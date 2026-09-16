@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Fragment } from "react";
+import Link from "@/components/app-link";
 import type { ContentBlock, RichText } from "@/lib/content";
 
 function RichTextContent({ content }: { content: RichText }) {
@@ -14,7 +15,9 @@ function RichTextContent({ content }: { content: RichText }) {
       case "emphasis":
         return <em key={index}>{item.text}</em>;
       case "link":
-        return <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">{item.text}</a>;
+        return item.href.startsWith("/")
+          ? <Link key={index} href={item.href}>{item.text}</Link>
+          : <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">{item.text}</a>;
       case "break":
         return <br key={index} />;
     }

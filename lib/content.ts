@@ -1,5 +1,6 @@
 import type { CategorySlug } from "@/lib/site";
 import { geminiTemporaryChatArticle } from "@/lib/articles/gemini-temporary-chat-vs-keep-activity-off";
+import { removeThirdPartyGoogleAccessArticle } from "@/lib/articles/remove-third-party-google-access-without-losing-login";
 
 export type InlineContent =
   | string
@@ -47,6 +48,7 @@ const deviceImage = "/images/devices-repairability.webp";
 const privacyImage = "/images/privacy-path.webp";
 
 export const articles: Article[] = [
+  removeThirdPartyGoogleAccessArticle,
   geminiTemporaryChatArticle,
   {
     title: "AI assistants are changing search. Here’s what that actually means",

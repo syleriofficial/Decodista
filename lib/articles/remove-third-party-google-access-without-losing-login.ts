@@ -1,0 +1,357 @@
+import type { Article, InlineContent, RichText } from "@/lib/content";
+
+const strong = (text: string): InlineContent => ({ type: "strong", text });
+const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
+const lineBreak: InlineContent = { type: "break" };
+const rich = (...content: InlineContent[]): RichText => content;
+
+export const removeThirdPartyGoogleAccessArticle: Article = {
+  title: "How to Remove Third-Party Google Access Without Losing Your Login",
+  seoTitle: "Remove Third-Party Google Access Without Losing Your Login",
+  slug: "remove-third-party-google-access-without-losing-login",
+  description: "Remove third-party Google access safely. Check your login first, understand each connection type, and learn what happens to your account and shared data.",
+  standfirst: "Before disconnecting an app from Google, check how you will sign in again. This guide separates login connections, Google-data permissions and account deletion, with a checklist for keeping access to the account you need.",
+  category: "security",
+  tags: ["Google Account", "Account Security", "Sign in with Google", "App Permissions", "Digital Privacy"],
+  author: "DECODISTA Editorial",
+  publishedDate: "2026-09-17",
+  updatedDate: "2026-09-17",
+  featuredImage: "/images/google-third-party-access.webp",
+  featuredImageAlt: "Abstract identity connection hub branching into sign-in, data permissions and third-party access, with one connector safely detached",
+  featuredImageWidth: 1536,
+  featuredImageHeight: 865,
+  readingTime: 10,
+  featured: true,
+  sample: false,
+  content: [
+    {
+      type: "paragraph",
+      text: rich(
+        strong("DECODISTA — Technology, Decoded."),
+        lineBreak,
+        strong("Information checked on: 16 September 2026 (UTC)."),
+      ),
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        strong("Before disconnecting an account you still use, verify another supported way to sign in to that same account."),
+        " Then remove the Google connection that matches your goal. An app’s permission to read Google data, its Google sign-in connection and its own account-deletion process are different things. Removing a link does not automatically erase information the service already holds. ",
+        link("Google’s connection overview", "https://support.google.com/accounts/answer/16670080"),
+      ),
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "The crucial word is ",
+        strong("same"),
+        ". A successful login is only useful if it opens your existing files, purchases or profile—not a new, empty account.",
+      ),
+    },
+    { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
+    {
+      type: "list",
+      style: "unordered",
+      items: [
+        "Identify whether you want to stop data access, change how you sign in, or leave the service entirely.",
+        "Test your replacement login before removing a sign-in connection.",
+        "Check every connection listed for the app.",
+        "Handle previously shared data through the service’s own privacy and deletion controls.",
+      ],
+    },
+    { type: "heading", level: 2, id: "connection-types", text: "Understand the three Google connection types" },
+    { type: "paragraph", text: "Google groups several different relationships under linked apps. Start by identifying who is accessing what." },
+    {
+      type: "table",
+      headers: ["Connection", "What it does", "A simple example"],
+      rows: [
+        [rich(strong("Sign in with Google")), "Google helps the service recognise you and sign you in.", "Using the Google button to enter a shopping account."],
+        [rich(strong("Access to your Google Account")), "The app receives permission to use specified Google data or features.", "A scheduling service working with your Google Calendar."],
+        [rich(strong("Linked account / Google Account Linking")), "Google receives access to certain features or data in the other service.", "Using Google to play music from a linked streaming account."],
+      ],
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "These distinctions come from Google’s guides to ",
+        link("Sign in with Google", "https://support.google.com/accounts/answer/12849458?hl=en"),
+        ", ",
+        link("Google-data permissions", "https://support.google.com/accounts/answer/14012355?hl=en"),
+        " and ",
+        link("Google Account Linking", "https://support.google.com/accounts/answer/13864929?hl=en"),
+        ".",
+      ),
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "Sign in with Google normally shares your name, email address and profile picture. It does not, by itself, grant access to your inbox or files; an app can request additional permissions separately. ",
+        link("Google’s sign-in privacy explanation", "https://support.google.com/accounts/answer/12921417"),
+      ),
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "One service can have more than one connection type. Inspect its individual entries rather than treating its name as one all-purpose switch. ",
+        link("Google’s connection-management guide", "https://support.google.com/accounts/answer/13533235?hl=en"),
+      ),
+    },
+    { type: "paragraph", text: "For example, a hypothetical booking app could offer Google sign-in and a separate Calendar integration. Wanting to stop calendar updates does not necessarily mean you want to change your login." },
+    { type: "heading", level: 2, id: "what-changes", text: "What changes—and what does not" },
+    { type: "paragraph", text: "The table separates Google-side controls from actions taken inside the other service. App-specific behaviour still matters." },
+    {
+      type: "table",
+      headers: ["Action", "Google access removed?", "Login affected?", "Third-party data deleted?", "Third-party account deleted?"],
+      rows: [
+        [rich("Stop ", strong("Sign in with Google")), "Sign-in/profile-sharing consent is removed. Check other connections separately.", "Google sign-in needs renewed consent; use a tested alternative if you want to stay disconnected.", "No automatic deletion.", "No."],
+        [rich("Remove the app’s ", strong("access to Google data")), "Yes, the relevant permission is revoked.", "Data-dependent features can stop working. Verify the app’s login separately.", "Existing copies may remain.", "No."],
+        [rich("Delete a ", strong("linked-account connection")), "Google loses the access that link provided to the other service.", "Linked features stop working; check direct access to the service.", "Previously shared data is not erased by unlinking.", "No."],
+        [rich("Use the service’s ", strong("account-deletion process")), "Do not assume Google connections disappear too.", "Access ends according to that process.", "Depends on the service’s deletion and retention rules.", "If account deletion is completed; deactivation may be different."],
+      ],
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "Sources: Google’s ",
+        link("sign-in revocation guidance", "https://developers.google.com/identity/gsi/web/guides/revoke"),
+        ", ",
+        link("data-access guide", "https://support.google.com/accounts/answer/14012355?hl=en"),
+        ", ",
+        link("account-linking privacy guide", "https://support.google.com/accounts/answer/13867826"),
+        ", ",
+        link("connection controls", "https://support.google.com/accounts/answer/13533235?hl=en"),
+        " and ",
+        link("account troubleshooting guide", "https://support.google.com/accounts/answer/12917337?hl=en"),
+        ".",
+      ),
+    },
+    { type: "heading", level: 2, id: "before-disconnecting", text: "Before disconnecting: a short checklist" },
+    { type: "paragraph", text: "For an account you want to keep, confirm:" },
+    {
+      type: "list",
+      style: "unordered",
+      items: [
+        rich(strong("The account identity:"), " note its email address, username or customer ID."),
+        rich(strong("The contents:"), " identify something you can recognise after signing in again, such as an existing order or saved project."),
+        rich(strong("The replacement method:"), " check the service’s own instructions for adding another login to this account."),
+        rich(strong("The recovery route:"), " make sure you can receive any required email or verification code."),
+        rich(strong("The dependencies:"), " identify any Google integration you still need."),
+        rich(strong("The exit plan:"), " save anything you need before starting a separate account-deletion request."),
+      ],
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "A Gmail address in the account profile does not prove that an email-and-password login exists. Google explicitly notes that some apps do not support multiple sign-in methods for the same account. ",
+        link("Google’s troubleshooting guidance", "https://support.google.com/accounts/answer/12917337?hl=en"),
+      ),
+    },
+    { type: "heading", level: 2, id: "safe-process", text: "A safe step-by-step process" },
+    { type: "paragraph", text: "This is DECODISTA’s suggested workflow for routine account cleanup. Follow the service’s own instructions where its account system differs." },
+    { type: "heading", level: 3, id: "decide-goal", text: "1. Decide what you want to stop" },
+    { type: "paragraph", text: "Write down one goal: “stop calendar access”, “stop using Google to sign in”, or “delete my account with this service”." },
+    { type: "paragraph", text: "That gives you a way to judge the confirmation screen. If it describes a broader change than you intended, pause." },
+    { type: "heading", level: 3, id: "review-login-settings", text: "2. Open the service and review its login settings" },
+    { type: "paragraph", text: "While you can still access the account, look for its security, login or connected-account settings. Read the help page for changing login methods." },
+    {
+      type: "paragraph",
+      text: rich(
+        "If supported, add an alternative to the ",
+        strong("existing account"),
+        ". Depending on the service, that might be a password, a passkey or an email sign-in link. Do not assume any particular option is available.",
+      ),
+    },
+    { type: "paragraph", text: "Do not create a second account merely to see whether its password works." },
+    { type: "heading", level: 3, id: "test-alternative", text: "3. Test the alternative in a separate session" },
+    { type: "paragraph", text: "Keep your current session open. Use another browser profile or a fresh private window that is not already signed in to the service." },
+    { type: "paragraph", text: "Use only the alternative method you intend to keep. Confirm that it opens the expected account and its existing contents." },
+    { type: "paragraph", text: "If the browser signs you in automatically, that has not demonstrated that your chosen replacement method works. Repeat using a separate browser profile." },
+    { type: "paragraph", text: "If you land in an empty account, stop and ask the service how to connect the login to your existing account. Do not disconnect first and investigate later." },
+    { type: "heading", level: 3, id: "review-google-account", text: "4. Review the correct Google Account" },
+    {
+      type: "paragraph",
+      text: rich(
+        "Open ",
+        link("Google Account connections", "https://myaccount.google.com/connections"),
+        " and check the selected Google account, especially if you use several.",
+      ),
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "Inspect the app and its connection types. Google’s current guide uses the categories ",
+        strong("Sign in with Google"),
+        ", ",
+        strong("Linked account"),
+        " and ",
+        strong("Access to your Google Account"),
+        ". ",
+        link("Google’s current instructions", "https://support.google.com/accounts/answer/13533235?hl=en"),
+      ),
+    },
+    { type: "heading", level: 3, id: "remove-connection", text: "5. Remove the relevant connection" },
+    { type: "paragraph", text: "Within the appropriate entry, review its details and confirmation:" },
+    {
+      type: "table",
+      headers: ["Your goal", "Action named in Google’s current help"],
+      rows: [
+        ["Stop Google sign-in for the app", rich(strong("Stop using Sign in with Google"))],
+        ["Stop Google accessing the other account", rich(strong("Delete link"))],
+        ["Stop the app accessing Google data", rich(strong("Remove access"))],
+      ],
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        "Follow the current screen rather than an older screenshot. ",
+        link("Google’s removal instructions", "https://support.google.com/accounts/answer/13533235?hl=en"),
+      ),
+    },
+    { type: "heading", level: 3, id: "check-result", text: "6. Check the result" },
+    { type: "paragraph", text: "Review the app’s remaining Google connections. Then use a fresh session to check that the login you want to retain still reaches the right account." },
+    { type: "paragraph", text: "If you removed data access, check the feature concerned. A disabled integration may be the intended result." },
+    {
+      type: "paragraph",
+      text: rich(
+        "Avoid selecting the Google button or approving a new permission request during this check unless you deliberately want to reconnect. Google’s developer documentation explains that revoked sign-in consent can be requested again. ",
+        link("Google’s revocation guidance", "https://developers.google.com/identity/gsi/web/guides/revoke"),
+      ),
+    },
+    { type: "heading", level: 2, id: "only-login-method", text: "What if Google is the only login method?" },
+    { type: "paragraph", text: "For routine cleanup, leave the sign-in connection in place while you establish whether the service offers a supported migration." },
+    { type: "paragraph", text: "Ask its support team:" },
+    { type: "quote", text: "Can I add another sign-in method to my existing account without creating a new account or losing its contents?" },
+    { type: "paragraph", text: "Ask which account identifier they need and what order to follow. A password-reset link is not a universal conversion tool for Google-created accounts." },
+    { type: "paragraph", text: "If no alternative exists, you may need to keep Google sign-in to keep using the service, or decide to leave after retrieving anything you need. There is no Google setting that can make the service offer a different login." },
+    {
+      type: "paragraph",
+      text: rich(
+        "If your aim is only to remove Google-data permissions, examine that connection separately. Some features may become unavailable, so test what you still need. ",
+        link("Google’s connection guidance", "https://support.google.com/accounts/answer/13533235?hl=en"),
+      ),
+    },
+    { type: "heading", level: 2, id: "existing-data", text: "What happens to data the service already has?" },
+    {
+      type: "paragraph",
+      text: rich(
+        strong("Revoking permission stops further access through that permission; it does not retrieve previously shared copies."),
+        " Google warns that apps can store information on their own servers and that retention depends on the app’s policy. ",
+        link("Google’s data-sharing safety guide", "https://support.google.com/accounts/answer/14013600"),
+      ),
+    },
+    { type: "paragraph", text: "For a hypothetical scheduling app, disconnecting Google Calendar may stop its integration while leaving previously imported appointment details in its own records. This is an illustration of the distinction, not a finding about a particular service." },
+    { type: "paragraph", text: "If you want those records removed, inspect the service’s privacy settings or contact its support team. Ask what will be deleted, what will remain and how long deletion takes. Keep any confirmation." },
+    {
+      type: "paragraph",
+      text: rich(
+        "For linked accounts in the opposite direction, Google likewise says removing the link does not affect data already shared. ",
+        link("Google’s account-linking privacy guide", "https://support.google.com/accounts/answer/13867826"),
+      ),
+    },
+    { type: "heading", level: 2, id: "disconnecting-vs-deleting", text: "Disconnecting is different from deleting the account" },
+    { type: "paragraph", text: "Use the service’s own controls if your goal is to close its account. Check whether the action is deletion or merely deactivation, and read its explanation of what happens to stored information." },
+    {
+      type: "paragraph",
+      text: rich(
+        "Google says accounts at other services are separate from your Google Account. It also warns that an app can remain in your Google connections after its own account has been deleted. Review both sides of the relationship. ",
+        link("Google’s account-deletion guidance", "https://support.google.com/accounts/answer/12917337?hl=en"),
+      ),
+    },
+    { type: "paragraph", text: "A practical order is: save what you need, complete the service’s deletion process while you can access it, then review and remove remaining Google connections." },
+    { type: "heading", level: 2, id: "next-step", text: "Choose your next step" },
+    { type: "paragraph", text: "These are starting points; the service’s supported login and deletion processes take precedence." },
+    {
+      type: "table",
+      headers: ["If your goal is…", "Start here"],
+      rows: [
+        ["Keep the account but stop Google sign-in", "Verify another login to the same account first."],
+        ["Revoke access to Google data", "Review and remove the relevant data-access connection."],
+        ["Stop using a service through Google products", "Review the linked-account connection."],
+        ["Delete the third-party account and its data", "Use that service’s deletion controls; check retention details and remaining Google connections."],
+        ["Keep the account but no alternative login is available", "Ask the service about migration before removing sign-in."],
+      ],
+    },
+    { type: "heading", level: 2, id: "test-account-workflow", text: "A safe test-account workflow" },
+    { type: "paragraph", text: "If you want to understand the process before touching an important account, use a disposable account at a service whose official help documents an alternative login." },
+    {
+      type: "list",
+      style: "ordered",
+      items: [
+        "Create the test account with harmless sample content and no purchases.",
+        "Add the documented alternative login to that same account.",
+        "In a separate session, confirm the sample content is present after using that login.",
+        "Remove one clearly identified Google connection, then repeat the login check.",
+        "Record what changed, inspect remaining connections and use the service’s own controls to delete the test account when finished.",
+      ],
+    },
+    {
+      type: "paragraph",
+      text: rich(
+        strong("This is a proposed workflow, not a report of hands-on testing."),
+        " A result for one service does not prove that another service behaves the same way.",
+      ),
+    },
+    { type: "heading", level: 2, id: "common-mistakes", text: "Common mistakes" },
+    {
+      type: "list",
+      style: "unordered",
+      items: [
+        rich(strong("Testing only a browser tab that is already signed in."), " Test the actual replacement login in a separate session."),
+        rich(strong("Accepting an empty profile as success."), " Check that your existing contents are present."),
+        rich(strong("Removing every connection without reading the details."), " Match the action to your goal."),
+        rich(strong("Assuming disconnection erased old information."), " Follow up through the service’s own controls."),
+        rich(strong("Treating a prompt setting as account cleanup."), " Hiding a Google sign-in prompt is a separate choice from removing a connection. ", link("Google’s sign-in explanation", "https://support.google.com/accounts/answer/12849458?hl=en")),
+      ],
+    },
+    { type: "heading", level: 2, id: "faq", text: "FAQ" },
+    { type: "heading", level: 3, id: "delete-app-account", text: "Does removing Google access delete my account with the app?" },
+    {
+      type: "paragraph",
+      text: rich(
+        "No automatic account deletion occurs just because you revoke a connection. Use the service’s own account controls if deletion is your goal. Previously shared information may remain. ",
+        link("Google’s linked-app overview", "https://support.google.com/accounts/answer/16670080"),
+        ", ",
+        link("account guidance", "https://support.google.com/accounts/answer/12917337?hl=en"),
+      ),
+    },
+    { type: "heading", level: 3, id: "keep-account", text: "Can I stop Sign in with Google and keep the account?" },
+    { type: "paragraph", text: "Only rely on that plan once the service supports another route to your existing account and you have tested it. Do not assume that entering the same email address on a registration screen will do the job." },
+    { type: "heading", level: 3, id: "reconnect", text: "Can I reconnect later?" },
+    {
+      type: "paragraph",
+      text: rich(
+        "Google documents renewed consent after sign-in revocation. Reconnection is therefore possible, but that is not a guarantee that an account deleted at the service can be recovered. Check the service before relying on it. ",
+        link("Google’s revocation documentation", "https://developers.google.com/identity/gsi/web/guides/revoke"),
+      ),
+    },
+    { type: "heading", level: 3, id: "google-password", text: "Did the app get my Google password?" },
+    {
+      type: "paragraph",
+      text: rich(
+        "Google says it does not share your password through Sign in with Google. An app-specific password, if the service supports one, is a separate credential. ",
+        link("Google’s sign-in privacy guide", "https://support.google.com/accounts/answer/12921417"),
+      ),
+    },
+    { type: "heading", level: 3, id: "sign-out-everywhere", text: "Will removing the connection sign me out everywhere?" },
+    { type: "paragraph", text: "Do not rely on it as a universal logout. The Google pages reviewed here do not establish that every service immediately ends every existing session. If that is your goal, check the service’s own session controls." },
+    { type: "heading", level: 2, id: "sources-verification", text: "Sources and verification" },
+    {
+      type: "paragraph",
+      text: rich(
+        "Google’s official documentation was checked on ",
+        strong("16 September 2026 (UTC)"),
+        ". Sources are linked beside the relevant explanations. The checklist and testing sequence are DECODISTA’s practical recommendations.",
+      ),
+    },
+    { type: "paragraph", text: "No authenticated account changes or hands-on tests were performed, and no screenshots were captured. This guide covers consumer account cleanup; for a work or school login, also follow your organisation’s access rules." },
+    {
+      type: "paragraph",
+      text: rich(
+        strong("Related reading:"),
+        " ",
+        link("what Google’s Gemini privacy controls actually save", "/articles/gemini-temporary-chat-vs-keep-activity-off"),
+        ".",
+      ),
+    },
+  ],
+};
