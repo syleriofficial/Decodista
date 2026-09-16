@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Search } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 

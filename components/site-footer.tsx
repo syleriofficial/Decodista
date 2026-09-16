@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Newsletter } from "@/components/newsletter";
 import { CATEGORY_DEFINITIONS } from "@/lib/site";
 

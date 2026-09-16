@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ArticleBody } from "@/components/article-body";

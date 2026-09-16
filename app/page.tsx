@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
 import { SectionHeading } from "@/components/section-heading";

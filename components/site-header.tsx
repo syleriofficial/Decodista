@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useState } from "react";
 import { NAV_ITEMS } from "@/lib/site";
@@ -49,6 +49,11 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <button className="mobile-theme-toggle" type="button" onClick={toggleTheme}>
+            <Moon className="theme-moon" aria-hidden="true" />
+            <Sun className="theme-sun" aria-hidden="true" />
+            <span>Change appearance</span>
+          </button>
         </div>
       </nav>
     </header>

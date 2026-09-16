@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/content";
 import { formatDate } from "@/lib/content";
