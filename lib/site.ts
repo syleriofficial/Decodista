@@ -4,6 +4,8 @@ export const SITE_DESCRIPTION =
   "Clear, practical explanations of technology and digital life for everyone.";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://decodista.com";
+export const GOOGLE_ANALYTICS_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-1T57TWPXM6";
 
 export const CATEGORY_DEFINITIONS = [
   { slug: "ai", name: "Artificial Intelligence", navName: "AI", shortName: "AI", mark: "AI", description: "Understand the tools, ideas, and choices shaping everyday artificial intelligence." },

@@ -9,6 +9,7 @@ import { sites } from "./build/sites-vite-plugin";
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
 const PRODUCTION_SITE_URL = "https://decodista.com";
+const GOOGLE_ANALYTICS_ID = "G-1T57TWPXM6";
 
 const { d1, r2 } = hostingConfig;
 
@@ -38,6 +39,7 @@ const localBindingConfig = {
 
 export default defineConfig(async () => {
   process.env.NEXT_PUBLIC_SITE_URL ??= PRODUCTION_SITE_URL;
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??= GOOGLE_ANALYTICS_ID;
 
   // Use Miniflare's local Request.cf placeholder unless fetching is requested.
   process.env.CLOUDFLARE_CF_FETCH_ENABLED ??= "false";

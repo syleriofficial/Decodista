@@ -1,4 +1,5 @@
 import Link from "@/components/app-link";
+import { PrivacyChoicesButton } from "@/components/analytics-consent";
 import { Newsletter } from "@/components/newsletter";
 import { CATEGORY_DEFINITIONS } from "@/lib/site";
 
@@ -42,6 +43,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-base">
           <span>© {new Date().getUTCFullYear()} DECODISTA</span>
+          <PrivacyChoicesButton />
           <span>Technology, Decoded.</span>
         </div>
       </div>
