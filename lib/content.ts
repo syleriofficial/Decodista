@@ -1,17 +1,28 @@
 import type { CategorySlug } from "@/lib/site";
+import { geminiTemporaryChatArticle } from "@/lib/articles/gemini-temporary-chat-vs-keep-activity-off";
+
+export type InlineContent =
+  | string
+  | { type: "strong"; text: string }
+  | { type: "emphasis"; text: string }
+  | { type: "link"; text: string; href: string }
+  | { type: "break" };
+
+export type RichText = string | InlineContent[];
 
 export type ContentBlock =
   | { type: "heading"; level: 2 | 3; text: string; id: string }
-  | { type: "paragraph"; text: string }
-  | { type: "list"; style: "ordered" | "unordered"; items: string[] }
-  | { type: "quote"; text: string; attribution?: string }
-  | { type: "callout"; title: string; text: string }
+  | { type: "paragraph"; text: RichText }
+  | { type: "list"; style: "ordered" | "unordered"; items: RichText[] }
+  | { type: "quote"; text: RichText; attribution?: string }
+  | { type: "callout"; title: string; text: RichText }
   | { type: "code"; language: string; code: string }
-  | { type: "table"; headers: string[]; rows: string[][]; caption?: string }
+  | { type: "table"; headers: RichText[]; rows: RichText[][]; caption?: string }
   | { type: "image"; src: string; alt: string; caption?: string };
 
 export interface Article {
   title: string;
+  seoTitle?: string;
   slug: string;
   description: string;
   standfirst: string;
@@ -22,10 +33,12 @@ export interface Article {
   updatedDate?: string;
   featuredImage: string;
   featuredImageAlt: string;
+  featuredImageWidth?: number;
+  featuredImageHeight?: number;
   readingTime: number;
   featured?: boolean;
   trending?: boolean;
-  sample: true;
+  sample: boolean;
   content: ContentBlock[];
 }
 
@@ -34,6 +47,7 @@ const deviceImage = "/images/devices-repairability.webp";
 const privacyImage = "/images/privacy-path.webp";
 
 export const articles: Article[] = [
+  geminiTemporaryChatArticle,
   {
     title: "AI assistants are changing search. Here’s what that actually means",
     slug: "how-ai-assistants-change-search",

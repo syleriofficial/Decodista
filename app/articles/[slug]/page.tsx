@@ -14,12 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
+  const metadataTitle = article.seoTitle ?? article.title;
   return {
-    title: article.title,
+    title: metadataTitle,
     description: article.description,
     alternates: { canonical: `/articles/${slug}` },
-    openGraph: { type: "article", title: article.title, description: article.description, url: `/articles/${slug}`, publishedTime: article.publishedDate, modifiedTime: article.updatedDate, authors: [article.author], images: [{ url: article.featuredImage, alt: article.featuredImageAlt, width: 1536, height: 1024 }] },
-    twitter: { card: "summary_large_image", title: article.title, description: article.description, images: [article.featuredImage] },
+    openGraph: { type: "article", title: metadataTitle, description: article.description, url: `/articles/${slug}`, publishedTime: article.publishedDate, modifiedTime: article.updatedDate ?? article.publishedDate, authors: [article.author], images: [{ url: article.featuredImage, alt: article.featuredImageAlt, width: article.featuredImageWidth ?? 1536, height: article.featuredImageHeight ?? 1024 }] },
+    twitter: { card: "summary_large_image", title: metadataTitle, description: article.description, images: [article.featuredImage] },
   };
 }
 
@@ -43,12 +44,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <article>
         <header className="article-header wrap">
           <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href={`/${article.category}`}>{category.name}</Link></nav>
-          <div className="article-kicker"><Link className="category-label" href={`/${article.category}`}>{category.name}</Link><span className="sample-label">Sample article</span></div>
+          <div className="article-kicker"><Link className="category-label" href={`/${article.category}`}>{category.name}</Link>{article.sample && <span className="sample-label">Sample article</span>}</div>
           <h1>{article.title}</h1>
           <p className="standfirst">{article.standfirst}</p>
           <div className="article-byline"><div><strong>{article.author}</strong><span>Independent explanatory coverage</span></div><dl><div><dt>Published</dt><dd><time dateTime={article.publishedDate}>{formatDate(article.publishedDate)}</time></dd></div>{article.updatedDate && <div><dt>Updated</dt><dd><time dateTime={article.updatedDate}>{formatDate(article.updatedDate)}</time></dd></div>}<div><dt>Read</dt><dd>{article.readingTime} minutes</dd></div></dl></div>
         </header>
-        <figure className="article-hero wrap"><div><Image src={article.featuredImage} alt={article.featuredImageAlt} fill priority sizes="(max-width: 1500px) 100vw, 1440px" /></div><figcaption>{article.featuredImageAlt}. Original DECODISTA sample artwork.</figcaption></figure>
+        <figure className="article-hero wrap"><div><Image src={article.featuredImage} alt={article.featuredImageAlt} fill priority sizes="(max-width: 1500px) 100vw, 1440px" /></div><figcaption>{article.featuredImageAlt}. Original DECODISTA {article.sample ? "sample artwork." : "artwork."}</figcaption></figure>
         <div className="article-layout wrap">
           {toc.length > 1 && <aside className="toc"><strong>In this article</strong><ol>{toc.map((item) => item.type === "heading" && <li key={item.id}><a href={`#${item.id}`}>{item.text}</a></li>)}</ol></aside>}
           <ArticleBody blocks={article.content} />

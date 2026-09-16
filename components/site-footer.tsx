@@ -42,7 +42,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-base">
           <span>© {new Date().getUTCFullYear()} DECODISTA</span>
-          <span>Demo publication foundation</span>
+          <span>Technology, Decoded.</span>
         </div>
       </div>
     </footer>

@@ -52,7 +52,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
       </header>
       {featured ? <section className="category-lead wrap" aria-labelledby="category-lead-title">
         <Link className="category-lead-image" href={`/articles/${featured.slug}`}><Image src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" /></Link>
-        <div><span className="sample-label">Sample story</span><h2 id="category-lead-title"><Link href={`/articles/${featured.slug}`}>{featured.title}</Link></h2><p>{featured.standfirst}</p><Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the story <ArrowRight aria-hidden="true" /></Link></div>
+        <div>{featured.sample && <span className="sample-label">Sample story</span>}<h2 id="category-lead-title"><Link href={`/articles/${featured.slug}`}>{featured.title}</Link></h2><p>{featured.standfirst}</p><Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the story <ArrowRight aria-hidden="true" /></Link></div>
       </section> : <section className="empty-state wrap"><h2>Stories are being prepared</h2><p>This section is ready for publishing. Add an article to the typed content repository and it will appear here automatically.</p></section>}
       <section className="section-block wrap" aria-labelledby="category-latest-title">
         <div className="section-heading"><div><span className="eyebrow">Page {page} of {pages}</span><h2 id="category-latest-title">More in {category.shortName}</h2></div></div>

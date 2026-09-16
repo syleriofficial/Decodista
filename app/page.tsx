@@ -26,7 +26,7 @@ export default function HomePage() {
             <span className="image-number" aria-hidden="true">01</span>
           </Link>
           <div className="lead-copy">
-            <div className="card-labels"><Link className="category-label" href={`/${lead.category}`}>{CATEGORY_MAP[lead.category].shortName}</Link><span className="sample-label">Sample story</span></div>
+            <div className="card-labels"><Link className="category-label" href={`/${lead.category}`}>{CATEGORY_MAP[lead.category].shortName}</Link>{lead.sample && <span className="sample-label">Sample story</span>}</div>
             <h1 id="lead-story-title"><Link href={`/articles/${lead.slug}`}>{lead.title}</Link></h1>
             <p>{lead.standfirst}</p>
             <div className="lead-meta">

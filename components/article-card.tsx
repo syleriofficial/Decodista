@@ -28,7 +28,7 @@ export function ArticleCard({ article, variant = "standard", priority = false }:
       <div className="card-copy">
         <div className="card-labels">
           <Link className="category-label" href={`/${article.category}`}>{category.shortName}</Link>
-          <span className="sample-label">Sample</span>
+          {article.sample && <span className="sample-label">Sample</span>}
         </div>
         <h3><Link href={`/articles/${article.slug}`}>{article.title}</Link></h3>
         {variant !== "compact" && <p>{article.description}</p>}
