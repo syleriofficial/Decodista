@@ -23,6 +23,10 @@ export const googleAuthenticatorNewPhoneArticle: Article = {
   readingTime: 13,
   featured: true,
   sample: false,
+  relatedArticleSlugs: [
+    "remove-third-party-google-access-without-losing-login",
+    "google-photos-android-undo-backup-keep-phone-photos",
+  ],
   content: [
     {
       type: "paragraph",

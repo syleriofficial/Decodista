@@ -42,6 +42,7 @@ export interface Article {
   featured?: boolean;
   trending?: boolean;
   sample: boolean;
+  relatedArticleSlugs?: string[];
   content: ContentBlock[];
 }
 
@@ -263,6 +264,13 @@ export const getArticlesByCategory = (category: CategorySlug) =>
   articles.filter((article) => article.category === category);
 
 export const getRelatedArticles = (article: Article, limit = 3) => {
+  if (article.relatedArticleSlugs) {
+    return article.relatedArticleSlugs
+      .map((slug) => getArticle(slug))
+      .filter((candidate): candidate is Article => Boolean(candidate))
+      .slice(0, limit);
+  }
+
   const sameCategory = articles.filter(
     (candidate) => candidate.slug !== article.slug && candidate.category === article.category,
   );
