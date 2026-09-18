@@ -1,4 +1,5 @@
 import type { CategorySlug } from "@/lib/site";
+import { googleAuthenticatorNewPhoneArticle } from "@/lib/articles/google-authenticator-new-phone-codes-missing";
 import { geminiTemporaryChatArticle } from "@/lib/articles/gemini-temporary-chat-vs-keep-activity-off";
 import { googlePhotosUndoBackupArticle } from "@/lib/articles/google-photos-android-undo-backup-keep-phone-photos";
 import { removeThirdPartyGoogleAccessArticle } from "@/lib/articles/remove-third-party-google-access-without-losing-login";
@@ -49,6 +50,7 @@ const deviceImage = "/images/devices-repairability.webp";
 const privacyImage = "/images/privacy-path.webp";
 
 export const articles: Article[] = [
+  googleAuthenticatorNewPhoneArticle,
   googlePhotosUndoBackupArticle,
   removeThirdPartyGoogleAccessArticle,
   geminiTemporaryChatArticle,
