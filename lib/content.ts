@@ -1,4 +1,5 @@
 import type { CategorySlug } from "@/lib/site";
+import { doesIcloudBackupIncludePhotosArticle } from "@/lib/articles/does-icloud-backup-include-photos";
 import { googleAuthenticatorNewPhoneArticle } from "@/lib/articles/google-authenticator-new-phone-codes-missing";
 import { geminiTemporaryChatArticle } from "@/lib/articles/gemini-temporary-chat-vs-keep-activity-off";
 import { googlePhotosUndoBackupArticle } from "@/lib/articles/google-photos-android-undo-backup-keep-phone-photos";
@@ -51,6 +52,7 @@ const deviceImage = "/images/devices-repairability.webp";
 const privacyImage = "/images/privacy-path.webp";
 
 export const articles: Article[] = [
+  doesIcloudBackupIncludePhotosArticle,
   googleAuthenticatorNewPhoneArticle,
   googlePhotosUndoBackupArticle,
   removeThirdPartyGoogleAccessArticle,
