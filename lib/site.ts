@@ -1,22 +1,49 @@
 export const SITE_NAME = "DECODISTA";
 export const SITE_TAGLINE = "Technology, Decoded.";
 export const SITE_DESCRIPTION =
-  "Clear, practical explanations of technology and digital life for everyone.";
+  "Clear answers for the technology people use every day.";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://decodista.com";
 export const GOOGLE_ANALYTICS_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-1T57TWPXM6";
 
 export const CATEGORY_DEFINITIONS = [
-  { slug: "ai", name: "Artificial Intelligence", navName: "AI", shortName: "AI", mark: "AI", description: "Understand the tools, ideas, and choices shaping everyday artificial intelligence." },
-  { slug: "devices", name: "Devices", navName: "Devices", shortName: "Devices", mark: "DV", description: "Make clearer choices about the phones, wearables, and gadgets you use every day." },
-  { slug: "computers", name: "Computers", navName: "Computers", shortName: "Computers", mark: "PC", description: "Friendly explanations and practical advice for laptops, desktops, and everything inside them." },
-  { slug: "apps", name: "Apps & Software", navName: "Apps", shortName: "Apps", mark: "AP", description: "Useful software, better workflows, and the details hidden behind everyday apps." },
-  { slug: "internet", name: "Internet & Web", navName: "Internet", shortName: "Internet", mark: "WEB", description: "How the web works, where it is changing, and how to use it with more confidence." },
-  { slug: "security", name: "Privacy & Security", navName: "Security", shortName: "Security", mark: "SEC", description: "Practical ways to protect your accounts, devices, identity, and personal information." },
-  { slug: "digital-life", name: "Digital Life", navName: "Digital Life", shortName: "Digital Life", mark: "DL", description: "Thoughtful guidance for living well with the technology that surrounds us." },
-  { slug: "guides", name: "Guides", navName: "Guides", shortName: "Guides", mark: "HOW", description: "Step-by-step help for solving common technology problems without the jargon." },
-  { slug: "reviews", name: "Reviews", navName: "Reviews", shortName: "Reviews", mark: "REV", description: "Clear evaluation frameworks designed to help you buy and choose more thoughtfully." },
+  {
+    slug: "ai",
+    name: "Artificial Intelligence",
+    navName: "AI",
+    shortName: "AI",
+    mark: "AI",
+    description:
+      "Clear explanations of the AI tools, privacy choices and ideas changing everyday technology.",
+  },
+  {
+    slug: "digital-life",
+    name: "Digital Life",
+    navName: "Digital Life",
+    shortName: "Digital Life",
+    mark: "DL",
+    description:
+      "Practical guidance for managing photos, accounts, storage and the technology woven into daily life.",
+  },
+  {
+    slug: "security",
+    name: "Security",
+    navName: "Security",
+    shortName: "Security",
+    mark: "SEC",
+    description:
+      "Understand account security, privacy controls, authentication and safer choices without unnecessary alarm.",
+  },
+  {
+    slug: "science",
+    name: "Science",
+    navName: "Science",
+    shortName: "Science",
+    mark: "SCI",
+    description:
+      "Technology-adjacent science, from advanced computing and semiconductors to energy, robotics and space.",
+  },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORY_DEFINITIONS)[number]["slug"];
@@ -25,10 +52,102 @@ export const CATEGORY_MAP = Object.fromEntries(
   CATEGORY_DEFINITIONS.map((category) => [category.slug, category]),
 ) as Record<CategorySlug, (typeof CATEGORY_DEFINITIONS)[number]>;
 
+export const CONTENT_TYPE_DEFINITIONS = [
+  {
+    slug: "how-to",
+    name: "How-To",
+    description:
+      "Careful, step-by-step help for fixing problems, changing settings and moving data safely.",
+  },
+  {
+    slug: "explainer",
+    name: "Explainer",
+    description:
+      "Plain-English context for understanding how technology works and what its choices mean.",
+  },
+] as const;
+
+export type ContentTypeSlug = (typeof CONTENT_TYPE_DEFINITIONS)[number]["slug"];
+
+export const CONTENT_TYPE_MAP = Object.fromEntries(
+  CONTENT_TYPE_DEFINITIONS.map((contentType) => [contentType.slug, contentType]),
+) as Record<ContentTypeSlug, (typeof CONTENT_TYPE_DEFINITIONS)[number]>;
+
+export const TOPIC_HUBS = [
+  {
+    slug: "google",
+    name: "Google",
+    description:
+      "Guides and explainers for Google accounts, Gemini, Google Photos and authentication.",
+    tags: [
+      "Google Gemini",
+      "Google Account",
+      "Google Photos",
+      "Google Authenticator",
+      "Sign in with Google",
+    ],
+  },
+  {
+    slug: "google-account",
+    name: "Google Account",
+    description:
+      "Understand Google sign-in, account connections, authentication and privacy controls.",
+    tags: ["Google Account", "Sign in with Google", "Google Authenticator"],
+  },
+  {
+    slug: "photos-backup",
+    name: "Photos & Backup",
+    description:
+      "Clear guidance on photo libraries, device copies, cloud sync and independent backups.",
+    tags: [
+      "Google Photos",
+      "Photo Backup",
+      "Photo backup",
+      "Photo Storage",
+      "Cloud Storage",
+      "iCloud Photos",
+      "iCloud Backup",
+    ],
+  },
+  {
+    slug: "privacy",
+    name: "Privacy",
+    description:
+      "Practical explanations of privacy controls, permissions, retention and safer data choices.",
+    tags: [
+      "AI Privacy",
+      "Digital Privacy",
+      "App Permissions",
+      "Account Security",
+      "Data Protection",
+      "Data protection",
+    ],
+  },
+] as const;
+
+export type TopicSlug = (typeof TOPIC_HUBS)[number]["slug"];
+
+export const TOPIC_MAP = Object.fromEntries(
+  TOPIC_HUBS.map((topic) => [topic.slug, topic]),
+) as Record<TopicSlug, (typeof TOPIC_HUBS)[number]>;
+
 export const NAV_ITEMS = [
-  { href: "/", label: "Home" },
-  ...CATEGORY_DEFINITIONS.map((category) => ({
-    href: `/${category.slug}`,
-    label: category.navName,
-  })),
-];
+  { href: "/ai", label: "AI" },
+  { href: "/how-to", label: "How-To" },
+  { href: "/digital-life", label: "Digital Life" },
+  { href: "/security", label: "Security" },
+  { href: "/science", label: "Science" },
+  { href: "/latest", label: "Latest" },
+] as const;
+
+export const TRUST_LINKS = [
+  { href: "/about", label: "About" },
+  { href: "/editorial-policy", label: "Editorial Standards" },
+  { href: "/how-we-work", label: "How We Work" },
+  { href: "/corrections", label: "Corrections" },
+  { href: "/editorial-team", label: "Editorial Team" },
+  { href: "/ai-policy", label: "AI Policy" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy-policy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+] as const;

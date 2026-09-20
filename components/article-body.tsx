@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import Link from "@/components/app-link";
 import type { ContentBlock, RichText } from "@/lib/content";
 
-function RichTextContent({ content }: { content: RichText }) {
+export function RichTextContent({ content }: { content: RichText }) {
   if (typeof content === "string") return content;
 
   return content.map((item, index) => {
@@ -24,9 +24,9 @@ function RichTextContent({ content }: { content: RichText }) {
   });
 }
 
-export function ArticleBody({ blocks }: { blocks: ContentBlock[] }) {
+export function ArticleBody({ blocks, className = "" }: { blocks: ContentBlock[]; className?: string }) {
   return (
-    <div className="article-prose">
+    <div className={`article-prose ${className}`.trim()}>
       {blocks.map((block, index) => {
         switch (block.type) {
           case "heading":

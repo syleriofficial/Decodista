@@ -2,7 +2,6 @@ import type { Article, InlineContent, RichText } from "@/lib/content";
 
 const strong = (text: string): InlineContent => ({ type: "strong", text });
 const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
-const lineBreak: InlineContent = { type: "break" };
 const rich = (...content: InlineContent[]): RichText => content;
 
 export const removeThirdPartyGoogleAccessArticle: Article = {
@@ -12,34 +11,23 @@ export const removeThirdPartyGoogleAccessArticle: Article = {
   description: "Remove third-party Google access safely. Check your login first, understand each connection type, and learn what happens to your account and shared data.",
   standfirst: "Before disconnecting an app from Google, check how you will sign in again. This guide separates login connections, Google-data permissions and account deletion, with a checklist for keeping access to the account you need.",
   category: "security",
+  contentType: "how-to",
   tags: ["Google Account", "Account Security", "Sign in with Google", "App Permissions", "Digital Privacy"],
   author: "DECODISTA Editorial",
   publishedDate: "2026-09-17",
   updatedDate: "2026-09-17",
+  checkedDate: "2026-09-16",
   featuredImage: "/images/google-third-party-access.webp",
   featuredImageAlt: "Abstract identity connection hub branching into sign-in, data permissions and third-party access, with one connector safely detached",
   featuredImageWidth: 1536,
   featuredImageHeight: 865,
   readingTime: 10,
-  featured: true,
-  sample: false,
+  shortAnswer: rich(
+    strong("Before disconnecting an account you still use, verify another supported way to sign in to that same account."),
+    " Then remove the Google connection that matches your goal. An app’s permission to read Google data, its Google sign-in connection and its own account-deletion process are different things. Removing a link does not automatically erase information the service already holds. ",
+    link("Google’s connection overview", "https://support.google.com/accounts/answer/16670080"),
+  ),
   content: [
-    {
-      type: "paragraph",
-      text: rich(
-        strong("DECODISTA — Technology, Decoded."),
-        lineBreak,
-        strong("Information checked on: 16 September 2026 (UTC)."),
-      ),
-    },
-    {
-      type: "paragraph",
-      text: rich(
-        strong("Before disconnecting an account you still use, verify another supported way to sign in to that same account."),
-        " Then remove the Google connection that matches your goal. An app’s permission to read Google data, its Google sign-in connection and its own account-deletion process are different things. Removing a link does not automatically erase information the service already holds. ",
-        link("Google’s connection overview", "https://support.google.com/accounts/answer/16670080"),
-      ),
-    },
     {
       type: "paragraph",
       text: rich(

@@ -2,7 +2,6 @@ import type { Article, InlineContent, RichText } from "@/lib/content";
 
 const strong = (text: string): InlineContent => ({ type: "strong", text });
 const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
-const lineBreak: InlineContent = { type: "break" };
 const rich = (...content: InlineContent[]): RichText => content;
 
 export const googleAuthenticatorNewPhoneArticle: Article = {
@@ -12,37 +11,26 @@ export const googleAuthenticatorNewPhoneArticle: Article = {
   description: "Missing Google Authenticator codes on a new phone? Choose the right sync, transfer or account recovery path, then verify access before retiring the old phone.",
   standfirst: "New phone, missing codes? Find the right route for synced entries, an available old phone or account recovery—and check access before retiring your old device.",
   category: "security",
+  contentType: "how-to",
   tags: ["Google Authenticator", "Two-factor authentication", "Account security", "Account recovery", "Google Account", "Phone migration"],
   author: "DECODISTA Editorial",
   publishedDate: "2026-09-18",
   updatedDate: "2026-09-18",
+  checkedDate: "2026-09-18",
   featuredImage: "/images/google-authenticator-new-phone.webp",
   featuredImageAlt: "Two unbranded phones exchanging abstract authenticator tokens through a protected direct path beside a separate cloud sync route",
   featuredImageWidth: 1672,
   featuredImageHeight: 941,
   readingTime: 13,
-  featured: true,
-  sample: false,
   relatedArticleSlugs: [
     "remove-third-party-google-access-without-losing-login",
     "google-photos-android-undo-backup-keep-phone-photos",
   ],
+  shortAnswer: rich(
+    "If your Google Authenticator codes are missing on a new phone, start with how they were stored. Previously synced entries can return through the Google Account used in Authenticator. If you still have the old phone, you can transfer entries directly. If neither is available, you need the affected account’s alternative sign-in or recovery process; recovery is not guaranteed. ",
+    link("Google’s Authenticator guidance", "https://support.google.com/accounts/answer/1066447?hl=en"),
+  ),
   content: [
-    {
-      type: "paragraph",
-      text: rich(
-        strong("DECODISTA — Technology, Decoded."),
-        lineBreak,
-        strong("Information checked on: 18 September 2026 (UTC)."),
-      ),
-    },
-    {
-      type: "paragraph",
-      text: rich(
-        "If your Google Authenticator codes are missing on a new phone, start with how they were stored. Previously synced entries can return through the Google Account used in Authenticator. If you still have the old phone, you can transfer entries directly. If neither is available, you need the affected account’s alternative sign-in or recovery process; recovery is not guaranteed. ",
-        link("Google’s Authenticator guidance", "https://support.google.com/accounts/answer/1066447?hl=en"),
-      ),
-    },
     { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
     {
       type: "list",

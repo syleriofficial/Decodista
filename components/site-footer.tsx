@@ -1,43 +1,33 @@
 import Link from "@/components/app-link";
 import { PrivacyChoicesButton } from "@/components/analytics-consent";
-import { Newsletter } from "@/components/newsletter";
-import { CATEGORY_DEFINITIONS } from "@/lib/site";
-
-const footerLinks = [
-  ["About", "/about"],
-  ["Contact", "/contact"],
-  ["Editorial Policy", "/editorial-policy"],
-  ["Privacy Policy", "/privacy-policy"],
-  ["Terms", "/terms"],
-  ["Categories", "/ai"],
-  ["Guides", "/guides"],
-  ["Reviews", "/reviews"],
-  ["Newsletter", "/#newsletter-title"],
-] as const;
+import { NAV_ITEMS, TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="wrap">
-        <Newsletter />
         <div className="footer-grid">
-          <div>
+          <div className="footer-brand">
             <Link className="wordmark footer-wordmark" href="/">DECODISTA</Link>
             <p>Technology, Decoded.</p>
-            <p className="footer-note">Making technology easier to understand.</p>
+            <p className="footer-note">Clear answers for the technology people use every day.</p>
           </div>
           <div>
             <h2>Explore</h2>
             <ul>
-              {CATEGORY_DEFINITIONS.slice(0, 7).map((category) => (
-                <li key={category.slug}><Link href={`/${category.slug}`}>{category.shortName}</Link></li>
-              ))}
+              {NAV_ITEMS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
+            </ul>
+          </div>
+          <div>
+            <h2>Topics</h2>
+            <ul>
+              {TOPIC_HUBS.map((topic) => <li key={topic.slug}><Link href={`/topics/${topic.slug}`}>{topic.name}</Link></li>)}
             </ul>
           </div>
           <div>
             <h2>DECODISTA</h2>
             <ul>
-              {footerLinks.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}
+              {TRUST_LINKS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
             </ul>
           </div>
         </div>

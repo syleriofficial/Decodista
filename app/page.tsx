@@ -3,19 +3,51 @@ import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
 import { SectionHeading } from "@/components/section-heading";
-import { articles, formatDate, getArticlesByCategory } from "@/lib/content";
-import { CATEGORY_MAP, type CategorySlug } from "@/lib/site";
+import {
+  articles,
+  formatDate,
+  getArticlesByCategory,
+  getArticlesByContentType,
+  getEditorsPicks,
+} from "@/lib/content";
+import { CATEGORY_MAP, CONTENT_TYPE_MAP } from "@/lib/site";
+
+function EditorialSection({
+  eyebrow,
+  title,
+  href,
+  stories,
+}: {
+  eyebrow: string;
+  title: string;
+  href: string;
+  stories: typeof articles;
+}) {
+  if (!stories.length) return null;
+  const titleId = `home-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
+  return (
+    <section className="home-topic wrap" aria-labelledby={titleId}>
+      <SectionHeading eyebrow={eyebrow} title={title} href={href} id={titleId} />
+      <div className={`home-topic-grid ${stories.length === 1 ? "home-topic-grid--single" : ""}`}>
+        {stories.slice(0, 3).map((article) => (
+          <ArticleCard key={article.slug} article={article} variant={stories.length === 1 ? "horizontal" : "compact"} />
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   const lead = articles[0];
-  const secondary = articles.slice(1, 5);
-  const shortcuts = [
-    ["AI", "Artificial Intelligence", "/ai"], ["PH", "Smartphones", "/devices"],
-    ["PC", "Computers", "/computers"], ["WEB", "Internet & Web", "/internet"],
-    ["APP", "Apps & Software", "/apps"], ["SEC", "Privacy & Security", "/security"],
-    ["FLOW", "Productivity", "/search?q=productivity"], ["LIFE", "Digital Life", "/digital-life"],
-  ];
-  const majorCategories: CategorySlug[] = ["ai", "devices", "computers", "internet", "apps", "security", "digital-life"];
+  const secondary = articles.slice(1, 4);
+  const latest = articles.slice(0, 5);
+  const ai = getArticlesByCategory("ai");
+  const howTo = getArticlesByContentType("how-to");
+  const digitalLife = getArticlesByCategory("digital-life");
+  const security = getArticlesByCategory("security");
+  const science = getArticlesByCategory("science");
+  const editorsPicks = getEditorsPicks();
 
   return (
     <main id="main-content">
@@ -23,10 +55,14 @@ export default function HomePage() {
         <article className="lead-story">
           <Link className="lead-image" href={`/articles/${lead.slug}`}>
             <Image src={lead.featuredImage} alt={lead.featuredImageAlt} fill priority sizes="(max-width: 900px) 100vw, 65vw" />
-            <span className="image-number" aria-hidden="true">01</span>
           </Link>
           <div className="lead-copy">
-            <div className="card-labels"><Link className="category-label" href={`/${lead.category}`}>{CATEGORY_MAP[lead.category].shortName}</Link>{lead.sample && <span className="sample-label">Sample story</span>}</div>
+            <div className="card-labels">
+              <Link className="category-label" href={`/${lead.category}`}>{CATEGORY_MAP[lead.category].shortName}</Link>
+              {lead.contentType === "how-to"
+                ? <Link className="content-type-label" href="/how-to">{CONTENT_TYPE_MAP[lead.contentType].name}</Link>
+                : <span className="content-type-label">{CONTENT_TYPE_MAP[lead.contentType].name}</span>}
+            </div>
             <h1 id="lead-story-title"><Link href={`/articles/${lead.slug}`}>{lead.title}</Link></h1>
             <p>{lead.standfirst}</p>
             <div className="lead-meta">
@@ -36,48 +72,34 @@ export default function HomePage() {
             </div>
           </div>
         </article>
-        <aside className="hero-rail" aria-label="More featured stories">
-          <div className="rail-heading"><span>In focus</span><span>01—04</span></div>
+        <aside className="hero-rail" aria-label="More recent stories">
+          <div className="rail-heading"><span>Latest</span><span>02—04</span></div>
           {secondary.map((article, index) => (
             <article key={article.slug}>
               <span className="story-index">0{index + 2}</span>
-              <div><Link className="category-label" href={`/${article.category}`}>{CATEGORY_MAP[article.category].shortName}</Link><h2><Link href={`/articles/${article.slug}`}>{article.title}</Link></h2><span className="rail-meta">{article.readingTime} min read</span></div>
+              <div>
+                <Link className="category-label" href={`/${article.category}`}>{CATEGORY_MAP[article.category].shortName}</Link>
+                <h2><Link href={`/articles/${article.slug}`}>{article.title}</Link></h2>
+                <span className="rail-meta">{CONTENT_TYPE_MAP[article.contentType].name} · {article.readingTime} min</span>
+              </div>
             </article>
           ))}
         </aside>
       </section>
 
-      <section className="category-strip" aria-label="Browse technology topics">
-        <div className="wrap category-shortcuts">
-          {shortcuts.map(([mark, label, href]) => <Link key={label} href={href}><span>{mark}</span><strong>{label}</strong><ArrowRight aria-hidden="true" /></Link>)}
+      <section className="section-block latest-home wrap" aria-labelledby="latest-title">
+        <SectionHeading eyebrow="Stay current" title="Latest" href="/latest" id="latest-title" />
+        <div className="latest-feed">
+          {latest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
         </div>
       </section>
 
-      <section className="section-block wrap" aria-labelledby="latest-title">
-        <SectionHeading eyebrow="Freshly decoded" title="Latest articles" href="/search" />
-        <div className="latest-layout">
-          <div className="article-grid">
-            {articles.slice(0, 6).map((article, index) => <ArticleCard key={article.slug} article={article} priority={index < 2} />)}
-          </div>
-          <aside className="trending-panel" aria-labelledby="trending-title">
-            <div className="trending-title"><span className="signal-dot" aria-hidden="true" /><h2 id="trending-title">Trending</h2></div>
-            <p className="trending-note">Stories selected by the editorial team. No traffic ranking implied.</p>
-            <ol>{articles.filter((article) => article.trending).map((article) => <li key={article.slug}><Link href={`/articles/${article.slug}`}>{article.title}</Link><span>{CATEGORY_MAP[article.category].shortName} · {article.readingTime} min</span></li>)}</ol>
-          </aside>
-        </div>
-      </section>
-
-      <section className="category-sections wrap" aria-labelledby="category-stories-title">
-        <SectionHeading eyebrow="The edit" title="Technology, section by section" />
-        <h2 id="category-stories-title" className="sr-only">Selected category stories</h2>
-        <div className="category-feature-grid">
-          {majorCategories.map((slug, index) => {
-            const article = getArticlesByCategory(slug)[0] ?? articles[index % articles.length];
-            const category = CATEGORY_MAP[slug];
-            return <article className="category-feature" key={slug}><div className="category-feature-head"><span>{String(index + 1).padStart(2, "0")}</span><Link href={`/${slug}`}>{category.name} <ArrowRight aria-hidden="true" /></Link></div><ArticleCard article={article} variant="compact" /></article>;
-          })}
-        </div>
-      </section>
+      <EditorialSection eyebrow="Understand" title="AI" href="/ai" stories={ai} />
+      <EditorialSection eyebrow="Fix" title="How-To" href="/how-to" stories={howTo} />
+      <EditorialSection eyebrow="Everyday technology" title="Digital Life" href="/digital-life" stories={digitalLife} />
+      <EditorialSection eyebrow="Protect what matters" title="Security" href="/security" stories={security} />
+      <EditorialSection eyebrow="Explore what comes next" title="Science" href="/science" stories={science} />
+      <EditorialSection eyebrow="Selected by DECODISTA" title="Editor’s Picks" href="/latest" stories={editorsPicks} />
     </main>
   );
 }

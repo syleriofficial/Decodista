@@ -31,12 +31,14 @@ npm run build
 
 ## Content model
 
-Sample articles live in `lib/content.ts`. Every article has a title, slug, description, standfirst, category, tags, author, dates, featured image and alt text, reading time, editorial flags, and typed content blocks.
+Approved production articles live in `lib/articles/` and are registered by `lib/content.ts`. Every article has a primary category, a separate content type, topic tags, publication and verification metadata, a short answer, related-article controls, responsive artwork metadata and typed content blocks.
 
 Supported content blocks include headings, paragraphs, ordered and unordered lists, tables, images with captions, quotes, code blocks, and callouts. The presentation layer consumes the typed `Article` interface, so a Markdown/MDX loader or CMS adapter can replace the current repository without rewriting page components.
+
+Primary categories are AI, Digital Life, Security and Science. How-To is a cross-category content type. `/latest` is the chronological archive, while a limited set of populated `/topics/...` hubs provide subject-based discovery without creating thin tag pages.
 
 ## Configuration
 
 Set `NEXT_PUBLIC_SITE_URL` to the canonical production origin before launch. It defaults to `https://decodista.com` so local builds can generate complete sitemap, canonical, and structured-data URLs.
 
-Newsletter and contact interfaces are intentionally not connected to a provider. The sample content is labelled as such and makes no claim of original product testing, traffic rankings, or newsroom credentials.
+The newsletter interface is hidden because no provider is connected. Contact routes are not presented as functional until a verified channel exists. Documentation-based articles do not claim hands-on testing.

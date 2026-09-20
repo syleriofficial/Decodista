@@ -2,7 +2,6 @@ import type { Article, InlineContent, RichText } from "@/lib/content";
 
 const strong = (text: string): InlineContent => ({ type: "strong", text });
 const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
-const lineBreak: InlineContent = { type: "break" };
 const rich = (...content: InlineContent[]): RichText => content;
 
 export const doesIcloudBackupIncludePhotosArticle: Article = {
@@ -12,42 +11,29 @@ export const doesIcloudBackupIncludePhotosArticle: Article = {
   description: "Does iCloud Backup include photos? Learn how iCloud Photos changes the answer, what deletion does, and what to check before replacing or erasing your iPhone.",
   standfirst: "Your photo recovery route depends on whether iCloud Photos is enabled. Check what is synced, what is backed up and which copies to verify before an iPhone upgrade.",
   category: "digital-life",
+  contentType: "explainer",
   tags: ["iCloud", "iCloud Photos", "iCloud Backup", "iPhone", "Photo backup", "Data protection"],
   author: "DECODISTA Editorial",
   publishedDate: "2026-09-20",
   updatedDate: "2026-09-20",
+  checkedDate: "2026-09-18",
   featuredImage: "/images/icloud-backup-photos.webp",
   featuredImageAlt: "Generic smartphone photo library linked separately to a blue cloud sync layer and an amber device backup archive",
   featuredImageWidth: 1672,
   featuredImageHeight: 941,
   readingTime: 12,
-  featured: true,
-  sample: false,
   relatedArticleSlugs: [
     "google-photos-android-undo-backup-keep-phone-photos",
     "google-authenticator-new-phone-codes-missing",
   ],
+  shortAnswer: rich(
+    strong("If iCloud Photos is on, your synced photos are stored in iCloud Photos and are not duplicated inside your normal iCloud device backup. If iCloud Photos is off, iCloud Backup may include the photos and videos stored on your iPhone."),
+    " Inclusion depends on your backup settings and a successful backup. ",
+    link("Apple’s explanation of backup contents", "https://support.apple.com/en-us/108770"),
+    ", ",
+    link("photo-library backup controls", "https://support.apple.com/en-us/108922"),
+  ),
   content: [
-    {
-      type: "paragraph",
-      text: rich(
-        strong("DECODISTA — Technology, Decoded."),
-        lineBreak,
-        strong("Category: Digital Life"),
-        lineBreak,
-        strong("Information checked on: 18 September 2026 (UTC)"),
-      ),
-    },
-    {
-      type: "paragraph",
-      text: rich(
-        strong("If iCloud Photos is on, your synced photos are stored in iCloud Photos and are not duplicated inside your normal iCloud device backup. If iCloud Photos is off, iCloud Backup may include the photos and videos stored on your iPhone."),
-        " Inclusion depends on your backup settings and a successful backup. ",
-        link("Apple’s explanation of backup contents", "https://support.apple.com/en-us/108770"),
-        ", ",
-        link("photo-library backup controls", "https://support.apple.com/en-us/108922"),
-      ),
-    },
     { type: "paragraph", text: "That means replacing a phone and recovering an accidentally deleted photo are different problems. Before relying on either service, check which copies actually exist." },
     { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
     {

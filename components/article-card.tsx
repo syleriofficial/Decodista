@@ -3,7 +3,7 @@ import Link from "@/components/app-link";
 import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/content";
 import { formatDate } from "@/lib/content";
-import { CATEGORY_MAP } from "@/lib/site";
+import { CATEGORY_MAP, CONTENT_TYPE_MAP } from "@/lib/site";
 
 interface ArticleCardProps {
   article: Article;
@@ -28,7 +28,9 @@ export function ArticleCard({ article, variant = "standard", priority = false }:
       <div className="card-copy">
         <div className="card-labels">
           <Link className="category-label" href={`/${article.category}`}>{category.shortName}</Link>
-          {article.sample && <span className="sample-label">Sample</span>}
+          {article.contentType === "how-to"
+            ? <Link className="content-type-label" href="/how-to">{CONTENT_TYPE_MAP[article.contentType].name}</Link>
+            : <span className="content-type-label">{CONTENT_TYPE_MAP[article.contentType].name}</span>}
         </div>
         <h3><Link href={`/articles/${article.slug}`}>{article.title}</Link></h3>
         {variant !== "compact" && <p>{article.description}</p>}

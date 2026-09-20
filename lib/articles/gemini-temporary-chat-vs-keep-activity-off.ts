@@ -3,7 +3,6 @@ import type { Article, InlineContent, RichText } from "@/lib/content";
 const strong = (text: string): InlineContent => ({ type: "strong", text });
 const emphasis = (text: string): InlineContent => ({ type: "emphasis", text });
 const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
-const lineBreak: InlineContent = { type: "break" };
 const rich = (...content: InlineContent[]): RichText => content;
 
 export const geminiTemporaryChatArticle: Article = {
@@ -13,36 +12,26 @@ export const geminiTemporaryChatArticle: Article = {
   description: "Compare Gemini Temporary Chat and Keep Activity off: what stays in history, 72-hour retention, AI training, personalisation and important privacy exceptions.",
   standfirst: "Temporary Chat applies to one conversation; Keep Activity off changes future ordinary chats. Here is how history, retention, training and personalisation differ—and which exceptions still matter.",
   category: "ai",
+  contentType: "explainer",
   tags: ["Google Gemini", "AI Privacy", "Digital Privacy", "Google Account", "Temporary Chat"],
   author: "DECODISTA Editorial",
   publishedDate: "2026-09-17",
   updatedDate: "2026-09-17",
+  checkedDate: "2026-09-16",
   featuredImage: "/images/gemini-temporary-chat-privacy.webp",
   featuredImageAlt: "Abstract glass conversation paths divide between a dissolving temporary chat and layered saved history",
   featuredImageWidth: 1536,
   featuredImageHeight: 865,
   readingTime: 10,
-  featured: true,
-  sample: false,
+  editorsPick: true,
+  shortAnswer: rich(
+    strong("Temporary Chat is a choice for one conversation. Turning Keep Activity off changes how your future ordinary conversations are handled."),
+    " Both limit what becomes part of your saved Gemini history, but neither means Google stores nothing. Google documents a short retention window of up to 72 hours for these conversations, with other rules applying to feedback and related data. ",
+    link("Google’s Temporary Chat announcement", "https://blog.google/products-and-platforms/products/gemini/temporary-chats-privacy-controls/"),
+    ", ",
+    link("activity controls", "https://support.google.com/gemini/answer/13278892"),
+  ),
   content: [
-    {
-      type: "paragraph",
-      text: rich(
-        strong("DECODISTA — Technology, Decoded."),
-        lineBreak,
-        strong("Information checked on: 16 September 2026 (UTC)."),
-      ),
-    },
-    {
-      type: "paragraph",
-      text: rich(
-        strong("Temporary Chat is a choice for one conversation. Turning Keep Activity off changes how your future ordinary conversations are handled."),
-        " Both limit what becomes part of your saved Gemini history, but neither means Google stores nothing. Google documents a short retention window of up to 72 hours for these conversations, with other rules applying to feedback and related data. ",
-        link("Google’s Temporary Chat announcement", "https://blog.google/products-and-platforms/products/gemini/temporary-chats-privacy-controls/"),
-        ", ",
-        link("activity controls", "https://support.google.com/gemini/answer/13278892"),
-      ),
-    },
     {
       type: "paragraph",
       text: rich(

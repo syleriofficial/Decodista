@@ -1,9 +1,249 @@
-export interface InfoPage { title: string; eyebrow: string; description: string; updated?: string; sections: { title: string; paragraphs: string[]; bullets?: string[] }[]; }
+export interface InfoPage {
+  title: string;
+  eyebrow: string;
+  description: string;
+  updated?: string;
+  sections: { title: string; paragraphs: string[]; bullets?: string[] }[];
+}
 
 export const infoPages: Record<string, InfoPage> = {
-  about: { title: "About DECODISTA", eyebrow: "Technology, Decoded.", description: "DECODISTA is an independent publication concept built around one idea: technology should be understandable to everyone.", sections: [{ title: "What we cover", paragraphs: ["We explain the technology and digital choices that shape everyday life, from artificial intelligence and devices to privacy, apps, and the internet."], bullets: ["Clear explanations before jargon", "Practical context before hype", "Global relevance and accessible English", "Useful choices for non-specialist readers"] }, { title: "This first edition", paragraphs: ["This site is a production-ready foundation demonstrated with a small set of clearly labelled sample articles. It does not represent a full newsroom or claim a publishing history that does not yet exist."] }] },
-  contact: { title: "Contact", eyebrow: "Get in touch", description: "DECODISTA’s public contact channels will be listed here when the publication launches.", sections: [{ title: "Editorial enquiries", paragraphs: ["A verified editorial email or contact form has not been connected in this first version. No message submitted through this site is currently collected or stored."] }, { title: "Corrections and feedback", paragraphs: ["When official contact details are added, readers will be able to use them for factual corrections, accessibility feedback, and general editorial enquiries."] }] },
-  "editorial-policy": { title: "Editorial Policy", eyebrow: "How we work", description: "The principles intended to guide DECODISTA’s reporting, explanations, guides, and reviews.", sections: [{ title: "Accuracy and clarity", paragraphs: ["We aim to distinguish verified facts, analysis, and opinion. Technical language should be explained when it is necessary, and removed when it is not."], bullets: ["Prefer primary sources for technical claims", "Name uncertainty and important limitations", "Update material errors transparently", "Avoid sensational or misleading headlines"] }, { title: "Independence and reviews", paragraphs: ["Commercial relationships, supplied products, affiliate links, or meaningful conflicts should be disclosed clearly when they exist. This demo contains no product tests, affiliate links, sponsored articles, or performance claims."] }, { title: "Corrections", paragraphs: ["A formal corrections log and contact process should be added before publication begins."] }] },
-  "privacy-policy": { title: "Privacy Policy", eyebrow: "Reader privacy", updated: "17 September 2026", description: "DECODISTA minimises data collection and does not connect its newsletter or contact forms to a provider.", sections: [{ title: "Information collected", paragraphs: ["DECODISTA does not intentionally collect names, email addresses, or form submissions through the current website. Your theme preference and analytics choice are stored locally on your device."] }, { title: "Hosting and analytics", paragraphs: ["Cloudflare hosts DECODISTA and may process standard request information, such as IP addresses and user-agent data, to deliver and protect the website.", "With your permission, DECODISTA loads Google Analytics to measure page views and site interaction. Google Analytics may use first-party cookies and process information about your browser, device, and use of the site. Advertising storage, advertising user data, advertising personalisation, Google signals, and ad-personalisation signals remain disabled in DECODISTA’s implementation. Analytics data is retained according to the settings of the connected Google Analytics property and Google’s policies."] }, { title: "Your choices", paragraphs: ["Analytics is off by default and the Google Analytics tag is not loaded unless you select Accept analytics. You can decline it or reopen Privacy choices in the footer at any time. Withdrawing consent prevents future analytics collection from this browser, but does not delete information already processed before withdrawal."] }] },
-  terms: { title: "Terms", eyebrow: "Using DECODISTA", description: "Basic terms structure for the initial publication foundation.", sections: [{ title: "Informational purpose", paragraphs: ["DECODISTA content is intended for general information and education. It is not a substitute for professional legal, medical, financial, or security advice."] }, { title: "Sample content", paragraphs: ["Articles in this first version are clearly identified as samples. They do not claim original testing, private research, endorsements, or access to unreleased products."] }, { title: "Intellectual property and links", paragraphs: ["Final ownership, reuse, external-link, jurisdiction, and liability terms should be reviewed by qualified counsel before commercial launch."] }] },
+  about: {
+    title: "About DECODISTA",
+    eyebrow: "Technology, Decoded.",
+    description: "DECODISTA is a consumer-technology publication built to make everyday technology easier to understand.",
+    sections: [
+      {
+        title: "What we do",
+        paragraphs: [
+          "DECODISTA publishes clear explanations and practical guides for the technology people use every day. The focus is not only what a product or setting does, but what it means for a reader making a real decision.",
+        ],
+        bullets: [
+          "Understand artificial intelligence and emerging technology",
+          "Fix account, privacy, backup and device problems",
+          "Make informed choices without manufactured urgency",
+          "Read globally accessible English with necessary terms explained",
+        ],
+      },
+      {
+        title: "Our editorial position",
+        paragraphs: [
+          "DECODISTA prefers useful context to hype. It distinguishes documentation-based explanation from hands-on testing and does not present a review unless a genuine evaluation has taken place.",
+          "Published work currently uses the DECODISTA Editorial byline. The byline describes publication-level responsibility; it does not imply a large newsroom or unnamed specialist credentials.",
+        ],
+      },
+    ],
+  },
+  contact: {
+    title: "Contact",
+    eyebrow: "Reach DECODISTA",
+    description: "Contact routes are published only after they are verified and able to receive messages reliably.",
+    sections: [
+      {
+        title: "Current contact status",
+        paragraphs: [
+          "DECODISTA does not currently publish an editorial email address or operate a contact form. No message entered on this website is collected or stored.",
+          "A working editorial and corrections channel will be added here after it has been verified. DECODISTA will not display an untested address or a form that gives readers a false expectation of delivery.",
+        ],
+      },
+      {
+        title: "Security note",
+        paragraphs: [
+          "Never send passwords, one-time codes, backup codes, QR secrets, recovery keys or other account credentials to a publication or support contact.",
+        ],
+      },
+    ],
+  },
+  "editorial-policy": {
+    title: "Editorial Standards",
+    eyebrow: "Accuracy, clarity, independence",
+    description: "The standards applied to DECODISTA explanations, guides and future evaluation work.",
+    sections: [
+      {
+        title: "Accuracy and sourcing",
+        paragraphs: [
+          "DECODISTA aims to distinguish documented facts, practical recommendations, analysis and uncertainty. Primary or official sources are preferred for product behaviour, settings and policy claims.",
+        ],
+        bullets: [
+          "Link important claims to the most relevant source available",
+          "State when information was checked where timing matters",
+          "Name meaningful limitations and documentation conflicts",
+          "Avoid sensational headlines and unsupported certainty",
+        ],
+      },
+      {
+        title: "Testing and reviews",
+        paragraphs: [
+          "A documentation-based article is not described as hands-on testing. Reviews remain outside DECODISTA’s active publishing model until products or services can be evaluated directly with a disclosed method.",
+          "Any future commercial relationship, supplied product, sponsorship or affiliate link should be disclosed clearly and should not determine an editorial conclusion.",
+        ],
+      },
+      {
+        title: "Corrections and updates",
+        paragraphs: [
+          "Material factual errors should be corrected promptly. Significant corrections should be explained on the affected page; ordinary maintenance changes may be reflected in the updated date when they materially change the article.",
+        ],
+      },
+    ],
+  },
+  "how-we-work": {
+    title: "How We Work",
+    eyebrow: "From source to explanation",
+    description: "How DECODISTA researches, labels and maintains consumer-technology coverage.",
+    sections: [
+      {
+        title: "Start with the reader’s decision",
+        paragraphs: [
+          "Coverage begins with a practical question: what does a reader need to understand, verify or do safely? Articles are structured to provide a direct answer before the deeper explanation.",
+        ],
+      },
+      {
+        title: "Prefer primary sources",
+        paragraphs: [
+          "Official product documentation, support pages, policies and first-party announcements are preferred for claims about settings and service behaviour. Sources are linked near the relevant explanation where practical.",
+          "When documentation is unclear or inconsistent, the article should say so rather than resolving the ambiguity by guesswork.",
+        ],
+      },
+      {
+        title: "Separate documentation from testing",
+        paragraphs: [
+          "A guide based on documentation is labelled and written as documentation-based reporting. DECODISTA does not claim to have changed an account, transferred data, tested hardware or captured a screenshot unless that work was actually performed and documented.",
+        ],
+      },
+      {
+        title: "Maintain and correct",
+        paragraphs: [
+          "Information-check dates record when time-sensitive documentation was reviewed. Updated dates are used when published material changes meaningfully. Errors are handled under the Corrections policy.",
+        ],
+      },
+    ],
+  },
+  corrections: {
+    title: "Corrections",
+    eyebrow: "Getting the record right",
+    description: "How DECODISTA handles factual errors, clarifications and material updates.",
+    sections: [
+      {
+        title: "What is corrected",
+        paragraphs: [
+          "Factual errors, misleading wording, broken source attribution and instructions made unsafe by a product change should be reviewed and corrected. Differences of opinion are not treated as factual errors, but unclear distinctions may warrant clarification.",
+        ],
+      },
+      {
+        title: "How changes are shown",
+        paragraphs: [
+          "A material correction should be noted on the affected article with enough context to understand what changed. Substantive maintenance may update the article’s modified date. Typographical changes that do not alter meaning do not require a correction note.",
+        ],
+      },
+      {
+        title: "Submitting a correction",
+        paragraphs: [
+          "The verified submission route will be listed on the Contact page when it is operational. Until then, DECODISTA does not present a non-functional form or unverified inbox as a corrections channel.",
+        ],
+      },
+    ],
+  },
+  "editorial-team": {
+    title: "DECODISTA Editorial",
+    eyebrow: "Editorial profile",
+    description: "The publication-level byline used for DECODISTA’s researched explanations and guides.",
+    sections: [
+      {
+        title: "What the byline means",
+        paragraphs: [
+          "DECODISTA Editorial identifies work published under the publication’s editorial process. It does not represent a list of invented staff members, credentials or testing facilities.",
+          "Articles carrying this byline should make their sourcing, verification date, limitations and testing status clear within the page when those details matter.",
+        ],
+      },
+      {
+        title: "Editorial approach",
+        paragraphs: [
+          "The work prioritises primary sources, practical consequences and careful safety language. No article should claim first-hand use, original testing or specialist credentials unless those claims can be supported and disclosed.",
+        ],
+      },
+    ],
+  },
+  "ai-policy": {
+    title: "AI Policy",
+    eyebrow: "Responsible assistance",
+    description: "How automated tools may support DECODISTA without replacing editorial responsibility.",
+    sections: [
+      {
+        title: "Where tools may assist",
+        paragraphs: [
+          "Automated tools may assist with research organisation, structure, formatting, metadata, code and original illustration production. Their output is not treated as evidence or as a substitute for checking the cited source.",
+        ],
+      },
+      {
+        title: "Editorial responsibility",
+        paragraphs: [
+          "DECODISTA Editorial remains responsible for what is published. Unsupported facts, fabricated quotations, invented testing and false credentials are not acceptable uses of automation.",
+        ],
+      },
+      {
+        title: "Images and testing",
+        paragraphs: [
+          "Original editorial illustrations may be created with generative tools and should not imitate protected product interfaces or imply hands-on testing. Documentation-based guides must not be presented as device or account testing.",
+        ],
+      },
+    ],
+  },
+  "privacy-policy": {
+    title: "Privacy Policy",
+    eyebrow: "Reader privacy",
+    updated: "20 September 2026",
+    description: "How DECODISTA handles local preferences, optional analytics and standard hosting data.",
+    sections: [
+      {
+        title: "Information collected",
+        paragraphs: [
+          "DECODISTA does not operate a newsletter signup or contact form and does not intentionally collect names, email addresses or form submissions. Theme and analytics preferences are stored locally on your device.",
+        ],
+      },
+      {
+        title: "Hosting and analytics",
+        paragraphs: [
+          "Cloudflare hosts DECODISTA and may process standard request information, such as IP addresses and user-agent data, to deliver and protect the website.",
+          "With your permission, DECODISTA loads Google Analytics to measure page views and site interaction. Advertising storage, advertising user data, advertising personalisation, Google signals and ad-personalisation signals remain disabled in DECODISTA’s implementation.",
+        ],
+      },
+      {
+        title: "Your choices",
+        paragraphs: [
+          "Analytics is off by default and its tag is not loaded unless you accept. You can decline or reopen Privacy choices in the footer. Withdrawing consent prevents future analytics collection from that browser but does not delete information already processed before withdrawal.",
+        ],
+      },
+    ],
+  },
+  terms: {
+    title: "Terms",
+    eyebrow: "Using DECODISTA",
+    updated: "20 September 2026",
+    description: "Basic terms governing access to DECODISTA’s informational technology coverage.",
+    sections: [
+      {
+        title: "Informational purpose",
+        paragraphs: [
+          "DECODISTA content is provided for general information and education. It is not a substitute for professional legal, medical, financial or security advice, and product interfaces or policies may change after publication.",
+        ],
+      },
+      {
+        title: "Use of the website",
+        paragraphs: [
+          "You may read and link to publicly available pages for lawful purposes. Do not interfere with the website, attempt unauthorised access or misrepresent DECODISTA content or branding as your own.",
+        ],
+      },
+      {
+        title: "External services",
+        paragraphs: [
+          "Articles may link to third-party documentation and services. Those destinations control their own content, availability and privacy practices. A source link is not an endorsement of every part of a third-party service.",
+        ],
+      },
+      {
+        title: "No fabricated evaluation claims",
+        paragraphs: [
+          "DECODISTA distinguishes researched explanation from hands-on testing. The absence of a testing claim means readers should not infer that a product, account change or recovery process was personally tested.",
+        ],
+      },
+    ],
+  },
 };

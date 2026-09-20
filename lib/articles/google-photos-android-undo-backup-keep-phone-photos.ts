@@ -2,7 +2,6 @@ import type { Article, InlineContent, RichText } from "@/lib/content";
 
 const strong = (text: string): InlineContent => ({ type: "strong", text });
 const link = (text: string, href: string): InlineContent => ({ type: "link", text, href });
-const lineBreak: InlineContent = { type: "break" };
 const rich = (...content: InlineContent[]): RichText => content;
 
 export const googlePhotosUndoBackupArticle: Article = {
@@ -12,34 +11,24 @@ export const googlePhotosUndoBackupArticle: Article = {
   description: "Use Google Photos Undo backup on Android carefully: verify phone copies, compare deletion options, and check other devices before removing cloud photos.",
   standfirst: "Undo backup can remove Google Photos cloud copies while preserving files on your Android device. Check real local files, make an independent copy and review other devices before changing your backup.",
   category: "digital-life",
+  contentType: "how-to",
   tags: ["Google Photos", "Android", "Photo Backup", "Cloud Storage", "Photo Storage", "Data Protection"],
   author: "DECODISTA Editorial",
   publishedDate: "2026-09-18",
   updatedDate: "2026-09-18",
+  checkedDate: "2026-09-17",
   featuredImage: "/images/google-photos-undo-backup.webp",
   featuredImageAlt: "Unbranded smartphone holding local photo files beneath a separate cloud photo layer being disconnected",
   featuredImageWidth: 1672,
   featuredImageHeight: 941,
   readingTime: 12,
-  featured: true,
-  sample: false,
+  editorsPick: true,
+  shortAnswer: rich(
+    strong("On Android, Undo backup removes Google Photos copies of items currently on that device while keeping the device files. It does not clear every cloud-only photo in your account."),
+    " Before using it, verify the files and make an independent copy of anything important. ",
+    link("Google’s Android deletion guide", "https://support.google.com/photos/answer/6128858?co=GENIE.Platform%3DAndroid&hl=en"),
+  ),
   content: [
-    {
-      type: "paragraph",
-      text: rich(
-        strong("DECODISTA — Technology, Decoded."),
-        lineBreak,
-        strong("Information checked on: 17 September 2026 (UTC)."),
-      ),
-    },
-    {
-      type: "paragraph",
-      text: rich(
-        strong("On Android, Undo backup removes Google Photos copies of items currently on that device while keeping the device files. It does not clear every cloud-only photo in your account."),
-        " Before using it, verify the files and make an independent copy of anything important. ",
-        link("Google’s Android deletion guide", "https://support.google.com/photos/answer/6128858?co=GENIE.Platform%3DAndroid&hl=en"),
-      ),
-    },
     { type: "paragraph", text: "This guide covers Android. Do not apply its steps or device-storage assumptions to an iPhone or iPad." },
     { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
     {
