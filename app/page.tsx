@@ -39,8 +39,8 @@ function EditorialSection({
 }
 
 export default function HomePage() {
-  const lead = articles[0];
-  const secondary = articles.slice(1, 4);
+  const lead = articles.find((article) => article.featured) ?? articles[0];
+  const secondary = articles.filter((article) => article.slug !== lead.slug).slice(0, 3);
   const latest = articles.slice(0, 5);
   const ai = getArticlesByCategory("ai");
   const howTo = getArticlesByContentType("how-to");

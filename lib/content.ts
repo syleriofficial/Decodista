@@ -1,15 +1,13 @@
 import type { CategorySlug, ContentTypeSlug, TopicSlug } from "@/lib/site";
 import { TOPIC_MAP } from "@/lib/site";
-import { doesIcloudBackupIncludePhotosArticle } from "@/lib/articles/does-icloud-backup-include-photos";
-import { googleAuthenticatorNewPhoneArticle } from "@/lib/articles/google-authenticator-new-phone-codes-missing";
-import { geminiTemporaryChatArticle } from "@/lib/articles/gemini-temporary-chat-vs-keep-activity-off";
-import { googlePhotosUndoBackupArticle } from "@/lib/articles/google-photos-android-undo-backup-keep-phone-photos";
-import { removeThirdPartyGoogleAccessArticle } from "@/lib/articles/remove-third-party-google-access-without-losing-login";
+import { cmsArticles } from "virtual:decodista-articles";
 
 export type InlineContent =
   | string
   | { type: "strong"; text: string }
   | { type: "emphasis"; text: string }
+  | { type: "delete"; text: string }
+  | { type: "code"; text: string }
   | { type: "link"; text: string; href: string }
   | { type: "break" };
 
@@ -43,6 +41,7 @@ export interface Article {
   featuredImageWidth?: number;
   featuredImageHeight?: number;
   readingTime: number;
+  featured?: boolean;
   editorsPick?: boolean;
   shortAnswer: RichText;
   relatedArticleSlugs?: string[];
@@ -58,11 +57,7 @@ const publicationOrder = (a: Article, b: Article) =>
  * Sample fixtures are not registered for rendering, search or discovery.
  */
 export const articles: Article[] = [
-  doesIcloudBackupIncludePhotosArticle,
-  googleAuthenticatorNewPhoneArticle,
-  googlePhotosUndoBackupArticle,
-  removeThirdPartyGoogleAccessArticle,
-  geminiTemporaryChatArticle,
+  ...cmsArticles,
 ].sort(publicationOrder);
 
 export const getArticle = (slug: string) =>

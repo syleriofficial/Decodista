@@ -1,0 +1,264 @@
+backend:
+  name: github
+  repo: syleriofficial/Decodista
+  branch: main
+  base_url: https://decodista.com
+  auth_endpoint: /api/decap/auth
+  site_domain: decodista.com
+  squash_merges: true
+  use_graphql: true
+  commit_messages:
+    create: 'Create {{collection}} “{{slug}}”'
+    update: 'Update {{collection}} “{{slug}}”'
+    delete: 'Delete {{collection}} “{{slug}}”'
+    uploadMedia: 'Upload editorial image “{{path}}”'
+    deleteMedia: 'Delete editorial image “{{path}}”'
+
+publish_mode: editorial_workflow
+site_url: https://decodista.com
+display_url: https://decodista.com
+logo:
+  src: https://decodista.com/favicon.svg
+  show_in_header: true
+locale: en
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+media_processing:
+  enabled: true
+  format:
+    enabled: true
+    default: webp
+  quality: 82
+  strip_metadata: true
+  width: 1600
+  height: 900
+  aspect_ratio: 16x9
+
+collections:
+  - name: articles
+    label: Articles
+    label_singular: Article
+    description: Create, review and publish DECODISTA articles. Drafts stay off the production branch until you publish them.
+    folder: content/articles
+    create: true
+    delete: false
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    slug: '{{fields.slug}}'
+    summary: '{{title}} · {{primaryCategory}} · {{contentType}} · {{publishedAt}}'
+    preview_path: 'articles/{{fields.slug}}'
+    sortable_fields: [title, publishedAt, primaryCategory, contentType]
+    view_filters:
+      - label: Featured Story
+        field: featured
+        pattern: true
+      - label: Editor's Picks
+        field: editorsPick
+        pattern: true
+      - label: How-To
+        field: contentType
+        pattern: how-to
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: The reader-facing headline. The article page supplies the only H1 automatically.
+      - label: Slug
+        name: slug
+        widget: string
+        pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Use lowercase words separated by hyphens. Do not change a published slug.']
+        hint: Becomes /articles/this-slug. Do not change it after publication.
+      - label: Deck
+        name: deck
+        widget: text
+        hint: A concise standfirst shown below the headline and on major editorial surfaces.
+      - label: Primary Category
+        name: primaryCategory
+        widget: select
+        options:
+          - { label: AI, value: ai }
+          - { label: Digital Life, value: digital-life }
+          - { label: Security, value: security }
+          - { label: Science, value: science }
+      - label: Content Type
+        name: contentType
+        widget: select
+        hint: How-To is a format, not a primary category.
+        options:
+          - { label: How-To, value: how-to }
+          - { label: Explainer, value: explainer }
+          - { label: News, value: news }
+          - { label: Analysis, value: analysis }
+      - label: Topics
+        name: topics
+        widget: list
+        min: 1
+        max: 20
+        field: { label: Topic, name: topic, widget: string }
+        hint: Add focused subject labels such as Google Account, iCloud Photos or Privacy.
+      - label: Hero Image
+        name: heroImage
+        widget: image
+        allow_multiple: false
+        choose_url: false
+        media_library:
+          config:
+            max_file_size: 2000000
+        media_processing:
+          enabled: true
+          format:
+            enabled: true
+            default: webp
+          quality: 82
+          strip_metadata: true
+          width: 1600
+          height: 900
+          aspect_ratio: 16x9
+        hint: Upload a landscape image up to 2 MB. It is converted to a metadata-stripped 1600×900 WebP before saving.
+      - label: Hero Image Alt Text
+        name: heroImageAlt
+        widget: text
+        pattern: ['.{20,}', 'Describe the meaningful visual content in at least 20 characters.']
+        hint: Describe what the image communicates; do not repeat the headline.
+      - { label: Hero Image Width, name: heroImageWidth, widget: hidden, default: 1600 }
+      - { label: Hero Image Height, name: heroImageHeight, widget: hidden, default: 900 }
+      - label: Short Answer
+        name: shortAnswer
+        widget: richtext
+        minimal: true
+        modes: [rich_text, raw]
+        buttons: [bold, italic, link]
+        editor_components: []
+        hint: Answer the article's main question directly in 2–5 concise lines. Do not introduce claims that are not supported below.
+      - label: Key Takeaways
+        name: keyTakeaways
+        widget: list
+        min: 2
+        max: 8
+        field:
+          label: Takeaway
+          name: takeaway
+          widget: richtext
+          minimal: true
+          modes: [rich_text, raw]
+          buttons: [bold, italic, link]
+          editor_components: []
+      - label: Opening Note (optional)
+        name: introduction
+        widget: richtext
+        required: false
+        minimal: true
+        modes: [rich_text, raw]
+        buttons: [bold, italic, link]
+        editor_components: []
+        hint: Optional context that should appear between the Short Answer and Key Takeaways.
+      - label: Main Article Body
+        name: body
+        widget: richtext
+        modes: [rich_text, raw]
+        buttons: [bold, italic, code, link, heading-two, heading-three, quote, bulleted-list, numbered-list]
+        editor_components: [image, code-block]
+        sanitize_preview: true
+        hint: Start sections with H2 and use H3 only beneath them. Do not add an H1. Existing table Markdown is preserved in Raw mode.
+      - label: FAQ
+        name: faqs
+        widget: list
+        required: false
+        collapsed: true
+        minimize_collapsed: true
+        label_singular: FAQ item
+        summary: '{{fields.question}}'
+        fields:
+          - { label: Question, name: question, widget: string }
+          - { label: Anchor, name: id, widget: hidden, default: '' }
+          - label: Answer
+            name: answer
+            widget: richtext
+            minimal: true
+            modes: [rich_text, raw]
+            buttons: [bold, italic, link, bulleted-list, numbered-list]
+            editor_components: []
+      - label: Sources & Verification
+        name: sourcesVerification
+        widget: richtext
+        modes: [rich_text, raw]
+        buttons: [bold, italic, link, bulleted-list]
+        editor_components: []
+        hint: Explain the verification basis and link the official or primary sources. Never claim testing that did not occur.
+      - label: Published Date
+        name: publishedAt
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        picker_utc: true
+      - label: Updated Date (only for substantive changes)
+        name: updatedAt
+        widget: datetime
+        required: false
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        picker_utc: true
+      - label: Information Checked Date
+        name: informationCheckedAt
+        widget: datetime
+        required: false
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        picker_utc: true
+        hint: The date time-sensitive documentation was checked; this is not the publication date.
+      - label: Author
+        name: author
+        widget: select
+        options:
+          - { label: DECODISTA Editorial, value: DECODISTA Editorial }
+        default: DECODISTA Editorial
+      - label: Reading Time (minutes)
+        name: readingTime
+        widget: number
+        value_type: int
+        min: 1
+        max: 120
+      - label: Related Articles (optional)
+        name: relatedArticles
+        widget: relation
+        required: false
+        collection: articles
+        search_fields: [title, slug, topics]
+        value_field: slug
+        display_fields: [title]
+        multiple: true
+      - label: SEO Title
+        name: seoTitle
+        widget: string
+        pattern: ['^.{1,70}$', 'Keep the SEO title to 70 characters or fewer.']
+      - label: Meta Description
+        name: metaDescription
+        widget: text
+        pattern: ['^.{1,170}$', 'Keep the meta description to 170 characters or fewer.']
+      - label: Editor's Pick
+        name: editorsPick
+        widget: boolean
+        default: false
+        required: false
+      - label: Internal CMS Workflow Test
+        name: internalTest
+        widget: boolean
+        default: false
+        required: false
+        hint: Setup validation only. Entries enabled here are excluded from public routes, search, metadata and the sitemap, and their slug must start with cms-workflow-test-.
+      - label: Featured Story
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: Only one published article may be the featured homepage story; the build rejects multiple selections.

@@ -65,6 +65,18 @@ export const CONTENT_TYPE_DEFINITIONS = [
     description:
       "Plain-English context for understanding how technology works and what its choices mean.",
   },
+  {
+    slug: "news",
+    name: "News",
+    description:
+      "Timely reporting on technology changes that matter to everyday users.",
+  },
+  {
+    slug: "analysis",
+    name: "Analysis",
+    description:
+      "Evidence-based analysis of important technology decisions, policies and shifts.",
+  },
 ] as const;
 
 export type ContentTypeSlug = (typeof CONTENT_TYPE_DEFINITIONS)[number]["slug"];

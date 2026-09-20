@@ -14,6 +14,10 @@ export function RichTextContent({ content }: { content: RichText }) {
         return <strong key={index}>{item.text}</strong>;
       case "emphasis":
         return <em key={index}>{item.text}</em>;
+      case "delete":
+        return <del key={index}>{item.text}</del>;
+      case "code":
+        return <code key={index}>{item.text}</code>;
       case "link":
         return item.href.startsWith("/")
           ? <Link key={index} href={item.href}>{item.text}</Link>
