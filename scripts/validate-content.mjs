@@ -59,4 +59,4 @@ if (fs.existsSync(uploadDirectory)) {
   }
 }
 
-console.log(`Validated ${articles.length} production articles, ${documents.length - articles.length} non-public workflow tests, ${internalArticleLinks.length} internal article links, ${images.length} referenced images, and ${uploadedFiles} CMS uploads.`);
+console.log(`Validated ${articles.length} production articles, ${internalArticleLinks.length} internal article links, ${images.length} referenced images, and ${uploadedFiles} CMS uploads.`);

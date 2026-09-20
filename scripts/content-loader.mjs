@@ -304,13 +304,6 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const slug = requiredString(data.slug, "slug", source);
   if (!SLUG_PATTERN.test(slug)) fail(source, '"slug" must use lowercase words separated by hyphens');
   if (path.basename(filePath, path.extname(filePath)) !== slug) fail(source, "filename must match the article slug");
-  const internalTest = data.internalTest === true;
-  if (internalTest && !slug.startsWith("cms-workflow-test-")) {
-    fail(source, 'internal CMS tests must use a slug beginning with "cms-workflow-test-"');
-  }
-  if (internalTest && (data.featured === true || data.editorsPick === true)) {
-    fail(source, "internal CMS tests cannot be featured or selected as an Editor's Pick");
-  }
 
   const category = requiredString(data.primaryCategory, "primaryCategory", source);
   if (!ALLOWED_CATEGORIES.has(category)) fail(source, `unknown primaryCategory "${category}"`);
@@ -405,7 +398,6 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
       bodyMarkdown: parsed.content.trim(),
       faqs,
       sourcesMarkdown,
-      internalTest,
     },
     source,
   };
@@ -421,20 +413,18 @@ export function loadArticles(projectRoot) {
   if (!files.length) fail(ARTICLE_DIRECTORY, "no article files were found");
 
   const parsed = files.map((filePath) => parseArticleDocument(fs.readFileSync(filePath, "utf8"), filePath, projectRoot));
-  const publicParsed = parsed.filter(({ editorial }) => !editorial.internalTest);
-  if (!publicParsed.length) fail(ARTICLE_DIRECTORY, "no production article files were found");
   const slugSet = new Set();
   const titleSet = new Set();
   let featuredCount = 0;
-  for (const { article, editorial, source } of parsed) {
+  for (const { article, source } of parsed) {
     if (slugSet.has(article.slug)) fail(source, `duplicate slug "${article.slug}"`);
     if (titleSet.has(article.title)) fail(source, `duplicate title "${article.title}"`);
     slugSet.add(article.slug);
     titleSet.add(article.title);
-    if (!editorial.internalTest && article.featured) featuredCount += 1;
+    if (article.featured) featuredCount += 1;
   }
   if (featuredCount > 1) fail(ARTICLE_DIRECTORY, "only one article may be the featured story");
-  const publicSlugs = new Set(publicParsed.map(({ article }) => article.slug));
+  const publicSlugs = new Set(parsed.map(({ article }) => article.slug));
   for (const { article, source } of parsed) {
     for (const related of article.relatedArticleSlugs ?? []) {
       if (related === article.slug) fail(source, "an article cannot relate to itself");
@@ -445,6 +435,6 @@ export function loadArticles(projectRoot) {
   return {
     files,
     parsed,
-    articles: publicParsed.map(({ article }) => article),
+    articles: parsed.map(({ article }) => article),
   };
 }

@@ -250,12 +250,6 @@ collections:
         widget: boolean
         default: false
         required: false
-      - label: Internal CMS Workflow Test
-        name: internalTest
-        widget: boolean
-        default: false
-        required: false
-        hint: Setup validation only. Entries enabled here are excluded from public routes, search, metadata and the sitemap, and their slug must start with cms-workflow-test-.
       - label: Featured Story
         name: featured
         widget: boolean
