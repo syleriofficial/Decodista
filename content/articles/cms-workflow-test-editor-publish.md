@@ -1,8 +1,8 @@
 ---
 title: CMS Workflow Validation — Not for Publication
 slug: cms-workflow-test-editor-publish
-deck: A temporary private workflow entry used to verify the DECODISTA publishing
-  system.
+deck: A temporary private workflow entry used to verify that the DECODISTA
+  publishing system can create, reopen and edit a draft.
 primaryCategory: ai
 contentType: explainer
 topics:
