@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   title: { default: `${SITE_NAME} — ${SITE_TAGLINE}`, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
   openGraph: { type: "website", siteName: SITE_NAME, title: `${SITE_NAME} — ${SITE_TAGLINE}`, description: SITE_DESCRIPTION, url: "/" },
   twitter: { card: "summary", title: `${SITE_NAME} — ${SITE_TAGLINE}`, description: SITE_DESCRIPTION },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },

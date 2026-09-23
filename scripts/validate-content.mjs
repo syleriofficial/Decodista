@@ -11,6 +11,43 @@ const internalArticleLinks = [];
 const images = [];
 const uploadDirectory = path.join(projectRoot, "public/images/uploads");
 
+function readWebpDimensions(file) {
+  const buffer = fs.readFileSync(file);
+  if (buffer.length < 30 || buffer.toString("ascii", 0, 4) !== "RIFF" || buffer.toString("ascii", 8, 12) !== "WEBP") {
+    throw new Error(`Invalid WebP image: ${path.relative(projectRoot, file)}`);
+  }
+
+  let offset = 12;
+  while (offset + 8 <= buffer.length) {
+    const type = buffer.toString("ascii", offset, offset + 4);
+    const size = buffer.readUInt32LE(offset + 4);
+    const data = offset + 8;
+    if (data + size > buffer.length) break;
+
+    if (type === "VP8X" && size >= 10) {
+      return {
+        width: 1 + buffer.readUIntLE(data + 4, 3),
+        height: 1 + buffer.readUIntLE(data + 7, 3),
+      };
+    }
+    if (type === "VP8L" && size >= 5 && buffer[data] === 0x2f) {
+      return {
+        width: 1 + buffer[data + 1] + ((buffer[data + 2] & 0x3f) << 8),
+        height: 1 + ((buffer[data + 2] & 0xc0) >> 6) + (buffer[data + 3] << 2) + ((buffer[data + 4] & 0x0f) << 10),
+      };
+    }
+    if (type === "VP8 " && size >= 10 && buffer[data + 3] === 0x9d && buffer[data + 4] === 0x01 && buffer[data + 5] === 0x2a) {
+      return {
+        width: buffer.readUInt16LE(data + 6) & 0x3fff,
+        height: buffer.readUInt16LE(data + 8) & 0x3fff,
+      };
+    }
+
+    offset = data + size + (size % 2);
+  }
+  throw new Error(`Could not read WebP dimensions: ${path.relative(projectRoot, file)}`);
+}
+
 function inspectRichText(value, article) {
   if (!Array.isArray(value)) return;
   for (const piece of value) {
@@ -20,7 +57,14 @@ function inspectRichText(value, article) {
 }
 
 for (const article of documents) {
-  images.push({ article: article.slug, src: article.featuredImage, uploaded: article.featuredImage.startsWith("/images/uploads/") });
+  images.push({
+    article: article.slug,
+    src: article.featuredImage,
+    uploaded: article.featuredImage.startsWith("/images/uploads/"),
+    hero: true,
+    declaredWidth: article.featuredImageWidth,
+    declaredHeight: article.featuredImageHeight,
+  });
   inspectRichText(article.shortAnswer, article.slug);
   for (const block of article.content) {
     if (block.type === "paragraph" || block.type === "quote" || block.type === "callout") {
@@ -45,6 +89,21 @@ for (const { article, src, uploaded } of images) {
   if (!fs.existsSync(file)) throw new Error(`${article}: missing image ${src}`);
   if (uploaded && fs.statSync(file).size > 2_000_000) {
     throw new Error(`${article}: CMS upload ${src} exceeds the 2 MB repository limit`);
+  }
+}
+
+for (const { article, src, hero, declaredWidth, declaredHeight } of images) {
+  if (!hero) continue;
+  const file = path.join(projectRoot, "public", src.replace(/^\//, ""));
+  if (path.extname(file).toLowerCase() !== ".webp") {
+    throw new Error(`${article}: hero image must be an optimized WebP`);
+  }
+  const actual = readWebpDimensions(file);
+  if (actual.width < 1200) {
+    throw new Error(`${article}: hero image must be at least 1200px wide for large-image eligibility (found ${actual.width}px)`);
+  }
+  if (actual.width !== declaredWidth || actual.height !== declaredHeight) {
+    throw new Error(`${article}: declared hero dimensions ${declaredWidth}×${declaredHeight} do not match ${actual.width}×${actual.height}`);
   }
 }
 

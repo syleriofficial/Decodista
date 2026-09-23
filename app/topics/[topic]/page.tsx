@@ -14,12 +14,20 @@ export async function generateMetadata({ params }: { params: Promise<{ topic: st
   const { topic } = await params;
   if (!isTopic(topic)) return {};
   const definition = TOPIC_MAP[topic];
+  const hasMeaningfulCoverage = getArticlesByTopic(topic).length >= 2;
   return {
     title: definition.name,
     description: definition.description,
     alternates: { canonical: `/topics/${topic}` },
     openGraph: { type: "website", title: `${definition.name} | ${SITE_NAME}`, description: definition.description, url: `/topics/${topic}` },
     twitter: { card: "summary", title: `${definition.name} | ${SITE_NAME}`, description: definition.description },
+    robots: {
+      index: hasMeaningfulCoverage,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   };
 }
 

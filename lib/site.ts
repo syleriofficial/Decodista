@@ -89,6 +89,7 @@ export const TOPIC_HUBS = [
   {
     slug: "google",
     name: "Google",
+    showInNavigation: true,
     description:
       "Guides and explainers for Google accounts, Gemini, Google Photos and authentication.",
     tags: [
@@ -102,6 +103,7 @@ export const TOPIC_HUBS = [
   {
     slug: "google-account",
     name: "Google Account",
+    showInNavigation: true,
     description:
       "Understand Google sign-in, account connections, authentication and privacy controls.",
     tags: ["Google Account", "Sign in with Google", "Google Authenticator"],
@@ -109,6 +111,7 @@ export const TOPIC_HUBS = [
   {
     slug: "photos-backup",
     name: "Photos & Backup",
+    showInNavigation: true,
     description:
       "Clear guidance on photo libraries, device copies, cloud sync and independent backups.",
     tags: [
@@ -124,6 +127,7 @@ export const TOPIC_HUBS = [
   {
     slug: "privacy",
     name: "Privacy",
+    showInNavigation: true,
     description:
       "Practical explanations of privacy controls, permissions, retention and safer data choices.",
     tags: [
@@ -135,6 +139,24 @@ export const TOPIC_HUBS = [
       "Data protection",
     ],
   },
+  {
+    slug: "scams-and-fraud",
+    name: "Scams & Fraud",
+    showInNavigation: false,
+    description:
+      "Practical guidance for recognizing scams, protecting accounts and recovering safely after fraud or account compromise.",
+    tags: [
+      "Scams & Fraud",
+      "Phishing",
+      "Fake Messages",
+      "Account Takeover",
+      "Voice Cloning",
+      "Deepfake Scams",
+      "Fake Support",
+      "QR Scams",
+      "Recovery After Hacking",
+    ],
+  },
 ] as const;
 
 export type TopicSlug = (typeof TOPIC_HUBS)[number]["slug"];
@@ -143,12 +165,15 @@ export const TOPIC_MAP = Object.fromEntries(
   TOPIC_HUBS.map((topic) => [topic.slug, topic]),
 ) as Record<TopicSlug, (typeof TOPIC_HUBS)[number]>;
 
+export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
+  (topic) => topic.showInNavigation,
+);
+
 export const NAV_ITEMS = [
   { href: "/ai", label: "AI" },
   { href: "/how-to", label: "How-To" },
   { href: "/digital-life", label: "Digital Life" },
   { href: "/security", label: "Security" },
-  { href: "/science", label: "Science" },
   { href: "/latest", label: "Latest" },
 ] as const;
 

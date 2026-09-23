@@ -35,7 +35,13 @@ export async function generateMetadata({
     alternates: { canonical },
     openGraph: { type: "website", title: `${title} | ${SITE_NAME}`, description: category.description, url: canonical },
     twitter: { card: "summary", title: `${title} | ${SITE_NAME}`, description: category.description },
-    robots: { index: hasStories, follow: true },
+    robots: {
+      index: hasStories,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   };
 }
 

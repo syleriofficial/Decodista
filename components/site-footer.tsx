@@ -1,6 +1,6 @@
 import Link from "@/components/app-link";
 import { PrivacyChoicesButton } from "@/components/analytics-consent";
-import { NAV_ITEMS, TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
+import { NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -21,7 +21,7 @@ export function SiteFooter() {
           <div>
             <h2>Topics</h2>
             <ul>
-              {TOPIC_HUBS.map((topic) => <li key={topic.slug}><Link href={`/topics/${topic.slug}`}>{topic.name}</Link></li>)}
+              {NAV_TOPIC_HUBS.map((topic) => <li key={topic.slug}><Link href={`/topics/${topic.slug}`}>{topic.name}</Link></li>)}
             </ul>
           </div>
           <div>

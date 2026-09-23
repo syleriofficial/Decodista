@@ -45,7 +45,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: article.description,
       images: [article.featuredImage],
     },
-    robots: { index: true, follow: true },
+    robots: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   };
 }
 

@@ -3,7 +3,7 @@
 import Link from "@/components/app-link";
 import { ChevronDown, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NAV_ITEMS, TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
+import { NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ export function SiteHeader() {
                 <section aria-labelledby="more-topics-title">
                   <h2 id="more-topics-title">Topics</h2>
                   <ul>
-                    {TOPIC_HUBS.map((topic) => (
+                    {NAV_TOPIC_HUBS.map((topic) => (
                       <li key={topic.slug}><Link href={`/topics/${topic.slug}`} onClick={closeNavigation}>{topic.name}</Link></li>
                     ))}
                   </ul>

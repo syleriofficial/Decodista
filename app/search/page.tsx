@@ -8,7 +8,13 @@ export const metadata: Metadata = {
   description: "Search DECODISTA articles, guides, and technology explainers.",
   alternates: { canonical: "/search" },
   openGraph: { title: `Search | ${SITE_NAME}`, description: "Search DECODISTA articles, guides, and technology explainers.", url: "/search" },
-  robots: { index: false, follow: true },
+  robots: {
+    index: false,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
 };
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

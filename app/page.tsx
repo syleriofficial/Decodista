@@ -46,7 +46,6 @@ export default function HomePage() {
   const howTo = getArticlesByContentType("how-to");
   const digitalLife = getArticlesByCategory("digital-life");
   const security = getArticlesByCategory("security");
-  const science = getArticlesByCategory("science");
   const editorsPicks = getEditorsPicks();
 
   return (
@@ -98,7 +97,6 @@ export default function HomePage() {
       <EditorialSection eyebrow="Fix" title="How-To" href="/how-to" stories={howTo} />
       <EditorialSection eyebrow="Everyday technology" title="Digital Life" href="/digital-life" stories={digitalLife} />
       <EditorialSection eyebrow="Protect what matters" title="Security" href="/security" stories={security} />
-      <EditorialSection eyebrow="Explore what comes next" title="Science" href="/science" stories={science} />
       <EditorialSection eyebrow="Selected by DECODISTA" title="Editor’s Picks" href="/latest" stories={editorsPicks} />
     </main>
   );
