@@ -14,7 +14,7 @@ topics:
   - Cloud Storage
   - Android
   - Photo Recovery
-heroImage: /images/uploads/chatgpt-image-sep-23-2026-03_45_08-pm.webp
+heroImage: /images/uploads/chatgpt-image-sep-23-2026-04_46_10-pm.webp
 heroImageAlt: Illustration of a phone with cleared photo storage beside a cloud
   holding backed-up pictures.
 heroImageWidth: 1600
