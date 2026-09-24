@@ -56,15 +56,6 @@ if (window.CMS && window.createClass && window.h) {
     },
   });
 
-  window.CMS.registerEventListener({
-    name: "postPublish",
-    handler: ({ entry }) => {
-      const slug = entry.getIn(["data", "slug"]);
-      const liveUrl = slug ? `https://decodista.com/articles/${slug}` : "https://decodista.com/latest";
-      window.alert(`GitHub publish succeeded. Cloudflare is now validating and deploying this version, which can take a few minutes. Confirm the live page after deployment:\n\n${liveUrl}`);
-    },
-  });
-
   const ArticlePreview = window.createClass({
     render() {
       const entry = this.props.entry;
