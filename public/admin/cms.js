@@ -51,6 +51,7 @@ if (window.CMS && window.createClass && window.h) {
       const normalized = normalizeCmsArticleData(entry.get("data").toJS());
       const errors = validateCmsArticleData(normalized);
       if (errors.length) {
+        console.error("[DECODISTA CMS] Publish validation failed:", errors.join(" | "));
         throw new Error(`This article is not ready to publish:\n• ${errors.join("\n• ")}`);
       }
     },
