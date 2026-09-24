@@ -1,8 +1,12 @@
-(function () {
-  "use strict";
+import {
+  getBodySectionState,
+  isBlankCmsValue,
+  isEntirelyBlankCmsValue,
+  normalizeCmsArticleData,
+  validateCmsArticleData,
+} from "/admin/content-rules.mjs";
 
-  if (!window.CMS || !window.createClass || !window.h) return;
-
+if (window.CMS && window.createClass && window.h) {
   const h = window.h;
   const toArray = (value) => {
     if (!value) return [];
@@ -10,16 +14,70 @@
     return Array.isArray(value) ? value : [];
   };
 
+  const normalizeEntryMap = (data) => {
+    const normalized = normalizeCmsArticleData(data.toJS());
+    let next = data;
+
+    for (const key of data.keySeq().toArray()) {
+      if (!Object.hasOwn(normalized, key)) next = next.delete(key);
+    }
+
+    for (const field of ["topics", "keyTakeaways", "relatedArticles"]) {
+      const value = next.get(field);
+      if (value && typeof value.filter === "function") {
+        next = next.set(field, value.filter((item) => !isBlankCmsValue(item)));
+      }
+    }
+
+    const faqs = next.get("faqs");
+    if (faqs && typeof faqs.filter === "function") {
+      next = next.set("faqs", faqs.filter((item) => {
+        const plain = item && typeof item.toJS === "function" ? item.toJS() : item;
+        return !isEntirelyBlankCmsValue(plain);
+      }));
+    }
+
+    return next;
+  };
+
+  window.CMS.registerEventListener({
+    name: "preSave",
+    handler: ({ entry }) => normalizeEntryMap(entry.get("data")),
+  });
+
+  window.CMS.registerEventListener({
+    name: "prePublish",
+    handler: ({ entry }) => {
+      const normalized = normalizeCmsArticleData(entry.get("data").toJS());
+      const errors = validateCmsArticleData(normalized);
+      if (errors.length) {
+        throw new Error(`This article is not ready to publish:\n• ${errors.join("\n• ")}`);
+      }
+    },
+  });
+
+  window.CMS.registerEventListener({
+    name: "postPublish",
+    handler: ({ entry }) => {
+      const slug = entry.getIn(["data", "slug"]);
+      const liveUrl = slug ? `https://decodista.com/articles/${slug}` : "https://decodista.com/latest";
+      window.alert(`GitHub publish succeeded. Cloudflare is now validating and deploying this version, which can take a few minutes. Confirm the live page after deployment:\n\n${liveUrl}`);
+    },
+  });
+
   const ArticlePreview = window.createClass({
     render() {
       const entry = this.props.entry;
       const data = entry.get("data");
-      const get = (name, fallback = "") => data.get(name) ?? fallback;
+      const normalized = normalizeCmsArticleData(data.toJS());
+      const get = (name, fallback = "") => normalized[name] ?? fallback;
       const asset = this.props.getAsset(get("heroImage"));
       const topics = toArray(get("topics"));
       const takeaways = toArray(get("keyTakeaways"));
-      const faqs = toArray(get("faqs")).filter((faq) => faq?.question && faq?.answer);
-      const bodyIncludesSources = /^##\s+Sources\s+(?:&|and)\s+Verification\s*$/im.test(String(get("body")));
+      const faqs = toArray(get("faqs"));
+      const bodySections = getBodySectionState(String(get("body")));
+      const bodyIncludesFaq = Boolean(bodySections.faq?.hasContent);
+      const bodyIncludesSources = Boolean(bodySections.sources?.hasContent);
 
       return h("main", { className: "cms-preview" },
         h("header", { className: "cms-preview__header" },
@@ -41,11 +99,17 @@
             h("ul", {}, ...takeaways.map((item, index) => h("li", { key: index }, String(item)))),
           ),
           this.props.widgetFor("body"),
-          faqs.length > 0 && h("section", {},
+          bodyIncludesFaq && faqs.length > 0 && h("aside", { className: "cms-preview__answer" },
+            "The published page uses the structured FAQ list in place of the FAQ section in the Main Article Body. Keep only one FAQ source for a clearer preview.",
+          ),
+          !bodyIncludesFaq && faqs.length > 0 && h("section", {},
             h("h2", {}, "FAQ"),
             ...faqs.map((faq, index) => h("div", { key: index }, h("h3", {}, faq.question), h("p", {}, faq.answer))),
           ),
-          !bodyIncludesSources && h("section", {}, h("h2", {}, "Sources and verification"), this.props.widgetFor("sourcesVerification")),
+          !bodyIncludesSources && get("sourcesVerification") && h("section", {},
+            h("h2", {}, "Sources and verification"),
+            this.props.widgetFor("sourcesVerification"),
+          ),
           h("p", { className: "cms-preview__topics" }, topics.join(" · ")),
         ),
       );
@@ -54,4 +118,4 @@
 
   window.CMS.registerPreviewTemplate("articles", ArticlePreview);
   window.CMS.registerPreviewStyle("/admin/preview.css");
-})();
+}

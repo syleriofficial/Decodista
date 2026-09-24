@@ -44,7 +44,7 @@ collections:
   - name: articles
     label: Articles
     label_singular: Article
-    description: Create, review and publish DECODISTA articles. Drafts stay off the production branch until you publish them.
+    description: Create, review and publish DECODISTA articles. Drafts stay off production until Publish now merges them to GitHub; Cloudflare then validates and deploys the article, which can take a few minutes.
     folder: content/articles
     create: true
     delete: false
@@ -166,22 +166,24 @@ collections:
         buttons: [bold, italic, code, link, heading-two, heading-three, quote, bulleted-list, numbered-list]
         editor_components: [image, code-block]
         sanitize_preview: true
-        hint: Start sections with H2 and use H3 only beneath them. Do not add an H1. Existing table Markdown is preserved in Raw mode. If FAQ or Sources & Verification are already included in the approved body, leave the optional FAQ list empty; the site will not duplicate an existing Sources & Verification section.
+        hint: Start sections with H2 and use H3 only beneath them. Do not add an H1. Existing table Markdown is preserved in Raw mode. FAQ and Sources & Verification may be written here or in their structured fields below, but should not be authored in both places.
       - label: FAQ
         name: faqs
         widget: list
         required: false
+        default: []
         collapsed: true
         minimize_collapsed: true
         label_singular: FAQ item
         summary: '{{fields.question}}'
-        hint: Use this list only when FAQ is not already present in the approved Main Article Body. Remove any unused blank FAQ item before publishing.
+        hint: Leave this section completely empty if your FAQ is already written in the Main Article Body. Blank unused rows are removed automatically; a partly completed row must have both a question and an answer.
         fields:
-          - { label: Question, name: question, widget: string }
+          - { label: Question, name: question, widget: string, required: false }
           - { label: Anchor, name: id, widget: hidden, default: '' }
           - label: Answer
             name: answer
             widget: richtext
+            required: false
             minimal: true
             modes: [rich_text, raw]
             buttons: [bold, italic, link, bulleted-list, numbered-list]
@@ -189,10 +191,11 @@ collections:
       - label: Sources & Verification
         name: sourcesVerification
         widget: richtext
+        required: false
         modes: [rich_text, raw]
         buttons: [bold, italic, link, bulleted-list]
         editor_components: []
-        hint: Explain the verification basis and link the official or primary sources. Never claim testing that did not occur.
+        hint: Use this field only when Sources & Verification is not already in the Main Article Body. One complete version is required before publishing. Blank placeholders are removed; never claim testing that did not occur.
       - label: Published Date
         name: publishedAt
         widget: datetime

@@ -43,6 +43,8 @@ Approved production articles live in `content/articles/<slug>.md`. Each file use
 
 Every article has a primary category, a separate content type, topic tags, publication and verification metadata, a short answer, key takeaways, optional FAQs, sources, related-article controls and responsive artwork metadata. Build validation rejects unsupported fields, broken article links, missing images, invalid dates, duplicate slugs, multiple featured stories and oversized CMS uploads.
 
+Decap's harmless blank placeholders are normalized before validation. Entirely blank optional FAQ rows and list values are removed, while partly completed FAQ records still fail with a clear error. FAQ and Sources & Verification may each be authored either in the article body or in their structured CMS field; the renderer outputs one version only. Structured FAQs take precedence when both are present, without rewriting the Markdown source.
+
 Supported content includes H2/H3 headings, paragraphs, ordered and unordered lists, GFM tables, images with captions, quotes, code blocks, callouts, links, bold and italic text. The presentation layer continues to consume the typed `Article` interface in `lib/content.ts`.
 
 Primary categories are AI, Digital Life, Security and Science. How-To is a cross-category content type. `/latest` is the chronological archive, while a limited set of populated `/topics/...` hubs provide subject-based discovery without creating thin tag pages.
@@ -85,5 +87,5 @@ Workers Builds installs the lockfile dependencies before running the build comma
 1. Open `https://decodista.com/admin/` and authenticate with the approved identity and GitHub account.
 2. Choose **New Article**, complete the required fields and upload an optimized hero image.
 3. Choose **Save** to keep a draft; reopen it from the workflow board to edit or preview it.
-4. Move the entry through review as needed, then choose **Publish**.
-5. Wait for the GitHub merge and Cloudflare build to pass; the article then appears automatically on DECODISTA.
+4. Move the entry through review as needed, then choose **Publish now**. Browser validation blocks missing required fields and malformed optional records before GitHub is updated.
+5. A publish confirmation means the GitHub merge succeeded. Cloudflare then runs `npm run release:check` and deploys automatically; allow a few minutes, then confirm the article's live URL. A failed Cloudflare validation leaves the previous Worker version serving production.

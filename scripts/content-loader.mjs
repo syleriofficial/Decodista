@@ -2,14 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import { parse as parseYaml } from "yaml";
+import {
+  ALLOWED_AUTHORS,
+  ALLOWED_CATEGORIES,
+  ALLOWED_CONTENT_TYPES,
+  DATE_PATTERN,
+  IMAGE_PATTERN,
+  normalizeCmsArticleData,
+  SLUG_PATTERN,
+  validateCmsArticleData,
+} from "../public/admin/content-rules.mjs";
 
 const ARTICLE_DIRECTORY = "content/articles";
-const ALLOWED_CATEGORIES = new Set(["ai", "digital-life", "security", "science"]);
-const ALLOWED_CONTENT_TYPES = new Set(["how-to", "explainer", "news", "analysis"]);
-const ALLOWED_AUTHORS = new Set(["DECODISTA Editorial"]);
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const IMAGE_PATTERN = /^\/images\/[a-zA-Z0-9/_-]+\.(?:avif|jpe?g|png|webp)$/;
 const CALLOUT_PREFIX = "DECODISTA callout — ";
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -298,11 +302,27 @@ function normalizeFaqs(value, source) {
   });
 }
 
+function getSectionRange(blocks, id) {
+  const start = blocks.findIndex((block) => block.type === "heading" && block.level === 2 && block.id === id);
+  if (start < 0) return undefined;
+  const nextOffset = blocks.slice(start + 1).findIndex((block) => block.type === "heading" && block.level === 2);
+  const end = nextOffset < 0 ? blocks.length : start + 1 + nextOffset;
+  return { start, end, hasContent: end > start + 1 };
+}
+
+function withoutSection(blocks, id) {
+  const range = getSectionRange(blocks, id);
+  if (!range) return blocks;
+  return [...blocks.slice(0, range.start), ...blocks.slice(range.end)];
+}
+
 export function parseArticleDocument(raw, filePath, projectRoot) {
   const source = path.relative(projectRoot, filePath);
   const parsed = parseFrontMatter(raw, source);
-  const data = parsed.data;
-  if (!isObject(data)) fail(source, "front matter must be an object");
+  if (!isObject(parsed.data)) fail(source, "front matter must be an object");
+  const data = normalizeCmsArticleData(parsed.data);
+  const cmsErrors = validateCmsArticleData({ ...data, body: parsed.content });
+  if (cmsErrors.length) fail(source, `CMS field validation failed: ${cmsErrors.join(" ")}`);
 
   const title = requiredString(data.title, "title", source);
   const slug = requiredString(data.slug, "slug", source);
@@ -328,8 +348,8 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   if (featuredImageAlt.length < 20) fail(source, '"heroImageAlt" must be meaningfully descriptive');
   const width = Number(data.heroImageWidth ?? (featuredImage.startsWith("/images/uploads/") ? 1600 : NaN));
   const height = Number(data.heroImageHeight ?? (featuredImage.startsWith("/images/uploads/") ? 900 : NaN));
-  if (!Number.isInteger(width) || width < 320 || !Number.isInteger(height) || height < 180) {
-    fail(source, "hero image dimensions must be positive integers (CMS uploads default to 1600×900)");
+  if (!Number.isInteger(width) || width < 1200 || !Number.isInteger(height) || height < 1) {
+    fail(source, "hero image dimensions must be at least 1200px wide (CMS uploads default to 1600×900)");
   }
   const readingTime = Number(data.readingTime);
   if (!Number.isInteger(readingTime) || readingTime < 1 || readingTime > 120) fail(source, '"readingTime" must be 1–120 minutes');
@@ -337,23 +357,37 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const shortAnswerMarkdown = requiredString(data.shortAnswer, "shortAnswer", source);
   const shortAnswer = markdownInlineToRichText(shortAnswerMarkdown, `${source} short answer`);
   const keyTakeawayMarkdown = requiredStringList(data.keyTakeaways, "keyTakeaways", source);
+  if (keyTakeawayMarkdown.length < 2 || keyTakeawayMarkdown.length > 8) {
+    fail(source, '"keyTakeaways" must contain 2–8 items');
+  }
   const keyTakeaways = keyTakeawayMarkdown.map((item, index) => markdownInlineToRichText(item, `${source} key takeaway ${index + 1}`));
   const introductionMarkdown = optionalString(data.introduction, "introduction", source);
   const introduction = introductionMarkdown ? markdownToBlocks(introductionMarkdown, `${source} introduction`) : [];
   const body = markdownToBlocks(parsed.content, `${source} body`);
+  if (!body.length) fail(source, '"body" must contain article content');
   const faqs = normalizeFaqs(data.faqs, source);
-  const sourcesMarkdown = requiredString(data.sourcesVerification, "sourcesVerification", source);
-  const sources = markdownToBlocks(sourcesMarkdown, `${source} sources and verification`);
-  const bodyHeadingIds = new Set(
-    body.filter((block) => block.type === "heading").map((block) => block.id),
-  );
-  const bodyIncludesSources = bodyHeadingIds.has("sources-verification");
+  const sourcesMarkdown = optionalString(data.sourcesVerification, "sourcesVerification", source);
+  const sources = sourcesMarkdown ? markdownToBlocks(sourcesMarkdown, `${source} sources and verification`) : [];
+
+  // Structured FAQs take precedence. Remove a body FAQ section only from the
+  // rendered block model; the approved Markdown source remains untouched.
+  const bodyWithoutDuplicateFaq = faqs.length
+    ? withoutSection(withoutSection(body, "faq"), "faqs")
+    : body;
+  const bodySources = getSectionRange(bodyWithoutDuplicateFaq, "sources-verification");
+  if (bodySources && !bodySources.hasContent) {
+    fail(source, 'the body "Sources & Verification" section cannot be empty');
+  }
+  const bodyIncludesSources = Boolean(bodySources?.hasContent);
+  if (!bodyIncludesSources && !sources.length) {
+    fail(source, 'provide "Sources & Verification" in the body or structured field');
+  }
 
   const content = [
     ...introduction,
     { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
     { type: "list", style: "unordered", items: keyTakeaways },
-    ...body,
+    ...bodyWithoutDuplicateFaq,
     ...(faqs.length ? [
       { type: "heading", level: 2, id: "faq", text: "FAQ" },
       ...faqs.flatMap((faq) => [

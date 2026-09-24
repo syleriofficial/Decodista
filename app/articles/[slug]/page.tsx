@@ -62,6 +62,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const category = CATEGORY_MAP[article.category];
   const contentType = CONTENT_TYPE_MAP[article.contentType];
+  const heroCaptionSeparator = /[.!?…]$/.test(article.featuredImageAlt) ? " " : ". ";
   const hasMeaningfulUpdate = article.updatedDate && article.updatedDate !== article.publishedDate;
   const related = getRelatedArticles(article);
   const index = articles.findIndex((item) => item.slug === article.slug);
@@ -155,7 +156,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <figure className="article-hero wrap">
           <div><Image src={article.featuredImage} alt={article.featuredImageAlt} fill priority sizes="(max-width: 1500px) 100vw, 1440px" /></div>
-          <figcaption>{article.featuredImageAlt}. Original DECODISTA artwork.</figcaption>
+          <figcaption>{article.featuredImageAlt}{heroCaptionSeparator}Original DECODISTA artwork.</figcaption>
         </figure>
 
         <div className="article-reading wrap">
