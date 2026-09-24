@@ -166,7 +166,7 @@ collections:
         buttons: [bold, italic, code, link, heading-two, heading-three, quote, bulleted-list, numbered-list]
         editor_components: [image, code-block]
         sanitize_preview: true
-        hint: Start sections with H2 and use H3 only beneath them. Do not add an H1. Existing table Markdown is preserved in Raw mode.
+        hint: Start sections with H2 and use H3 only beneath them. Do not add an H1. Existing table Markdown is preserved in Raw mode. If FAQ or Sources & Verification are already included in the approved body, leave the optional FAQ list empty; the site will not duplicate an existing Sources & Verification section.
       - label: FAQ
         name: faqs
         widget: list
@@ -175,6 +175,7 @@ collections:
         minimize_collapsed: true
         label_singular: FAQ item
         summary: '{{fields.question}}'
+        hint: Use this list only when FAQ is not already present in the approved Main Article Body. Remove any unused blank FAQ item before publishing.
         fields:
           - { label: Question, name: question, widget: string }
           - { label: Anchor, name: id, widget: hidden, default: '' }

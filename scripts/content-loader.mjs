@@ -282,15 +282,19 @@ function validateBlocks(blocks, source) {
 function normalizeFaqs(value, source) {
   if (value === undefined || value === null) return [];
   if (!Array.isArray(value)) fail(source, "" + '"faqs" must be a list');
-  return value.map((faq, index) => {
+  return value.flatMap((faq, index) => {
     if (!isObject(faq)) fail(source, `faqs[${index}] must be an object`);
-    const question = requiredString(faq.question, `faqs[${index}].question`, source);
-    const id = optionalString(faq.id, `faqs[${index}].id`, source) ?? slugifyHeading(question);
+    const question = optionalString(faq.question, `faqs[${index}].question`, source);
+    const suppliedId = optionalString(faq.id, `faqs[${index}].id`, source);
+    const answerMarkdown = optionalString(faq.answer, `faqs[${index}].answer`, source);
+    if (!question && !suppliedId && !answerMarkdown) return [];
+    if (!question) fail(source, `"faqs[${index}].question" must be a non-empty string`);
+    if (!answerMarkdown) fail(source, `"faqs[${index}].answer" must be a non-empty string`);
+    const id = suppliedId ?? slugifyHeading(question);
     if (!SLUG_PATTERN.test(id)) fail(source, `faqs[${index}].id must be a URL-safe anchor`);
-    const answerMarkdown = requiredString(faq.answer, `faqs[${index}].answer`, source);
     const answer = markdownToBlocks(answerMarkdown, `${source} FAQ “${question}”`);
     if (!answer.length) fail(source, `faqs[${index}].answer cannot be empty`);
-    return { question, id, answer, answerMarkdown };
+    return [{ question, id, answer, answerMarkdown }];
   });
 }
 
@@ -340,6 +344,10 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const faqs = normalizeFaqs(data.faqs, source);
   const sourcesMarkdown = requiredString(data.sourcesVerification, "sourcesVerification", source);
   const sources = markdownToBlocks(sourcesMarkdown, `${source} sources and verification`);
+  const bodyHeadingIds = new Set(
+    body.filter((block) => block.type === "heading").map((block) => block.id),
+  );
+  const bodyIncludesSources = bodyHeadingIds.has("sources-verification");
 
   const content = [
     ...introduction,
@@ -353,8 +361,10 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
         ...faq.answer,
       ]),
     ] : []),
-    { type: "heading", level: 2, id: "sources-verification", text: "Sources and verification" },
-    ...sources,
+    ...(!bodyIncludesSources ? [
+      { type: "heading", level: 2, id: "sources-verification", text: "Sources and verification" },
+      ...sources,
+    ] : []),
   ];
   validateRichText(shortAnswer, `${source} short answer`);
   validateBlocks(content, source);

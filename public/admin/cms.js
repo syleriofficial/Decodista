@@ -18,7 +18,8 @@
       const asset = this.props.getAsset(get("heroImage"));
       const topics = toArray(get("topics"));
       const takeaways = toArray(get("keyTakeaways"));
-      const faqs = toArray(get("faqs"));
+      const faqs = toArray(get("faqs")).filter((faq) => faq?.question && faq?.answer);
+      const bodyIncludesSources = /^##\s+Sources\s+(?:&|and)\s+Verification\s*$/im.test(String(get("body")));
 
       return h("main", { className: "cms-preview" },
         h("header", { className: "cms-preview__header" },
@@ -44,7 +45,7 @@
             h("h2", {}, "FAQ"),
             ...faqs.map((faq, index) => h("div", { key: index }, h("h3", {}, faq.question), h("p", {}, faq.answer))),
           ),
-          h("section", {}, h("h2", {}, "Sources and verification"), this.props.widgetFor("sourcesVerification")),
+          !bodyIncludesSources && h("section", {}, h("h2", {}, "Sources and verification"), this.props.widgetFor("sourcesVerification")),
           h("p", { className: "cms-preview__topics" }, topics.join(" · ")),
         ),
       );
