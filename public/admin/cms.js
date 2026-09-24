@@ -4,7 +4,7 @@ import {
   isEntirelyBlankCmsValue,
   normalizeCmsArticleData,
   validateCmsArticleData,
-} from "/admin/content-rules.mjs";
+} from "/admin/content-rules.mjs?v=20260924-1";
 
 if (window.CMS && window.createClass && window.h) {
   const h = window.h;
