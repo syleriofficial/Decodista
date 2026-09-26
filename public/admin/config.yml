@@ -249,7 +249,7 @@ collections:
       - label: Meta Description
         name: metaDescription
         widget: text
-        pattern: ['^.{1,170}$', 'Keep the meta description to 170 characters or fewer.']
+        pattern: ['^.{1,180}$', 'Keep the meta description to 180 characters or fewer.']
       - label: Editor's Pick
         name: editorsPick
         widget: boolean

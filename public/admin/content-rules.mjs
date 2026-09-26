@@ -189,8 +189,8 @@ export function validateCmsArticleData(input) {
     errors.push("SEO Title must be 70 characters or fewer.");
   }
   validateRequiredString(data, "metaDescription", "Meta Description", errors);
-  if (typeof data.metaDescription === "string" && data.metaDescription.trim().length > 170) {
-    errors.push("Meta Description must be 170 characters or fewer.");
+  if (typeof data.metaDescription === "string" && data.metaDescription.trim().length > 180) {
+    errors.push("Meta Description must be 180 characters or fewer.");
   }
 
   if (data.relatedArticles !== undefined) {

@@ -155,7 +155,7 @@ function markdownInlineToRichText(markdown, source) {
 }
 
 function listItemToRichText(item, source) {
-  const meaningful = item.tokens.filter((token) => token.type !== "space");
+  const meaningful = item.tokens.filter((token) => token.type !== "space" && token.type !== "checkbox");
   if (meaningful.length !== 1 || !["text", "paragraph"].includes(meaningful[0].type)) {
     fail(source, "nested or multi-paragraph list items are not supported");
   }
@@ -194,8 +194,14 @@ export function markdownToBlocks(markdown, source = "article Markdown") {
         if (![2, 3].includes(token.depth)) fail(source, "article headings must use H2 or H3");
         const explicit = token.text.match(/\s+\{#([a-z0-9][a-z0-9-]*)\}\s*$/);
         const text = (explicit ? token.text.slice(0, explicit.index) : token.text).trim();
-        const id = explicit?.[1] ?? slugifyHeading(text);
-        if (ids.has(id)) fail(source, `duplicate heading anchor "${id}"`);
+        const baseId = explicit?.[1] ?? slugifyHeading(text);
+        let id = baseId;
+        if (ids.has(id)) {
+          if (explicit) fail(source, `duplicate heading anchor "${id}"`);
+          let suffix = 2;
+          while (ids.has(`${baseId}-${suffix}`)) suffix += 1;
+          id = `${baseId}-${suffix}`;
+        }
         ids.add(id);
         blocks.push({ type: "heading", level: token.depth, text, id });
         break;
@@ -213,7 +219,7 @@ export function markdownToBlocks(markdown, source = "article Markdown") {
       case "list":
         blocks.push({
           type: "list",
-          style: token.ordered ? "ordered" : "unordered",
+          style: token.ordered ? "ordered" : token.items.every((item) => item.task) ? "checklist" : "unordered",
           items: token.items.map((item) => listItemToRichText(item, source)),
         });
         break;
@@ -406,7 +412,7 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const description = requiredString(data.metaDescription, "metaDescription", source);
   const seoTitle = requiredString(data.seoTitle, "seoTitle", source);
   if (seoTitle.length > 70) fail(source, '"seoTitle" must not exceed 70 characters');
-  if (description.length > 170) fail(source, '"metaDescription" must not exceed 170 characters');
+  if (description.length > 180) fail(source, '"metaDescription" must not exceed 180 characters');
 
   return {
     article: {

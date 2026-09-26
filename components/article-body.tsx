@@ -39,7 +39,8 @@ export function ArticleBody({ blocks, className = "" }: { blocks: ContentBlock[]
             return <p key={index}><RichTextContent content={block.text} /></p>;
           case "list": {
             const Tag = block.style === "ordered" ? "ol" : "ul";
-            return <Tag key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}><RichTextContent content={item} /></li>)}</Tag>;
+            const isChecklist = block.style === "checklist";
+            return <Tag className={isChecklist ? "article-checklist" : undefined} key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}>{isChecklist ? <><span aria-hidden="true" className="article-checklist-box">☐</span><span><RichTextContent content={item} /></span></> : <RichTextContent content={item} />}</li>)}</Tag>;
           }
           case "quote":
             return <blockquote key={index}><p><RichTextContent content={block.text} /></p>{block.attribution && <cite>{block.attribution}</cite>}</blockquote>;

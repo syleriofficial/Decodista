@@ -16,7 +16,7 @@ export type RichText = string | InlineContent[];
 export type ContentBlock =
   | { type: "heading"; level: 2 | 3; text: string; id: string }
   | { type: "paragraph"; text: RichText }
-  | { type: "list"; style: "ordered" | "unordered"; items: RichText[] }
+  | { type: "list"; style: "ordered" | "unordered" | "checklist"; items: RichText[] }
   | { type: "quote"; text: RichText; attribution?: string }
   | { type: "callout"; title: string; text: RichText }
   | { type: "code"; language: string; code: string }

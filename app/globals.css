@@ -186,6 +186,9 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .article-prose a:hover { color: var(--orange); }
 .article-prose ul, .article-prose ol { padding-left: 1.5rem; }
 .article-prose li { margin: .65rem 0; padding-left: .35rem; }
+.article-prose .article-checklist { padding-left: 0; list-style: none; }
+.article-prose .article-checklist li { display: grid; grid-template-columns: auto 1fr; gap: .7rem; padding-left: 0; }
+.article-checklist-box { color: var(--signal); font: 1rem/1.78 Arial, sans-serif; }
 .article-prose blockquote { margin: 3rem 0; padding: 1.5rem 0 1.5rem 2rem; border-left: 6px solid var(--orange); font-size: clamp(1.55rem, 3vw, 2.3rem); line-height: 1.3; letter-spacing: -.025em; }
 .article-prose blockquote p { margin: 0; }
 .article-prose blockquote cite { display: block; margin-top: .8rem; font: .75rem Arial, sans-serif; color: var(--muted); }
