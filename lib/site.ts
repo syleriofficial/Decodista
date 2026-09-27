@@ -90,6 +90,7 @@ export const TOPIC_HUBS = [
     slug: "google",
     name: "Google",
     showInNavigation: true,
+    minimumArticles: 2,
     description:
       "Guides and explainers for Google accounts, Gemini, Google Photos and authentication.",
     tags: [
@@ -104,6 +105,7 @@ export const TOPIC_HUBS = [
     slug: "google-account",
     name: "Google Account",
     showInNavigation: true,
+    minimumArticles: 2,
     description:
       "Understand Google sign-in, account connections, authentication and privacy controls.",
     tags: ["Google Account", "Sign in with Google", "Google Authenticator"],
@@ -112,6 +114,7 @@ export const TOPIC_HUBS = [
     slug: "photos-backup",
     name: "Photos & Backup",
     showInNavigation: true,
+    minimumArticles: 2,
     description:
       "Clear guidance on photo libraries, device copies, cloud sync and independent backups.",
     tags: [
@@ -128,6 +131,7 @@ export const TOPIC_HUBS = [
     slug: "privacy",
     name: "Privacy",
     showInNavigation: true,
+    minimumArticles: 2,
     description:
       "Practical explanations of privacy controls, permissions, retention and safer data choices.",
     tags: [
@@ -143,6 +147,7 @@ export const TOPIC_HUBS = [
     slug: "scams-and-fraud",
     name: "Scams & Fraud",
     showInNavigation: false,
+    minimumArticles: 3,
     description:
       "Practical guidance for recognizing scams, protecting accounts and recovering safely after fraud or account compromise.",
     tags: [

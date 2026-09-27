@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ({ slug }) => getArticlesByCategory(slug).length > 0,
   );
   const meaningfulTopics = TOPIC_HUBS.filter(
-    ({ slug }) => getArticlesByTopic(slug).length >= 2,
+    ({ slug, minimumArticles }) => getArticlesByTopic(slug).length >= minimumArticles,
   );
 
   return [

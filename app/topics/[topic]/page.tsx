@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ topic: st
   const { topic } = await params;
   if (!isTopic(topic)) return {};
   const definition = TOPIC_MAP[topic];
-  const hasMeaningfulCoverage = getArticlesByTopic(topic).length >= 2;
+  const hasMeaningfulCoverage = getArticlesByTopic(topic).length >= definition.minimumArticles;
   return {
     title: definition.name,
     description: definition.description,
@@ -36,7 +36,7 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
   if (!isTopic(topic)) notFound();
   const definition = TOPIC_MAP[topic];
   const stories = getArticlesByTopic(topic);
-  if (stories.length < 2) notFound();
+  if (stories.length < definition.minimumArticles) notFound();
 
   const breadcrumb = {
     "@context": "https://schema.org",
