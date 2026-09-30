@@ -46,13 +46,13 @@ export const infoPages: Record<string, InfoPage> = {
   contact: {
     title: "Contact",
     eyebrow: "Reach DECODISTA",
-    description: "Current contact availability and guidance for corrections, privacy and security-sensitive information.",
+    description: "Guidance for editorial enquiries, corrections, accessibility reports and other messages.",
     sections: [
       {
-        title: "Current contact status",
+        title: "Contact DECODISTA",
         paragraphs: [
-          "DECODISTA does not currently operate a verified public submission channel. This page does not collect, transmit or store messages, and there is no form to submit.",
-          "A contact workflow will be enabled only after server-side delivery, abuse protection, rate limiting and end-to-end delivery have been configured and tested. Until then, this page records that limitation rather than suggesting that a message can be delivered.",
+          "The Contact page provides a protected form for editorial enquiries, corrections, factual updates, accessibility issues and general messages.",
+          "Submitted information is used to review and, where appropriate, respond to the enquiry. The private delivery address is not published.",
         ],
         links: [
           { href: "/corrections", label: "Corrections policy" },
@@ -167,8 +167,8 @@ export const infoPages: Record<string, InfoPage> = {
       {
         title: "Submitting a correction",
         paragraphs: [
-          "The Contact page records whether a verified submission route is available. It does not currently accept messages, and no correction should be assumed delivered through this website.",
-          "When submissions become available, DECODISTA will review credible requests and correct material errors where appropriate. A submission will not guarantee that a change is made.",
+          "Use the Contact form and choose Correction. DECODISTA will review credible requests and correct material errors where appropriate. A submission does not guarantee that a change is made.",
+          "Never include passwords, one-time codes, account-recovery material, payment-card information or other account secrets.",
         ],
         bullets: [
           "The URL of the affected article",
@@ -176,7 +176,7 @@ export const infoPages: Record<string, InfoPage> = {
           "A concise explanation of the issue",
           "A reliable primary or supporting source, when available",
         ],
-        links: [{ href: "/contact", label: "Contact status" }],
+        links: [{ href: "/contact?type=correction", label: "Submit a correction" }],
       },
     ],
   },
@@ -240,19 +240,20 @@ export const infoPages: Record<string, InfoPage> = {
   "privacy-policy": {
     title: "Privacy Policy",
     eyebrow: "Reader privacy",
-    updated: "20 September 2026",
-    description: "How DECODISTA handles local preferences, optional analytics and standard hosting data.",
+    updated: "30 September 2026",
+    description: "How DECODISTA handles contact submissions, local preferences, optional analytics and standard hosting data.",
     sections: [
       {
         title: "Information collected",
         paragraphs: [
-          "DECODISTA does not operate a newsletter signup or contact form and does not intentionally collect names, email addresses or form submissions. Theme and analytics preferences are stored locally on your device.",
+          "When you use the Contact form, DECODISTA receives the name, email address, enquiry type, subject and message you provide, plus an optional DECODISTA page URL for corrections. That information is used to review and, where appropriate, respond to the enquiry.",
+          "Theme and analytics preferences are stored locally on your device. DECODISTA does not operate a newsletter signup.",
         ],
       },
       {
         title: "Hosting and analytics",
         paragraphs: [
-          "Cloudflare hosts DECODISTA and may process standard request information, such as IP addresses and user-agent data, to deliver and protect the website.",
+          "Cloudflare hosts DECODISTA, protects the Contact form and delivers submissions. Cloudflare may process standard request information, such as IP addresses and user-agent data, to deliver and protect the website.",
           "With your permission, DECODISTA loads Google Analytics to measure page views and site interaction. Advertising storage, advertising user data, advertising personalisation, Google signals and ad-personalisation signals remain disabled in DECODISTA’s implementation.",
         ],
       },

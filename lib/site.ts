@@ -6,6 +6,8 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://decodista.com";
 export const GOOGLE_ANALYTICS_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-1T57TWPXM6";
+export const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAAFKUUdBVj5U5Ujq3";
 
 export const CATEGORY_DEFINITIONS = [
   {

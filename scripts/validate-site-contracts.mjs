@@ -35,10 +35,11 @@ assert(!/"\/science"/.test(sitemap), "Empty Science route must not be hard-coded
 assert(/const trustRoutes = \[/.test(sitemap), "Trust routes must be separated from content-freshness routes");
 assert(!/host:\s*SITE_URL/.test(robots), "robots.txt must not emit a non-standard Host directive");
 
-assert(/This page does not collect, transmit or store messages/.test(legal), "Contact page must state its real delivery status");
-assert(/href: "\/contact", label: "Contact status"/.test(legal), "Corrections policy must point to the contact status page");
+assert(/href: "\/contact\?type=correction", label: "Submit a correction"/.test(legal), "Corrections policy must preselect the correction form");
 assert(!/mailto:/i.test(legal), "Trust pages must not publish an unverified email route");
-assert(/InfoPageView/.test(contactPage), "Contact page must use the current shared site shell");
+assert(/ContactForm/.test(contactPage), "Contact page must expose the protected production form");
+assert(/TURNSTILE_SITE_KEY/.test(contactPage), "Contact page must configure Cloudflare Turnstile");
+assert(/private delivery address is never shown/i.test(contactPage), "Contact page must keep the recipient private");
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
 assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-functional contact or signup form");
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
@@ -60,4 +61,4 @@ for (const root of publicTextRoots) {
   }
 }
 
-console.log("Validated navigation, Science visibility, trust-page contact status, sitemap freshness rules, and robots output contracts.");
+console.log("Validated navigation, Science visibility, protected contact route, sitemap freshness rules, and robots output contracts.");
