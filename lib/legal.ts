@@ -3,7 +3,12 @@ export interface InfoPage {
   eyebrow: string;
   description: string;
   updated?: string;
-  sections: { title: string; paragraphs: string[]; bullets?: string[] }[];
+  sections: {
+    title: string;
+    paragraphs: string[];
+    bullets?: string[];
+    links?: { href: string; label: string }[];
+  }[];
 }
 
 export const infoPages: Record<string, InfoPage> = {
@@ -30,25 +35,40 @@ export const infoPages: Record<string, InfoPage> = {
           "DECODISTA prefers useful context to hype. It distinguishes documentation-based explanation from hands-on testing and does not present a review unless a genuine evaluation has taken place.",
           "Published work currently uses the DECODISTA Editorial byline. The byline describes publication-level responsibility; it does not imply a large newsroom or unnamed specialist credentials.",
         ],
+        links: [
+          { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/how-we-work", label: "How We Work" },
+          { href: "/editorial-team", label: "DECODISTA Editorial" },
+        ],
       },
     ],
   },
   contact: {
     title: "Contact",
     eyebrow: "Reach DECODISTA",
-    description: "Contact routes are published only after they are verified and able to receive messages reliably.",
+    description: "Current contact availability and guidance for corrections, privacy and security-sensitive information.",
     sections: [
       {
         title: "Current contact status",
         paragraphs: [
-          "DECODISTA does not currently publish an editorial email address or operate a contact form. No message entered on this website is collected or stored.",
-          "A working editorial and corrections channel will be added here after it has been verified. DECODISTA will not display an untested address or a form that gives readers a false expectation of delivery.",
+          "DECODISTA does not currently operate a verified public submission channel. This page does not collect, transmit or store messages, and there is no form to submit.",
+          "A contact workflow will be enabled only after server-side delivery, abuse protection, rate limiting and end-to-end delivery have been configured and tested. Until then, this page records that limitation rather than suggesting that a message can be delivered.",
+        ],
+        links: [
+          { href: "/corrections", label: "Corrections policy" },
+          { href: "/privacy-policy", label: "Privacy Policy" },
         ],
       },
       {
         title: "Security note",
         paragraphs: [
-          "Never send passwords, one-time codes, backup codes, QR secrets, recovery keys or other account credentials to a publication or support contact.",
+          "Do not send secrets or material that would let someone enter, recover or take control of an account. DECODISTA will never need them to assess an editorial question or correction.",
+        ],
+        bullets: [
+          "Passwords, passkeys, PINs, recovery keys or recovery phrases",
+          "One-time codes, backup codes or authenticator setup keys",
+          "QR codes, session tokens, API keys or private keys",
+          "Payment-card details, banking credentials, government-identity data or other account secrets",
         ],
       },
     ],
@@ -82,6 +102,10 @@ export const infoPages: Record<string, InfoPage> = {
         paragraphs: [
           "Material factual errors should be corrected promptly. Significant corrections should be explained on the affected page; ordinary maintenance changes may be reflected in the updated date when they materially change the article.",
         ],
+        links: [
+          { href: "/corrections", label: "Corrections policy" },
+          { href: "/how-we-work", label: "How We Work" },
+        ],
       },
     ],
   },
@@ -100,6 +124,7 @@ export const infoPages: Record<string, InfoPage> = {
         title: "Prefer primary sources",
         paragraphs: [
           "Official product documentation, support pages, policies and first-party announcements are preferred for claims about settings and service behaviour. Sources are linked near the relevant explanation where practical.",
+          "Relevant independent reporting can supplement primary evidence, especially for ongoing events and claims that require external context.",
           "When documentation is unclear or inconsistent, the article should say so rather than resolving the ambiguity by guesswork.",
         ],
       },
@@ -113,6 +138,11 @@ export const infoPages: Record<string, InfoPage> = {
         title: "Maintain and correct",
         paragraphs: [
           "Information-check dates record when time-sensitive documentation was reviewed. Updated dates are used when published material changes meaningfully. Errors are handled under the Corrections policy.",
+        ],
+        links: [
+          { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/corrections", label: "Corrections policy" },
+          { href: "/ai-policy", label: "AI Policy" },
         ],
       },
     ],
@@ -137,8 +167,16 @@ export const infoPages: Record<string, InfoPage> = {
       {
         title: "Submitting a correction",
         paragraphs: [
-          "The verified submission route will be listed on the Contact page when it is operational. Until then, DECODISTA does not present a non-functional form or unverified inbox as a corrections channel.",
+          "The Contact page records whether a verified submission route is available. It does not currently accept messages, and no correction should be assumed delivered through this website.",
+          "When submissions become available, DECODISTA will review credible requests and correct material errors where appropriate. A submission will not guarantee that a change is made.",
         ],
+        bullets: [
+          "The URL of the affected article",
+          "The exact statement or instruction that may be wrong",
+          "A concise explanation of the issue",
+          "A reliable primary or supporting source, when available",
+        ],
+        links: [{ href: "/contact", label: "Contact status" }],
       },
     ],
   },
@@ -157,7 +195,15 @@ export const infoPages: Record<string, InfoPage> = {
       {
         title: "Editorial approach",
         paragraphs: [
-          "The work prioritises primary sources, practical consequences and careful safety language. No article should claim first-hand use, original testing or specialist credentials unless those claims can be supported and disclosed.",
+          "The work prioritises primary sources, relevant independent reporting, practical consequences and careful safety language. Gaps and uncertainty should be stated instead of filled with inference.",
+          "No article should claim first-hand use, original testing or specialist credentials unless those claims can be supported and disclosed. Information-check dates are shown where timing matters, and material mistakes are handled under the Corrections policy.",
+          "Automated tools may assist with production under the publication’s AI Policy, but DECODISTA Editorial remains responsible for what is published.",
+        ],
+        links: [
+          { href: "/how-we-work", label: "How We Work" },
+          { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/corrections", label: "Corrections policy" },
+          { href: "/ai-policy", label: "AI Policy" },
         ],
       },
     ],
@@ -183,6 +229,10 @@ export const infoPages: Record<string, InfoPage> = {
         title: "Images and testing",
         paragraphs: [
           "Original editorial illustrations may be created with generative tools and should not imitate protected product interfaces or imply hands-on testing. Documentation-based guides must not be presented as device or account testing.",
+        ],
+        links: [
+          { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/how-we-work", label: "How We Work" },
         ],
       },
     ],

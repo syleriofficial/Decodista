@@ -1,19 +1,22 @@
 import type { MetadataRoute } from "next";
-import { articles, getArticlesByCategory, getArticlesByTopic } from "@/lib/content";
+import { articles, getArticlesByCategory, getArticlesByContentType, getArticlesByTopic } from "@/lib/content";
 import { CATEGORY_DEFINITIONS, SITE_URL, TOPIC_HUBS } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const latest = articles.reduce(
+  const latestArticleDate = (items: typeof articles) => items.reduce(
     (date, article) => {
       const articleDate = article.updatedDate ?? article.publishedDate;
       return articleDate > date ? articleDate : date;
     },
     "2026-09-01",
   );
-  const staticRoutes = [
-    "",
-    "/latest",
-    "/how-to",
+  const latest = latestArticleDate(articles);
+  const discoveryRoutes = [
+    { route: "", lastModified: latest },
+    { route: "/latest", lastModified: latest },
+    { route: "/how-to", lastModified: latestArticleDate(getArticlesByContentType("how-to")) },
+  ];
+  const trustRoutes = [
     "/about",
     "/editorial-policy",
     "/how-we-work",
@@ -32,21 +35,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   return [
-    ...staticRoutes.map((route) => ({
+    ...discoveryRoutes.map(({ route, lastModified }) => ({
       url: `${SITE_URL}${route}`,
-      lastModified: latest,
-      changeFrequency: route === "" || route === "/latest" ? "daily" as const : "monthly" as const,
+      lastModified,
+      changeFrequency: route === "" || route === "/latest" ? "daily" as const : "weekly" as const,
       priority: route === "" ? 1 : route === "/latest" || route === "/how-to" ? .9 : .5,
+    })),
+    ...trustRoutes.map((route) => ({
+      url: `${SITE_URL}${route}`,
+      changeFrequency: "monthly" as const,
+      priority: .5,
     })),
     ...populatedCategories.map(({ slug }) => ({
       url: `${SITE_URL}/${slug}`,
-      lastModified: latest,
+      lastModified: latestArticleDate(getArticlesByCategory(slug)),
       changeFrequency: "weekly" as const,
       priority: .8,
     })),
     ...meaningfulTopics.map(({ slug }) => ({
       url: `${SITE_URL}/topics/${slug}`,
-      lastModified: latest,
+      lastModified: latestArticleDate(getArticlesByTopic(slug)),
       changeFrequency: "weekly" as const,
       priority: .7,
     })),

@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "content:validate": "node scripts/validate-content.mjs",
     "cms:test": "node scripts/test-cms-content.mjs",
-    "release:check": "npm run content:validate && npm run cms:test && npm run lint && npm run typecheck && npm run build"
+    "site:contracts": "node scripts/validate-site-contracts.mjs",
+    "release:check": "npm run content:validate && npm run cms:test && npm run site:contracts && npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

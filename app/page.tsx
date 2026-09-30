@@ -41,12 +41,20 @@ function EditorialSection({
 export default function HomePage() {
   const lead = articles.find((article) => article.featured) ?? articles[0];
   const secondary = articles.filter((article) => article.slug !== lead.slug).slice(0, 3);
-  const latest = articles.slice(0, 5);
-  const ai = getArticlesByCategory("ai");
-  const howTo = getArticlesByContentType("how-to");
-  const digitalLife = getArticlesByCategory("digital-life");
-  const security = getArticlesByCategory("security");
-  const editorsPicks = getEditorsPicks();
+  const alreadyShown = new Set([lead.slug, ...secondary.map((article) => article.slug)]);
+  const takeDistinct = (candidates: typeof articles, limit: number, fill = true) => {
+    const distinct = candidates.filter((article) => !alreadyShown.has(article.slug));
+    const fallback = fill ? candidates.filter((article) => alreadyShown.has(article.slug)) : [];
+    const selected = [...distinct, ...fallback].slice(0, limit);
+    selected.forEach((article) => alreadyShown.add(article.slug));
+    return selected;
+  };
+  const latest = takeDistinct(articles, 4);
+  const ai = takeDistinct(getArticlesByCategory("ai"), 3, false);
+  const howTo = takeDistinct(getArticlesByContentType("how-to"), 3);
+  const digitalLife = takeDistinct(getArticlesByCategory("digital-life"), 3);
+  const security = takeDistinct(getArticlesByCategory("security"), 3);
+  const editorsPicks = takeDistinct(getEditorsPicks(), 3, false);
 
   return (
     <main id="main-content">

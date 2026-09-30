@@ -40,9 +40,10 @@ export function SiteHeader() {
           {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
 
-        <Link className="wordmark" href="/" aria-label="DECODISTA home" onClick={closeNavigation}>
+        <Link className="wordmark" href="/" onClick={closeNavigation}>
           <span>DECODISTA</span>
           <small>Technology, Decoded.</small>
+          <span className="sr-only">home</span>
         </Link>
 
         <nav id="site-navigation" className={`primary-nav ${open ? "is-open" : ""}`} aria-label="Main navigation">

@@ -137,4 +137,19 @@ assert.equal(fieldMap.get("heroImage")?.media_processing?.width, 1600);
 assert.equal(fieldMap.get("heroImage")?.media_processing?.height, 900);
 console.log("CMS configuration alignment passed: required fields, options and image processing match production rules.");
 
+assert.deepEqual(validateCmsArticleData({
+  ...base,
+  heroImage: `/images/uploads/${base.slug}.webp`,
+  body: defaultBody,
+}), []);
+assert.match(
+  validateCmsArticleData({
+    ...base,
+    heroImage: "/images/uploads/untitled-export.webp",
+    body: defaultBody,
+  }).join(" "),
+  /filename must match the article slug/,
+);
+console.log("CMS filename rule passed: new uploads use the article slug without changing legacy production URLs.");
+
 console.log("CMS publishing validation suite passed without creating files or public routes.");

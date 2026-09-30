@@ -6,6 +6,12 @@ export const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const IMAGE_PATTERN = /^\/images\/[a-zA-Z0-9/_-]+\.(?:avif|jpe?g|png|webp)$/;
 
+// One production upload predates the slug-based naming rule. Its public URL
+// remains stable; all later CMS hero uploads use the article slug.
+export const LEGACY_UPLOAD_IMAGE_PATHS = new Set([
+  "/images/uploads/chatgpt-image-sep-23-2026-04_46_10-pm.webp",
+]);
+
 const OPTIONAL_SCALAR_FIELDS = [
   "introduction",
   "updatedAt",
@@ -121,6 +127,16 @@ export function validateCmsArticleData(input) {
   validateRequiredString(data, "heroImage", "Hero Image", errors);
   if (typeof data.heroImage === "string" && data.heroImage.trim() && !IMAGE_PATTERN.test(data.heroImage.trim())) {
     errors.push("Hero Image must be an image stored under /images/.");
+  }
+  if (
+    typeof data.heroImage === "string"
+    && data.heroImage.startsWith("/images/uploads/")
+    && typeof data.slug === "string"
+    && SLUG_PATTERN.test(data.slug.trim())
+    && data.heroImage !== `/images/uploads/${data.slug.trim()}.webp`
+    && !LEGACY_UPLOAD_IMAGE_PATHS.has(data.heroImage)
+  ) {
+    errors.push("Hero Image filename must match the article slug and use WebP, for example /images/uploads/your-article-slug.webp.");
   }
   validateRequiredString(data, "heroImageAlt", "Hero Image Alt Text", errors);
   if (typeof data.heroImageAlt === "string" && data.heroImageAlt.trim() && data.heroImageAlt.trim().length < 20) {
