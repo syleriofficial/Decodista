@@ -14,6 +14,7 @@ const homepage = read("app/page.tsx");
 const science = read("app/[section]/page.tsx");
 const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
+const ads = read("public/ads.txt");
 const contactPage = read("app/contact/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
@@ -37,6 +38,12 @@ assert(!/"\/science"/.test(sitemap), "Empty Science route must not be hard-coded
 
 assert(/const trustRoutes = \[/.test(sitemap), "Trust routes must be separated from content-freshness routes");
 assert(!/host:\s*SITE_URL/.test(robots), "robots.txt must not emit a non-standard Host directive");
+assert.equal(
+  ads,
+  "google.com, pub-5589150014762971, DIRECT, f08c47fec0942fa0\n",
+  "ads.txt must contain exactly the approved Google AdSense publisher entry",
+);
+assert(!/ads\.txt/.test(robots), "robots.txt must not block ads.txt");
 
 assert(/href: "\/contact\?type=correction", label: "Submit a correction"/.test(legal), "Corrections policy must preselect the correction form");
 assert(!/mailto:/i.test(legal), "Trust pages must not publish an unverified email route");
