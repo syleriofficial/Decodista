@@ -89,13 +89,17 @@ console.log("TEST E passed: structured Sources & Verification renders exactly on
 
 // TEST F — harmless blank list values are removed before required-list checks.
 const blankLists = parse({
-  topics: ["Privacy", "", "  "],
+  topics: ["Privacy", "", "  ", "photo backup", "account security"],
   keyTakeaways: ["First supported takeaway.", "", "Second supported takeaway."],
   relatedArticles: ["", "  "],
 });
-assert.deepEqual(blankLists.article.tags, ["Privacy"]);
+assert.deepEqual(blankLists.article.tags, ["Privacy", "Photo Backup", "Account Security"]);
 assert.equal(blankLists.article.relatedArticleSlugs, undefined);
 console.log("TEST F passed: blank topic, takeaway and optional related values are removed.");
+
+const canonicalTopics = normalizeCmsArticleData({ topics: ["data protection", "Photo Backup"] });
+assert.deepEqual(canonicalTopics.topics, ["Data Protection", "Photo Backup"]);
+console.log("Topic normalization passed: known case-only variants use canonical DECODISTA labels.");
 
 // TEST G — required Short Answer remains a hard publishing requirement.
 expectFailure(() => parse({ shortAnswer: "" }), /Short Answer is required/);

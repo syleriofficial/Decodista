@@ -20,6 +20,18 @@ const OPTIONAL_SCALAR_FIELDS = [
 ];
 const STRING_LIST_FIELDS = ["topics", "keyTakeaways", "relatedArticles"];
 
+export const CANONICAL_TOPIC_LABELS = new Map([
+  ["account security", "Account Security"],
+  ["data protection", "Data Protection"],
+  ["photo backup", "Photo Backup"],
+]);
+
+export function normalizeTopicLabel(value) {
+  if (typeof value !== "string") return value;
+  const trimmed = value.trim();
+  return CANONICAL_TOPIC_LABELS.get(trimmed.toLocaleLowerCase("en")) ?? trimmed;
+}
+
 export function isBlankCmsValue(value) {
   return value === undefined || value === null || (typeof value === "string" && !value.trim());
 }
@@ -47,6 +59,7 @@ export function normalizeCmsArticleData(input) {
   for (const field of STRING_LIST_FIELDS) {
     if (!Array.isArray(data[field])) continue;
     data[field] = data[field].filter((item) => !isBlankCmsValue(item));
+    if (field === "topics") data[field] = data[field].map(normalizeTopicLabel);
     if (field === "relatedArticles" && data[field].length === 0) delete data[field];
   }
 

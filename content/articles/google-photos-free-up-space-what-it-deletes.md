@@ -55,6 +55,7 @@ sourcesVerification: >-
   8. [Find lost photos & videos — Android](https://support.google.com/photos/answer/6306652?hl=en&co=GENIE.Platform%3DAndroid)
 publishedAt: 2026-09-23
 updatedAt: ""
+informationCheckedAt: 2026-09-23
 author: DECODISTA Editorial
 readingTime: 8
 seoTitle: "Google Photos Free Up Space: What It Deletes and What Stays"

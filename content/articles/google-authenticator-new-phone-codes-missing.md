@@ -7,7 +7,7 @@ contentType: how-to
 topics:
   - Google Authenticator
   - Two-factor authentication
-  - Account security
+  - Account Security
   - Account recovery
   - Google Account
   - Phone migration

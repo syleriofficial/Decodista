@@ -103,7 +103,7 @@ collections:
         min: 1
         max: 20
         field: { label: Topic, name: topic, widget: string }
-        hint: Add focused subject labels such as Google Account, iCloud Photos, Privacy, Scams & Fraud, Phishing, Fake Messages, Account Takeover, Voice Cloning, Deepfake Scams, Fake Support, QR Scams or Recovery After Hacking.
+        hint: Use the established title casing for existing topics (for example Photo Backup, Data Protection and Account Security). Add focused labels such as Google Account, iCloud Photos, Privacy, Scams & Fraud, Phishing, Fake Messages, Account Takeover, Voice Cloning, Deepfake Scams, Fake Support, QR Scams or Recovery After Hacking.
       - label: Hero Image
         name: heroImage
         widget: image

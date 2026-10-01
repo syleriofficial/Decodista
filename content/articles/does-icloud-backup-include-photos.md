@@ -9,8 +9,8 @@ topics:
   - iCloud Photos
   - iCloud Backup
   - iPhone
-  - Photo backup
-  - Data protection
+  - Photo Backup
+  - Data Protection
 heroImage: /images/icloud-backup-photos.webp
 heroImageAlt: Generic smartphone photo library linked separately to a blue cloud sync layer and an amber device backup archive
 heroImageWidth: 1672

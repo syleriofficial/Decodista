@@ -16,6 +16,9 @@ const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
 const contactPage = read("app/contact/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
+const nextConfig = read("next.config.ts");
+const notFound = read("app/not-found.tsx");
+const staticHeaders = read("public/_headers");
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { articles } = loadArticles(projectRoot);
 
@@ -43,6 +46,39 @@ assert(/private delivery address is never shown/i.test(contactPage), "Contact pa
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
 assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-functional contact or signup form");
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
+
+for (const header of [
+  "Content-Security-Policy",
+  "Strict-Transport-Security",
+  "X-Content-Type-Options",
+  "Referrer-Policy",
+  "X-Frame-Options",
+  "Permissions-Policy",
+]) {
+  assert(nextConfig.includes(header), `Global security header is missing: ${header}`);
+}
+assert(nextConfig.includes("https://challenges.cloudflare.com"), "CSP must allow Cloudflare Turnstile");
+assert(!nextConfig.includes("'unsafe-eval'"), "CSP must not permit unsafe-eval");
+assert(!/includeSubDomains|preload/.test(nextConfig), "HSTS must not opt into subdomains or preload without a separate audit");
+assert(/\/admin\*[\s\S]*Content-Security-Policy:[^\n]*https:\/\/unpkg\.com/.test(staticHeaders), "Admin CSP must preserve the pinned Decap bundle");
+assert(/\/admin\*[\s\S]*script-src[^\n]*'unsafe-eval'[^\n]*https:\/\/unpkg\.com/.test(staticHeaders), "Admin CSP must retain Decap's narrowly scoped runtime-evaluation requirement");
+assert(/\/_next\/static\/\*[\s\S]*max-age=31536000, immutable/.test(staticHeaders), "Hashed framework assets need immutable caching");
+assert(/alternates:\s*null/.test(notFound), "404 metadata must not inherit the homepage canonical");
+assert(/openGraph:\s*null/.test(notFound), "404 metadata must not inherit homepage Open Graph metadata");
+assert(/index:\s*false/.test(notFound), "404 metadata must remain noindex");
+
+const topicCaseGroups = new Map();
+for (const article of articles) {
+  for (const topic of article.tags) {
+    const key = topic.toLocaleLowerCase("en");
+    const labels = topicCaseGroups.get(key) ?? new Set();
+    labels.add(topic);
+    topicCaseGroups.set(key, labels);
+  }
+}
+for (const [topic, labels] of topicCaseGroups) {
+  assert.equal(labels.size, 1, `Topic casing differs for ${topic}: ${[...labels].join(", ")}`);
+}
 
 const publicTextRoots = ["app", "components", "lib", "public"];
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".md", ".mjs", ".svg", ".ts", ".tsx", ".txt", ".yml", ".yaml"]);

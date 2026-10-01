@@ -3,6 +3,7 @@ import {
   isBlankCmsValue,
   isEntirelyBlankCmsValue,
   normalizeCmsArticleData,
+  normalizeTopicLabel,
   validateCmsArticleData,
 } from "/admin/content-rules.mjs?v=20260930-1";
 
@@ -26,6 +27,7 @@ if (window.CMS && window.createClass && window.h) {
       const value = next.get(field);
       if (value && typeof value.filter === "function") {
         next = next.set(field, value.filter((item) => !isBlankCmsValue(item)));
+        if (field === "topics") next = next.update(field, (items) => items.map(normalizeTopicLabel));
       }
     }
 

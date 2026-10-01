@@ -122,7 +122,6 @@ export const TOPIC_HUBS = [
     tags: [
       "Google Photos",
       "Photo Backup",
-      "Photo backup",
       "Photo Storage",
       "Cloud Storage",
       "iCloud Photos",
@@ -142,7 +141,6 @@ export const TOPIC_HUBS = [
       "App Permissions",
       "Account Security",
       "Data Protection",
-      "Data protection",
     ],
   },
   {
