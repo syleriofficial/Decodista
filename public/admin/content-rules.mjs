@@ -162,7 +162,7 @@ export function validateCmsArticleData(input) {
   }
 
   validateRequiredString(data, "shortAnswer", "Short Answer", errors);
-  validateStringList(data, "keyTakeaways", "Key Takeaways", { min: 2, max: 8 }, errors);
+  validateStringList(data, "keyTakeaways", "Key Takeaways", { min: 2, max: 9 }, errors);
   validateRequiredString(data, "body", "Main Article Body", errors);
   if (!isBlankCmsValue(data.introduction) && typeof data.introduction !== "string") {
     errors.push("Opening Note must contain formatted text.");

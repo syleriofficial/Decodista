@@ -139,7 +139,16 @@ assert.deepEqual(new Set(fieldMap.get("primaryCategory")?.options.map((option) =
 assert.deepEqual(new Set(fieldMap.get("contentType")?.options.map((option) => option.value)), ALLOWED_CONTENT_TYPES);
 assert.equal(fieldMap.get("heroImage")?.media_processing?.width, 1600);
 assert.equal(fieldMap.get("heroImage")?.media_processing?.height, 900);
+assert.equal(fieldMap.get("keyTakeaways")?.max, 9);
 console.log("CMS configuration alignment passed: required fields, options and image processing match production rules.");
+
+const nineTakeaways = Array.from({ length: 9 }, (_, index) => `Supported takeaway ${index + 1}.`);
+assert.deepEqual(validateCmsArticleData({ ...base, keyTakeaways: nineTakeaways, body: defaultBody }), []);
+assert.match(
+  validateCmsArticleData({ ...base, keyTakeaways: [...nineTakeaways, "Unsupported tenth takeaway."], body: defaultBody }).join(" "),
+  /no more than 9 items/,
+);
+console.log("CMS takeaway limit passed: nine approved items are accepted and ten are rejected.");
 
 assert.deepEqual(validateCmsArticleData({
   ...base,

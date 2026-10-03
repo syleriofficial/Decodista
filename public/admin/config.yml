@@ -142,7 +142,7 @@ collections:
         name: keyTakeaways
         widget: list
         min: 2
-        max: 8
+        max: 9
         field:
           label: Takeaway
           name: takeaway

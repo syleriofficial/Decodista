@@ -363,8 +363,8 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const shortAnswerMarkdown = requiredString(data.shortAnswer, "shortAnswer", source);
   const shortAnswer = markdownInlineToRichText(shortAnswerMarkdown, `${source} short answer`);
   const keyTakeawayMarkdown = requiredStringList(data.keyTakeaways, "keyTakeaways", source);
-  if (keyTakeawayMarkdown.length < 2 || keyTakeawayMarkdown.length > 8) {
-    fail(source, '"keyTakeaways" must contain 2–8 items');
+  if (keyTakeawayMarkdown.length < 2 || keyTakeawayMarkdown.length > 9) {
+    fail(source, '"keyTakeaways" must contain 2–9 items');
   }
   const keyTakeaways = keyTakeawayMarkdown.map((item, index) => markdownInlineToRichText(item, `${source} key takeaway ${index + 1}`));
   const introductionMarkdown = optionalString(data.introduction, "introduction", source);
