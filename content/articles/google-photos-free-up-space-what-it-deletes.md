@@ -29,9 +29,7 @@ keyTakeaways:
   - A connected Gallery app can also affect cloud photos.
   - Undo backup removes cloud copies of current-device items and disables that
     device’s backup.
-introduction: ""
-faqs:
-  - id: ""
+faqs: []
 sourcesVerification: >-
   Verified against official Google Help documentation on **September 23, 2026**.
   This article is documentation-based; it does not claim hands-on testing.
@@ -54,7 +52,6 @@ sourcesVerification: >-
 
   8. [Find lost photos & videos — Android](https://support.google.com/photos/answer/6306652?hl=en&co=GENIE.Platform%3DAndroid)
 publishedAt: 2026-09-23
-updatedAt: ""
 informationCheckedAt: 2026-09-23
 author: DECODISTA Editorial
 readingTime: 8

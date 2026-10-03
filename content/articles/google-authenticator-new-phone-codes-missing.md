@@ -6,11 +6,11 @@ primaryCategory: security
 contentType: how-to
 topics:
   - Google Authenticator
-  - Two-factor authentication
+  - Two-Factor Authentication
   - Account Security
-  - Account recovery
+  - Account Recovery
   - Google Account
-  - Phone migration
+  - Phone Migration
 heroImage: /images/google-authenticator-new-phone.webp
 heroImageAlt: Two unbranded phones exchanging abstract authenticator tokens through a protected direct path beside a separate cloud sync route
 heroImageWidth: 1672

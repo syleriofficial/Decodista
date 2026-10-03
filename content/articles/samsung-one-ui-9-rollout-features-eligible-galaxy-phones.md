@@ -306,7 +306,7 @@ Official Samsung sources are the primary evidence:
 - **R13 — [How to use Warranty and Care](https://www.samsung.com/africa_en/support/mobile-devices/use-warranty-and-care-on-samsung-galaxy-devices/)**. Service and coverage limitations.
 - **R14 — [Galaxy S26 FE AI features: Samsung Malaysia](https://www.samsung.com/my/mobile/mobile-phone-buying-guide/galaxy-s26-fe-ai-features-explained/)**. Released-product Android 17 corroboration.
 - **R15 — [Samsung support: software update preparation](https://www.samsung.com/us/support/troubleshoot/TSG10004921/)**. The update section within the network troubleshooting guide covers charge, connection, storage and backups.
-- **R16 — [Samsung support: software and app update checks](https://www.samsung.com/us/support/troubleshoot/TSG10001538/)**. Menu variants, Galaxy Store and Play Store updates.
+- **R16 — [Manage app updates on a Samsung Galaxy device](https://www.samsung.com/us/support/answer/ANS10002628/)**. Play Store and Galaxy Store update guidance, including menu variants.
 - **R17 — [U.K. rollout announcement](https://news.samsung.com/uk/samsung-begins-official-rollout-of-one-ui-9-bringing-the-latest-galaxy-experiences-to-more-devices)**, September 16, 2026. Regional timing and AI feature descriptions.
 - **R18 — [Now Nudge on Galaxy S26](https://www.samsung.com/au/support/mobile-devices/how-to-use-the-now-nudge-feature-on-the-samsung-galaxy-s26-series/)**. Supported-device settings and contextual actions.
 - **R19 — [DECODISTA: Pixel Scam Detection](https://decodista.com/articles/pixel-scam-detection-chat-gboard-privacy-2026)**. Internal contextual reading only; not evidence for Samsung behavior.

@@ -34,7 +34,7 @@ keyTakeaways:
   - "Independent reporting adds reasons to scrutinize protections; it does not establish that every user experienced a security failure."
 faqs: []
 publishedAt: 2026-09-26
-informationCheckedAt: 2026-09-24
+informationCheckedAt: 2026-10-04
 author: DECODISTA Editorial
 readingTime: 11
 seoTitle: "Meta Muse Privacy: Access, Memory and AI Training Controls"
@@ -54,6 +54,8 @@ The difference is consequence. A chatbot's travel suggestion is something you ca
 ## What can Muse access?
 
 The examples below are supported by Meta's product and design materials. They are not a complete connector directory or a promise that every provider is supported. [3][4]
+
+Meta subsequently announced additional connectors and Muse for Small Business connections, including Facebook Pages, Instagram professional analytics and Meta ad accounts. These explicit connections are separate from Meta’s narrower claim that ordinary Muse conversations and VM data are not shared with its advertising systems. Meta’s announcement covers the United States and Canada; it does not establish availability for every user or market. [9]
 
 | Data/service | Can Muse access it? | When? | User control |
 | --- | --- | --- | --- |
@@ -270,7 +272,7 @@ Integration was announced at Connect. [6] Confirm availability for your model an
 
 ## Sources & verification
 
-**Verified September 24, 2026.** This article is documentation-based. No hands-on testing, network inspection, security audit or independent verification of Meta's backend privacy behavior was performed. “Verified” means the statements were checked against the accessible sources below; it does not mean their implementation was independently proven. Documentation gaps are identified in the relevant sections.
+**Verified October 4, 2026.** This article is documentation-based. No hands-on testing, network inspection, security audit or independent verification of Meta's backend privacy behavior was performed. “Verified” means the statements were checked against the accessible sources below; it does not mean their implementation was independently proven. Documentation gaps are identified in the relevant sections.
 
 ### Official Meta sources
 
@@ -280,9 +282,9 @@ Integration was announced at Connect. [6] Confirm availability for your model an
 4. [How We Designed Muse](https://introducing.muse.ai/) — September 2026; memory, activity log and permission design.
 5. [Download Muse](https://ai.meta.com/muse/download/) — current cross-device description, retrieved September 24, 2026.
 6. [Introducing Ray-Ban Meta Audio and More AI Glasses Styles](https://about.fb.com/news/2026/09/introducing-ray-ban-meta-audio-glasses-new-styles-plus-muse/) — September 23, 2026; Connect announcement.
+9. [The Future Is for Everyone: Muse for Small Business](https://about.fb.com/news/2026/09/introducing-muse-small-business/) — September 29, 2026; additional business connectors and United States/Canada availability context.
 
 ### Independent reporting
 
 7. [Reuters: Meta launches AI agent that can access other apps to send emails, make payments](https://www.reuters.com/business/meta-launches-ai-agent-that-can-access-other-apps-send-emails-make-payments-2026-09-08/) — September 8, 2026.
 8. [Reuters: Meta testing a 'human concierge' for its new personal AI agent, Muse](https://www.reuters.com/business/meta-testing-human-concierge-its-new-personal-ai-agent-muse-2026-09-22/) — September 22, updated September 23, 2026. The updated rollback information is reflected above.
-

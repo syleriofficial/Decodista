@@ -38,7 +38,7 @@ keyTakeaways:
   - "Separate ordinary shopping scams, scams targeting an agent, and mistakes made by an agent."
 faqs: []
 publishedAt: 2026-09-26
-informationCheckedAt: 2026-09-26
+informationCheckedAt: 2026-10-04
 author: DECODISTA Editorial
 readingTime: 17
 seoTitle: "AI Shopping Agents: Scam, Fraud and Privacy Risks Explained"
@@ -130,7 +130,7 @@ These rows describe documented flows, not guaranteed access for every country, a
 
 There is also infrastructure for purchases without approval at the exact moment of payment. AP2’s specification includes a “Human Not Present” mode: the user approves constraints first, and an agent later approves a qualifying transaction within them. That is prior authorization, not no authorization. A protocol capability does not establish that every consumer product has enabled it. [16]
 
-Google’s May Universal Cart announcement described a US rollout and future expansion. Its September 16 update confirms UCP-powered direct checkout across Google and says additional integration capabilities are rolling out in the US. It does not establish universal availability of every Cart feature, merchant, or international rollout. [5][8]
+Google’s May Universal Cart announcement described a US rollout and future expansion. Google’s current Merchant Center help says UCP-powered checkout applies to eligible products in the United States, Canada and Australia, for participating merchants and partners. Availability remains selective by merchant, product and Google surface, and this does not establish universal rollout of every Universal Cart, UCP or agentic-checkout feature. Separately, Google says the Merchant Center UCP integration-hub onboarding experience is rolling out gradually in the US, with Australia and Canada to follow later. Product eligibility and integration-hub onboarding are therefore different rollout questions. [5][6][8][23]
 
 ## What if the agent buys the wrong thing?
 
@@ -307,13 +307,13 @@ Only when needed for a specific task and after reviewing its permissions and ter
 
 ## Sources & Verification
 
-**Verified September 26, 2026.** This article is based on publicly accessible documentation and reporting. No hands-on purchase, payment, refund, or chargeback testing was performed. Availability statements are limited to the documented scope; announced rollout schedules are not treated as proof of universal access.
+**Verified October 4, 2026.** This article is based on publicly accessible documentation and reporting. No hands-on purchase, payment, refund, or chargeback testing was performed. Availability statements are limited to the documented scope; announced rollout schedules are not treated as proof of universal access.
 
 ### Official sources
 
 - **[1]** [OpenAI — Shopping with ChatGPT Search](https://help.openai.com/en/articles/11128490-shopping-with-chatgpt-search). Current shopping, merchant-ranking, advertising, and eligibility language.
 - **[2]** [OpenAI — Powering Product Discovery in ChatGPT](https://openai.com/index/powering-product-discovery-in-chatgpt/), March 24, 2026. Merchant checkout direction.
-- **[3]** [OpenAI — Plugin guidelines, Checkout](https://developers.openai.com/plugins/app-guidelines). Limited Instant Checkout beta and external-checkout requirements.
+- **[3]** [OpenAI — Plugin guidelines, Checkout](https://developers.openai.com/plugins/plugin-guidelines). Limited Instant Checkout beta and external-checkout requirements.
 - **[4]** [OpenAI — ACP key concepts](https://developers.openai.com/commerce/guides/key-concepts?device=c). Delegated payment, merchant systems, and merchant-of-record roles.
 - **[5]** [Google — Introducing the Universal Cart and more ways to help you shop](https://blog.google/products-and-platforms/products/shopping/google-shopping-cart/), May 19, 2026. Cart, Wallet, and announced rollout scope.
 - **[6]** [Google — About UCP and UCP-powered checkout](https://support.google.com/merchants/answer/16837055?hl=en). Eligibility, Google Pay, and credential support.
@@ -332,9 +332,9 @@ Only when needed for a specific task and after reviewing its permissions and ter
 - **[20]** [CFPB — How do I dispute a charge on my credit card bill?](https://www.consumerfinance.gov/ask-cfpb/how-do-i-dispute-a-charge-on-my-credit-card-bill-en-61/). US credit-card dispute procedure.
 - **[21]** [OpenAI — Using shopping research in ChatGPT](https://help.openai.com/en/articles/12911370-using-shopping-research-in-chatgpt). Consumer verification of price, variants, and retailer policies.
 - **[22]** [OpenAI — Commerce policies](https://openai.com/policies/commerce-policies/), updated June 24, 2026. Prohibited deceptive merchant practices.
+- **[23]** [Google — How to onboard to the UCP integration hub in Merchant Center](https://support.google.com/merchants/answer/16992327?hl=en). Merchant Center onboarding rollout, distinct from checkout eligibility.
 
 ### Independent reporting
 
 - **[10]** [Reuters — Banks warn AI shopping bots raise scam, fraud and data-privacy risks](https://www.reuters.com/legal/litigation/banks-warn-ai-shopping-bots-raise-scam-fraud-data-privacy-risks-2026-09-22/), September 22, 2026. Reviewed through the retrieved Reuters article text; direct page opening was unavailable.
 - **[19]** [Reuters via CNA — FTC chair suggests AI developers should be liable for conduct of agents](https://www.channelnewsasia.com/business/ftc-chair-suggests-ai-developers-should-be-liable-conduct-agents-6411691), September 25, 2026. Syndicated Reuters report; original Reuters URL could not be opened directly.
-
