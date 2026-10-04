@@ -177,7 +177,7 @@ Before paying, investigate the business independently of the agent’s summary:
 
 An unfamiliar seller is not automatically fraudulent. Equally, HTTPS means the connection is encrypted, not that the business is honest. [11][12]
 
-If you have already paid a suspected scammer, contact your bank, card issuer, or payment service immediately through its official app, website, or a trusted telephone number. Ask what recovery steps are available; recovery is not guaranteed. If you exposed account credentials, change them and enable two-factor authentication. [13]
+If you have already paid a suspected scammer, contact your bank, card issuer, or payment service immediately through its official app, website, or a trusted telephone number. Ask what recovery steps are available; recovery is not guaranteed. If you exposed account credentials, change them and enable two-factor authentication. DECODISTA’s [fake tech-support and verification-code scams guide](</articles/fake-tech-support-scams-remote-access-verification-code>) covers related social-engineering tactics in a different scam context. [13]
 
 ## Impersonation scams matter here too
 

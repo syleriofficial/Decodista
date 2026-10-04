@@ -177,6 +177,8 @@ Current documentation includes two details that matter:
 
 Temporary Chat is therefore not a promise of instant deletion or a guarantee about every external service used during a conversation.
 
+For a cross-platform comparison, DECODISTA’s [Gemini Temporary Chat and activity controls](</articles/gemini-temporary-chat-vs-keep-activity-off>) guide explains Google’s separate rules; they should not be applied to ChatGPT.
+
 ## Feedback is a separate exception
 
 OpenAI says that voluntarily submitting feedback—such as a thumbs-up or thumbs-down—can make the associated **entire conversation** eligible for training even after opting out. “May be used” does not mean every feedback submission definitely enters training. [O4]
