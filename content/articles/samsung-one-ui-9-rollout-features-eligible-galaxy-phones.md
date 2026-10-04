@@ -22,15 +22,15 @@ heroImageAlt: Illustration of Galaxy-style smartphones and foldables representin
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
-  Samsung announced the official One UI 9 rollout on September 16, starting with
-  Galaxy S26, S26+ and S26 Ultra. Galaxy Z Fold8 Ultra, Z Fold8 and Z Flip8 had
-  already debuted with it. More Galaxy devices will follow, but the official
-  sources reviewed do not provide one complete worldwide stable-release
-  schedule. Features and update timing depend on your device and market;
-  language, carrier and app requirements also matter. [R1, R3, R6]
+  Samsung began the official One UI 9 rollout on September 16 with Galaxy S26,
+  S26+ and S26 Ultra. Stable updates have since started reaching Galaxy S25,
+  S25+, S25 Ultra, S25 FE, Z Fold7 and Z Flip7 in some markets, including South
+  Korea and specific U.S. carrier variants. The rollout remains staged: timing
+  depends on country, carrier and model, while feature availability can also
+  depend on language and app requirements. [R1, R3, R21-R26]
 keyTakeaways:
   - "One UI 9 is based on Android 17. [R7, R14]"
-  - "Samsung’s September beta expansion is separate from the first stable rollout. [R8]"
+  - "Samsung’s September beta list was not a stable-release schedule; several devices from it have since begun staged stable rollouts. [R8, R21-R26]"
   - "Galaxy AI changes include contextual suggestions, video reframing and revised summaries. [R3]"
   - "Privacy Alerts checks for potential privacy risks on supported devices; it is not universal. [R1, R4]"
   - "Security Brief brings security information into Now Brief. [R9]"
@@ -39,7 +39,8 @@ keyTakeaways:
   - "Back up, check essential apps and make sure you know your screen-lock credential before installing. [R10, R15, R16]"
 faqs: []
 publishedAt: 2026-09-29
-informationCheckedAt: 2026-09-29
+updatedAt: 2026-10-04
+informationCheckedAt: 2026-10-04
 author: DECODISTA Editorial
 readingTime: 13
 seoTitle: "Samsung One UI 9: New Features, Confirmed Galaxy Phones and Rollout"
@@ -52,9 +53,9 @@ featured: false
 ---
 ## Which Galaxy phones have One UI 9 now?
 
-Read this as a record of Samsung’s announcements, not proof that every carrier variant has received a download.
+Read this as a record of Samsung’s announcements and dated rollout evidence, not proof that every carrier variant has received a download.
 
-| Device | One UI 9 status | What Samsung currently confirms | Region caveat |
+| Device | One UI 9 status | What current evidence shows | Region caveat |
 | --- | --- | --- | --- |
 | Galaxy Z Fold8 Ultra | Out of the box | Listed in Samsung’s upgrade guide | Sales and feature availability differ by market |
 | Galaxy Z Fold8 | Out of the box | Listed in the same guide | Check your local model |
@@ -63,25 +64,20 @@ Read this as a record of Samsung’s announcements, not proof that every carrier
 | Galaxy S26 | First announced stable rollout | Named in the September 16 announcement | Local and carrier delivery may differ |
 | Galaxy S26+ | First announced stable rollout | Named alongside S26 and S26 Ultra | Local and carrier delivery may differ |
 | Galaxy S26 Ultra | First announced stable rollout | Named in the first wave | Local and carrier delivery may differ |
+| Galaxy S25 | Stable rollout started | Reported in South Korea on September 28; U.S. carrier release documented by October 2–3 | Not proof of delivery to every country, carrier or variant |
+| Galaxy S25+ | Stable rollout started | Reported in South Korea on September 28; U.S. carrier release documented by October 2–3 | Not proof of delivery to every country, carrier or variant |
+| Galaxy S25 Ultra | Stable rollout started | Reported in South Korea on September 28; U.S. carrier release documented by October 2–3 | Not proof of delivery to every country, carrier or variant |
+| Galaxy S25 FE | Stable rollout started | Verizon documents a U.S. One UI 9 release dated October 2 | Other carriers and regions may differ |
+| Galaxy Z Fold7 | Stable rollout started | Reported in South Korea on September 28; Verizon documents a U.S. release dated October 2 | Other carriers and variants may differ |
+| Galaxy Z Flip7 | Stable rollout started | Reported in South Korea on September 28; Verizon documents a U.S. release dated October 2 | Other carriers and variants may differ |
 
-Sources: Samsung’s upgrade guide and U.S. rollout announcement. [R6, R3]
+Sources: Samsung’s upgrade guide and rollout announcements, plus current South Korean reporting and U.S. carrier notices. [R3, R6, R21-R26]
 
-The U.S. announcement says September 16; the U.K. notice describes rollout beginning during September. India’s notice was published September 25 but retains September 16 in its rollout wording. Those dates do not prove that every eligible Indian handset received the update on either day. Check the phone itself and local Samsung Members notices. [R2, R3, R17]
+Samsung’s official September 16 announcement started with the S26 trio. On September 28, current reporting documented stable S25-series and Fold7/Flip7 updates in South Korea. U.S. carrier pages dated October 2 and reporting published October 3 then documented releases for S25 models and the 2025 foldables. These are staged deployments, not a worldwide completion notice. Check the phone itself, the carrier and local Samsung Members notices. [R1, R3, R21-R26]
 
 ## Which Galaxy phones are confirmed for One UI 9 beta?
 
-Samsung’s September 1 expansion announcement names these devices:
-
-| Device | Confirmed program |
-| --- | --- |
-| Galaxy Z Fold7 | **BETA** |
-| Galaxy Z Flip7 | **BETA** |
-| Galaxy S25 | **BETA** |
-| Galaxy S25+ | **BETA** |
-| Galaxy S25 Ultra | **BETA** |
-| Galaxy S25 FE | **BETA** |
-
-The announcement covers selected markets, including India, Korea, the U.K. and the U.S., with registration through Samsung Members. Timing varies. It confirms beta participation, not stable delivery; it also does not establish that registration remains open today. This table does not rule out later local releases—it states what that official announcement proves. [R8]
+Samsung’s September 1 expansion announcement named Galaxy Z Fold7, Z Flip7, S25, S25+, S25 Ultra and S25 FE for beta testing in selected markets. Each has since begun a stable rollout in at least one documented market, so none remains listed here as beta-only. That does not mean every beta region, carrier or device variant has received the stable build. [R8, R21-R26]
 
 ## What Samsung has not confirmed yet
 
@@ -239,11 +235,11 @@ Samsung has announced an official release. That does not make a build labeled be
 
 ### Which Galaxy phones have One UI 9?
 
-Samsung lists Fold8 Ultra, Fold8, Flip8 and S26 FE as shipping with it. S26, S26+ and S26 Ultra are the first announced stable update wave. Check local delivery. [R6, R3]
+Samsung lists Fold8 Ultra, Fold8, Flip8 and S26 FE as shipping with it. S26, S26+ and S26 Ultra were the first announced stable update wave. Stable rollouts have since started in some markets for the S25 trio, S25 FE, Fold7 and Flip7. Check local delivery. [R3, R6, R21-R26]
 
 ### Is Galaxy S25 getting One UI 9?
 
-Samsung confirmed S25, S25+ and S25 Ultra for the beta program. That announcement alone does not confirm their stable rollout in your market. [R8]
+Yes. Stable One UI 9 began reaching S25, S25+ and S25 Ultra devices in South Korea on September 28, followed by documented U.S. carrier releases in early October. Availability is still expanding in stages, so this does not mean every S25 owner worldwide can download it yet. [R21-R23]
 
 ### Is Galaxy S24 getting One UI 9?
 
@@ -287,7 +283,7 @@ Samsung India documents reset-required lockout at the 13th failed attempt, start
 
 ## Sources & Verification
 
-**Documentation verified September 29, 2026.** This explainer is based on documentation; DECODISTA did not perform hands-on device testing. Announced availability is not a live audit of every handset, carrier or regional firmware build. Live product and support pages can change.
+**Documentation verified October 4, 2026.** This explainer is based on documentation; DECODISTA did not perform hands-on device testing. Announced availability is not a live audit of every handset, carrier or regional firmware build. Live product and support pages can change.
 
 Official Samsung sources are the primary evidence:
 
@@ -311,3 +307,9 @@ Official Samsung sources are the primary evidence:
 - **R18 — [Now Nudge on Galaxy S26](https://www.samsung.com/au/support/mobile-devices/how-to-use-the-now-nudge-feature-on-the-samsung-galaxy-s26-series/)**. Supported-device settings and contextual actions.
 - **R19 — [DECODISTA: Pixel Scam Detection](https://decodista.com/articles/pixel-scam-detection-chat-gboard-privacy-2026)**. Internal contextual reading only; not evidence for Samsung behavior.
 - **R20 — [U.S. lock-screen security guidance](https://www.samsung.com/us/support/answer/ANS10013252/)**. Reset consequences and comparison with India scope wording.
+- **R21 — [Android Authority: Galaxy S25 and Z7 join the stable One UI 9 rollout](https://www.androidauthority.com/samsung-one-ui-9-galaxy-s25-fold-7-flip-7-stable-3716021/)**, September 28, 2026. South Korean rollout evidence for S25, S25+, S25 Ultra, Fold7 and Flip7.
+- **R22 — [GSMArena: Galaxy S25 series receiving One UI 9 in the U.S.](https://www.gsmarena.com/samsung_galaxy_s25_series_one_ui_9_stable_update_usa-news-74890.php)**, October 3, 2026. Current U.S. rollout reporting for S25, S25+ and S25 Ultra.
+- **R23 — Verizon software-update notices for [Galaxy S25](https://www.verizon.com/support/samsung-galaxy-s25-update/), [S25+](https://www.verizon.com/support/samsung-galaxy-s25-plus-update/) and [S25 Ultra](https://www.verizon.com/support/samsung-galaxy-s25-ultra-update/)**. U.S. carrier releases dated October 2, 2026.
+- **R24 — [Verizon Galaxy S25 FE software update](https://www.verizon.com/support/samsung-galaxy-s25-fe-update/)**. U.S. One UI 9 carrier release dated October 2, 2026.
+- **R25 — [Verizon Galaxy Z Fold7 software update](https://www.verizon.com/support/samsung-galaxy-z-fold7-update/)**. U.S. One UI 9 carrier release dated October 2, 2026.
+- **R26 — [Verizon Galaxy Z Flip7 software update](https://www.verizon.com/support/samsung-galaxy-z-flip7-update/)**. U.S. One UI 9 carrier release dated October 2, 2026.
