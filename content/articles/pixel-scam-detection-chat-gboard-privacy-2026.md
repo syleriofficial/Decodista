@@ -247,7 +247,7 @@ Before replying, opening a link, or paying:
 - **Identity:** independently confirm who contacted you; a familiar display name is insufficient.
 - **Domain and destination:** check the actual address, not only the brand name in the message. Do not open a suspicious link just to investigate it.
 - **Payment:** ask whether the charge is expected and whether the recipient matches the business you intended to pay.
-- **Credentials:** stop if an unsolicited sender requests your password, one-time code, or approval of a login you did not initiate.
+- **Credentials:** stop if an [unsolicited sender requests your password, one-time code, or approval of a login you did not initiate](</articles/fake-tech-support-scams-remote-access-verification-code>).
 - **Pressure:** treat deadlines, threats, and demands for secrecy as reasons to pause.
 - **Recovery requests:** verify unexpected account-recovery instructions through the service itself.
 
@@ -346,4 +346,3 @@ Do not assume so. It is a user-triggered search and AI analysis, not the automat
 ### Other official consumer-safety guidance
 
 9. [U.S. Federal Trade Commission — How To Recognize and Avoid Phishing Scams](https://consumer.ftc.gov/articles/how-recognize-avoid-phishing-scams). Independent verification of unexpected messages and phishing precautions.
-

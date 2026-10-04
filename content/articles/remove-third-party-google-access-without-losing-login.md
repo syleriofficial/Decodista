@@ -91,7 +91,7 @@ For an account you want to keep, confirm:
 - **The account identity:** note its email address, username or customer ID.
 - **The contents:** identify something you can recognise after signing in again, such as an existing order or saved project.
 - **The replacement method:** check the service’s own instructions for adding another login to this account.
-- **The recovery route:** make sure you can receive any required email or verification code.
+- **The recovery route:** make sure you can receive any required email or verification code. If the alternative depends on app-generated codes, complete the separate [Google Authenticator migration checks](</articles/google-authenticator-new-phone-codes-missing>) before disconnecting.
 - **The dependencies:** identify any Google integration you still need.
 - **The exit plan:** save anything you need before starting a separate account-deletion request.
 

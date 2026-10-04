@@ -97,7 +97,7 @@ Temporary conversations are excluded from AI-model training under Google’s sta
 
 Google says audio and Gemini Live video/screenshare recordings aren’t used to improve its services by default, and their use for improvement is controlled separately. Do not assume one switch describes every type of media. [Gemini Apps Privacy Hub](<https://support.google.com/gemini/answer/13594961?hl=en>), [Google’s recording controls](<https://support.google.com/gemini/answer/13278892>)
 
-Training changes the system; personalisation changes how it responds to you. Those are separate controls.
+Training changes the system; personalisation changes how it responds to you. Those are separate controls. DECODISTA’s [Meta Muse privacy guide](</articles/meta-muse-privacy-access-memory-ai-training>) applies the same analytical distinction to a different agent; Gemini’s rules should not be applied to Muse.
 
 ## Personalisation: Memory and saved instructions {#personalisation}
 

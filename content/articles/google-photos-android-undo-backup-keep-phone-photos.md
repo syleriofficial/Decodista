@@ -52,7 +52,7 @@ sourcesVerification: |-
 
   This is a documentation-based Android guide. No hands-on deletion, multi-device or recovery experiment was performed. The file-verification checks and conservative stopping points are DECODISTA recommendations, not guarantees about an untested device.
 
-  Related reading: [what Google’s privacy settings actually change](</articles/gemini-temporary-chat-vs-keep-activity-off>), and [review apps with access to your Google Account](</articles/remove-third-party-google-access-without-losing-login>).
+  Related reading: [how iCloud Backup and iCloud Photos differ](</articles/does-icloud-backup-include-photos>), and [review apps with access to your Google Account](</articles/remove-third-party-google-access-without-losing-login>).
 ---
 
 ## Before you remove anything {#before-you-remove-anything}
@@ -76,7 +76,7 @@ Read the confirmation screen as well as the action name.
 
 The deletion and Undo distinctions follow [Google’s Android deletion guide](<https://support.google.com/photos/answer/6128858?co=GENIE.Platform%3DAndroid&hl=en>). The device-only options are documented in Google’s [gallery integration guide](<https://support.google.com/photos/answer/14216276?hl=en>) and [Free up space guide](<https://support.google.com/photos/answer/6128843?co=GENIE.Platform%3DAndroid&hl=en>).
 
-**Free up space works towards the opposite storage goal from this article.** Google says the removed phone files remain viewable through its online library, but are no longer available as those local copies for offline viewing. Recent items may be left on the phone. [Google’s Free up space explanation](<https://support.google.com/photos/answer/6128843?co=GENIE.Platform%3DAndroid&hl=en>)
+[Free up space](</articles/google-photos-free-up-space-what-it-deletes>) **works towards the opposite storage goal from this article.** Google says the removed phone files remain viewable through its online library, but are no longer available as those local copies for offline viewing. Recent items may be left on the phone. [Google’s Free up space explanation](<https://support.google.com/photos/answer/6128843?co=GENIE.Platform%3DAndroid&hl=en>)
 
 ### Cloud space or phone space? {#cloud-or-phone-space}
 

@@ -103,7 +103,7 @@ In consumer terms, an agent proposes work and a separate permission system evalu
 
 Meta lists messages, purchases and sharing with connected apps; its FAQ also describes one-time or continuing permission. [3] Engineering documentation specifies approval for each checkout in its described purchase flows. [2]
 
-There is no exhaustive action-by-action list verified here. Avoid assuming every action produces a new prompt. Check the recipient, information being sent, amount and duration of permission before approving.
+There is no exhaustive action-by-action list verified here. Avoid assuming every action produces a new prompt. Check the recipient, information being sent, amount and duration of permission before approving. For broader context on delegated purchases—not Muse-specific behavior—DECODISTA’s [AI shopping-agent risk guide](</articles/ai-shopping-agents-scam-fraud-privacy-risks>) explains seller, payment and dispute checks.
 
 Meta's design guide says tapping the Muse avatar opens its activity log and approved permissions. [4] Use that record to compare intended work with actual activity.
 

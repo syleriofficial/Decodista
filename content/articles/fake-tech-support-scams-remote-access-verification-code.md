@@ -154,7 +154,7 @@ If answers are unclear, stop and verify. [7,12]
 - Passwords or device passcodes
 - OTPs and authenticator codes
 - Backup or recovery codes
-- Authenticator setup QR codes or secret keys
+- [Authenticator setup QR codes or secret keys](</articles/google-authenticator-new-phone-codes-missing>)
 - Account recovery keys
 - Session tokens or session cookies
 - API keys
@@ -173,7 +173,7 @@ Remote access does not prove malware was installed. Equally, uninstalling one ap
 
 ## What to do if you shared a password or code
 
-From a trusted device, change the affected password and any reused copies. Review recent security events, signed-in devices, recovery contacts, and connected access; remove what you do not recognize. Use official account recovery if locked out. [18]
+From a trusted device, change the affected password and any reused copies. Review recent security events, signed-in devices, recovery contacts, and connected access; remove what you do not recognize. For a Google Account, [reviewing third-party Google access](</articles/remove-third-party-google-access-without-losing-login>) is one cleanup step, not a substitute for password, session, and recovery checks. Use official account recovery if locked out. [18]
 
 Secure email early because its inbox can receive password-reset links for other accounts. Review forwarding rules and sign out other sessions using the provider’s controls. [19]
 

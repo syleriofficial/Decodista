@@ -200,4 +200,4 @@ If a service still rejects the code, use a working alternative method and consul
 - **Assuming a normal phone backup proves Authenticator recovery will work.** Test the specific migration route you intend to rely on.
 - **Keeping the only recovery material on the phone being replaced.** Make sure you can reach it independently.
 - **Treating a trusted, already-open session as a test.** Use a fresh authentication attempt.
-- **Sending a code to someone offering recovery help.** Enter credentials only into the official sign-in flow you initiated. Google warns against account-recovery services and sharing verification codes. [Google’s recovery guidance](<https://support.google.com/accounts/answer/7682439?hl=en>)
+- **Sending a code to someone offering recovery help.** Enter credentials only into the official sign-in flow you initiated. Google warns against account-recovery services and sharing verification codes. DECODISTA’s [fake tech-support scam guide](</articles/fake-tech-support-scams-remote-access-verification-code>) covers verification-code and remote-access pressure. [Google’s recovery guidance](<https://support.google.com/accounts/answer/7682439?hl=en>)
