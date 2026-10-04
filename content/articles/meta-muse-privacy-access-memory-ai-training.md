@@ -34,6 +34,7 @@ keyTakeaways:
   - "Independent reporting adds reasons to scrutinize protections; it does not establish that every user experienced a security failure."
 faqs: []
 publishedAt: 2026-09-26
+updatedAt: 2026-10-04
 informationCheckedAt: 2026-10-04
 author: DECODISTA Editorial
 readingTime: 11

@@ -38,6 +38,7 @@ keyTakeaways:
   - "Separate ordinary shopping scams, scams targeting an agent, and mistakes made by an agent."
 faqs: []
 publishedAt: 2026-09-26
+updatedAt: 2026-10-04
 informationCheckedAt: 2026-10-04
 author: DECODISTA Editorial
 readingTime: 17
