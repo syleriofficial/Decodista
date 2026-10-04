@@ -21,12 +21,15 @@ heroImageHeight: 900
 shortAnswer: >-
   According to Meta, access to connected services depends on your connections
   and permissions. Muse also remembers information for future personalization,
-  and Meta offers a model-training opt-out. Those controls address different
-  uses of your information. The protections described here are primarily
-  company claims, not independently verified privacy guarantees. [1]
+  and internal instructions obtained by researchers and reviewed by WIRED
+  indicate that this memory can include structured information about people in
+  a user's life and their relationships. Meta also offers a model-training
+  opt-out. Those controls address different uses of your information. The
+  protections described here are primarily company claims, not independently
+  verified privacy guarantees. [1][10]
 keyTakeaways:
   - "Review permissions before connecting an account."
-  - "Treat persistent memory separately from conversation history."
+  - "Treat persistent memory—including reported structured context about people and relationships—separately from conversation history. [4][10]"
   - "Check the training preference; do not assume it matches another Meta app."
   - "Credential protection does not eliminate the risks of account access."
   - "Examine sensitive-action approvals and any continuing permission you grant."
@@ -106,7 +109,13 @@ Meta's design guide says tapping the Muse avatar opens its activity log and appr
 
 ## What does Muse remember?
 
-Meta's design account describes cross-conversation memory, proactive suggestions and directly editable Memory files. [4]
+Meta's announcement says Muse can remember details such as friends' dietary restrictions, and its design account describes cross-conversation memory, proactive suggestions and directly editable Memory files. [1][4]
+
+Internal Muse instructions obtained by researchers and reviewed by WIRED indicate that the agent can maintain structured pages about individual people in a user's life, including family, partners, friends, colleagues, collaborators and people the user follows. WIRED reported that those pages can organize available evidence into facts and shared history, relationship context and common interests, open threads, and reminders or suggestions intended to strengthen a relationship. The instructions reportedly direct Muse not to invent missing details. [10]
+
+Meta spokesperson Daniel Roberts told WIRED that a useful agent needs context about users and the people they interact with, and said Muse gathers that context from public information and information users choose to share. [10]
+
+This finding matters because a personal agent's saved context may cover not only the user, but also people in the user's life; those people did not necessarily provide the information themselves. The instructions describe intended system behavior, not proof that every contact gets a page or that the process runs the same way for every user. DECODISTA has not independently verified how consistently per-person pages are created, what triggers them in practice, or how much information is explicitly supplied rather than inferred from available evidence.
 
 Personalization can be useful when a preference remains accurate. It becomes a different privacy decision when the remembered detail concerns someone else, an old circumstance or information shared for one task only.
 
@@ -289,3 +298,4 @@ Integration was announced at Connect. [6] Confirm availability for your model an
 
 7. [Reuters: Meta launches AI agent that can access other apps to send emails, make payments](https://www.reuters.com/business/meta-launches-ai-agent-that-can-access-other-apps-send-emails-make-payments-2026-09-08/) — September 8, 2026.
 8. [Reuters: Meta testing a 'human concierge' for its new personal AI agent, Muse](https://www.reuters.com/business/meta-testing-human-concierge-its-new-personal-ai-agent-muse-2026-09-22/) — September 22, updated September 23, 2026. The updated rollback information is reflected above.
+10. [WIRED: Muse Creates Detailed Profiles of All Your Friends and Family](https://www.wired.com/story/muse-creates-detailed-profiles-of-all-your-friends-and-family/) — October 3, 2026; extracted internal instructions, structured per-person memory and Meta's response.
