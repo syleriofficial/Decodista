@@ -231,7 +231,3 @@ Information checked against current official Google documentation on **6 October
 2. Google Photos Help — [Hide sensitive photos & videos in Locked Folder — iPhone & iPad](https://support.google.com/photos/answer/10694388?co=GENIE.Platform%3DiOS&hl=en)
 3. Google Photos Help — [Hide sensitive photos & videos in Locked Folder — Computer](https://support.google.com/photos/answer/10694388?co=GENIE.Platform%3DDesktop&hl=en)
 4. Google Photos Help — [Delete photos & videos — Android](https://support.google.com/photos/answer/6128858?co=GENIE.Platform%3DAndroid&hl=en)
-
-### Official Google product announcement
-
-5. Google Photos — [Access Locked Folder across devices with cloud backup](https://blog.google/products-and-platforms/products/photos/locked-folder-cloud-backup/)
