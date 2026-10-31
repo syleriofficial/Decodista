@@ -64,6 +64,13 @@ export function SiteHeader() {
                     ))}
                   </ul>
                 </section>
+                <section aria-labelledby="more-follow-title">
+                  <h2 id="more-follow-title">Follow DECODISTA</h2>
+                  <ul>
+                    <li><Link href="/weekly" onClick={closeNavigation}>Weekly Digital Safety Brief</Link></li>
+                    <li><Link href="/rss.xml" onClick={closeNavigation}>RSS Feed</Link></li>
+                  </ul>
+                </section>
                 <section aria-labelledby="more-decodista-title">
                   <h2 id="more-decodista-title">DECODISTA</h2>
                   <ul>
