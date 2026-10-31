@@ -9,8 +9,9 @@ import {
   getArticlesByCategory,
   getArticlesByContentType,
   getEditorsPicks,
+  getArticlesByTopic,
 } from "@/lib/content";
-import { CATEGORY_MAP, CONTENT_TYPE_MAP } from "@/lib/site";
+import { CATEGORY_MAP, CONTENT_TYPE_MAP, TOPIC_MAP } from "@/lib/site";
 
 function EditorialSection({
   eyebrow,
@@ -39,7 +40,26 @@ function EditorialSection({
 }
 
 export default function HomePage() {
-  const lead = articles.find((article) => article.featured) ?? articles[0];
+  // Lead with the newest published story. Older curated selections remain
+  // available in the dedicated Editors' Picks section.
+  const lead = articles[0];
+  const readerJourneys = ([
+    {
+      slug: "photos-backup",
+      title: "Protect your photos",
+      description: "Understand backups before deleting, moving or syncing photos.",
+    },
+    {
+      slug: "google-account",
+      title: "Secure your Google account",
+      description: "Make sense of sign-in, recovery and connected apps.",
+    },
+    {
+      slug: "privacy",
+      title: "Take control of privacy",
+      description: "Find the settings and trade-offs behind everyday tech.",
+    },
+  ] as const).filter(({ slug }) => getArticlesByTopic(slug).length >= TOPIC_MAP[slug].minimumArticles);
   const secondary = articles.filter((article) => article.slug !== lead.slug).slice(0, 3);
   const alreadyShown = new Set([lead.slug, ...secondary.map((article) => article.slug)]);
   const takeDistinct = (candidates: typeof articles, limit: number, fill = true) => {
@@ -94,8 +114,30 @@ export default function HomePage() {
         </aside>
       </section>
 
+      <section className="reader-paths wrap" aria-labelledby="reader-paths-title">
+        <div className="reader-paths-heading">
+          <span className="eyebrow">Start with a problem</span>
+          <h2 id="reader-paths-title">Find a useful answer</h2>
+          <p>Practical guides to the accounts, photos and privacy decisions that matter in everyday life.</p>
+        </div>
+        <div className="reader-paths-grid">
+          {readerJourneys.map((journey) => (
+            <Link className="reader-path" href={`/topics/${journey.slug}`} key={journey.slug}>
+              <strong>{journey.title}</strong>
+              <span>{journey.description}</span>
+              <span className="reader-path-action">Explore guides <ArrowRight aria-hidden="true" /></span>
+            </Link>
+          ))}
+          <Link className="reader-path" href="/security">
+            <strong>Stay safer online</strong>
+            <span>Understand account protection, scams and safer sign-in choices.</span>
+            <span className="reader-path-action">Explore security <ArrowRight aria-hidden="true" /></span>
+          </Link>
+        </div>
+      </section>
+
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
-        <SectionHeading eyebrow="Stay current" title="Latest" href="/latest" id="latest-title" />
+        <SectionHeading eyebrow="Recently published" title="Latest" href="/latest" id="latest-title" />
         <div className="latest-feed">
           {latest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
         </div>
