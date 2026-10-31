@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
+import { FollowDecodista } from "@/components/follow-decodista";
 import { SectionHeading } from "@/components/section-heading";
 import {
   articles,
@@ -154,6 +155,8 @@ export default function HomePage() {
           ))}
         </ol>
       </section>
+
+      <div className="wrap"><FollowDecodista /></div>
 
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
         <SectionHeading eyebrow="Recently published" title="Latest" href="/latest" id="latest-title" />

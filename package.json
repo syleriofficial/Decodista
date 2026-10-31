@@ -19,9 +19,10 @@
     "contact:test": "node --test scripts/test-contact.mjs",
     "contact:leak-check": "node scripts/check-contact-leaks.mjs",
     "site:contracts": "node scripts/validate-site-contracts.mjs",
+    "rss:test": "node --test scripts/test-rss.mjs",
     "security:audit": "npm audit --omit=dev --audit-level=high",
     "security:audit:all": "npm audit",
-    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run lint && npm run typecheck && npm run build && npm run contact:leak-check"
+    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run contact:leak-check"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

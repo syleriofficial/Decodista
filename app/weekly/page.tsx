@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
+import { FollowDecodista } from "@/components/follow-decodista";
 import { formatDate } from "@/lib/content";
 import { SITE_NAME } from "@/lib/site";
 import { weeklyBriefs } from "@/lib/weekly-briefs";
@@ -46,6 +47,7 @@ export default function WeeklyArchive() {
         <h2 id="weekly-approach-title">Useful information, not an endless feed</h2>
         <p>Each edition is assembled from dated primary sources. A mention does not mean a feature is already available to everyone, a vulnerability is widely exploited, or a proposed policy has taken effect. We distinguish announcements from releases and recommend actions only when the evidence supports them.</p>
       </section>
+      <FollowDecodista />
       {earlier.length > 0 && (
         <section className="weekly-archive" aria-labelledby="weekly-archive-heading">
           <h2 id="weekly-archive-heading">Previous editions</h2>
