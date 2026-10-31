@@ -99,7 +99,7 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
       </div>
       <aside className="weekly-editor-note" aria-labelledby="weekly-editor-note-title">
         <h2 id="weekly-editor-note-title">How we selected these updates</h2>
-        <p>This edition records announcements and releases in the stated date range, based on the linked primary sources. It is a dated snapshot, not a continuously updated vulnerability tracker or a substitute for your device's own update screen. Availability and policies may change after publication.</p>
+        <p>This edition records announcements and releases in the stated date range, based on the linked primary sources. It is a dated snapshot, not a continuously updated vulnerability tracker or a substitute for your device’s own update screen. Availability and policies may change after publication.</p>
       </aside>
       {related.length > 0 && (
         <section className="weekly-related" aria-labelledby="weekly-related-heading">
