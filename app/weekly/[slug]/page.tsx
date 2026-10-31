@@ -53,7 +53,7 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
     description: issue.standfirst,
     datePublished: issue.publishedDate,
     mainEntityOfPage: `${SITE_URL}/weekly/${issue.slug}`,
-    author: { "@type": "Organization", name: "${SITE_NAME}", url: `${SITE_URL}/editorial-team` },
+    author: { "@type": "Organization", name: SITE_NAME, url: `${SITE_URL}/editorial-team` },
     publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
     inLanguage: "en",
     isAccessibleForFree: true,
