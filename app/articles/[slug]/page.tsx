@@ -196,10 +196,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </footer>
       </article>
 
-      <section className="related-section wrap" aria-labelledby="related-title">
-        <div className="section-heading"><div><span className="eyebrow">Continue reading</span><h2 id="related-title">Related reading</h2></div></div>
-        <div className="article-grid">{related.map((item) => <ArticleCard key={item.slug} article={item} variant="compact" />)}</div>
-      </section>
+      {related.length > 0 && (
+        <section className="related-section wrap" aria-labelledby="related-title">
+          <div className="section-heading">
+            <div><span className="eyebrow">Continue reading</span><h2 id="related-title">Related reading</h2></div>
+            <Link href={`/${article.category}`}>Explore {category.shortName} <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <div className="article-grid">{related.map((item) => <ArticleCard key={item.slug} article={item} variant="compact" />)}</div>
+        </section>
+      )}
     </main>
   );
 }

@@ -11,6 +11,9 @@ function read(relativePath) {
 const site = read("lib/site.ts");
 const legal = read("lib/legal.ts");
 const homepage = read("app/page.tsx");
+const topicPage = read("app/topics/[topic]/page.tsx");
+const articlePage = read("app/articles/[slug]/page.tsx");
+const contentHelpers = read("lib/content.ts");
 const science = read("app/[section]/page.tsx");
 const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
@@ -53,6 +56,13 @@ assert(/private delivery address is never shown/i.test(contactPage), "Contact pa
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
 assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-functional contact or signup form");
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
+assert(homepage.includes("const lead = articles[0]"), "Homepage must lead with the newest published story");
+assert(homepage.includes("readerJourneys") && homepage.includes("reader-paths"), "Homepage must offer curated reader journeys");
+assert(homepage.includes("getArticlesByTopic(slug).length >= TOPIC_MAP[slug].minimumArticles"), "Reader paths must never lead to unpopulated topics");
+assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"), "Topic hubs must have non-duplicated starting points");
+assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
+assert(contentHelpers.includes(".filter(({ score }) => score > 0)"), "Related articles must have a positive relevance score");
+assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
 
 for (const header of [
   "Content-Security-Policy",

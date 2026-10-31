@@ -80,16 +80,14 @@ export const getEditorsPicks = () =>
   articles.filter((article) => article.editorsPick);
 
 export const getRelatedArticles = (article: Article, limit = 3) => {
-  if (article.relatedArticleSlugs?.length) {
-    return article.relatedArticleSlugs
-      .map((slug) => getArticle(slug))
-      .filter((candidate): candidate is Article => Boolean(candidate))
-      .slice(0, limit);
-  }
-
+  const manual = [...new Set(article.relatedArticleSlugs ?? [])]
+    .filter((slug) => slug !== article.slug)
+    .map((slug) => getArticle(slug))
+    .filter((candidate): candidate is Article => Boolean(candidate));
+  const excluded = new Set([article.slug, ...manual.map((candidate) => candidate.slug)]);
   const sourceTags = new Set(article.tags.map((tag) => tag.toLowerCase()));
-  return articles
-    .filter((candidate) => candidate.slug !== article.slug)
+  const automaticallyRelated = articles
+    .filter((candidate) => !excluded.has(candidate.slug))
     .map((candidate) => {
       const sharedTopics = candidate.tags.filter((tag) => sourceTags.has(tag.toLowerCase())).length;
       const score =
@@ -98,9 +96,11 @@ export const getRelatedArticles = (article: Article, limit = 3) => {
         (candidate.contentType === article.contentType ? 1 : 0);
       return { candidate, score };
     })
+    .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || publicationOrder(a.candidate, b.candidate))
-    .slice(0, limit)
     .map(({ candidate }) => candidate);
+
+  return [...manual, ...automaticallyRelated].slice(0, limit);
 };
 
 export const formatDate = (date: string) =>
