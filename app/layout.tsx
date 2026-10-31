@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: `${SITE_NAME} — ${SITE_TAGLINE}`, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: { "application/rss+xml": `${SITE_URL}/rss.xml` } },
   robots: {
     index: true,
     follow: true,
