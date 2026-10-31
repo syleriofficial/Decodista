@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articles, getArticlesByCategory, getArticlesByContentType, getArticlesByTopic } from "@/lib/content";
 import { CATEGORY_DEFINITIONS, SITE_URL, TOPIC_HUBS } from "@/lib/site";
+import { weeklyBriefs } from "@/lib/weekly-briefs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const latestArticleDate = (items: typeof articles) => items.reduce(
@@ -11,8 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "2026-09-01",
   );
   const latest = latestArticleDate(articles);
+  const newestBriefDate = weeklyBriefs[0].publishedDate;
+  const homepageLatest = latest > newestBriefDate ? latest : newestBriefDate;
   const discoveryRoutes = [
-    { route: "", lastModified: latest },
+    { route: "", lastModified: homepageLatest },
+    { route: "/weekly", lastModified: newestBriefDate },
     { route: "/latest", lastModified: latest },
     { route: "/how-to", lastModified: latestArticleDate(getArticlesByContentType("how-to")) },
   ];
@@ -57,6 +61,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: latestArticleDate(getArticlesByTopic(slug)),
       changeFrequency: "weekly" as const,
       priority: .7,
+    })),
+    ...weeklyBriefs.map((issue) => ({
+      url: `${SITE_URL}/weekly/${issue.slug}`,
+      lastModified: issue.publishedDate,
+      changeFrequency: "monthly" as const,
+      priority: .8,
     })),
     ...articles.map((article) => ({
       url: `${SITE_URL}/articles/${article.slug}`,
