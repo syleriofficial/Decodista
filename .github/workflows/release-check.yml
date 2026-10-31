@@ -36,6 +36,8 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add package-lock.json
             git commit -m "security: regenerate lockfile for Next.js 16.4.3"
+            git fetch origin ci/release-check-pr
+            git rebase origin/ci/release-check-pr
             git push origin HEAD:ci/release-check-pr
           fi
 
