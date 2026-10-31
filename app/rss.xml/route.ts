@@ -1,6 +1,6 @@
 import { articles } from "@/lib/content";
 import { renderRssFeed, type RssEntry } from "@/lib/rss";
-import { SITE_URL } from "@/lib/site";
+import { CATEGORY_MAP, SITE_URL } from "@/lib/site";
 import { weeklyBriefs } from "@/lib/weekly-briefs";
 
 /**
@@ -14,7 +14,7 @@ export function GET() {
     description: article.description,
     url: `${SITE_URL}/articles/${article.slug}`,
     publishedDate: article.publishedDate,
-    category: article.category === "ai" ? "AI" : article.category === "security" ? "Security" : "Digital Life",
+    category: CATEGORY_MAP[article.category].name,
   }));
   const weeklyEntries: RssEntry[] = weeklyBriefs.map((issue) => ({
     title: `Weekly Digital Safety Brief #${issue.issueNumber}: ${issue.title}`,
