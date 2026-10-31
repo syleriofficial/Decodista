@@ -50,7 +50,9 @@ test("orders calendar publication dates with consistent tie breaks and caps to 5
   const xml = renderRssFeed(entries.reverse(), site);
   assert.equal((xml.match(/<item>/g) ?? []).length, 50);
   assert(xml.indexOf("story-00") < xml.indexOf("story-01"));
-  assert(xml.indexOf("story-01") < xml.indexOf("story-59"));
+  assert(xml.indexOf("story-01") < xml.indexOf("story-02"));
+  assert(xml.includes("story-49"));
+  assert(!xml.includes("story-59"));
 });
 
 test("rejects invalid dates, external links, non-HTTPS canonical origins", () => {
