@@ -38,6 +38,12 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
   const stories = getArticlesByTopic(topic);
   if (stories.length < definition.minimumArticles) notFound();
 
+  // Put practical guides first without duplicating their cards in the listing.
+  const practical = stories.filter((article) => article.contentType === "how-to" || article.contentType === "explainer");
+  const startHere = (practical.length > 0 ? practical : stories).slice(0, 3);
+  const startHereSlugs = new Set(startHere.map((article) => article.slug));
+  const remaining = stories.filter((article) => !startHereSlugs.has(article.slug));
+
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -55,9 +61,26 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
         <h1>{definition.name}</h1>
         <p>{definition.description}</p>
       </header>
-      <section className="topic-grid" aria-label={`${definition.name} articles`}>
-        {stories.map((article) => <ArticleCard key={article.slug} article={article} />)}
+      <section className="topic-reading-path" aria-labelledby="topic-start-here">
+        <div className="topic-section-intro">
+          <span className="eyebrow">Recommended starting points</span>
+          <h2 id="topic-start-here">Start here</h2>
+          <p>Begin with these practical guides and explainers, then explore the rest of this topic.</p>
+        </div>
+        <div className="topic-grid">
+          {startHere.map((article) => <ArticleCard key={article.slug} article={article} />)}
+        </div>
       </section>
+      {remaining.length > 0 && (
+        <section className="topic-reading-path topic-reading-path--more" aria-labelledby="topic-more">
+          <div className="topic-section-intro">
+            <h2 id="topic-more">More on {definition.name}</h2>
+          </div>
+          <div className="topic-grid">
+            {remaining.map((article) => <ArticleCard key={article.slug} article={article} />)}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
