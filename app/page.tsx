@@ -12,6 +12,7 @@ import {
   getArticlesByTopic,
 } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, TOPIC_MAP } from "@/lib/site";
+import { weeklyBriefs } from "@/lib/weekly-briefs";
 
 function EditorialSection({
   eyebrow,
@@ -43,6 +44,7 @@ export default function HomePage() {
   // Lead with the newest published story. Older curated selections remain
   // available in the dedicated Editors' Picks section.
   const lead = articles[0];
+  const latestBrief = weeklyBriefs[0];
   const readerJourneys = ([
     {
       slug: "photos-backup",
@@ -134,6 +136,23 @@ export default function HomePage() {
             <span className="reader-path-action">Explore security <ArrowRight aria-hidden="true" /></span>
           </Link>
         </div>
+      </section>
+
+      <section className="weekly-feature wrap" aria-labelledby="weekly-feature-heading">
+        <div className="weekly-feature-lead">
+          <span className="eyebrow">Weekly Digital Safety Brief · {formatDate(latestBrief.publishedDate)}</span>
+          <h2 id="weekly-feature-heading">What changed. Why it matters. What you can do.</h2>
+          <p>Five verified AI, privacy and security developments, with clear takeaways and links to the original sources.</p>
+          <Link className="weekly-primary-link" href={`/weekly/${latestBrief.slug}`}>Read the latest brief <ArrowRight aria-hidden="true" /></Link>
+        </div>
+        <ol className="weekly-feature-headlines">
+          {latestBrief.items.slice(0, 3).map((item) => (
+            <li key={item.id}>
+              <span>{item.category}</span>
+              <Link href={`/weekly/${latestBrief.slug}#${item.id}`}>{item.headline}</Link>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">

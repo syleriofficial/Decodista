@@ -16,6 +16,7 @@ export function SiteFooter() {
             <h2>Explore</h2>
             <ul>
               {NAV_ITEMS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
+              <li><Link href="/weekly">Weekly Brief</Link></li>
             </ul>
           </div>
           <div>

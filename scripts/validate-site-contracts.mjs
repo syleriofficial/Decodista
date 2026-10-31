@@ -11,6 +11,9 @@ function read(relativePath) {
 const site = read("lib/site.ts");
 const legal = read("lib/legal.ts");
 const homepage = read("app/page.tsx");
+const weeklyArchive = read("app/weekly/page.tsx");
+const weeklyIssue = read("app/weekly/[slug]/page.tsx");
+const weeklyData = read("lib/weekly-briefs.ts");
 const topicPage = read("app/topics/[topic]/page.tsx");
 const articlePage = read("app/articles/[slug]/page.tsx");
 const contentHelpers = read("lib/content.ts");
@@ -63,6 +66,20 @@ assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"),
 assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
 assert(contentHelpers.includes(".filter(({ score }) => score > 0)"), "Related articles must have a positive relevance score");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
+assert(homepage.includes("weeklyBriefs[0]") && homepage.includes("weekly-feature"), "Homepage must highlight a published weekly issue");
+assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");
+assert(weeklyIssue.includes("getWeeklyBrief(slug)") && weeklyIssue.includes("notFound()"), "Weekly issue route must reject unknown slugs");
+assert(weeklyIssue.includes("Primary source:") && weeklyIssue.includes("rel=\"noopener noreferrer\""), "Weekly issue must attribute and safely link to primary sources");
+assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosting"), "Weekly issues need discoverable structured data");
+assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
+assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
+const weeklySources = [...weeklyData.matchAll(/url: "(https:\/\/[^"]+)"/g)].map((match) => match[1]);
+assert(weeklySources.length >= 4, "First weekly edition must cite multiple direct primary sources");
+assert(new Set(weeklySources).size === weeklySources.length, "Weekly issue should not repeat a primary source");
+assert(weeklySources.every((url) => /^https:\/\/(?:support\.apple\.com|www\.mozilla\.org|blog\.google|openai\.com)\//.test(url)), "Weekly sources must point directly to reviewed primary publishers");
+assert(/slug: "2026-11-01"/.test(weeklyData), "First weekly issue must have an explicit dated slug");
+assert(/publishedDate: "2026-11-01"/.test(weeklyData), "First weekly issue must have a dated publication field");
+assert(weeklyData.includes("implementation is planned over the coming months"), "Do not describe the proposed AI training signal as already implemented");
 
 for (const header of [
   "Content-Security-Policy",
