@@ -12,6 +12,7 @@ const site = read("lib/site.ts");
 const legal = read("lib/legal.ts");
 const homepage = read("app/page.tsx");
 const layout = read("app/layout.tsx");
+const header = read("components/site-header.tsx");
 const footer = read("components/site-footer.tsx");
 const rssRoute = read("app/rss.xml/route.ts");
 const rssFormatter = read("lib/rss.ts");
@@ -80,6 +81,8 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
+assert(header.includes('href="/weekly"') && header.includes('href="/rss.xml"'), "Header More menu must expose Weekly Brief and RSS links");
+assert(header.includes('moreMenuRef.current?.open') && header.includes('querySelector("summary")?.focus()'), "Escape must close the More menu and restore focus");
 assert(footer.includes('href="/rss.xml"'), "RSS must have a permanent footer link");
 assert(homepage.includes("FollowDecodista") && weeklyArchive.includes("FollowDecodista"), "RSS follow options must appear on Homepage and weekly archive");
 assert(rssRoute.includes("articles.map(") && rssRoute.includes("weeklyBriefs.map("), "RSS must include both approved article and weekly issue records");
