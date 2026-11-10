@@ -29,6 +29,16 @@ export function SiteHeader() {
     localStorage.setItem("decodista-theme", next ? "dark" : "light");
   };
 
+  useEffect(() => {
+    const closeMoreOnOutsideClick = (event: PointerEvent) => {
+      if (moreMenuRef.current?.open && event.target instanceof Node && !moreMenuRef.current.contains(event.target)) {
+        moreMenuRef.current.open = false;
+      }
+    };
+    document.addEventListener("pointerdown", closeMoreOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeMoreOnOutsideClick);
+  }, []);
+
   const closeNavigation = () => {
     setOpen(false);
     if (moreMenuRef.current) moreMenuRef.current.open = false;
