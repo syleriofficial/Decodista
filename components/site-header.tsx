@@ -2,16 +2,22 @@
 
 import Link from "@/components/app-link";
 import { ChevronDown, Menu, Moon, Search, Sun, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
-    if (!open) return;
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Escape") return;
+      if (moreMenuRef.current?.open) {
+        moreMenuRef.current.open = false;
+        moreMenuRef.current.querySelector("summary")?.focus();
+      } else if (open) {
+        setOpen(false);
+      }
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
@@ -23,7 +29,10 @@ export function SiteHeader() {
     localStorage.setItem("decodista-theme", next ? "dark" : "light");
   };
 
-  const closeNavigation = () => setOpen(false);
+  const closeNavigation = () => {
+    setOpen(false);
+    if (moreMenuRef.current) moreMenuRef.current.open = false;
+  };
 
   return (
     <header className="site-header">
@@ -53,7 +62,7 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <details className="more-menu">
+            <details className="more-menu" ref={moreMenuRef}>
               <summary>More <ChevronDown aria-hidden="true" /></summary>
               <div className="more-panel">
                 <section aria-labelledby="more-topics-title">
@@ -62,6 +71,13 @@ export function SiteHeader() {
                     {NAV_TOPIC_HUBS.map((topic) => (
                       <li key={topic.slug}><Link href={`/topics/${topic.slug}`} onClick={closeNavigation}>{topic.name}</Link></li>
                     ))}
+                  </ul>
+                </section>
+                <section aria-labelledby="more-follow-title">
+                  <h2 id="more-follow-title">Follow DECODISTA</h2>
+                  <ul>
+                    <li><Link href="/weekly" onClick={closeNavigation}>Weekly Digital Safety Brief</Link></li>
+                    <li><Link href="/rss.xml" onClick={closeNavigation}>RSS Feed</Link></li>
                   </ul>
                 </section>
                 <section aria-labelledby="more-decodista-title">
