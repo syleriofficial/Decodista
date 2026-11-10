@@ -20,11 +20,17 @@ for (const sample of [
   const page = await ctx.newPage();
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
+  page.on("console", message => {
+    if (message.type() === "error") pageErrors.push("console: " + message.text());
+  });
   const report = { ...sample };
   try {
     const res = await page.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert(res && res.status() === 200, "Homepage must return HTTP 200");
     await page.locator(".reader-search-link").waitFor({ state: "visible", timeout: 20000 });
+    // Wait until client-side scripts and hydration have settled before testing
+    // React-powered controls; a DOM-ready page can still be unhydrated.
+    await page.waitForLoadState("networkidle", { timeout: 30000 });
     if (sample.theme === "dark") {
       await page.evaluate(() => document.documentElement.dataset.theme = "dark");
     }
