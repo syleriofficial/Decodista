@@ -56,7 +56,36 @@ for (const sample of [
     assert(await search.evaluate(el => document.activeElement === el), "Search CTA must accept keyboard focus");
     await page.locator("section.reader-paths").screenshot({ path: out + "/" + sample.name + "-discovery.png" });
 
-    await search.click();
+
+    // Browser regression coverage for the navigation, including the mobile drawer.
+    const mobileMenu = page.locator(".mobile-menu-button");
+    if (sample.width <= 1000) {
+      assert(await mobileMenu.isVisible(), "Mobile menu toggle must be available");
+      await mobileMenu.click();
+      assert(await page.locator("#site-navigation").isVisible(), "Mobile navigation should open");
+    } else {
+      assert(await page.locator("#site-navigation").isVisible(), "Desktop navigation must be visible");
+    }
+
+    const more = page.locator(".more-menu > summary");
+    await more.click();
+    assert(await page.locator(".more-menu").evaluate(element => element.open), "More menu should expand");
+    assert(await page.locator('.more-panel a[href="/ai"]').isVisible(), "Existing AI section must remain discoverable");
+    assert(await page.locator('.more-panel a[href="/review-methodology"]').isVisible(), "Review Methodology must be discoverable");
+
+    await page.keyboard.press("Escape");
+    assert(!await page.locator(".more-menu").evaluate(element => element.open), "Escape must close More");
+    assert(await more.evaluate(element => document.activeElement === element), "Escape restores focus to More");
+
+    const methodology = await page.goto(base + "/review-methodology", { waitUntil: "domcontentloaded", timeout: 45000 });
+    assert(methodology && methodology.status() === 200, "Review Methodology must return HTTP 200");
+    assert.equal(await page.locator("main h1").innerText(), "Review Methodology", "Review Methodology page heading");
+    assert(await page.locator("main").innerText().then(text => text.includes("Research versus hands-on testing")), "Review policy must distinguish documentation and testing");
+    assert((await page.locator(".footer-note").innerText()).includes("Technology news, reviews, science"), "Footer must use current publication description");
+
+    await page.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 45000 });
+    const searchAgain = page.locator('a.reader-search-link[href="/search"]');
+    await searchAgain.click();
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
     report.status = "passed";
