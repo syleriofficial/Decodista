@@ -1,0 +1,26 @@
+name: Staged editorial content QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'editorial/ready/**'
+      - '.github/workflows/staged-editorial-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-staged:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --include=dev
+      - name: Validate staged articles against the real CMS parser
+        run: node editorial/ready/validate-staged.mjs
