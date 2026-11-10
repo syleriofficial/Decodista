@@ -96,6 +96,15 @@ for (const sample of [
     await searchAgain.click();
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
+    if (sample.name === "desktop-light") {
+      const invalidPage = await page.goto(base + "/latest?page=1.5", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(invalidPage?.status(), 404, "Fractional archive page must return 404");
+      const invalidSection = await page.goto(base + "/security?page=abc", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(invalidSection?.status(), 404, "Non-numeric category page must return 404");
+      const secondPage = await page.goto(base + "/security?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(secondPage?.status(), 200, "Second Security archive page must work");
+      assert.equal(await page.locator(".category-lead").count(), 0, "Featured article must not repeat on category page 2");
+    }
     report.status = "passed";
     report.measures = measures;
     report.pageErrors = pageErrors;
