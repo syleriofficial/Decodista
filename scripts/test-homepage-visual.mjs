@@ -39,7 +39,7 @@ for (const sample of [
     assert((await search.innerText()).includes("Search all published guides"), "Search link has expected label");
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
     assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
-    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment"], "Main navigation items");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
@@ -77,6 +77,8 @@ for (const sample of [
     await more.click();
     assert(await page.locator(".more-menu").evaluate(element => element.open), "More menu should expand");
     assert(await page.locator('.more-panel a[href="/ai"]').isVisible(), "Existing AI section must remain discoverable");
+    assert.equal(await page.locator('.more-panel a[href="/latest"]').count(), 0, "Latest must not appear in More");
+    assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 1, "Latest must appear once in primary navigation");
     assert(await page.locator('.more-panel a[href="/review-methodology"]').isVisible(), "Review Methodology must be discoverable");
 
     await page.keyboard.press("Escape");
