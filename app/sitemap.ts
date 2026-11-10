@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const trustRoutes = [
     "/about",
     "/editorial-policy",
+    "/review-methodology",
     "/how-we-work",
     "/corrections",
     "/editorial-team",
