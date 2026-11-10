@@ -1,5 +1,5 @@
-export const ALLOWED_CATEGORIES = new Set(["ai", "digital-life", "security", "science"]);
-export const ALLOWED_CONTENT_TYPES = new Set(["how-to", "explainer", "news", "analysis"]);
+export const ALLOWED_CATEGORIES = new Set(["tech-news", "reviews", "science", "entertainment", "ai", "digital-life", "security"]);
+export const ALLOWED_CONTENT_TYPES = new Set(["review", "how-to", "explainer", "news", "analysis"]);
 export const ALLOWED_AUTHORS = new Set(["DECODISTA Editorial"]);
 
 export const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -130,10 +130,10 @@ export function validateCmsArticleData(input) {
   validateRequiredString(data, "deck", "Deck", errors);
 
   if (!ALLOWED_CATEGORIES.has(data.primaryCategory)) {
-    errors.push("Primary Category must be AI, Digital Life, Security or Science.");
+    errors.push("Primary Category must be Tech News, Reviews, Science, Entertainment, AI, Digital Life or Security.");
   }
   if (!ALLOWED_CONTENT_TYPES.has(data.contentType)) {
-    errors.push("Content Type must be How-To, Explainer, News or Analysis.");
+    errors.push("Content Type must be Review, How-To, Explainer, News or Analysis.");
   }
   validateStringList(data, "topics", "Topics", { min: 1, max: 20 }, errors);
 
