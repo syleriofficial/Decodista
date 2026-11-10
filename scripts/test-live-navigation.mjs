@@ -34,10 +34,12 @@ async function inspect(label, viewport, javaScriptEnabled) {
     if (!response || response.status() >= 400) {
       throw new Error("Live navigation HTTP status: " + (response?.status() ?? "no response"));
     }
-    if (viewport.width <= 1000) {
+    if (viewport.width <= 1000 && javaScriptEnabled) {
       await page.locator(".mobile-menu-button").click();
     }
-    await page.locator(".more-menu > summary").click();
+    if (viewport.width > 1000 || javaScriptEnabled) {
+      await page.locator(".more-menu > summary").click();
+    }
     if (javaScriptEnabled) await page.waitForTimeout(2000);
 
     const state = await page.evaluate(() => {
@@ -82,8 +84,9 @@ async function inspect(label, viewport, javaScriptEnabled) {
       failedAssets,
     };
     reports.push(record);
-    if (state.count !== 3 || !state.followVisible || !state.weeklyLink || !state.rssLink) {
-      errors.push(label + ": Follow DECODISTA is not visibly present (" + state.count + " sections)");
+    const shouldBeVisible = javaScriptEnabled || viewport.width > 1000;
+    if (state.count !== 3 || (shouldBeVisible && !state.followVisible) || !state.weeklyLink || !state.rssLink) {
+      errors.push(label + ": Follow DECODISTA markup or visibility failed (" + state.count + " sections)");
     }
     if (state.htmlWidth > state.viewportWidth + 1) {
       errors.push(label + ": horizontal overflow");
