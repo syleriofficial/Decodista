@@ -34,7 +34,7 @@ keyTakeaways:
   - "Offload App removes an app but normally preserves its documents and data; Delete App removes the app and associated data. [3]"
   - "With iCloud Photos on, deleting a photo from Photos deletes it from the shared synced library, not only the phone. [4]"
   - "If **iCloud** is full instead, new iCloud Photos uploads and backups may stop. That requires a different solution. [5]"
-shortAnswer: "**iPhone storage and iCloud storage are two different limits.** The first is physical space built into your iPhone, used for apps, downloaded files, photos and system data. The second is cloud capacity used by services including iCloud Photos, backups and iCloud Drive. Buying more iCloud storage does **not** increase your iPhone's built-in capacity. [1]  If the iPhone is full but iCloud has room, consider **Optimize iPhone Storage** for a verified, fully synced iCloud Photos library; remove unneeded downloads; or **Offload App** for apps you rarely use. **Deleting photos in a synced library is not a safe shortcut.** [2][3][4]"
+shortAnswer: "Extra iCloud space does not increase your iPhone's built-in storage. Check Settings > General > iPhone Storage, then consider optimizing a verified iCloud Photos library, offloading unused apps or removing replaceable downloads. Do not delete synced photos without protecting separate copies. [1][2][3]"
 ---
 
 > **DECODISTA callout — Before clearing photos**
