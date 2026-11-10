@@ -212,6 +212,7 @@ export const NAV_ITEMS = [
   { href: "/reviews", label: "Reviews" },
   { href: "/science", label: "Science" },
   { href: "/entertainment", label: "Entertainment" },
+  { href: "/latest", label: "Latest" },
 ] as const;
 
 export const MORE_NAV_ITEMS = [
@@ -219,7 +220,6 @@ export const MORE_NAV_ITEMS = [
   { href: "/how-to", label: "How-To" },
   { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
-  { href: "/latest", label: "Latest" },
 ] as const;
 
 export const TRUST_LINKS = [
