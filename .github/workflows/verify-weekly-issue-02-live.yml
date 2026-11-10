@@ -1,0 +1,47 @@
+name: Verify Weekly Brief 02 live
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/verify-weekly-issue-02-live.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Probe live production independently of browser snapshots
+        run: |
+          node --input-type=module <<'NODE'
+          const endpoints = [
+            {key:'issue',url:'https://decodista.com/weekly/2026-11-11',must:['iPhone and Firefox Fixes, Instagram Teen Protections, and Gemini on Pixel','Apple releases iOS and iPadOS 26.7.3','Mozilla fixes high-impact vulnerabilities in Firefox 160','Microsoft documents fake downloads','Instagram expands AI age estimation','Google expands Gemini Intelligence']},
+            {key:'archive',url:'https://decodista.com/weekly',must:['Latest published issue','No. 2','iPhone and Firefox Fixes']},
+            {key:'homepage',url:'https://decodista.com/',must:['Weekly Digital Safety Brief','November 11, 2026','iPhone and Firefox']},
+            {key:'rss',url:'https://decodista.com/rss.xml',must:['/weekly/2026-11-11']},
+            {key:'sitemap',url:'https://decodista.com/sitemap.xml',must:['/weekly/2026-11-11']}
+          ];
+          let allGood=false;
+          for(let attempt=1;attempt<=18;attempt++){
+            const report=await Promise.all(endpoints.map(async item=>{
+              try {
+                const res=await fetch(item.url,{headers:{'User-Agent':'DecodistaLiveSmoke/1.0','Cache-Control':'no-cache','Pragma':'no-cache'},signal:AbortSignal.timeout(15000)});
+                const html=await res.text();
+                const missing=item.must.filter(phrase=>!html.includes(phrase));
+                return {key:item.key,status:res.status,missing,bytes:html.length,cacheControl:res.headers.get('cache-control'),cfCache:res.headers.get('cf-cache-status'),ok:res.status===200&&!missing.length};
+              }catch(e){return {key:item.key,error:String(e),ok:false}}
+            }));
+            allGood=report.every(r=>r.ok);
+            console.log(JSON.stringify({attempt,at:new Date().toISOString(),report}));
+            if(allGood)break;
+            if(attempt<18)await new Promise(resolve=>setTimeout(resolve,9000));
+          }
+          if(!allGood) {
+            console.error('Production has not yet confirmed Issue 02 on all public endpoints.');
+            process.exitCode=1;
+          }else{
+            console.log('VERIFIED: Issue 02 is live and present on its canonical URL, archive, homepage, RSS and sitemap.');
+          }
+          NODE
