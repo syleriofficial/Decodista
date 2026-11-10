@@ -18,7 +18,7 @@ jobs:
           node --input-type=module <<'NODE'
           const endpoints = [
             {key:'issue',url:'https://decodista.com/weekly/2026-11-11',must:['iPhone and Firefox Fixes, Instagram Teen Protections, and Gemini on Pixel','Apple releases iOS and iPadOS 26.7.3','Mozilla fixes high-impact vulnerabilities in Firefox 160','Microsoft documents fake downloads','Instagram expands AI age estimation','Google expands Gemini Intelligence']},
-            {key:'archive',url:'https://decodista.com/weekly',must:['Latest published issue','No. 2','iPhone and Firefox Fixes']},
+            {key:'archive',url:'https://decodista.com/weekly',must:['Latest published issue','/weekly/2026-11-11','iPhone and Firefox Fixes']},
             {key:'homepage',url:'https://decodista.com/',must:['Weekly Digital Safety Brief','November 11, 2026','Apple releases iOS and iPadOS 26.7.3']},
             {key:'rss',url:'https://decodista.com/rss.xml',must:['/weekly/2026-11-11']},
             {key:'sitemap',url:'https://decodista.com/sitemap.xml',must:['/weekly/2026-11-11']}
