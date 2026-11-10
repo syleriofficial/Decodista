@@ -98,7 +98,7 @@ For more detail, see [Google Photos Free Up Space: What It Deletes and What Stay
 
 Google warns that after **large batches of file deletions**, the storage figure may need **48–72 hours** to reflect the change accurately. Your account may update much sooner. [1][4] If the freed space disappears, check whether another device has automatic backup enabled and is uploading more files.
 
-A Google One **plan upgrade** can take up to 24 hours to apply; this is a different delay. [4] A Google One plan changes your total storage allowance; confirm the total shown for your account rather than adding the plan's advertised capacity a second time. [4][6]
+A Google One **plan upgrade** can take up to 24 hours to apply; this is a different delay. [4] The standard 100 GB Google One plan shows 100 GB total, not 100 GB plus the usual free 15 GB. Google explains its example as 15 GB included plus 85 GB from the membership; promotions may increase the total. Check the total in your account. [6]
 
 ## Step 7: Test Gmail and recover the communication—not just storage
 
@@ -154,5 +154,3 @@ Documentation reviewed **November 11, 2026 (UTC)**. This is a documentation-base
 5. [Google Photos Help: Delete photos and videos](https://support.google.com/photos/answer/6128858?hl=en)
 6. [Google One Help: How existing Google storage works](https://support.google.com/googleone/answer/9004014?hl=en)
 7. [Google Photos Help: Free up space on your device](https://support.google.com/photos/answer/6128843?hl=en)
-
-**Publication gate:** Editorial review; confirm 2026 UI labels on current device/browser; commission original optimized 1600×900 hero; create validated CMS front matter and FAQ blocks; review cross-links; pass content validation, SEO metadata, Lighthouse and Cloudflare preview checks. Draft must not be deployed as a production article without this gate.
