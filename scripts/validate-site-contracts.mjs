@@ -53,6 +53,8 @@ assert.deepEqual(
 );
 assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
 assert(footer.includes("MORE_NAV_ITEMS.map"), "Footer must retain links to existing sections");
+assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
+assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
 for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
   assert(homepage.includes(`getArticlesByCategory("${category}")`), `Homepage must support ${category} stories`);
 }
