@@ -1,6 +1,6 @@
 import Link from "@/components/app-link";
 import { PrivacyChoicesButton } from "@/components/analytics-consent";
-import { MORE_NAV_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
+import { MORE_NAV_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, SITE_DESCRIPTION, SITE_TAGLINE, TRUST_LINKS } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -9,8 +9,8 @@ export function SiteFooter() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link className="wordmark footer-wordmark" href="/">DECODISTA</Link>
-            <p>Technology, Decoded.</p>
-            <p className="footer-note">Clear answers for the technology people use every day.</p>
+            <p>{SITE_TAGLINE}</p>
+            <p className="footer-note">{SITE_DESCRIPTION}</p>
           </div>
           <div>
             <h2>Explore</h2>
@@ -37,7 +37,7 @@ export function SiteFooter() {
         <div className="footer-base">
           <span>© {new Date().getUTCFullYear()} DECODISTA</span>
           <PrivacyChoicesButton />
-          <span>Technology, Decoded.</span>
+          <span>{SITE_TAGLINE}</span>
         </div>
       </div>
     </footer>
