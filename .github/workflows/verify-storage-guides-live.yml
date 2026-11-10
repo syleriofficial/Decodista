@@ -1,0 +1,65 @@
+name: Verify Two Storage Guides Live
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/verify-storage-guides-live.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - name: Probe actual Decodista public origin, articles, assets and feeds
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+
+          const root='https://decodista.com';
+          const paths=[
+            {key:'gmail-guide',url:'/articles/gmail-not-receiving-emails-google-storage-full',
+              must:['Gmail Not Receiving Emails','Google Storage Is Full','/images/uploads/gmail-not-receiving-emails-google-storage-full.webp','sources-verification']},
+            {key:'iphone-guide',url:'/articles/iphone-storage-full-icloud-has-space',
+              must:['iPhone Storage Full but iCloud Has Space','/images/uploads/iphone-storage-full-icloud-has-space.webp','sources-verification']},
+            {key:'latest',url:'/latest',must:['/articles/gmail-not-receiving-emails-google-storage-full','/articles/iphone-storage-full-icloud-has-space']},
+            {key:'sitemap',url:'/sitemap.xml',must:['/articles/gmail-not-receiving-emails-google-storage-full','/articles/iphone-storage-full-icloud-has-space']},
+            {key:'rss',url:'/rss.xml',must:['/articles/gmail-not-receiving-emails-google-storage-full','/articles/iphone-storage-full-icloud-has-space']}
+          ];
+          const images=[
+            {key:'gmail-art',url:'/images/uploads/gmail-not-receiving-emails-google-storage-full.webp',size:89894,digest:'7b68b455c0f106d1ae3caffa3ee1f7338594d6c9f98d19f3f0e3b84e018d0fc7'},
+            {key:'iphone-art',url:'/images/uploads/iphone-storage-full-icloud-has-space.webp',size:60228,digest:'9be268f9af65b34852e16fbe1a90d2e4d16b2b92746121e76aa5ab5e6f0ed4a0'}
+          ];
+          const verify=async item=>{
+            try{
+              const response=await fetch(root+item.url,{
+                headers:{'User-Agent':'DecodistaLiveVerify/1.0','Cache-Control':'no-cache','Pragma':'no-cache'},
+                signal:AbortSignal.timeout(13000)
+              });
+              const cc=response.headers.get('cache-control');
+              if(item.must){
+                const html=await response.text();
+                const missing=item.must.filter(x=>!html.includes(x));
+                return {key:item.key,status:response.status,ok:response.status===200&&missing.length===0,missing,bytes:html.length,cache:cc};
+              }
+              const b=Buffer.from(await response.arrayBuffer());
+              const digest=createHash('sha256').update(b).digest('hex');
+              const mime=response.headers.get('content-type');
+              const validHeader=b.toString('ascii',0,4)==='RIFF'&&b.toString('ascii',8,12)==='WEBP';
+              return {key:item.key,status:response.status,ok:response.status===200&&b.length===item.size&&digest===item.digest&&validHeader,
+                size:b.length,sha256:digest,mime,webp:validHeader,cache:cc};
+            }catch(e){return {key:item.key,ok:false,error:String(e)};}
+          };
+          let passed=false;
+          for(let attempt=1;attempt<=24;attempt++){
+            const report=await Promise.all([...paths,...images].map(verify));
+            passed=report.every(r=>r.ok);
+            console.log(JSON.stringify({attempt,time:new Date().toISOString(),report,allPassed:passed}));
+            if(passed)break;
+            if(attempt<24)await new Promise(resolve=>setTimeout(resolve,8000));
+          }
+          if(!passed){console.error('Production not fully verified across all seven endpoints.');process.exitCode=1;}
+          else console.log('VERIFIED: both Decodista article URLs, exact original WebP images, latest archive, RSS and sitemap are live.');
+          NODE
