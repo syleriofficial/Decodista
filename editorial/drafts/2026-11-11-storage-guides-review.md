@@ -34,3 +34,13 @@ Both are specific, high-stakes troubleshooting intents: the reader is facing a w
 ## Safety rule
 
 If any of the official documentation contradicts a proposed instruction, stop and correct the text before publication. Prefer a modest, supportable claim over confident guidance that could cause the loss of mail, photos or backups.
+
+## November 11 editorial staging update
+
+- Final content has been transformed into **CMS-structured YAML/Markdown files** under `editorial/ready/`, while the original drafts are retained for editorial comparison.
+- A production-parser smoke test now checks the staged entries using `parseArticleDocument` and the real Decodista CMS rules, including source sections, unique FAQ sections, SEO lengths, cross-links and intended WebP paths. Run: `node editorial/ready/validate-staged.mjs`.
+- Original **text-free 1600×900 WebP** hero artwork was prepared separately and exported in the conversation as `decodista-two-hero-images.zip`. The images were not uploaded to GitHub; the staged CMS files intentionally cannot be published until both matching `/images/uploads/<slug>.webp` files are committed.
+- Gmail draft refinement: official Google support treats paid Google One storage as a new *total allowance* in its troubleshooting guidance. Avoid describing it as a second full plan added to the existing capacity; check the displayed account total. Gmail search uses documented `filename:pdf` syntax.
+- Source verification confirmed the fundamental storage-limit, bounced email, 48–72-hour accounting, iCloud-vs-device capacity, Photos deletion, optimization and app-offloading claims against official Google and Apple documentation. This is a documentation review, **not hands-on device testing**.
+- Full **Release Checks** and **Staged editorial content QA** passed for the PR head. These tests cover repository integrity and typed content parsing, **not** live/mobile article rendering, as the articles are not yet in production.
+- **Remaining go/no-go:** upload the two exact WebPs; place approved CMS files into `content/articles/` on a separate publishing PR, update publication dates if needed, run full release checks, run page previews across 320/390/768/1440-pixel layouts, and inspect accessible images and links before merging.
