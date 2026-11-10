@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
-const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://127.0.0.1:5173";
+const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://localhost:5173";
 const out = "artifacts/homepage-qa";
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: "chrome", headless: true });
