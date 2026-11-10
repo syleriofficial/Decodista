@@ -1,0 +1,95 @@
+name: Live homepage diagnostics
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/live-homepage-diagnostics.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live:
+    name: Compare public homepage with active Worker deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch live, cache-busted, and version-specific homepage
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+
+          const stamp = Date.now().toString();
+          const urls = [
+            ['public-root', 'https://decodista.com/'],
+            ['public-cache-busted', 'https://decodista.com/?decodista_live_audit=' + stamp],
+            ['active-version', 'https://87791084-decodista.syleri-official.workers.dev/'],
+            ['active-version-cache-busted', 'https://87791084-decodista.syleri-official.workers.dev/?decodista_live_audit=' + stamp],
+          ];
+          const headers = {
+            'User-Agent': 'Decodista-Production-SmokeCheck/1.0 (+https://decodista.com/)',
+            'Cache-Control': 'no-cache, no-store',
+            'Pragma': 'no-cache',
+            'Accept': 'text/html',
+          };
+          const results = [];
+          for (const [name, url] of urls) {
+            try {
+              const res = await fetch(url, { headers, redirect: 'follow', signal: AbortSignal.timeout(25000) });
+              const html = await res.text();
+              const get = (name) => res.headers.get(name) ?? null;
+              const snippet = (phrase) => {
+                const at = html.indexOf(phrase);
+                return at < 0 ? null : html.slice(Math.max(0, at-90), at+phrase.length+90);
+              };
+              results.push({
+                name,
+                url,
+                finalUrl: res.url,
+                status: res.status,
+                bodyLength: html.length,
+                sha256: createHash('sha256').update(html).digest('hex').slice(0,20),
+                headers: {
+                  date: get('date'), cacheControl: get('cache-control'), cfCacheStatus: get('cf-cache-status'),
+                  age: get('age'), etag: get('etag'), vary: get('vary'), server: get('server'),
+                  xNextjsCache: get('x-nextjs-cache'), xVercelCache: get('x-vercel-cache'),
+                  contentType: get('content-type'), cfRay: get('cf-ray')
+                },
+                markers: {
+                  searchLink: html.includes('Search all published guides'),
+                  moreRecentGuides: html.includes('More Recent Guides'),
+                  oldRssPromotion: html.includes('Never miss a useful update'),
+                  legacyLatestLabel: html.includes('Recently published'),
+                  hasHomepageHero: html.includes('lead-story-title'),
+                  knownTitle: html.includes('DECODISTA'),
+                },
+                sample: {
+                  searchLink: snippet('Search all published guides'),
+                  moreRecentGuides: snippet('More Recent Guides'),
+                  oldRssPromotion: snippet('Never miss a useful update')
+                }
+              });
+            } catch(error) {
+              results.push({ name, url, error: String(error) });
+            }
+          }
+          console.log(JSON.stringify({ timestamp: new Date().toISOString(), results }, null, 2));
+          const version = results.find((r) => r.name === 'active-version');
+          const publicRoot = results.find((r) => r.name === 'public-root');
+          if (version?.status === 200 && publicRoot?.status === 200) {
+            if (!publicRoot.markers.searchLink && version.markers.searchLink) {
+              console.log('DIAGNOSIS: version-specific Worker has new HTML, public domain is serving old HTML.');
+            } else if (publicRoot.markers.searchLink && version.markers.searchLink) {
+              console.log('DIAGNOSIS: both public and version-specific Worker serve new HTML.');
+            } else {
+              console.log('DIAGNOSIS: both are old, or disagree in other ways; inspect output.');
+            }
+          }
+          NODE
