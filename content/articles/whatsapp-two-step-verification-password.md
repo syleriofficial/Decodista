@@ -141,7 +141,7 @@ The distinction matters most for backups. **Your new account password will not a
 4. Never share one-time registration codes or approve unexpected sign-in requests.
 5. Install official WhatsApp updates and retain an accessible recovery route.
 
-## Frequently asked questions
+## FAQ
 
 ### Is the new WhatsApp account password available to everyone?
 
