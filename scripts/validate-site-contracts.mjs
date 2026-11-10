@@ -68,6 +68,8 @@ assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-fu
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
 assert(homepage.includes("const lead = articles[0]"), "Homepage must lead with the newest published story");
 assert(homepage.includes("readerJourneys") && homepage.includes("reader-paths"), "Homepage must offer curated reader journeys");
+assert(homepage.includes('className="reader-search-link" href="/search"'), "Homepage must offer direct access to published-guide search");
+assert(!homepage.includes("<FollowDecodista />"), "Homepage should not promote a duplicate RSS subscribe panel; footer retains RSS");
 assert(homepage.includes("getArticlesByTopic(slug).length >= TOPIC_MAP[slug].minimumArticles"), "Reader paths must never lead to unpopulated topics");
 assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"), "Topic hubs must have non-duplicated starting points");
 assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
@@ -85,7 +87,7 @@ assert(header.includes('href="/weekly"'), "Header More menu must expose Weekly B
 assert(!header.includes('href="/rss.xml"'), "RSS feed should remain discoverable in footer and metadata, not the More menu");
 assert(header.includes('moreMenuRef.current?.open') && header.includes('querySelector("summary")?.focus()'), "Escape must close the More menu and restore focus");
 assert(footer.includes('href="/rss.xml"'), "RSS must have a permanent footer link");
-assert(homepage.includes("FollowDecodista") && weeklyArchive.includes("FollowDecodista"), "RSS follow options must appear on Homepage and weekly archive");
+assert(weeklyArchive.includes("FollowDecodista"), "Weekly archive must preserve RSS follow options");
 assert(rssRoute.includes("articles.map(") && rssRoute.includes("weeklyBriefs.map("), "RSS must include both approved article and weekly issue records");
 assert(rssRoute.includes('"Content-Type": "application/rss+xml; charset=utf-8"'), "RSS must serve an explicit XML MIME type");
 assert(rssFormatter.includes("escapeRssXml") && rssFormatter.includes("toRssPubDate"), "RSS must escape XML and serialize real calendar dates");
