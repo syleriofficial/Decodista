@@ -11,6 +11,33 @@ export const TURNSTILE_SITE_KEY =
 
 export const CATEGORY_DEFINITIONS = [
   {
+    slug: "tech-news",
+    name: "Tech News",
+    navName: "Tech News",
+    shortName: "Tech News",
+    mark: "TECH",
+    description:
+      "Verified developments in consumer technology, devices, platforms and the companies shaping them, with clear context on why they matter.",
+  },
+  {
+    slug: "reviews",
+    name: "Reviews",
+    navName: "Reviews",
+    shortName: "Reviews",
+    mark: "REV",
+    description:
+      "Evidence-led reviews, comparisons and buying advice for software, services and devices, with testing methods and limitations made clear.",
+  },
+  {
+    slug: "entertainment",
+    name: "Entertainment",
+    navName: "Entertainment",
+    shortName: "Entertainment",
+    mark: "ENT",
+    description:
+      "Streaming, gaming, movies and television, with an emphasis on the platforms, releases and choices that affect digital audiences.",
+  },
+  {
     slug: "ai",
     name: "Artificial Intelligence",
     navName: "AI",
@@ -55,6 +82,12 @@ export const CATEGORY_MAP = Object.fromEntries(
 ) as Record<CategorySlug, (typeof CATEGORY_DEFINITIONS)[number]>;
 
 export const CONTENT_TYPE_DEFINITIONS = [
+  {
+    slug: "review",
+    name: "Review",
+    description:
+      "Evidence-led evaluation of software, services or devices, with clear disclosure of what was and was not personally tested.",
+  },
   {
     slug: "how-to",
     name: "How-To",
@@ -175,10 +208,17 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
 );
 
 export const NAV_ITEMS = [
+  { href: "/tech-news", label: "Tech News" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/science", label: "Science" },
+  { href: "/entertainment", label: "Entertainment" },
+] as const;
+
+export const MORE_NAV_ITEMS = [
   { href: "/ai", label: "AI" },
   { href: "/how-to", label: "How-To" },
-  { href: "/digital-life", label: "Digital Life" },
   { href: "/security", label: "Security" },
+  { href: "/digital-life", label: "Digital Life" },
   { href: "/latest", label: "Latest" },
 ] as const;
 
