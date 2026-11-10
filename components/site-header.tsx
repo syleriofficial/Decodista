@@ -3,7 +3,7 @@
 import Link from "@/components/app-link";
 import { ChevronDown, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
+import { MORE_NAV_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -65,6 +65,14 @@ export function SiteHeader() {
             <details className="more-menu" ref={moreMenuRef}>
               <summary>More <ChevronDown aria-hidden="true" /></summary>
               <div className="more-panel">
+                <section aria-labelledby="more-sections-title">
+                  <h2 id="more-sections-title">More sections</h2>
+                  <ul>
+                    {MORE_NAV_ITEMS.map((item) => (
+                      <li key={item.href}><Link href={item.href} onClick={closeNavigation}>{item.label}</Link></li>
+                    ))}
+                  </ul>
+                </section>
                 <section aria-labelledby="more-topics-title">
                   <h2 id="more-topics-title">Topics</h2>
                   <ul>
