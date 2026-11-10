@@ -434,18 +434,11 @@ html[data-theme="dark"] .theme-sun { display: block; }
 
 
 /* Weekly Brief: a source-linked editorial issue, never an automated news feed. */
-.weekly-feature { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(2rem, 4vw, 5rem); align-items: start; border-top: 5px solid var(--ink); border-bottom: 1px solid var(--line); padding-block: clamp(2.5rem, 6vw, 5.5rem); margin-bottom: clamp(1rem, 3vw, 2rem); }
-.weekly-feature h2 { max-width: 730px; margin: .8rem 0 1rem; font: 500 clamp(2.1rem, 4.6vw, 4.8rem)/1 Georgia, 'Times New Roman', serif; letter-spacing: -.05em; }
-.weekly-feature-lead > p { max-width: 600px; margin: 0 0 1.65rem; color: var(--muted); font-size: 1.08rem; line-height: 1.55; }
 .weekly-primary-link { display: inline-flex; align-items: center; gap: .55rem; background: var(--ink); color: var(--paper); padding: .95rem 1.2rem; font-size: .78rem; font-weight: 900; text-transform: uppercase; letter-spacing: .055em; }
 .weekly-primary-link:hover, .weekly-primary-link:focus-visible { background: var(--signal); color: #fff; }
 .weekly-primary-link svg { width: 17px; height: 17px; }
-.weekly-feature-headlines, .weekly-spotlight-list ol { list-style: none; margin: 0; padding: 0; }
-.weekly-feature-headlines li { padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
-.weekly-feature-headlines li:first-child { padding-top: 0; }
-.weekly-feature-headlines span, .weekly-spotlight-list li span { display: block; color: var(--signal); font-size: .69rem; font-weight: 900; text-transform: uppercase; letter-spacing: .095em; }
-.weekly-feature-headlines a { display: block; margin-top: .35rem; font: 500 clamp(1.2rem, 1.9vw, 1.6rem)/1.18 Georgia, 'Times New Roman', serif; }
-.weekly-feature-headlines a:hover { color: var(--signal); }
+.weekly-spotlight-list ol { list-style: none; margin: 0; padding: 0; }
+.weekly-spotlight-list li span { display: block; color: var(--signal); font-size: .69rem; font-weight: 900; text-transform: uppercase; letter-spacing: .095em; }
 .weekly-page { max-width: 1180px; padding-block: clamp(3rem, 6vw, 6rem); }
 .weekly-page .page-intro h1 { max-width: 990px; font: 500 clamp(3rem, 6.8vw, 6.3rem)/.98 Georgia, 'Times New Roman', serif; letter-spacing: -.052em; }
 .weekly-spotlight { margin-top: clamp(2rem, 5vw, 4rem); display: grid; grid-template-columns: 1.25fr .85fr; gap: 2.5rem; padding: clamp(1.5rem, 3.5vw, 3rem); background: var(--surface); border-top: 5px solid var(--ink); }
@@ -497,12 +490,10 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .weekly-bottom-nav a:hover { color: var(--signal); }
 .weekly-bottom-nav svg { width: 17px; height: 17px; }
 @media (max-width: 900px) {
-  .weekly-feature, .weekly-spotlight { grid-template-columns: 1fr; }
-  .weekly-feature { gap: 2rem; }
+  .weekly-spotlight { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .weekly-page { padding-top: 2rem; }
-  .weekly-feature { padding-top: 2rem; }
   .weekly-spotlight { padding-inline: 1rem; }
   .weekly-item { grid-template-columns: 1fr; gap: .5rem; }
   .weekly-item-number { font-size: 1.35rem; }
