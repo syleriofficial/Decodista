@@ -84,15 +84,19 @@ collections:
         name: primaryCategory
         widget: select
         options:
+          - { label: Tech News, value: tech-news }
+          - { label: Reviews, value: reviews }
+          - { label: Science, value: science }
+          - { label: Entertainment, value: entertainment }
           - { label: AI, value: ai }
           - { label: Digital Life, value: digital-life }
           - { label: Security, value: security }
-          - { label: Science, value: science }
       - label: Content Type
         name: contentType
         widget: select
         hint: How-To is a format, not a primary category.
         options:
+          - { label: Review, value: review }
           - { label: How-To, value: how-to }
           - { label: Explainer, value: explainer }
           - { label: News, value: news }

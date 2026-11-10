@@ -40,11 +40,23 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Digital Life", "Security", "Latest"],
-  "Primary navigation must not expose inactive or legacy sections",
+  ["Tech News", "Reviews", "Science", "Entertainment"],
+  "Main navigation must show the four approved editorial sections in order",
 );
 
-assert(!/title="Science"|href="\/science"/.test(homepage), "Homepage must not expose an empty Science module");
+const moreNavigation = site.match(/export const MORE_NAV_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
+assert(moreNavigation, "More navigation definition is missing");
+assert.deepEqual(
+  [...moreNavigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
+  ["AI", "How-To", "Security", "Digital Life", "Latest"],
+  "More must retain the existing sections and latest archive",
+);
+assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
+assert(footer.includes("MORE_NAV_ITEMS.map"), "Footer must retain links to existing sections");
+for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
+  assert(homepage.includes(`getArticlesByCategory("${category}")`), `Homepage must support ${category} stories`);
+}
+assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
 assert(!/"\/science"/.test(sitemap), "Empty Science route must not be hard-coded into the sitemap");

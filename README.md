@@ -47,7 +47,7 @@ Decap's harmless blank placeholders are normalized before validation. Entirely b
 
 Supported content includes H2/H3 headings, paragraphs, ordered and unordered lists, GFM tables, images with captions, quotes, code blocks, callouts, links, bold and italic text. The presentation layer continues to consume the typed `Article` interface in `lib/content.ts`.
 
-Primary categories are AI, Digital Life, Security and Science. How-To is a cross-category content type. `/latest` is the chronological archive, while a limited set of populated `/topics/...` hubs provide subject-based discovery without creating thin tag pages.
+Primary categories are Tech News, Reviews, Science, Entertainment, AI, Digital Life and Security. Review, How-To, News, Explainer and Analysis are distinct content types. The main navigation highlights Tech News, Reviews, Science and Entertainment; the other sections and Latest remain under More. Empty sections are noindex until genuine reporting is published. `/latest` is the chronological archive, while a limited set of populated `/topics/...` hubs provide subject-based discovery without creating thin tag pages.
 
 ## Configuration
 
