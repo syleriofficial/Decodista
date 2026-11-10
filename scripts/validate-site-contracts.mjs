@@ -40,7 +40,7 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "Reviews", "Science", "Entertainment"],
+  ["Tech News", "Reviews", "Science", "Entertainment", "Latest"],
   "Main navigation must show the four approved editorial sections in order",
 );
 
@@ -48,7 +48,7 @@ const moreNavigation = site.match(/export const MORE_NAV_ITEMS = \[([\s\S]*?)\] 
 assert(moreNavigation, "More navigation definition is missing");
 assert.deepEqual(
   [...moreNavigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life", "Latest"],
+  ["AI", "How-To", "Security", "Digital Life"],
   "More must retain the existing sections and latest archive",
 );
 assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
