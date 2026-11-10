@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "@/components/app-link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { FollowDecodista } from "@/components/follow-decodista";
 import { SectionHeading } from "@/components/section-heading";
 import {
   articles,
@@ -122,6 +121,9 @@ export default function HomePage() {
           <span className="eyebrow">Start with a problem</span>
           <h2 id="reader-paths-title">Find a useful answer</h2>
           <p>Practical guides to the accounts, photos and privacy decisions that matter in everyday life.</p>
+          <Link className="reader-search-link" href="/search">
+            <Search aria-hidden="true" /> Search all published guides <ArrowRight aria-hidden="true" />
+          </Link>
         </div>
         <div className="reader-paths-grid">
           {readerJourneys.map((journey) => (
@@ -156,10 +158,8 @@ export default function HomePage() {
         </ol>
       </section>
 
-      <div className="wrap"><FollowDecodista /></div>
-
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
-        <SectionHeading eyebrow="Recently published" title="Latest" href="/latest" id="latest-title" />
+        <SectionHeading eyebrow="Continue reading" title="More Recent Guides" href="/latest" id="latest-title" />
         <div className="latest-feed">
           {latest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
         </div>
