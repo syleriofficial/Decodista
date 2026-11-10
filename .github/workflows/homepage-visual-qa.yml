@@ -31,8 +31,8 @@ jobs:
         run: |
           npm run dev > /tmp/decodista-homepage-preview.log 2>&1 &
           echo $! > /tmp/decodista-homepage-preview.pid
-          for i in $(seq 1 75); do
-            if curl -fsS http://127.0.0.1:5173/ -o /dev/null; then
+          for i in $(seq 1 35); do
+            if curl --connect-timeout 2 --max-time 4 -fsS http://127.0.0.1:5173/ -o /dev/null; then
               echo "Preview ready"
               exit 0
             fi
