@@ -32,6 +32,9 @@ for (const sample of [
     assert.equal(await search.count(), 1, "Homepage should have exactly one new guide-search link");
     assert((await search.innerText()).includes("Search all published guides"), "Search link has expected label");
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
+    assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment"], "Main navigation items");
+    assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
     assert((await page.locator(".reader-path").count()) > 0, "Reader journeys must remain present");
