@@ -34,7 +34,7 @@ keyTakeaways:
   - "Gmail search can locate large attachments for targeted deletion. [1][3]"
   - "Storage usage after large deletions may take **48–72 hours** to update accurately. [1][4]"
   - "Messages bounced during the full-storage period may need to be resent. [1]"
-shortAnswer: "**Yes. When a Google Account reaches its storage limit, Gmail may stop sending or receiving messages.** Gmail, Drive, Photos and some backups share an allowance. Google says incoming mail sent while an account is full can be **returned to the sender**, so freeing space later does not guarantee that missed messages will appear on their own. Ask the sender to resend an important email once your account accepts mail again. [1][2]"
+shortAnswer: "A full Google Account can stop Gmail from sending or receiving mail because Gmail shares storage with Drive, Photos and some backups. Safely clear unneeded storage, and ask senders to resend important messages that bounced while the account was full. [1]"
 ---
 
 > **DECODISTA callout — Preserve your data first**
