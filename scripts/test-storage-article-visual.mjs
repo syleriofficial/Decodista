@@ -41,10 +41,10 @@ for(const article of articles){
       const hero=page.locator("figure.article-hero img").first();
       await hero.waitFor({state:"visible",timeout:20000});
       const image=await hero.evaluate(async img=>{
-        if(!img.complete) await new Promise((resolve,reject)=>{
+        if(!img.complete) await new Promise(resolve=>{
           img.addEventListener("load",resolve,{once:true});
-          img.addEventListener("error",reject,{once:true});
-          setTimeout(()=>reject(new Error("hero image load timeout")),15000);
+          img.addEventListener("error",resolve,{once:true});
+          setTimeout(resolve,15000);
         });
         return {complete:img.complete,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,alt:img.alt,currentSrc:img.currentSrc};
       });
