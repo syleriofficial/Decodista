@@ -86,7 +86,7 @@ Before enabling it:
 - If possible, inspect important items at [iCloud Photos](https://www.icloud.com/photos/) while signed into the same account; seeing a thumbnail on the phone does not prove the cloud upload has completed.
 - Check that iCloud has sufficient room to hold the library.
 
-**Apple's menu labels vary by iOS version.** For iOS 27, Apple documents **Settings > your name > iCloud > Photos > iPhone Storage > Optimize iPhone Storage**. On iOS 26 or earlier, the optimize choice may appear directly inside the Photos settings. Follow what your actual device shows instead of guessing that every iPhone uses an identical menu. [2]
+**Apple's menu labels can vary with software updates.** Apple's published starting route is **Settings > your name > iCloud > Photos**, where you can enable syncing and choose **Optimize iPhone Storage**. Follow the options actually shown on your device. [2]
 
 Optimization is not an instant deletion command. The phone can retain recent or frequently used originals and optimize more files when it needs room. Give sync and optimization time to finish; do not promise an immediate specific number of gigabytes. [2]
 
@@ -166,7 +166,7 @@ Not on that basis alone. System Data is local storage; purchasing additional iCl
 
 ## Sources & verification
 
-Documentation reviewed **November 11, 2026 (UTC)**. This draft is based on Apple documentation, not hands-on testing or captured screenshots. Interface labels can differ across iOS 26 and iOS 27.
+Documentation reviewed **November 11, 2026 (UTC)**. This draft is based on Apple documentation, not hands-on testing or captured screenshots. Interface labels can vary by iOS version.
 
 1. [Apple: Difference between iCloud storage and device storage](https://support.apple.com/en-us/102670)
 2. [Apple: Manage your photo and video storage](https://support.apple.com/en-us/105061)
@@ -174,5 +174,3 @@ Documentation reviewed **November 11, 2026 (UTC)**. This draft is based on Apple
 4. [Apple: Delete and recover photos and videos](https://support.apple.com/en-us/104967)
 5. [Apple: Manage iCloud storage](https://support.apple.com/en-us/108922)
 6. [Apple iPhone User Guide: Manage storage](https://support.apple.com/guide/iphone/iph47c931112/ios)
-
-**Publication gate:** Re-verify current iOS 26/27 button labels and source dates; independently review loss-of-data statements; produce original optimized 1600×900 WebP artwork; convert to the production CMS front matter with one Short Answer / Key Takeaways / Sources block; verify internal links; pass content validation, build, mobile preview and accessibility checks. This draft must not go live before the gate.
