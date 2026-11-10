@@ -1,0 +1,37 @@
+name: Live navigation diagnostics
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/live-navigation-diagnostics.yml'
+      - 'scripts/test-live-navigation.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  navigation-browser:
+    name: Check live SSR and hydrated menu in Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright (CI-only; no lockfile changes)
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Use hosted Chrome
+        run: google-chrome --version
+      - name: Compare live SSR, hydrated desktop and mobile menus
+        run: node scripts/test-live-navigation.mjs
+      - name: Save diagnostic screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: decodista-live-navigation-diagnostics
+          path: artifacts/live-nav/
+          if-no-files-found: ignore
+          retention-days: 3
