@@ -25,6 +25,8 @@ const topicPage = read("app/topics/[topic]/page.tsx");
 const articlePage = read("app/articles/[slug]/page.tsx");
 const contentHelpers = read("lib/content.ts");
 const science = read("app/[section]/page.tsx");
+const latestArchive = read("app/latest/page.tsx");
+const paginationHelper = read("lib/pagination.ts");
 const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
 const ads = read("public/ads.txt");
@@ -61,6 +63,11 @@ for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
+assert(paginationHelper.includes("Number.isSafeInteger"), "Pagination must reject unsafe values");
+assert(paginationHelper.includes("/^[1-9]\\d*$/"), "Pagination must only accept positive integer page numbers");
+assert(latestArchive.includes("parsePageNumber(pageParam)"), "Latest must validate page numbers");
+assert(science.includes("parsePageNumber(pageParam)"), "Category pagination must validate page numbers");
+assert(science.includes("featured && page === 1"), "Category featured article must not repeat on paginated pages");
 assert(!/"\/science"/.test(sitemap), "Empty Science route must not be hard-coded into the sitemap");
 
 assert(/const trustRoutes = \[/.test(sitemap), "Trust routes must be separated from content-freshness routes");
