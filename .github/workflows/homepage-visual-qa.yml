@@ -7,6 +7,7 @@ on:
       - 'app/page.tsx'
       - 'app/globals.css'
       - 'scripts/test-homepage-visual.mjs'
+      - 'scripts/audit-mobile-performance.mjs'
       - '.github/workflows/homepage-visual-qa.yml'
   workflow_dispatch:
 
@@ -42,6 +43,8 @@ jobs:
           exit 1
       - name: Check homepage using Chrome
         run: node scripts/test-homepage-visual.mjs
+      - name: Capture synthetic mobile performance baseline
+        run: node scripts/audit-mobile-performance.mjs
       - name: Save screenshots, report and preview log
         if: always()
         run: |
