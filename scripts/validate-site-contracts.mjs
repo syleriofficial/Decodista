@@ -87,7 +87,7 @@ assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"),
 assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
 assert(contentHelpers.includes(".filter(({ score }) => score > 0)"), "Related articles must have a positive relevance score");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
-assert(homepage.includes("weeklyBriefs[0]") && homepage.includes("weekly-feature"), "Homepage must highlight a published weekly issue");
+assert(!homepage.includes('className="weekly-feature'), "Weekly Brief should remain in More and its archive, not dominate the homepage");
 assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");
 assert(weeklyIssue.includes("getWeeklyBrief(slug)") && weeklyIssue.includes("notFound()"), "Weekly issue route must reject unknown slugs");
 assert(weeklyIssue.includes("Primary source:") && weeklyIssue.includes("rel=\"noopener noreferrer\""), "Weekly issue must attribute and safely link to primary sources");
@@ -96,6 +96,10 @@ assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_UR
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
 assert(header.includes('href="/weekly"'), "Header More menu must expose Weekly Brief");
+assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
+assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
+assert(homepage.includes('eyebrow="Evaluations and comparisons"'), "Reviews must avoid implying unverified testing");
+assert(!homepage.includes('Tested and evaluated'), "Homepage must not imply unverified hands-on testing");
 assert(!header.includes('href="/rss.xml"'), "RSS feed should remain discoverable in footer and metadata, not the More menu");
 assert(header.includes('moreMenuRef.current?.open') && header.includes('querySelector("summary")?.focus()'), "Escape must close the More menu and restore focus");
 assert(footer.includes('href="/rss.xml"'), "RSS must have a permanent footer link");

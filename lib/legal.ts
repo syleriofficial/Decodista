@@ -15,18 +15,19 @@ export const infoPages: Record<string, InfoPage> = {
   about: {
     title: "About DECODISTA",
     eyebrow: "Technology, Decoded.",
-    description: "DECODISTA is a consumer-technology publication built to make everyday technology easier to understand.",
+    description: "DECODISTA explains technology news, product choices, emerging science and digital entertainment alongside practical AI, security and how-to guidance.",
     sections: [
       {
         title: "What we do",
         paragraphs: [
-          "DECODISTA publishes clear explanations and practical guides for the technology people use every day. The focus is not only what a product or setting does, but what it means for a reader making a real decision.",
+          "DECODISTA publishes source-led explainers and practical guides for the technology people use every day. Our editorial scope also covers technology news, product evaluations, emerging science, streaming and gaming. We focus on what a change or choice means for the reader.",
         ],
         bullets: [
           "Understand artificial intelligence and emerging technology",
           "Fix account, privacy, backup and device problems",
           "Make informed choices without manufactured urgency",
           "Read globally accessible English with necessary terms explained",
+          "Follow technology, science and digital entertainment as dedicated coverage develops",
         ],
       },
       {
@@ -37,8 +38,48 @@ export const infoPages: Record<string, InfoPage> = {
         ],
         links: [
           { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/review-methodology", label: "Review Methodology" },
           { href: "/how-we-work", label: "How We Work" },
           { href: "/editorial-team", label: "DECODISTA Editorial" },
+        ],
+      },
+    ],
+  },
+  "review-methodology": {
+    title: "Review Methodology",
+    eyebrow: "How DECODISTA evaluates",
+    description: "How we distinguish research-based comparisons from directly tested product and service reviews.",
+    sections: [
+      {
+        title: "Research versus hands-on testing",
+        paragraphs: [
+          "Research-based comparisons examine publicly documented features, terms, prices and independent evidence. They do not imply that DECODISTA has personally used or tested a product.",
+          "Hands-on reviews are reserved for cases where a product or service has actually been evaluated and the method can be explained. Without hands-on work, we will not claim that something was personally tested, benchmarked or verified.",
+        ],
+      },
+      {
+        title: "Evidence and limitations",
+        paragraphs: [
+          "We aim to state the scope and date of an evaluation, explain why products were selected, cite primary sources and distinguish documented facts from editorial judgment.",
+          "When direct testing takes place, we aim to describe relevant devices, software versions, account tiers and test scenarios. Research-based comparisons identify details that could not be independently confirmed.",
+        ],
+        bullets: [
+          "Check official features, prices, availability and important conditions when relevant",
+          "Discuss strengths, drawbacks and alternatives according to reader needs",
+          "Disclose supplied products, commercial relationships and affiliate links when applicable",
+          "Correct errors and revisit time-sensitive claims when substantial changes occur",
+        ],
+      },
+      {
+        title: "Editorial independence",
+        paragraphs: [
+          "A future sponsorship, supplied product or affiliate arrangement must be disclosed and must not control the editorial conclusion. We do not promise favourable coverage for compensation.",
+          "This page describes our editorial standards, not a claim that every product has been personally tested.",
+        ],
+        links: [
+          { href: "/editorial-policy", label: "Editorial Standards" },
+          { href: "/how-we-work", label: "How We Work" },
+          { href: "/corrections", label: "Corrections" },
         ],
       },
     ],
@@ -93,7 +134,7 @@ export const infoPages: Record<string, InfoPage> = {
       {
         title: "Testing and reviews",
         paragraphs: [
-          "A documentation-based article is not described as hands-on testing. Reviews remain outside DECODISTA’s active publishing model until products or services can be evaluated directly with a disclosed method.",
+          "A documentation-based article is not described as hands-on testing. Research-based comparisons must be clearly labelled, sourced and limited to what can be verified. Hands-on reviews require direct evaluation and disclosure of the method.",
           "Any future commercial relationship, supplied product, sponsorship or affiliate link should be disclosed clearly and should not determine an editorial conclusion.",
         ],
       },

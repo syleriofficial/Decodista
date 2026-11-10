@@ -1,7 +1,7 @@
 export const SITE_NAME = "DECODISTA";
 export const SITE_TAGLINE = "Technology, Decoded.";
 export const SITE_DESCRIPTION =
-  "Clear answers for the technology people use every day.";
+  "Technology news, reviews, science and digital entertainment explained clearly, alongside practical AI, security and how-to guides.";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://decodista.com";
 export const GOOGLE_ANALYTICS_ID =
@@ -225,6 +225,7 @@ export const MORE_NAV_ITEMS = [
 export const TRUST_LINKS = [
   { href: "/about", label: "About" },
   { href: "/editorial-policy", label: "Editorial Standards" },
+  { href: "/review-methodology", label: "Review Methodology" },
   { href: "/how-we-work", label: "How We Work" },
   { href: "/corrections", label: "Corrections" },
   { href: "/editorial-team", label: "Editorial Team" },
