@@ -3,13 +3,17 @@ import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
 import { articles } from "@/lib/content";
+import { parsePageNumber } from "@/lib/pagination";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const PAGE_SIZE = 12;
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ page?: string }> }): Promise<Metadata> {
   const { page: pageParam } = await searchParams;
-  const page = Math.max(1, Number(pageParam) || 1);
+  const page = parsePageNumber(pageParam);
+  if (page === null || page > Math.max(1, Math.ceil(articles.length / PAGE_SIZE))) {
+    return { robots: { index: false, follow: true }, alternates: { canonical: null } };
+  }
   const suffix = page > 1 ? ` — Page ${page}` : "";
   const canonical = page > 1 ? `/latest?page=${page}` : "/latest";
   const description = "The newest DECODISTA technology explainers and practical guides, ordered by publication date.";
@@ -24,9 +28,9 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
 export default async function LatestPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page: pageParam } = await searchParams;
-  const page = Math.max(1, Number(pageParam) || 1);
+  const page = parsePageNumber(pageParam);
   const pages = Math.max(1, Math.ceil(articles.length / PAGE_SIZE));
-  if (page > pages) notFound();
+  if (page === null || page > pages) notFound();
   const visible = articles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const breadcrumb = {
     "@context": "https://schema.org",
