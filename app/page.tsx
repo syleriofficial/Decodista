@@ -71,6 +71,12 @@ export default function HomePage() {
     selected.forEach((article) => alreadyShown.add(article.slug));
     return selected;
   };
+  // New editorial pillars are featured only after verified articles exist.
+  // Empty sections never generate placeholder article cards.
+  const techNews = takeDistinct(getArticlesByCategory("tech-news"), 3, false);
+  const reviews = takeDistinct(getArticlesByCategory("reviews"), 3, false);
+  const science = takeDistinct(getArticlesByCategory("science"), 3, false);
+  const entertainment = takeDistinct(getArticlesByCategory("entertainment"), 3, false);
   const latest = takeDistinct(articles, 4);
   const ai = takeDistinct(getArticlesByCategory("ai"), 3, false);
   const howTo = takeDistinct(getArticlesByContentType("how-to"), 3);
@@ -116,6 +122,11 @@ export default function HomePage() {
         </aside>
       </section>
 
+      <EditorialSection eyebrow="What's changing" title="Tech News" href="/tech-news" stories={techNews} />
+      <EditorialSection eyebrow="Tested and evaluated" title="Reviews" href="/reviews" stories={reviews} />
+      <EditorialSection eyebrow="Research and discovery" title="Science" href="/science" stories={science} />
+      <EditorialSection eyebrow="Streaming, gaming and screens" title="Entertainment" href="/entertainment" stories={entertainment} />
+
       <section className="reader-paths wrap" aria-labelledby="reader-paths-title">
         <div className="reader-paths-heading">
           <span className="eyebrow">Start with a problem</span>
@@ -159,7 +170,7 @@ export default function HomePage() {
       </section>
 
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
-        <SectionHeading eyebrow="Continue reading" title="More Recent Guides" href="/latest" id="latest-title" />
+        <SectionHeading eyebrow="Continue reading" title="Latest Stories" href="/latest" id="latest-title" />
         <div className="latest-feed">
           {latest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
         </div>
