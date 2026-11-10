@@ -1,0 +1,58 @@
+name: Storage guide browser QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'content/articles/gmail-not-receiving-emails-google-storage-full.md'
+      - 'content/articles/iphone-storage-full-icloud-has-space.md'
+      - 'public/images/uploads/gmail-not-receiving-emails-google-storage-full.webp'
+      - 'public/images/uploads/iphone-storage-full-icloud-has-space.webp'
+      - 'scripts/test-storage-article-visual.mjs'
+      - '.github/workflows/storage-guide-browser-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  storage-guide-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --include=dev
+      - name: Install Playwright runner
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Start local DECODISTA preview
+        run: |
+          npm run dev > /tmp/decodista-storage-qa.log 2>&1 &
+          echo $! > /tmp/decodista-storage-qa.pid
+          for i in $(seq 1 35); do
+            if curl --connect-timeout 2 --max-time 4 -fsS http://localhost:5173/ -o /dev/null; then
+              echo 'Preview ready'
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/decodista-storage-qa.log
+          exit 1
+      - name: Test two articles in desktop, tablet and mobile Chrome
+        run: node scripts/test-storage-article-visual.mjs
+      - name: Save logs
+        if: always()
+        run: |
+          mkdir -p artifacts/storage-article-qa
+          cp /tmp/decodista-storage-qa.log artifacts/storage-article-qa/server.log 2>/dev/null || true
+      - name: Upload screenshots and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storage-guide-browser-qa
+          path: artifacts/storage-article-qa/
+          if-no-files-found: ignore
+          retention-days: 5
