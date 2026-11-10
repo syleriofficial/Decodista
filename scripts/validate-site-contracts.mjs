@@ -98,7 +98,16 @@ assert(legal.includes("DECODISTA does not operate a newsletter signup"), "Privac
 const weeklySources = [...weeklyData.matchAll(/url: "(https:\/\/[^"]+)"/g)].map((match) => match[1]);
 assert(weeklySources.length >= 4, "First weekly edition must cite multiple direct primary sources");
 assert(new Set(weeklySources).size === weeklySources.length, "Weekly issue should not repeat a primary source");
-assert(weeklySources.every((url) => /^https:\/\/(?:support\.apple\.com|www\.mozilla\.org|blog\.google|openai\.com)\//.test(url)), "Weekly sources must point directly to reviewed primary publishers");
+assert(weeklySources.every((url) => /^https:\/\/(?:support\.apple\.com|www\.mozilla\.org|blog\.google|openai\.com|www\.microsoft\.com|about\.fb\.com)\//.test(url)), "Weekly sources must point directly to reviewed primary publishers");
+assert(weeklyData.indexOf('slug: "2026-11-11"') !== -1, "Weekly issue 02 must be dated"); 
+assert(weeklyData.indexOf('slug: "2026-11-11"') < weeklyData.indexOf('slug: "2026-11-01"'), "Newest weekly issue must come first");
+const secondIssue = weeklyData.split('slug: "2026-11-11"')[1]?.split('slug: "2026-11-01"')[0] ?? "";
+assert(/issueNumber: 2/.test(secondIssue), "Issue 02 must have the correct issue number");
+assert(/publishedDate: "2026-11-11"/.test(secondIssue), "Issue 02 must carry its actual publication date");
+assert(/periodStart: "2026-11-02"/.test(secondIssue) && /periodEnd: "2026-11-10"/.test(secondIssue), "Issue 02 must state its reporting window");
+const secondIssueDates = [...secondIssue.matchAll(/announcedDate: "(2026-11-\\d{2})"/g)].map((match) => match[1]);
+assert.equal(secondIssueDates.length, 5, "Issue 02 must have exactly five dated developments");
+assert(secondIssueDates.every((date) => date >= "2026-11-02" && date <= "2026-11-10"), "Issue 02 updates must fall within its reporting window");
 assert(/slug: "2026-11-01"/.test(weeklyData), "First weekly issue must have an explicit dated slug");
 assert(/publishedDate: "2026-11-01"/.test(weeklyData), "First weekly issue must have a dated publication field");
 assert(weeklyData.includes("implementation is planned over the coming months"), "Do not describe the proposed AI training signal as already implemented");
