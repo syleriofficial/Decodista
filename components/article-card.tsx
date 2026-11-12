@@ -21,7 +21,7 @@ export function ArticleCard({ article, variant = "standard", priority = false }:
           src={article.featuredImage}
           alt={article.featuredImageAlt}
           fill
-          sizes={variant === "horizontal" ? "(max-width: 700px) 100vw, 34vw" : "(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 32vw"}
+          sizes={variant === "horizontal" ? "(max-width: 600px) 38vw, (max-width: 1000px) 34vw, 32vw" : "(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 32vw"}
           priority={priority}
         />
       </Link>

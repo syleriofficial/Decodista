@@ -50,7 +50,7 @@ export default async function LatestPage({ searchParams }: { searchParams: Promi
         <p>The newest DECODISTA explanations and guides, ordered by publication date.</p>
       </header>
       <section className="archive-feed" aria-label="Latest articles">
-        {visible.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
+        {visible.map((article, index) => <ArticleCard key={article.slug} article={article} variant="horizontal" priority={index === 0} />)}
       </section>
       {pages > 1 && <nav className="pagination" aria-label="Latest pagination">
         {page > 1 && <Link href={page === 2 ? "/latest" : `/latest?page=${page - 1}`}>Previous</Link>}
