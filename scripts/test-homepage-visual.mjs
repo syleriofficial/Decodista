@@ -44,7 +44,7 @@ for (const sample of [
     const firstFeedSrc = await page.locator(".latest-feed .card-image img").first().getAttribute("src");
     assert(firstFeedSrc?.startsWith("/images/"), "Homepage thumbnails must avoid unnecessary /_next/image redirects");
     assert.equal(await page.locator(".lead-image img").getAttribute("fetchpriority"), "high", "Hero LCP image must keep high fetch priority");
-    assert((await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Narrow mobile thumbnails must not request full viewport width");
+    assert.equal(await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("srcset"), null, "Do not advertise fake optimized widths for unchanged original WebP images");
     assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
@@ -108,7 +108,8 @@ for (const sample of [
       const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
       await firstArchiveImage.waitFor({ state: "attached", timeout: 20000 });
       assert.notEqual(await firstArchiveImage.getAttribute("loading"), "lazy", "Above-the-fold Latest thumbnail must not be lazy-loaded");
-      assert((await firstArchiveImage.getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Latest archive image must have an accurate mobile sizes attribute");
+      assert((await firstArchiveImage.getAttribute("src"))?.startsWith("/images/"), "Latest archive must fetch original WebP directly, avoiding the redirecting optimizer");
+      assert.equal(await firstArchiveImage.getAttribute("srcset"), null, "Latest must not emit nonexistent responsive image variants");
       assert.equal(await page.locator("section.archive-feed > h2").innerText(), "Latest articles", "Archive card headings need an h2 parent");
       assert((await page.locator('head meta[name="description"]').getAttribute("content"))?.includes("DECODISTA"), "Latest meta description must be inside <head>");
       assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith("/latest"), "Latest canonical must be inside <head>");
