@@ -1,7 +1,7 @@
 export const SITE_NAME = "DECODISTA";
 export const SITE_TAGLINE = "Technology, Decoded.";
 export const SITE_DESCRIPTION =
-  "Technology news, reviews, science and digital entertainment explained clearly, alongside practical AI, security and how-to guides.";
+  "Independent technology explainers and step-by-step guides about AI, security, digital life, privacy and everyday technology.";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://decodista.com";
 export const GOOGLE_ANALYTICS_ID =
@@ -207,19 +207,19 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
   (topic) => topic.showInNavigation,
 );
 
+// Prioritize sections with published, useful articles. Empty editorial pillars
+// retain their existing category routes (noindex and excluded from sitemap)
+// but are not promoted in navigation until they contain real stories.
 export const NAV_ITEMS = [
-  { href: "/tech-news", label: "Tech News" },
-  { href: "/reviews", label: "Reviews" },
-  { href: "/science", label: "Science" },
-  { href: "/entertainment", label: "Entertainment" },
-  { href: "/latest", label: "Latest" },
-] as const;
-
-export const MORE_NAV_ITEMS = [
   { href: "/ai", label: "AI" },
   { href: "/how-to", label: "How-To" },
   { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
+  { href: "/latest", label: "Latest" },
+] as const;
+
+export const MORE_NAV_ITEMS = [
+  { href: "/weekly", label: "Weekly Brief" },
 ] as const;
 
 export const TRUST_LINKS = [
