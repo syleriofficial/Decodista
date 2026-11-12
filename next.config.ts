@@ -30,6 +30,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Vinext's async generateMetadata streaming may put title/description/canonical
+  // in a hidden body outlet. Keep article and archive SEO tags in <head> for
+  // HTML-only crawlers and link previews. All site metadata is local (no API
+  // calls), limiting the cost of waiting for metadata before the head flushes.
+  htmlLimitedBots: /.*/,
   async headers() {
     return [
       { source: "/", headers: securityHeaders },
