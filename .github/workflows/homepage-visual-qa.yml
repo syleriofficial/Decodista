@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'app/page.tsx'
+      - 'lib/site.ts'
+      - 'components/site-header.tsx'
+      - 'components/site-footer.tsx'
+      - 'scripts/check-production-deployment.mjs'
       - 'app/globals.css'
       - 'scripts/test-homepage-visual.mjs'
       - 'scripts/audit-mobile-performance.mjs'
