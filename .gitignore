@@ -47,3 +47,6 @@ next-env.d.ts
 /outputs/
 /work/
 /.npm-cache/
+
+# Generated during Vite dev and production builds; original images stay committed.
+/public/images/responsive/
