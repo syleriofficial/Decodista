@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { ArrowRight, Search } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
@@ -87,7 +87,7 @@ export default function HomePage() {
       <section className="hero wrap" aria-labelledby="lead-story-title">
         <article className="lead-story">
           <Link className="lead-image" href={`/articles/${lead.slug}`}>
-            <Image src={lead.featuredImage} alt={lead.featuredImageAlt} fill priority sizes="(max-width: 900px) 100vw, 65vw" />
+            <ResponsiveImage src={lead.featuredImage} alt={lead.featuredImageAlt} fill priority sizes="(max-width: 900px) 100vw, 65vw" />
           </Link>
           <div className="lead-copy">
             <div className="card-labels">
