@@ -1,0 +1,46 @@
+name: Lighthouse mobile production audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audit-production-lighthouse.mjs'
+      - '.github/workflows/production-lighthouse.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Throttled mobile Lighthouse (public production)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify installed Chrome
+        run: google-chrome --version
+      - name: Install pinned Lighthouse CLI
+        run: npm install --global lighthouse@13.6.0
+      - name: Audit publicly deployed pages using simulated mobile throttling
+        env:
+          LIGHTHOUSE_PATHS: ${{ github.event_name == 'pull_request' && '/' || '/,/latest,/articles/gmail-not-receiving-emails-google-storage-full' }}
+          LIGHTHOUSE_OUTPUT_DIR: artifacts/production-lighthouse
+        run: node scripts/audit-production-lighthouse.mjs
+      - name: Upload raw Lighthouse JSON and concise summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-production-lighthouse
+          path: artifacts/production-lighthouse/
+          if-no-files-found: ignore
+          retention-days: 14
