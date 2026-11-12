@@ -39,6 +39,19 @@ for (const sample of [
     assert((await search.innerText()).includes("Search all published guides"), "Search link has expected label");
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
     assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
+    const leadSrc = await page.locator(".lead-image img").getAttribute("src");
+    assert(leadSrc?.startsWith("/images/"), "Homepage hero must fetch the real WebP directly, not redirect through /_next/image");
+    const firstFeedSrc = await page.locator(".latest-feed .card-image img").first().getAttribute("src");
+    assert(firstFeedSrc?.startsWith("/images/"), "Homepage thumbnails must avoid unnecessary /_next/image redirects");
+    assert.equal(await page.locator(".lead-image img").getAttribute("fetchpriority"), "high", "Hero LCP image must keep high fetch priority");
+    const offscreen = page.locator("main > .home-topic").last();
+    if (await offscreen.count()) {
+      assert.equal(await offscreen.evaluate(element => getComputedStyle(element).contentVisibility), "auto", "Offscreen homepage sections must defer rendering when supported");
+      await offscreen.scrollIntoViewIfNeeded();
+      assert(await offscreen.locator("h2").isVisible(), "Deferred section heading must render after scrolling into view");
+      assert(await offscreen.evaluate(element => element.getBoundingClientRect().height > 80), "Deferred section must expand to its actual height");
+      await page.evaluate(() => window.scrollTo(0, 0));
+    }
     assert((await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Narrow mobile thumbnails must not request full viewport width");
     assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
