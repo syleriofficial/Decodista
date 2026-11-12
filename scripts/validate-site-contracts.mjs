@@ -34,6 +34,8 @@ const contactPage = read("app/contact/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
 const globalCss = read("app/globals.css");
+assert(nextConfig.includes("images: { unoptimized: true }"), "Do not generate redirecting image optimizer URLs until Vinext has a working image backend");
+assert(globalCss.includes("content-visibility: auto") && globalCss.includes("contain-intrinsic-size: auto 650px"), "Skip offscreen homepage rendering with a stable intrinsic size");
 const notFound = read("app/not-found.tsx");
 const staticHeaders = read("public/_headers");
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
