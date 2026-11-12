@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResponsiveImage } from "@/components/responsive-image";
 import { Fragment } from "react";
 import Link from "@/components/app-link";
 import type { ContentBlock, RichText } from "@/lib/content";
@@ -51,7 +51,7 @@ export function ArticleBody({ blocks, className = "" }: { blocks: ContentBlock[]
           case "table":
             return <figure className="table-figure" key={index}><div className="table-scroll" role="region" aria-label="Scrollable comparison table" tabIndex={0}><table><thead><tr>{block.headers.map((header, headerIndex) => <th scope="col" key={headerIndex}><RichTextContent content={header} /></th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={`${rowIndex}-${cellIndex}`}><RichTextContent content={cell} /></td>)}</tr>)}</tbody></table></div>{block.caption && <figcaption>{block.caption}</figcaption>}</figure>;
           case "image":
-            return <figure className="prose-image" key={index}><div className="prose-image-frame"><Image src={block.src} alt={block.alt} fill sizes="(max-width: 800px) 100vw, 760px" /></div>{block.caption && <figcaption>{block.caption}</figcaption>}</figure>;
+            return <figure className="prose-image" key={index}><div className="prose-image-frame"><ResponsiveImage src={block.src} alt={block.alt} fill sizes="(max-width: 800px) 100vw, 760px" /></div>{block.caption && <figcaption>{block.caption}</figcaption>}</figure>;
         }
       })}
     </div>

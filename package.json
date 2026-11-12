@@ -22,7 +22,8 @@
     "rss:test": "node --test scripts/test-rss.mjs",
     "security:audit": "npm audit --omit=dev --audit-level=high",
     "security:audit:all": "npm audit",
-    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run contact:leak-check"
+    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run images:test && npm run contact:leak-check",
+    "images:test": "node scripts/test-responsive-images.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
@@ -44,6 +45,7 @@
     "eslint-config-next": "16.4.0",
     "marked": "18.0.13",
     "react-server-dom-webpack": "19.2.8",
+    "sharp": "0.35.5",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "1.0.0",

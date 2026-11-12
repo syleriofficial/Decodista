@@ -44,7 +44,17 @@ for (const sample of [
     const firstFeedSrc = await page.locator(".latest-feed .card-image img").first().getAttribute("src");
     assert(firstFeedSrc?.startsWith("/images/"), "Homepage thumbnails must avoid unnecessary /_next/image redirects");
     assert.equal(await page.locator(".lead-image img").getAttribute("fetchpriority"), "high", "Hero LCP image must keep high fetch priority");
-    assert.equal(await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("srcset"), null, "Do not advertise fake optimized widths for unchanged original WebP images");
+    const heroSrcSet = await page.locator(".lead-image img").getAttribute("srcset");
+    assert(heroSrcSet?.includes("/images/responsive/") && heroSrcSet.includes(" 320w"), "Homepage hero must advertise real responsive WebP variants");
+    const feedSrcSet = await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("srcset");
+    assert(feedSrcSet?.includes("/images/responsive/"), "Thumbnail must advertise responsive WebP variants");
+    if (sample.name === "mobile-light") {
+      const heroVariant = await page.locator(".lead-image img").evaluate(img => img.currentSrc);
+      assert(heroVariant.includes("/images/responsive/"), "Mobile homepage must select an actual resized WebP");
+      const imageResponse = await page.request.get(heroVariant);
+      assert.equal(imageResponse.status(), 200, "Chosen mobile WebP must exist");
+      assert((imageResponse.headers()["content-type"] ?? "").includes("image/webp"), "Chosen mobile asset must be a WebP");
+    }
     assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
@@ -109,7 +119,7 @@ for (const sample of [
       await firstArchiveImage.waitFor({ state: "attached", timeout: 20000 });
       assert.notEqual(await firstArchiveImage.getAttribute("loading"), "lazy", "Above-the-fold Latest thumbnail must not be lazy-loaded");
       assert((await firstArchiveImage.getAttribute("src"))?.startsWith("/images/"), "Latest archive must fetch original WebP directly, avoiding the redirecting optimizer");
-      assert.equal(await firstArchiveImage.getAttribute("srcset"), null, "Latest must not emit nonexistent responsive image variants");
+      assert((await firstArchiveImage.getAttribute("srcset"))?.includes("/images/responsive/"), "Latest must advertise generated responsive variants");
       assert.equal(await page.locator("section.archive-feed > h2").innerText(), "Latest articles", "Archive card headings need an h2 parent");
       assert((await page.locator('head meta[name="description"]').getAttribute("content"))?.includes("DECODISTA"), "Latest meta description must be inside <head>");
       assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith("/latest"), "Latest canonical must be inside <head>");

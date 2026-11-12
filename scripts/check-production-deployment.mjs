@@ -69,6 +69,17 @@ const latestHtml = snapshots["/latest"]?.body ?? "";
 if (latestHtml) {
   const imageTags = latestHtml.split("<img ").slice(1).map(fragment => fragment.split(">", 1)[0]);
   check("Latest images bypass optimizer redirects", imageTags.length > 0 && imageTags.every(tag => tag.includes('src="/images/')), "Local article images should point directly to WebP files instead of redirecting through /_next/image");
+  const variantUrl = latestHtml.match(/\/images\/responsive\/[a-zA-Z0-9/_-]+\.webp/)?.[0];
+  check("Latest responsive srcset exists", Boolean(variantUrl), "Latest article images must advertise real generated WebP candidates");
+  if (variantUrl) {
+    try {
+      const response = await fetch(new URL(variantUrl, base), { signal: AbortSignal.timeout(20000) });
+      check("Generated WebP variant accessible", response.ok && (response.headers.get("content-type") ?? "").includes("image/webp"), "Selected responsive WebP should return HTTP 200 image/webp on Cloudflare");
+      if (response.ok) await response.arrayBuffer();
+    } catch (error) {
+      check("Generated WebP variant accessible", false, String(error));
+    }
+  }
   check("Latest SEO title", /<title[^>]*>[^<]*Latest[^<]*<\/title>/.test(latestHtml), "Latest needs a descriptive title");
   check("Latest canonical", latestHtml.includes("rel=\"canonical\"") && latestHtml.includes("/latest"), "Canonical link should exist");
 }

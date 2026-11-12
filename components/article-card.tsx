@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/content";
@@ -17,7 +17,7 @@ export function ArticleCard({ article, variant = "standard", priority = false }:
   return (
     <article className={`article-card article-card--${variant}`}>
       <Link className="card-image" href={`/articles/${article.slug}`} aria-label={`Read ${article.title}`}>
-        <Image
+        <ResponsiveImage
           src={article.featuredImage}
           alt={article.featuredImageAlt}
           fill
