@@ -39,6 +39,7 @@ for (const sample of [
     assert((await search.innerText()).includes("Search all published guides"), "Search link has expected label");
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
     assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
+    assert((await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Narrow mobile thumbnails must not request full viewport width");
     assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
@@ -97,6 +98,12 @@ for (const sample of [
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
     if (sample.name === "desktop-light") {
+      const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(latestPage?.status(), 200, "Latest archive must load");
+      const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
+      await firstArchiveImage.waitFor({ state: "attached", timeout: 20000 });
+      assert.notEqual(await firstArchiveImage.getAttribute("loading"), "lazy", "Above-the-fold Latest thumbnail must not be lazy-loaded");
+      assert((await firstArchiveImage.getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Latest archive image must have an accurate mobile sizes attribute");
       const invalidPage = await page.goto(base + "/latest?page=1.5", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(invalidPage?.status(), 404, "Fractional archive page must return 404");
       const invalidSection = await page.goto(base + "/security?page=abc", { waitUntil: "domcontentloaded", timeout: 45000 });
