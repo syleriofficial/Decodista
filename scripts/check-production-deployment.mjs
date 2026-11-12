@@ -67,8 +67,8 @@ for (const path of ["/", "/latest", "/review-methodology", articlePath]) {
 
 const latestHtml = snapshots["/latest"]?.body ?? "";
 if (latestHtml) {
-  const imageTags = [...latestHtml.matchAll(/<img\\b[^>]*>/g)].map(match => match[0]);
-  check("Latest images bypass optimizer redirects", imageTags.length > 0 && imageTags.every(tag => /src="\\/images\\//.test(tag)), "Local article images should point directly to WebP files instead of redirecting through /_next/image");
+  const imageTags = latestHtml.split("<img ").slice(1).map(fragment => fragment.split(">", 1)[0]);
+  check("Latest images bypass optimizer redirects", imageTags.length > 0 && imageTags.every(tag => tag.includes('src="/images/')), "Local article images should point directly to WebP files instead of redirecting through /_next/image");
   check("Latest SEO title", /<title[^>]*>[^<]*Latest[^<]*<\/title>/.test(latestHtml), "Latest needs a descriptive title");
   check("Latest canonical", latestHtml.includes("rel=\"canonical\"") && latestHtml.includes("/latest"), "Canonical link should exist");
 }
