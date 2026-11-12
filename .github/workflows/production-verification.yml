@@ -1,0 +1,58 @@
+name: Verify live DECODISTA production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-verification-main
+  cancel-in-progress: true
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Check live routes, navigation, SEO, and headers
+        id: http
+        continue-on-error: true
+        run: node scripts/check-production-deployment.mjs
+
+      - name: Install dependencies
+        run: npm ci --include=dev
+      - name: Install browser test runner
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Capture public-site synthetic mobile performance
+        env:
+          HOMEPAGE_PREVIEW_URL: https://decodista.com
+          MOBILE_AUDIT_OUTPUT_DIR: artifacts/production-qa
+        run: node scripts/audit-mobile-performance.mjs
+
+      - name: Upload production verification and mobile measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: decodista-production-qa
+          path: artifacts/production-qa/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Surface HTTP verification failures
+        if: always()
+        env:
+          HTTP_OUTCOME: ${{ steps.http.outcome }}
+        run: |
+          if [ "$HTTP_OUTCOME" != "success" ]; then
+            echo "::error::Live production HTTP verification failed. See the uploaded http-checks.json for the exact endpoint and marker."
+            exit 1
+          fi
