@@ -8,6 +8,13 @@ on:
       - 'app/globals.css'
       - 'scripts/test-homepage-visual.mjs'
       - 'scripts/audit-mobile-performance.mjs'
+      - 'components/article-card.tsx'
+      - 'components/responsive-image.tsx'
+      - 'build/responsive-images-vite-plugin.ts'
+      - 'lib/responsive-images.generated.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/test-responsive-images.mjs'
       - '.github/workflows/homepage-visual-qa.yml'
   workflow_dispatch:
 
@@ -41,6 +48,8 @@ jobs:
           done
           cat /tmp/decodista-homepage-preview.log
           exit 1
+      - name: Verify generated image assets and srcset dimensions
+        run: node scripts/test-responsive-images.mjs
       - name: Check homepage using Chrome
         run: node scripts/test-homepage-visual.mjs
       - name: Capture synthetic mobile performance baseline
