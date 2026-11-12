@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
-// Synthetic browser readings from the local preview. These are NOT Google
-// CrUX field data and must never be presented as official Core Web Vitals.
+// Synthetic browser readings, either on a local preview or on the public
+// production site. Never confuse them with CrUX field data or Lighthouse.
 const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://localhost:5173";
-const outDir = "artifacts/homepage-qa";
+const targetHost = new URL(base).hostname;
+const isLocal = targetHost === "localhost" || targetHost === "127.0.0.1";
+const outDir = process.env.MOBILE_AUDIT_OUTPUT_DIR ?? "artifacts/homepage-qa";
 await mkdir(outDir, { recursive: true });
 
 const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -90,8 +92,12 @@ try {
   await browser.close();
 }
 const result = {
-  kind: "synthetic-dev-preview-observation",
-  disclaimer: "Local unthrottled Chrome preview. Not production Lighthouse, PageSpeed Insights, CrUX or real-user INP.",
+  kind: isLocal ? "synthetic-dev-preview-observation" : "synthetic-public-production-observation",
+  checkedAt: new Date().toISOString(),
+  target: base,
+  disclaimer: isLocal
+    ? "Local unthrottled Chrome preview. Not production Lighthouse, PageSpeed Insights, CrUX or real-user INP."
+    : "Unthrottled Chrome on a public website from GitHub Actions. This is not a mobile-network Lighthouse score, CrUX field data, or real-user INP.",
   records,
   failures,
 };
