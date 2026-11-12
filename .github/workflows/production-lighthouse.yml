@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  checks: read
 
 concurrency:
   group: lighthouse-production-${{ github.ref }}
@@ -27,6 +28,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Wait for matching Cloudflare Workers Build
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/wait-for-cloudflare-build.mjs
       - name: Verify installed Chrome
         run: google-chrome --version
       - name: Install pinned Lighthouse CLI
