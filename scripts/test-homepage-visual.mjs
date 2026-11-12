@@ -104,6 +104,13 @@ for (const sample of [
       await firstArchiveImage.waitFor({ state: "attached", timeout: 20000 });
       assert.notEqual(await firstArchiveImage.getAttribute("loading"), "lazy", "Above-the-fold Latest thumbnail must not be lazy-loaded");
       assert((await firstArchiveImage.getAttribute("sizes"))?.includes("(max-width: 600px) 38vw"), "Latest archive image must have an accurate mobile sizes attribute");
+      assert.equal(await page.locator("section.archive-feed > h2").innerText(), "Latest articles", "Archive card headings need an h2 parent");
+      assert((await page.locator('head meta[name="description"]').getAttribute("content"))?.includes("DECODISTA"), "Latest meta description must be inside <head>");
+      assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith("/latest"), "Latest canonical must be inside <head>");
+      const articleResponse = await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(articleResponse?.status(), 200, "Representative article must load");
+      assert((await page.locator('head meta[name="description"]').getAttribute("content"))?.length > 50, "Article meta description must be inside <head>");
+      assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.includes("/articles/gmail-not-receiving-emails-google-storage-full"), "Article canonical must be inside <head>");
       const invalidPage = await page.goto(base + "/latest?page=1.5", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(invalidPage?.status(), 404, "Fractional archive page must return 404");
       const invalidSection = await page.goto(base + "/security?page=abc", { waitUntil: "domcontentloaded", timeout: 45000 });

@@ -31,7 +31,8 @@ const snapshots = {};
 function check(name, condition, details) {
   checks.push({ name, status: condition ? "passed" : "failed", details });
 }
-const requiredPaths = ["/", "/latest", "/review-methodology", "/robots.txt", "/sitemap.xml"];
+const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
+const requiredPaths = ["/", "/latest", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -42,7 +43,7 @@ for (const path of requiredPaths) {
   }
 }
 
-for (const path of ["/", "/latest", "/review-methodology"]) {
+for (const path of ["/", "/latest", "/review-methodology", articlePath]) {
   const html = snapshots[path]?.body ?? "";
   if (!html) continue;
   // Limit the check to the header's nav: the footer may contain repeated links.
@@ -52,6 +53,16 @@ for (const path of ["/", "/latest", "/review-methodology"]) {
   const moreRegion = moreStarts < 0 ? "" : nav.slice(moreStarts);
   check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
   check(path + " no duplicate Latest in More", !/<a\b[^>]*href="\/latest"/.test(moreRegion), "Latest must not be duplicated in More");
+
+  // For vinext async generateMetadata, tags in a hidden body outlet can pass
+  // simple string checks while failing search/social crawlers and Lighthouse.
+  const head = html.split("</head>", 1)[0];
+  const metaTags = [...head.matchAll(/<meta\b[^>]*>/g)].map(match => match[0]);
+  const linkTags = [...head.matchAll(/<link\b[^>]*>/g)].map(match => match[0]);
+  const description = metaTags.find(tag => /\bname=["']description["']/.test(tag));
+  const canonical = linkTags.find(tag => /\brel=["']canonical["']/.test(tag));
+  check(path + " description in head", Boolean(description && /\bcontent=["'][^"']{30,}["']/.test(description)), "SEO description must be present in <head>");
+  check(path + " canonical in head", Boolean(canonical && canonical.includes(path === "/" ? base : path)), "Canonical URL must be present in <head>");
 }
 
 const latestHtml = snapshots["/latest"]?.body ?? "";
