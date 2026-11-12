@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import imageManifest from "@/lib/responsive-images.generated.json";
 
 interface VariantInfo {
