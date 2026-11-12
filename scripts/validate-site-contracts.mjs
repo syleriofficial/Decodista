@@ -50,23 +50,29 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "Reviews", "Science", "Entertainment", "Latest"],
-  "Main navigation must show the four approved editorial sections in order",
+  ["AI", "How-To", "Security", "Digital Life", "Latest"],
+  "Primary navigation must promote only the existing guide categories and Latest",
 );
 
 const moreNavigation = site.match(/export const MORE_NAV_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(moreNavigation, "More navigation definition is missing");
 assert.deepEqual(
   [...moreNavigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life"],
-  "More must retain the existing sections and latest archive",
+  ["Weekly Brief"],
+  "More should link to the Weekly Brief without duplicating primary navigation",
 );
 assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
 assert(footer.includes("MORE_NAV_ITEMS.map"), "Footer must retain links to existing sections");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
+for (const category of ["ai", "security", "digital-life"]) {
+  assert(homepage.includes(`getArticlesByCategory("${category}")`), `Homepage must feature populated ${category} stories`);
+  assert(articles.some((article) => article.category === category), `Promoted category ${category} cannot be empty`);
+}
+assert(homepage.includes('getArticlesByContentType("how-to")'), "Homepage must promote real How-To guides");
+assert(articles.some((article) => article.contentType === "how-to"), "How-To primary navigation cannot lead to an empty archive");
 for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
-  assert(homepage.includes(`getArticlesByCategory("${category}")`), `Homepage must support ${category} stories`);
+  assert(!navigation.includes(`href: "/${category}"`), `Do not send users to a potentially empty ${category} archive through primary navigation`);
 }
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
@@ -114,11 +120,12 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
-assert(header.includes('href="/weekly"'), "Header More menu must expose Weekly Brief");
+assert(site.includes('href: "/weekly", label: "Weekly Brief"') && header.includes("MORE_NAV_ITEMS.map"), "Header More menu must expose Weekly Brief through its navigation data");
 assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
 assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
-assert(homepage.includes('eyebrow="Evaluations and comparisons"'), "Reviews must avoid implying unverified testing");
+assert(!homepage.includes('title="Reviews"'), "Do not promote the empty Reviews pillar in homepage sections");
 assert(!homepage.includes('Tested and evaluated'), "Homepage must not imply unverified hands-on testing");
+assert(site.includes("Independent technology explainers and step-by-step guides"), "Site description must reflect presently published content rather than empty future categories");
 assert(!header.includes('href="/rss.xml"'), "RSS feed should remain discoverable in footer and metadata, not the More menu");
 assert(header.includes('moreMenuRef.current?.open') && header.includes('querySelector("summary")?.focus()'), "Escape must close the More menu and restore focus");
 assert(footer.includes('href="/rss.xml"'), "RSS must have a permanent footer link");
