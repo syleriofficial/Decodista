@@ -34,6 +34,7 @@ jobs:
         run: |
           node --check scripts/check-production-deployment.mjs
           node --check scripts/audit-mobile-performance.mjs
+          node --check scripts/audit-production-lighthouse.mjs
 
       - name: Run release checks
         run: npm run release:check
