@@ -30,6 +30,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Vinext currently redirects local /_next/image requests to the unchanged
+  // original WebP asset on Cloudflare. Bypass that extra redirect until a
+  // real resizing backend is configured; images are already WebP originals.
+  images: { unoptimized: true },
   // Vinext's async generateMetadata streaming may put title/description/canonical
   // in a hidden body outlet. Keep article and archive SEO tags in <head> for
   // HTML-only crawlers and link previews. All site metadata is local (no API
