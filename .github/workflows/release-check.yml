@@ -30,5 +30,10 @@ jobs:
       - name: Install locked dependencies
         run: npm ci --include=dev
 
+      - name: Validate production audit scripts
+        run: |
+          node --check scripts/check-production-deployment.mjs
+          node --check scripts/audit-mobile-performance.mjs
+
       - name: Run release checks
         run: npm run release:check
