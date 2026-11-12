@@ -33,6 +33,7 @@ const ads = read("public/ads.txt");
 const contactPage = read("app/contact/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
+const globalCss = read("app/globals.css");
 const notFound = read("app/not-found.tsx");
 const staticHeaders = read("public/_headers");
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
