@@ -69,17 +69,13 @@ export default function HomePage() {
     selected.forEach((article) => alreadyShown.add(article.slug));
     return selected;
   };
-  // New editorial pillars are featured only after verified articles exist.
-  // Empty sections never generate placeholder article cards.
-  const techNews = takeDistinct(getArticlesByCategory("tech-news"), 3, false);
-  const reviews = takeDistinct(getArticlesByCategory("reviews"), 3, false);
-  const science = takeDistinct(getArticlesByCategory("science"), 3, false);
-  const entertainment = takeDistinct(getArticlesByCategory("entertainment"), 3, false);
-  const latest = takeDistinct(articles, 4);
+  // Feature existing, populated guide sections first. Do not advertise
+  // empty news, review, science or entertainment pillars as active coverage.
   const ai = takeDistinct(getArticlesByCategory("ai"), 3, false);
   const howTo = takeDistinct(getArticlesByContentType("how-to"), 3);
-  const digitalLife = takeDistinct(getArticlesByCategory("digital-life"), 3);
   const security = takeDistinct(getArticlesByCategory("security"), 3);
+  const digitalLife = takeDistinct(getArticlesByCategory("digital-life"), 3);
+  const latest = takeDistinct(articles, 4);
   const editorsPicks = takeDistinct(getEditorsPicks(), 3, false);
 
   return (
@@ -120,10 +116,10 @@ export default function HomePage() {
         </aside>
       </section>
 
-      <EditorialSection eyebrow="What's changing" title="Tech News" href="/tech-news" stories={techNews} />
-      <EditorialSection eyebrow="Evaluations and comparisons" title="Reviews" href="/reviews" stories={reviews} />
-      <EditorialSection eyebrow="Research and discovery" title="Science" href="/science" stories={science} />
-      <EditorialSection eyebrow="Streaming, gaming and screens" title="Entertainment" href="/entertainment" stories={entertainment} />
+      <EditorialSection eyebrow="Understand AI tools and choices" title="AI" href="/ai" stories={ai} />
+      <EditorialSection eyebrow="Solve everyday tech problems" title="How-To" href="/how-to" stories={howTo} />
+      <EditorialSection eyebrow="Protect your accounts" title="Security" href="/security" stories={security} />
+      <EditorialSection eyebrow="Manage your digital life" title="Digital Life" href="/digital-life" stories={digitalLife} />
 
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
         <SectionHeading eyebrow="Continue reading" title="Latest Stories" href="/latest" id="latest-title" />
@@ -157,10 +153,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <EditorialSection eyebrow="Understand" title="AI" href="/ai" stories={ai} />
-      <EditorialSection eyebrow="Fix" title="How-To" href="/how-to" stories={howTo} />
-      <EditorialSection eyebrow="Everyday technology" title="Digital Life" href="/digital-life" stories={digitalLife} />
-      <EditorialSection eyebrow="Protect what matters" title="Security" href="/security" stories={security} />
       <EditorialSection eyebrow="Selected by DECODISTA" title="Editor’s Picks" href="/latest" stories={editorsPicks} />
     </main>
   );

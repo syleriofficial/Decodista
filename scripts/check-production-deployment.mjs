@@ -32,7 +32,9 @@ function check(name, condition, details) {
   checks.push({ name, status: condition ? "passed" : "failed", details });
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
-const requiredPaths = ["/", "/latest", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
+const formerEmptySections = ["/tech-news", "/reviews", "/science", "/entertainment"];
+const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -53,6 +55,14 @@ for (const path of ["/", "/latest", "/review-methodology", articlePath]) {
   const moreRegion = moreStarts < 0 ? "" : nav.slice(moreStarts);
   check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
   check(path + " no duplicate Latest in More", !/<a\b[^>]*href="\/latest"/.test(moreRegion), "Latest must not be duplicated in More");
+  const primary = nav.split("<details", 1)[0];
+  const links = [...primary.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
+  check(path + " published categories in primary nav",
+    JSON.stringify(links) === JSON.stringify(["/ai", "/how-to", "/security", "/digital-life", "/latest"]),
+    "Show only real guide sections and Latest in the primary nav, in order");
+  check(path + " unpopulated categories not globally promoted",
+    formerEmptySections.every((section) => !nav.includes('href="' + section + '"')),
+    "Do not promote empty category landing pages");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
@@ -63,6 +73,23 @@ for (const path of ["/", "/latest", "/review-methodology", articlePath]) {
   const canonical = linkTags.find(tag => /\brel=["']canonical["']/.test(tag));
   check(path + " description in head", Boolean(description && /\bcontent=["'][^"']{30,}["']/.test(description)), "SEO description must be present in <head>");
   check(path + " canonical in head", Boolean(canonical && canonical.includes(path === "/" ? base : path)), "Canonical URL must be present in <head>");
+}
+
+for (const section of currentSections) {
+  const html = snapshots[section]?.body ?? "";
+  if (!html) continue;
+  const main = html.split('<main id="main-content"', 2)[1] ?? "";
+  check(section + " contains published articles",
+    /<a\b[^>]*href="\/articles\//.test(main) && !main.includes("Coverage in development"),
+    "Every promoted section must lead to real published stories, not an empty placeholder");
+}
+for (const section of formerEmptySections) {
+  const html = snapshots[section]?.body ?? "";
+  if (!html || !html.includes("Coverage in development")) continue;
+  const head = html.split("</head>", 1)[0];
+  check(section + " empty page has noindex",
+    /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    "Empty editorial sections should not be search-indexable");
 }
 
 const latestHtml = snapshots["/latest"]?.body ?? "";

@@ -55,7 +55,7 @@ for (const sample of [
       assert.equal(imageResponse.status(), 200, "Chosen mobile WebP must exist");
       assert((imageResponse.headers()["content-type"] ?? "").includes("image/webp"), "Chosen mobile asset must be a WebP");
     }
-    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Main navigation items");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["AI", "How-To", "Security", "Digital Life", "Latest"], "Only populated editorial sections should appear in main navigation");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
@@ -92,9 +92,13 @@ for (const sample of [
     const more = page.locator(".more-menu > summary");
     await more.click();
     assert(await page.locator(".more-menu").evaluate(element => element.open), "More menu should expand");
-    assert(await page.locator('.more-panel a[href="/ai"]').isVisible(), "Existing AI section must remain discoverable");
+    assert(await page.locator('.more-panel a[href="/weekly"]').isVisible(), "Weekly Brief must be discoverable under More");
+    assert.equal(await page.locator('.more-panel a[href="/ai"]').count(), 0, "AI must not appear in both primary and More");
     assert.equal(await page.locator('.more-panel a[href="/latest"]').count(), 0, "Latest must not appear in More");
     assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 1, "Latest must appear once in primary navigation");
+    for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
+      assert.equal(await page.locator(`header a[href="/${category}"], footer a[href="/${category}"]`).count(), 0, `Empty ${category} pillar must not be promoted in global navigation`);
+    }
     assert(await page.locator('.more-panel a[href="/review-methodology"]').isVisible(), "Review Methodology must be discoverable");
 
     await page.keyboard.press("Escape");
@@ -105,7 +109,7 @@ for (const sample of [
     assert(methodology && methodology.status() === 200, "Review Methodology must return HTTP 200");
     assert.equal(await page.locator("main h1").innerText(), "Review Methodology", "Review Methodology page heading");
     assert(await page.locator("main").innerText().then(text => text.includes("Research versus hands-on testing")), "Review policy must distinguish documentation and testing");
-    assert((await page.locator(".footer-note").innerText()).includes("Technology news, reviews, science"), "Footer must use current publication description");
+    assert((await page.locator(".footer-note").innerText()).includes("Independent technology explainers"), "Footer must describe the current published coverage");
 
     await page.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 45000 });
     const searchAgain = page.locator('a.reader-search-link[href="/search"]');
@@ -113,6 +117,12 @@ for (const sample of [
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
     if (sample.name === "desktop-light") {
+      for (const category of ["ai", "how-to", "security", "digital-life"]) {
+        const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(sectionResponse?.status(), 200, `Primary category ${category} should load`);
+        assert((await page.locator('main a[href^="/articles/"]').count()) > 0, `Primary category ${category} should link to published stories`);
+        assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
+      }
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
       const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
