@@ -66,6 +66,8 @@ assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category 
 assert(paginationHelper.includes("Number.isSafeInteger"), "Pagination must reject unsafe values");
 assert(paginationHelper.includes("/^[1-9]\\d*$/"), "Pagination must only accept positive integer page numbers");
 assert(latestArchive.includes("parsePageNumber(pageParam)"), "Latest must validate page numbers");
+assert(latestArchive.includes('id="latest-articles-heading"'), "Latest archive must provide an h2 parent for article h3 headings");
+assert(nextConfig.includes("htmlLimitedBots: /.*/"), "Async archive/article metadata must render in head for all crawlers");
 assert(science.includes("parsePageNumber(pageParam)"), "Category pagination must validate page numbers");
 assert(science.includes("featured && page === 1"), "Category featured article must not repeat on paginated pages");
 assert(!/"\/science"/.test(sitemap), "Empty Science route must not be hard-coded into the sitemap");
