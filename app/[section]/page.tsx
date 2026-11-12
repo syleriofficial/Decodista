@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
@@ -74,7 +74,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
         <p>{category.description}</p>
       </header>
       {featured && page === 1 ? <section className="category-lead wrap" aria-labelledby="category-lead-title">
-        <Link className="category-lead-image" href={`/articles/${featured.slug}`}><Image src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" /></Link>
+        <Link className="category-lead-image" href={`/articles/${featured.slug}`}><ResponsiveImage src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" /></Link>
         <div><span className="content-type-label">{CONTENT_TYPE_MAP[featured.contentType].name}</span><h2 id="category-lead-title"><Link href={`/articles/${featured.slug}`}>{featured.title}</Link></h2><p>{featured.standfirst}</p><Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the story <ArrowRight aria-hidden="true" /></Link></div>
       </section> : !featured ? <section className="section-principle wrap" aria-labelledby="section-coverage-title"><span className="eyebrow">Editorial scope</span><h2 id="section-coverage-title">Coverage in development</h2><p>Our {category.name.toLowerCase()} section will publish original, verified stories as they are ready. We do not fill sections with placeholder articles.</p><p><Link className="read-link" href="/latest">Explore published stories <ArrowRight aria-hidden="true" /></Link></p></section> : null}
       {listing.length > 0 && <section className="section-block wrap" aria-labelledby="category-latest-title">
