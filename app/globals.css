@@ -71,6 +71,16 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .more-panel a:hover { color: var(--signal); }
 .mobile-theme-toggle { display: none; }
 
+/* Skip offscreen homepage section layout/paint without hiding content from
+   search, find-in-page or assistive technology. The last rendered block-size
+   is remembered for scroll stability when a section leaves the viewport. */
+@supports (content-visibility: auto) {
+  main > .home-topic, main > .reader-paths, main > .latest-home {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 650px;
+  }
+}
+
 .hero { display: grid; grid-template-columns: minmax(0, 2.15fr) minmax(300px, .85fr); gap: clamp(2rem, 5vw, 5rem); padding-block: clamp(2rem, 5vw, 4.75rem); }
 .lead-story { min-width: 0; }
 .lead-image { display: block; position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1529; }
