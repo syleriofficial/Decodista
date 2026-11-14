@@ -55,7 +55,7 @@ for (const sample of [
       assert.equal(imageResponse.status(), 200, "Chosen mobile WebP must exist");
       assert((imageResponse.headers()["content-type"] ?? "").includes("image/webp"), "Chosen mobile asset must be a WebP");
     }
-    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["AI", "How-To", "Security", "Digital Life", "Latest"], "Only populated editorial sections should appear in main navigation");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Primary menu must use the approved five editorial sections");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
@@ -93,17 +93,29 @@ for (const sample of [
     await more.click();
     assert(await page.locator(".more-menu").evaluate(element => element.open), "More menu should expand");
     assert(await page.locator('.more-panel a[href="/weekly"]').isVisible(), "Weekly Brief must be discoverable under More");
-    assert.equal(await page.locator('.more-panel a[href="/ai"]').count(), 0, "AI must not appear in both primary and More");
+    for (const category of ["ai", "how-to", "security", "digital-life"]) {
+      assert.equal(await page.locator(`.more-panel a[href="/${category}"]`).count(), 1, `Published ${category} archive must be reachable via More`);
+    }
     assert.equal(await page.locator('.more-panel a[href="/latest"]').count(), 0, "Latest must not appear in More");
     assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 1, "Latest must appear once in primary navigation");
     for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
-      assert.equal(await page.locator(`header a[href="/${category}"], footer a[href="/${category}"]`).count(), 0, `Empty ${category} pillar must not be promoted in global navigation`);
+      assert.equal(await page.locator(`header .nav-scroll > a[href="/${category}"]`).count(), 1, `Primary navigation must include ${category}`);
+      assert.equal(await page.locator(`footer a[href="/${category}"]`).count(), 1, `Footer navigation must include ${category}`);
     }
     assert(await page.locator('.more-panel a[href="/review-methodology"]').isVisible(), "Review Methodology must be discoverable");
 
     await page.keyboard.press("Escape");
     assert(!await page.locator(".more-menu").evaluate(element => element.open), "Escape must close More");
     assert(await more.evaluate(element => document.activeElement === element), "Escape restores focus to More");
+
+    const articleDiscoveryResponse = await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full", { waitUntil: "domcontentloaded", timeout: 45000 });
+    assert.equal(articleDiscoveryResponse?.status(), 200, "Existing article must remain reachable");
+    const discovery = page.locator("nav.article-discovery");
+    assert.equal(await discovery.count(), 1, "Article must have one contextual discovery section");
+    assert((await discovery.locator('a[href^="/articles/"]').count()) > 0, "Discovery should link a real related article");
+    assert((await discovery.locator('a[href^="/topics/"]').count()) > 0, "Discovery should link a populated topic hub");
+    const articleDocumentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    assert(articleDocumentWidth <= sample.width + 1, "Article discovery must not cause mobile overflow");
 
     const aboutResponse = await page.goto(base + "/about", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert.equal(aboutResponse?.status(), 200, "About must load");
@@ -164,6 +176,12 @@ for (const sample of [
           assert((await image.getAttribute("srcset"))?.includes("/images/responsive/"), "How-To lead should serve generated responsive WebP variants");
         }
       }
+      const emptyScience = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(emptyScience?.status(), 200, "Science category should remain reachable as planned coverage");
+      assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
+        "A category without published stories must remain noindex despite appearing in navigation");
+      assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
+        "Do not manufacture science articles to populate an editorial section");
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
       const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
