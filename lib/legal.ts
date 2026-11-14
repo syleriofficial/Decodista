@@ -15,19 +15,18 @@ export const infoPages: Record<string, InfoPage> = {
   about: {
     title: "About DECODISTA",
     eyebrow: "Technology, Decoded.",
-    description: "DECODISTA explains technology news, product choices, emerging science and digital entertainment alongside practical AI, security and how-to guidance.",
+    description: "DECODISTA publishes sourced explainers and practical guides about AI, online security, privacy, backups and everyday technology.",
     sections: [
       {
         title: "What we do",
         paragraphs: [
-          "DECODISTA publishes source-led explainers and practical guides for the technology people use every day. Our editorial scope also covers technology news, product evaluations, emerging science, streaming and gaming. We focus on what a change or choice means for the reader.",
+          "DECODISTA publishes source-led explainers and practical guides about the technology people use every day. Our current published coverage focuses on AI tools, account security, privacy, backups and everyday digital choices. We explain what a change or choice means for the reader.",
         ],
         bullets: [
           "Understand artificial intelligence and emerging technology",
           "Fix account, privacy, backup and device problems",
           "Make informed choices without manufactured urgency",
           "Read globally accessible English with necessary terms explained",
-          "Follow technology, science and digital entertainment as dedicated coverage develops",
         ],
       },
       {
