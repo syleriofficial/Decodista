@@ -8,7 +8,7 @@ import path from "node:path";
 // It is not the 28-day CrUX p75 LCP, INP or CLS from real visitors.
 const base = new URL(process.env.DECODISTA_PRODUCTION_URL ?? "https://decodista.com/");
 const paths = (process.env.LIGHTHOUSE_PATHS ??
-  "/,/latest,/articles/gmail-not-receiving-emails-google-storage-full")
+  "/,/how-to,/latest,/articles/gmail-not-receiving-emails-google-storage-full")
   .split(",").map(value => value.trim()).filter(Boolean);
 const outDir = process.env.LIGHTHOUSE_OUTPUT_DIR ?? "artifacts/production-lighthouse";
 const timeoutMs = 150_000;
