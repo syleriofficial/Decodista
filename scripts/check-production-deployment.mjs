@@ -103,11 +103,18 @@ if (articleHtml) {
   check("Article has contextual discovery",
     Boolean(discovery && discovery.includes('href="/articles/') && discovery.includes('href="/topics/')),
     "Readers should be able to follow genuine related guides and populated topic hubs");
-  const articleLinks = [...discovery.matchAll(/href="(\/articles\/[^"]+)"/g)].map((match) => match[1]);
-  const publishedArticleLinks = new Set([...articleHtml.matchAll(/href="(\/articles\/[^"]+)"/g)].map((match) => match[1]));
-  check("Article discovery links are renderable",
-    articleLinks.length > 0 && articleLinks.every((link) => publishedArticleLinks.has(link)),
-    "Article discovery must use linked published article URLs");
+  const discoveryLinks = [...new Set([...discovery.matchAll(/href="(\/(?:articles|topics)\/[^"]+)"/g)].map((match) => match[1]))];
+  check("Article discovery has distinct destinations",
+    discoveryLinks.length >= 2,
+    "Continue exploring should offer a relevant guide and populated topic hub");
+  for (const link of discoveryLinks) {
+    try {
+      const destination = await inspect(link);
+      check("Discovery destination " + link, destination.status === 200, "HTTP " + destination.status);
+    } catch (error) {
+      check("Discovery destination " + link, false, String(error));
+    }
+  }
 }
 const howToHtml = snapshots["/how-to"]?.body ?? "";
 if (howToHtml) {
