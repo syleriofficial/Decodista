@@ -38,6 +38,7 @@ assert(searchPage.includes("normalizeSearchQuery(Array.isArray(q) ? q[0] : q)"),
 assert(searchPage.includes("index: false"), "Internal search results must remain noindex");
 assert(searchClient.includes("searchPublishedRecords(records, query)"), "Reader search must rank published records by separate keywords");
 assert(searchClient.includes("Clear search") && searchClient.includes("maxLength={SEARCH_QUERY_LIMIT}"), "Search must have a clear action and bounded user input");
+assert(searchClient.includes('action="/search" method="get"') && searchClient.includes('name="q"'), "Search must remain functional before React hydration or when JavaScript is disabled");
 assert(searchLogic.includes("terms.every") && searchLogic.includes("a.index - b.index"), "Search relevance must be all-keywords and stable");
 
 const howToPage = read("app/how-to/page.tsx");
