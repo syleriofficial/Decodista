@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ArticleBody, RichTextContent } from "@/components/article-body";
 import { ArticleCard } from "@/components/article-card";
-import { articles, formatDate, getArticle, getRelatedArticles } from "@/lib/content";
+import { articles, formatDate, getArticle, getArticleTopicHubs, getRelatedArticles } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -65,6 +65,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const heroCaptionSeparator = /[.!?…]$/.test(article.featuredImageAlt) ? " " : ". ";
   const hasMeaningfulUpdate = article.updatedDate && article.updatedDate !== article.publishedDate;
   const related = getRelatedArticles(article);
+  const topicHubs = getArticleTopicHubs(article);
   const index = articles.findIndex((item) => item.slug === article.slug);
   const newer = index > 0 ? articles[index - 1] : undefined;
   const older = index < articles.length - 1 ? articles[index + 1] : undefined;
@@ -168,6 +169,31 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </aside>
             {introBlocks.length > 0 && <ArticleBody blocks={introBlocks} className="article-prose--intro" />}
             {takeawayBlocks.length > 0 && <ArticleBody blocks={takeawayBlocks} className="article-prose--takeaways" />}
+            {(related.length > 0 || topicHubs.length > 0) && (
+              <nav className="article-discovery" aria-label="Explore related guides and topics">
+                <span className="eyebrow">Continue exploring</span>
+                <ul>
+                  {related[0] && (
+                    <li>
+                      <Link href={`/articles/${related[0].slug}`}>
+                        <strong>Related guide</strong>
+                        <span>{related[0].title}</span>
+                        <ArrowRight aria-hidden="true" />
+                      </Link>
+                    </li>
+                  )}
+                  {topicHubs.slice(0, 2).map((topic) => (
+                    <li key={topic.slug}>
+                      <Link href={`/topics/${topic.slug}`}>
+                        <strong>Explore topic · {topic.articleCount} guides</strong>
+                        <span>{topic.name}</span>
+                        <ArrowRight aria-hidden="true" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
           </div>
 
           <div className="article-main-grid">

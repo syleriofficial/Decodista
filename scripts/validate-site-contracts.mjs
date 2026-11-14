@@ -61,16 +61,16 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life", "Latest"],
-  "Primary navigation must promote only the existing guide categories and Latest",
+  ["Tech News", "Reviews", "Science", "Entertainment", "Latest"],
+  "Primary navigation must follow the selected editorial menu order",
 );
 
 const moreNavigation = site.match(/export const MORE_NAV_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(moreNavigation, "More navigation definition is missing");
 assert.deepEqual(
   [...moreNavigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Weekly Brief"],
-  "More should link to the Weekly Brief without duplicating primary navigation",
+  ["AI", "How-To", "Security", "Digital Life", "Weekly Brief"],
+  "More must retain published guide archives and Weekly Brief without duplicating primary navigation",
 );
 assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
 assert(footer.includes("MORE_NAV_ITEMS.map"), "Footer must retain links to existing sections");
@@ -84,10 +84,17 @@ assert(homepage.includes('getArticlesByContentType("how-to")'), "Homepage must p
 assert(howToPage.includes('import { ResponsiveImage } from "@/components/responsive-image"'), "How-To lead must use the shared responsive WebP implementation");
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
-assert(articles.some((article) => article.contentType === "how-to"), "How-To primary navigation cannot lead to an empty archive");
+assert(articles.some((article) => article.contentType === "how-to"), "The More menu must keep a real How-To archive");
 for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
-  assert(!navigation.includes(`href: "/${category}"`), `Do not send users to a potentially empty ${category} archive through primary navigation`);
+  assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
+for (const category of ["ai", "how-to", "security", "digital-life"]) {
+  assert(moreNavigation.includes(`href: "/${category}"`), `More menu is missing populated ${category} archives`);
+}
+const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
+const moreHrefs = [...moreNavigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
+assert.equal(new Set([...primaryHrefs, ...moreHrefs]).size, primaryHrefs.length + moreHrefs.length,
+  "Primary and More navigation must not duplicate destinations");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
@@ -128,6 +135,12 @@ assert(homepage.includes("getArticlesByTopic(slug).length >= TOPIC_MAP[slug].min
 assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"), "Topic hubs must have non-duplicated starting points");
 assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
 assert(contentHelpers.includes(".filter(({ score }) => score > 0)"), "Related articles must have a positive relevance score");
+assert(contentHelpers.includes("contextScore = sharedTags * 6 + sharedHubs * 3"),
+  "Related guides must prefer a genuinely shared subject before generic category similarity");
+assert(contentHelpers.includes("getArticleTopicHubs") && contentHelpers.includes("articleCount >= topic.minimumArticles"),
+  "Article discovery must link only to populated topic hubs");
+assert(articlePage.includes('className="article-discovery"') && articlePage.includes("topicHubs.slice(0, 2)"),
+  "Article readers must find contextual guides and populated topic hubs before finishing the story");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
 assert(!homepage.includes('className="weekly-feature'), "Weekly Brief should remain in More and its archive, not dominate the homepage");
 assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");

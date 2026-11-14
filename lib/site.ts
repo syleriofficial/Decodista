@@ -207,18 +207,22 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
   (topic) => topic.showInNavigation,
 );
 
-// Prioritize sections with published, useful articles. Empty editorial pillars
-// retain their existing category routes (noindex and excluded from sitemap)
-// but are not promoted in navigation until they contain real stories.
+// Primary editorial navigation follows the chosen newsroom hierarchy.
+// Sections awaiting real coverage remain visible but noindex and out of the sitemap;
+// never substitute placeholder or invented articles.
 export const NAV_ITEMS = [
-  { href: "/ai", label: "AI" },
-  { href: "/how-to", label: "How-To" },
-  { href: "/security", label: "Security" },
-  { href: "/digital-life", label: "Digital Life" },
+  { href: "/tech-news", label: "Tech News" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/science", label: "Science" },
+  { href: "/entertainment", label: "Entertainment" },
   { href: "/latest", label: "Latest" },
 ] as const;
 
 export const MORE_NAV_ITEMS = [
+  { href: "/ai", label: "AI" },
+  { href: "/how-to", label: "How-To" },
+  { href: "/security", label: "Security" },
+  { href: "/digital-life", label: "Digital Life" },
   { href: "/weekly", label: "Weekly Brief" },
 ] as const;
 

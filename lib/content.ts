@@ -1,5 +1,5 @@
 import type { CategorySlug, ContentTypeSlug, TopicSlug } from "@/lib/site";
-import { TOPIC_MAP } from "@/lib/site";
+import { TOPIC_HUBS, TOPIC_MAP } from "@/lib/site";
 import { cmsArticles } from "virtual:decodista-articles";
 
 export type InlineContent =
@@ -76,6 +76,25 @@ export const getArticlesByTopic = (topic: TopicSlug) => {
   );
 };
 
+// Link only to published topic hubs with enough genuine articles to render.
+// The count reflects available guides, not projected coverage.
+export const getArticleTopicHubs = (article: Article, limit = 3) => {
+  const articleTags = new Set(article.tags.map((tag) => tag.toLowerCase()));
+  return TOPIC_HUBS.map((topic) => {
+    const matchCount = topic.tags.filter((tag) => articleTags.has(tag.toLowerCase())).length;
+    const articleCount = getArticlesByTopic(topic.slug).length;
+    return { topic, matchCount, articleCount };
+  })
+    .filter(({ topic, matchCount, articleCount }) =>
+      matchCount > 0 && articleCount >= topic.minimumArticles)
+    .sort((a, b) =>
+      b.matchCount - a.matchCount ||
+      b.articleCount - a.articleCount ||
+      a.topic.name.localeCompare(b.topic.name))
+    .slice(0, Math.max(0, limit))
+    .map(({ topic, articleCount }) => ({ slug: topic.slug, name: topic.name, articleCount }));
+};
+
 export const getEditorsPicks = () =>
   articles.filter((article) => article.editorsPick);
 
@@ -86,18 +105,26 @@ export const getRelatedArticles = (article: Article, limit = 3) => {
     .filter((candidate): candidate is Article => Boolean(candidate));
   const excluded = new Set([article.slug, ...manual.map((candidate) => candidate.slug)]);
   const sourceTags = new Set(article.tags.map((tag) => tag.toLowerCase()));
+  const sourceHubs = new Set(getArticleTopicHubs(article, TOPIC_HUBS.length).map(({ slug }) => slug));
   const automaticallyRelated = articles
     .filter((candidate) => !excluded.has(candidate.slug))
     .map((candidate) => {
-      const sharedTopics = candidate.tags.filter((tag) => sourceTags.has(tag.toLowerCase())).length;
+      const sharedTags = candidate.tags.filter((tag) => sourceTags.has(tag.toLowerCase())).length;
+      const sharedHubs = getArticleTopicHubs(candidate, TOPIC_HUBS.length)
+        .filter(({ slug }) => sourceHubs.has(slug)).length;
+      // Reward subject overlap before broad category/content-type similarity.
+      const contextScore = sharedTags * 6 + sharedHubs * 3;
       const score =
-        sharedTopics * 3 +
+        contextScore +
         (candidate.category === article.category ? 2 : 0) +
         (candidate.contentType === article.contentType ? 1 : 0);
-      return { candidate, score };
+      return { candidate, contextScore, score };
     })
     .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || publicationOrder(a.candidate, b.candidate))
+    .sort((a, b) =>
+      Number(b.contextScore > 0) - Number(a.contextScore > 0) ||
+      b.score - a.score ||
+      publicationOrder(a.candidate, b.candidate))
     .map(({ candidate }) => candidate);
 
   return [...manual, ...automaticallyRelated].slice(0, limit);
