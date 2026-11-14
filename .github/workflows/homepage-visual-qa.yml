@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'app/page.tsx'
+      - 'app/search/page.tsx'
+      - 'components/search-client.tsx'
+      - 'lib/search.mjs'
+      - 'scripts/test-search.mjs'
       - 'app/how-to/page.tsx'
       - 'lib/legal.ts'
       - 'lib/site.ts'

@@ -34,7 +34,7 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const formerEmptySections = ["/tech-news", "/reviews", "/science", "/entertainment"];
-const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -45,7 +45,7 @@ for (const path of requiredPaths) {
   }
 }
 
-for (const path of ["/", "/how-to", "/latest", "/about", "/review-methodology", articlePath]) {
+for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-methodology", articlePath]) {
   const html = snapshots[path]?.body ?? "";
   if (!html) continue;
   // Limit the check to the header's nav: the footer may contain repeated links.
@@ -103,6 +103,17 @@ if (aboutHtml) {
   check("About reflects published topics", aboutHtml.includes("Our current published coverage focuses on AI tools") && !aboutHtml.includes("Follow technology, science and digital entertainment"), "Editorial scope must not imply unlaunched sections are already covered");
 }
 
+const searchHtml = snapshots["/search"]?.body ?? "";
+if (searchHtml) {
+  const head = searchHtml.split("</head>", 1)[0];
+  check("Search page is noindex", /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head), "Search queries must not become thin indexable pages");
+  check("Search provides labeled input", searchHtml.includes('id="article-search"') && searchHtml.includes('type="search"'), "Readers should have an accessible search field");
+}
+const deepSearch = snapshots["/search?q=Google%20Photos&q=ignored"];
+if (deepSearch) {
+  const head = deepSearch.body.split("</head>", 1)[0];
+  check("Repeated search parameters are safe", deepSearch.status === 200 && /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head), "Deep-linked search must stay accessible and noindex without 500 errors");
+}
 const latestHtml = snapshots["/latest"]?.body ?? "";
 if (latestHtml) {
   const imageTags = latestHtml.split("<img ").slice(1).map(fragment => fragment.split(">", 1)[0]);

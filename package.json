@@ -22,8 +22,9 @@
     "rss:test": "node --test scripts/test-rss.mjs",
     "security:audit": "npm audit --omit=dev --audit-level=high",
     "security:audit:all": "npm audit",
-    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run images:test && npm run contact:leak-check",
-    "images:test": "node scripts/test-responsive-images.mjs"
+    "release:check": "npm run security:audit && npm run content:validate && npm run cms:test && npm run contact:test && npm run site:contracts && npm run search:test && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run images:test && npm run contact:leak-check",
+    "images:test": "node scripts/test-responsive-images.mjs",
+    "search:test": "node --test scripts/test-search.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
