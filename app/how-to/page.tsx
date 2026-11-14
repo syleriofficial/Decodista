@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
@@ -38,7 +38,7 @@ export default function HowToPage() {
       </header>
       {featured && <section className="category-lead wrap" aria-labelledby="how-to-lead-title">
         <Link className="category-lead-image" href={`/articles/${featured.slug}`}>
-          <Image src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" />
+          <ResponsiveImage src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" />
         </Link>
         <div>
           <Link className="category-label" href={`/${featured.category}`}>{CATEGORY_MAP[featured.category].name}</Link>

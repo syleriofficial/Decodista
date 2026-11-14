@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'app/page.tsx'
+      - 'app/how-to/page.tsx'
+      - 'lib/legal.ts'
       - 'lib/site.ts'
       - 'components/site-header.tsx'
       - 'components/site-footer.tsx'

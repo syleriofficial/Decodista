@@ -34,7 +34,7 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const formerEmptySections = ["/tech-news", "/reviews", "/science", "/entertainment"];
-const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -45,7 +45,7 @@ for (const path of requiredPaths) {
   }
 }
 
-for (const path of ["/", "/latest", "/review-methodology", articlePath]) {
+for (const path of ["/", "/how-to", "/latest", "/about", "/review-methodology", articlePath]) {
   const html = snapshots[path]?.body ?? "";
   if (!html) continue;
   // Limit the check to the header's nav: the footer may contain repeated links.
@@ -90,6 +90,17 @@ for (const section of formerEmptySections) {
   check(section + " empty page has noindex",
     /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Empty editorial sections should not be search-indexable");
+}
+
+const howToHtml = snapshots["/how-to"]?.body ?? "";
+if (howToHtml) {
+  const leadIndex = howToHtml.indexOf('class="category-lead-image"');
+  const leadMarkup = leadIndex < 0 ? "" : howToHtml.slice(leadIndex, leadIndex + 1500);
+  check("How-To lead uses responsive WebP", leadMarkup.includes("/images/responsive/") && !leadMarkup.includes("/_next/image"), "Promoted guide Hero must have direct responsive variants instead of optimizer redirects");
+}
+const aboutHtml = snapshots["/about"]?.body ?? "";
+if (aboutHtml) {
+  check("About reflects published topics", aboutHtml.includes("Our current published coverage focuses on AI tools") && !aboutHtml.includes("Follow technology, science and digital entertainment"), "Editorial scope must not imply unlaunched sections are already covered");
 }
 
 const latestHtml = snapshots["/latest"]?.body ?? "";
