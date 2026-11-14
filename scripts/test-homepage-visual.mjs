@@ -120,6 +120,34 @@ for (const sample of [
     await searchAgain.click();
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
+    // Search should find separated keywords, retain shareable URLs, and
+    // recover from no-result queries without a page reload.
+    if (sample.name === "desktop-light" || sample.name === "mobile-light") {
+      const searchInput = page.locator("#article-search");
+      const initialResultCount = await page.locator(".search-results article").count();
+      assert(initialResultCount > 0, "Search should initially list published guides");
+
+      await searchInput.fill("Google    Photos");
+      assert((await page.locator(".search-results article").count()) > 0, "Separate Google Photos keywords should match published guides");
+      await page.locator(".search-form button[type=submit]").click();
+      assert.equal(await searchInput.inputValue(), "Google Photos", "Submitted search should normalize extra spaces");
+      assert(new URL(page.url()).searchParams.get("q") === "Google Photos", "Search URL should be shareable");
+
+      await searchInput.fill("termthatcannotmatchanypublishedstoryxyz");
+      assert.equal(await page.locator(".search-results article").count(), 0, "Unmatched search should show zero cards");
+      assert(await page.locator(".empty-state").isVisible(), "No-results state should explain the empty result");
+      await page.locator("button.search-clear").click();
+      assert.equal(await searchInput.inputValue(), "", "Clear action must reset the input");
+      assert.equal(new URL(page.url()).pathname, "/search", "Clear should reset the URL");
+      assert.equal(new URL(page.url()).search, "", "Clear should remove the query parameter");
+      assert.equal(await page.locator(".search-results article").count(), initialResultCount, "Clearing search should restore all published articles");
+
+      const deepLink = await page.goto(base + "/search?q=Google%20Photos&q=ignored", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(deepLink?.status(), 200, "Repeated q parameters must not crash search");
+      assert.equal(await page.locator("#article-search").inputValue(), "Google Photos", "Deep-linked search should read the first q parameter");
+      assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"), "Search results must be noindex");
+      assert((await page.locator(".search-results article").count()) > 0, "Deep-linked search should render relevant published articles");
+    }
     if (sample.name === "desktop-light") {
       for (const category of ["ai", "how-to", "security", "digital-life"]) {
         const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
