@@ -555,3 +555,46 @@ html[data-theme="dark"] .theme-sun { display: block; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+
+/* Content discovery: genuine related stories and populated topic hubs only. */
+.article-discovery {
+  margin-block: clamp(1.8rem, 4vw, 3rem);
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+.article-discovery > .eyebrow { display: block; margin-bottom: .85rem; }
+.article-discovery ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: .75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.article-discovery a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .45rem .7rem;
+  align-content: start;
+  min-height: 118px;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+.article-discovery a:hover, .article-discovery a:focus-visible { border-color: var(--signal); }
+.article-discovery a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.article-discovery strong {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.article-discovery a span {
+  font: 500 1.12rem/1.27 Georgia, 'Times New Roman', serif;
+  letter-spacing: -.02em;
+}
+.article-discovery svg { width: 18px; height: 18px; color: var(--signal); }
