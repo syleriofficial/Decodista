@@ -33,8 +33,10 @@ function check(name, condition, details) {
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
-const formerEmptySections = ["/tech-news", "/reviews", "/science", "/entertainment"];
-const requiredPaths = ["/", ...currentSections, ...formerEmptySections, "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const editorialSections = ["/tech-news", "/reviews", "/science", "/entertainment"];
+const primaryNavigation = [...editorialSections, "/latest"];
+const moreNavigation = [...currentSections, "/weekly"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -57,12 +59,15 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   check(path + " no duplicate Latest in More", !/<a\b[^>]*href="\/latest"/.test(moreRegion), "Latest must not be duplicated in More");
   const primary = nav.split("<details", 1)[0];
   const links = [...primary.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " published categories in primary nav",
-    JSON.stringify(links) === JSON.stringify(["/ai", "/how-to", "/security", "/digital-life", "/latest"]),
-    "Show only real guide sections and Latest in the primary nav, in order");
-  check(path + " unpopulated categories not globally promoted",
-    formerEmptySections.every((section) => !nav.includes('href="' + section + '"')),
-    "Do not promote empty category landing pages");
+  check(path + " editorial primary nav order",
+    JSON.stringify(links) === JSON.stringify(primaryNavigation),
+    "Primary navigation must be Tech News, Reviews, Science, Entertainment, Latest");
+  check(path + " More retains published guides",
+    moreNavigation.every((section) => moreRegion.includes('href="' + section + '"')),
+    "Published AI, How-To, Security, Digital Life and Weekly Brief must remain accessible under More");
+  check(path + " More has no duplicate primary sections",
+    primaryNavigation.every((section) => !moreRegion.includes('href="' + section + '"')),
+    "Each editorial navigation destination must appear in the intended menu only");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
@@ -83,7 +88,7 @@ for (const section of currentSections) {
     /<a\b[^>]*href="\/articles\//.test(main) && !main.includes("Coverage in development"),
     "Every promoted section must lead to real published stories, not an empty placeholder");
 }
-for (const section of formerEmptySections) {
+for (const section of editorialSections) {
   const html = snapshots[section]?.body ?? "";
   if (!html || !html.includes("Coverage in development")) continue;
   const head = html.split("</head>", 1)[0];
@@ -92,6 +97,25 @@ for (const section of formerEmptySections) {
     "Empty editorial sections should not be search-indexable");
 }
 
+const articleHtml = snapshots[articlePath]?.body ?? "";
+if (articleHtml) {
+  const discovery = articleHtml.match(/<nav\b[^>]*class="article-discovery"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
+  check("Article has contextual discovery",
+    Boolean(discovery && discovery.includes('href="/articles/') && discovery.includes('href="/topics/')),
+    "Readers should be able to follow genuine related guides and populated topic hubs");
+  const discoveryLinks = [...new Set([...discovery.matchAll(/href="(\/(?:articles|topics)\/[^"]+)"/g)].map((match) => match[1]))];
+  check("Article discovery has distinct destinations",
+    discoveryLinks.length >= 2,
+    "Continue exploring should offer a relevant guide and populated topic hub");
+  for (const link of discoveryLinks) {
+    try {
+      const destination = await inspect(link);
+      check("Discovery destination " + link, destination.status === 200, "HTTP " + destination.status);
+    } catch (error) {
+      check("Discovery destination " + link, false, String(error));
+    }
+  }
+}
 const howToHtml = snapshots["/how-to"]?.body ?? "";
 if (howToHtml) {
   const leadIndex = howToHtml.indexOf('class="category-lead-image"');
@@ -149,7 +173,7 @@ const report = {
   checkedAt: new Date().toISOString(),
   target: base,
   kind: "public-production-http-check",
-  note: "Validates public behavior and PR #41 responsive image marker, not the exact Cloudflare deployment SHA or Google indexing.",
+  note: "Validates live public HTTP and discovery contracts. Cloudflare deployment SHA is checked separately by the workflow; Google indexing is outside this check.",
   checks,
   pages: Object.fromEntries(Object.entries(snapshots).map(([path, value]) => [path, {
     url: value.url, status: value.status, headers: value.headers, bytes: Buffer.byteLength(value.body, "utf8"),
