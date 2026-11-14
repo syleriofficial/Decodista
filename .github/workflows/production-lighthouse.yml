@@ -39,7 +39,7 @@ jobs:
         run: npm install --global lighthouse@13.6.0
       - name: Audit publicly deployed pages using simulated mobile throttling
         env:
-          LIGHTHOUSE_PATHS: ${{ github.event_name == 'pull_request' && '/' || '/,/latest,/articles/gmail-not-receiving-emails-google-storage-full' }}
+          LIGHTHOUSE_PATHS: ${{ github.event_name == 'pull_request' && '/' || '/,/how-to,/latest,/articles/gmail-not-receiving-emails-google-storage-full' }}
           LIGHTHOUSE_OUTPUT_DIR: artifacts/production-lighthouse
         run: node scripts/audit-production-lighthouse.mjs
       - name: Upload raw Lighthouse JSON and concise summary
