@@ -31,6 +31,7 @@ const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
 const ads = read("public/ads.txt");
 const contactPage = read("app/contact/page.tsx");
+const howToPage = read("app/how-to/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
 const imageComponent = read("components/responsive-image.tsx");
@@ -70,6 +71,9 @@ for (const category of ["ai", "security", "digital-life"]) {
   assert(articles.some((article) => article.category === category), `Promoted category ${category} cannot be empty`);
 }
 assert(homepage.includes('getArticlesByContentType("how-to")'), "Homepage must promote real How-To guides");
+assert(howToPage.includes('import { ResponsiveImage } from "@/components/responsive-image"'), "How-To lead must use the shared responsive WebP implementation");
+assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
+assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
 assert(articles.some((article) => article.contentType === "how-to"), "How-To primary navigation cannot lead to an empty archive");
 for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
   assert(!navigation.includes(`href: "/${category}"`), `Do not send users to a potentially empty ${category} archive through primary navigation`);
@@ -97,6 +101,9 @@ assert(!/ads\.txt/.test(robots), "robots.txt must not block ads.txt");
 
 assert(/href: "\/contact\?type=correction", label: "Submit a correction"/.test(legal), "Corrections policy must preselect the correction form");
 assert(!/mailto:/i.test(legal), "Trust pages must not publish an unverified email route");
+const aboutContent = legal.split('  about: {', 2)[1]?.split('  "review-methodology": {', 1)[0] ?? "";
+assert(aboutContent.includes("Our current published coverage focuses on AI tools"), "About must describe the coverage readers can actually access");
+assert(!/Follow technology, science and digital entertainment/.test(aboutContent), "About must not imply unlaunched sections are active");
 assert(/ContactForm/.test(contactPage), "Contact page must expose the protected production form");
 assert(/TURNSTILE_SITE_KEY/.test(contactPage), "Contact page must configure Cloudflare Turnstile");
 assert(/private delivery address is never shown/i.test(contactPage), "Contact page must keep the recipient private");
