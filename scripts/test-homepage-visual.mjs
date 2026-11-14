@@ -105,6 +105,10 @@ for (const sample of [
     assert(!await page.locator(".more-menu").evaluate(element => element.open), "Escape must close More");
     assert(await more.evaluate(element => document.activeElement === element), "Escape restores focus to More");
 
+    const aboutResponse = await page.goto(base + "/about", { waitUntil: "domcontentloaded", timeout: 45000 });
+    assert.equal(aboutResponse?.status(), 200, "About must load");
+    assert((await page.locator("main").innerText()).includes("Our current published coverage focuses on AI tools"), "About must accurately describe currently published coverage");
+    assert(!((await page.locator("main").innerText()).includes("Follow technology, science and digital entertainment")), "About should not advertise unlaunched content");
     const methodology = await page.goto(base + "/review-methodology", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert(methodology && methodology.status() === 200, "Review Methodology must return HTTP 200");
     assert.equal(await page.locator("main h1").innerText(), "Review Methodology", "Review Methodology page heading");
@@ -122,6 +126,12 @@ for (const sample of [
         assert.equal(sectionResponse?.status(), 200, `Primary category ${category} should load`);
         assert((await page.locator('main a[href^="/articles/"]').count()) > 0, `Primary category ${category} should link to published stories`);
         assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
+        if (category === "how-to") {
+          const image = page.locator(".category-lead-image img").first();
+          assert.equal(await image.getAttribute("fetchpriority"), "high", "How-To lead must retain high fetch priority");
+          assert((await image.getAttribute("src"))?.startsWith("/images/"), "How-To lead must avoid /_next/image redirects");
+          assert((await image.getAttribute("srcset"))?.includes("/images/responsive/"), "How-To lead should serve generated responsive WebP variants");
+        }
       }
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
