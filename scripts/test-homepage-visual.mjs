@@ -120,6 +120,9 @@ for (const sample of [
     await searchAgain.click();
     await page.waitForURL(/\/search(?:\?|$)/, { timeout: 20000 });
     assert((await page.locator("h1").first().innerText()).includes("Search DECODISTA"), "Search destination must work");
+    await page.waitForLoadState("networkidle", { timeout: 30000 });
+    assert.equal(await page.locator(".search-form").getAttribute("method"), "get", "Search should support normal GET submission before JavaScript hydrates");
+    assert.equal(await page.locator("#article-search").getAttribute("name"), "q", "Search input must support no-JavaScript fallback");
     // Search should find separated keywords, retain shareable URLs, and
     // recover from no-result queries without a page reload.
     if (sample.name === "desktop-light" || sample.name === "mobile-light") {
