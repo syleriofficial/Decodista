@@ -32,10 +32,10 @@ export function SearchClient({ records, initialQuery = "" }: { records: SearchRe
 
   return (
     <>
-      <form className="search-form" role="search" onSubmit={submit}>
+      <form className="search-form" role="search" action="/search" method="get" onSubmit={submit}>
         <Search aria-hidden="true" />
         <label className="sr-only" htmlFor="article-search">Search all articles</label>
-        <input id="article-search" type="search" value={query} maxLength={SEARCH_QUERY_LIMIT} onChange={(event) => setQuery(event.target.value)} placeholder="Search topics, guides, and articles" autoComplete="off" />
+        <input id="article-search" name="q" type="search" value={query} maxLength={SEARCH_QUERY_LIMIT} onChange={(event) => setQuery(event.target.value)} placeholder="Search topics, guides, and articles" autoComplete="off" />
         <button type="submit">Search</button>
       </form>
       <div className="search-summary">
