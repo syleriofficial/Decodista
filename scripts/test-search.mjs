@@ -44,7 +44,7 @@ test("blank search preserves the original publication order", () => {
 
 test("all keywords can match across separate fields and punctuation", () => {
   assert.deepEqual(searchPublishedRecords(records, "Google   backup").map(x => x.slug), ["google-photos"]);
-  assert.deepEqual(searchPublishedRecords(records, "google-photos").map(x => x.slug), ["google-photos"]);
+  assert.deepEqual(searchPublishedRecords(records, "google-photos").map(x => x.slug), ["google-photos", "photo-import"]); // Both words may match in different fields.
   assert.deepEqual(searchPublishedRecords(records, "google PHOTOS backup").map(x => x.slug), ["google-photos"]);
   assert.deepEqual(searchPublishedRecords(records, "photos passkeys").map(x => x.slug), []);
 });
