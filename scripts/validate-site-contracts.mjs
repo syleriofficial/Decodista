@@ -25,6 +25,7 @@ const topicPage = read("app/topics/[topic]/page.tsx");
 const articlePage = read("app/articles/[slug]/page.tsx");
 const contentHelpers = read("lib/content.ts");
 const science = read("app/[section]/page.tsx");
+const css = read("app/globals.css");
 const latestArchive = read("app/latest/page.tsx");
 const paginationHelper = read("lib/pagination.ts");
 const sitemap = read("app/sitemap.ts");
@@ -40,6 +41,10 @@ assert(searchClient.includes("searchPublishedRecords(records, query)"), "Reader 
 assert(searchClient.includes("Clear search") && searchClient.includes("maxLength={SEARCH_QUERY_LIMIT}"), "Search must have a clear action and bounded user input");
 assert(searchClient.includes('action="/search" method="get"') && searchClient.includes('name="q"'), "Search must remain functional before React hydration or when JavaScript is disabled");
 assert(searchLogic.includes("terms.every") && searchLogic.includes("a.index - b.index"), "Search relevance must be all-keywords and stable");
+assert(searchClient.includes("suggestedQueries.map") && searchClient.includes('aria-pressed={normalizeSearchQuery(query) === term}')
+  && searchClient.includes('onClick={() => setSearch(term)}'),
+  "Search topic suggestions must be accessible and interactive");
+assert(css.includes(".search-suggestions button[aria-pressed"), "Search topic chips need visible selection feedback");
 
 const howToPage = read("app/how-to/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
@@ -109,6 +114,9 @@ assert(!navigation.includes('href: "/entertainment"') && !navigation.includes('h
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
+assert(science.includes('className="section-explore-links"') && science.includes('getArticlesByContentType("how-to").length')
+  && science.includes('all.length === 1 ? "story" : "stories"'),
+  "Category design must report real content counts and suggest only populated archives");
 assert(paginationHelper.includes("Number.isSafeInteger"), "Pagination must reject unsafe values");
 assert(paginationHelper.includes("/^[1-9]\\d*$/"), "Pagination must only accept positive integer page numbers");
 assert(latestArchive.includes("parsePageNumber(pageParam)"), "Latest must validate page numbers");
@@ -151,6 +159,8 @@ assert(contentHelpers.includes("contextScore = sharedTags * 6 + sharedHubs * 3")
   "Related guides must prefer a genuinely shared subject before generic category similarity");
 assert(contentHelpers.includes("getArticleTopicHubs") && contentHelpers.includes("articleCount >= topic.minimumArticles"),
   "Article discovery must link only to populated topic hubs");
+assert(articlePage.indexOf('className="article-discovery"') > articlePage.indexOf('className="article-main-grid"'),
+  "Article discovery must follow the full article, not interrupt reading");
 assert(articlePage.includes('className="article-discovery"') && articlePage.includes("topicHubs.slice(0, 2)"),
   "Article readers must find contextual guides and populated topic hubs before finishing the story");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
