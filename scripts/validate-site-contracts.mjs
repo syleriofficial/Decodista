@@ -134,7 +134,8 @@ assert(!homepage.includes("<FollowDecodista />"), "Homepage should not promote a
 assert(homepage.includes("getArticlesByTopic(slug).length >= TOPIC_MAP[slug].minimumArticles"), "Reader paths must never lead to unpopulated topics");
 assert(topicPage.includes("Start here") && topicPage.includes("startHereSlugs"), "Topic hubs must have non-duplicated starting points");
 assert(articlePage.includes("related.length > 0"), "Do not render an empty related-reading section");
-assert(contentHelpers.includes(".filter(({ score }) => score > 0)"), "Related articles must have a positive relevance score");
+assert(contentHelpers.includes(".filter(({ contextScore }) => contextScore > 0)"), "Automatic related guides must share at least one topical signal; category or content type alone is insufficient");
+assert(contentHelpers.includes("return [...manual, ...automaticallyRelated].slice(0, limit)"), "Manual editorial related guides must continue to take priority over automatic suggestions");
 assert(contentHelpers.includes("contextScore = sharedTags * 6 + sharedHubs * 3"),
   "Related guides must prefer a genuinely shared subject before generic category similarity");
 assert(contentHelpers.includes("getArticleTopicHubs") && contentHelpers.includes("articleCount >= topic.minimumArticles"),
