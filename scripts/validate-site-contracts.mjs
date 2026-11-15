@@ -79,7 +79,7 @@ assert(footer.includes("FOOTER_GUIDE_ITEMS.map"), "Footer must keep real, popula
 assert(productionAudit.includes('const editorialSections = ["/tech-news", "/reviews", "/science"];') &&
   productionAudit.includes('const footerGuides = currentSections;'),
   "Live production HTTP QA must validate the selected primary pillars and published footer archives");
-assert(productionAudit.includes('"More dropdown removed"') && productionAudit.includes('"footer retains published guide archives"'),
+assert(productionAudit.includes(' More dropdown removed"') && productionAudit.includes(' footer retains published guide archives"'),
   "Live production HTTP QA must not expect the retired More dropdown");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
