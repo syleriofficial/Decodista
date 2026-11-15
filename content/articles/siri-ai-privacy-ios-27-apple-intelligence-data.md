@@ -187,6 +187,8 @@ An OpenAI no-training rule therefore does not, by itself, describe Apple’s sep
 
 This comparison follows Apple’s extension notice. Signing in does not mean training necessarily occurs; it changes which controls apply. [8]
 
+If you connect a ChatGPT account, also review [DECODISTA’s guide to ChatGPT Memory, chat history and model-training controls](/articles/chatgpt-memory-vs-chat-history-model-training). Those controls are separate from Apple’s Siri improvement setting; the guide explains their different purposes rather than treating them as one privacy switch.
+
 ## Siri AI and Google/Gemini infrastructure
 
 Three relationships need separating. Apple says its newer foundation models were developed using technology from Google’s Gemini family. It also describes extending PCC to Google Cloud infrastructure using NVIDIA GPUs. Neither statement means Siri simply submits your conversation to the consumer Gemini chatbot. [11, 12, 14]
