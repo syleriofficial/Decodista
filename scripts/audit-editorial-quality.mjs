@@ -99,9 +99,17 @@ for (const article of articles) {
   const rawUrls = [...sourceMarkdown.matchAll(/https?:\/\/[^\s<>\])]+/gi)]
     .map(match => match[0].replace(/[.,;]+$/, ""));
   const referencedUrls = new Set([...(links ?? []), ...rawUrls]);
+  const externalUrls = [...referencedUrls].filter(value => {
+    try {
+      const link = new URL(value);
+      return ["http:", "https:"].includes(link.protocol) && !["decodista.com", "www.decodista.com"].includes(link.hostname);
+    } catch {
+      return false;
+    }
+  });
   if (links === null) {
     note(article.slug, "source-section", "Sources & Verification section is missing.", "error");
-  } else if (referencedUrls.size === 0) {
+  } else if (externalUrls.length === 0) {
     note(article.slug, "source-links", "No external source URL found in the article body or verification notes; review source transparency.");
   }
   if (!article.checkedDate) {
@@ -122,7 +130,7 @@ for (const article of articles) {
     hero: source,
     heroAltLength: alt.length,
     heroFileBytes: fs.existsSync(imageFile) ? fs.statSync(imageFile).size : null,
-    sourceLinks: links === null ? null : referencedUrls.size,
+    sourceLinks: links === null ? null : externalUrls.length,
     checkedDate: article.checkedDate ?? null,
     bodyImages: internalImageBlocks.length,
   });
