@@ -193,7 +193,7 @@ No. Project files are retained until the Project or file is deleted or a workspa
 
 ## Sources & Verification
 
-Information checked against current official OpenAI documentation on **October 5, 2026**. This article is documentation-based and does not claim hands-on product testing. Feature availability and workspace policy can vary by account, plan, region, and administrator settings.
+Information rechecked against current official OpenAI documentation on **November 15, 2026**. This article is documentation-based and does not claim hands-on product testing. Feature availability and workspace policy can vary by account, plan, region, and administrator settings.
 
 1. [OpenAI — Using Library to manage files in ChatGPT](https://help.openai.com/en/articles/20001052-using-library-to-manage-files-in-chatgpt) — Library/Space availability, locked chat visibility, separate file retention, file deletion, Recently deleted, Google Drive items and Temporary Chat files.
 2. [OpenAI — Chat and file retention in ChatGPT](https://help.openai.com/en/articles/8983778-chat-and-file-retention-in-chatgpt) — regular, archived, deleted, temporary, Library, Project, and custom GPT retention.
