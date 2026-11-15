@@ -327,11 +327,14 @@ body { background: var(--paper); }
   .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .consent-banner {
     left: .6rem; right: .6rem; bottom: .6rem; width: auto;
-    padding: .85rem .95rem; gap: .6rem; max-height: min(55dvh, 390px); overflow-y: auto;
+    padding: .6rem .8rem .7rem; gap: .35rem;
+    border-top-width: 3px; max-height: min(45dvh, 280px); overflow-y: auto;
   }
-  .consent-banner p { font-size: .76rem; line-height: 1.35; }
-  .consent-actions { grid-template-columns: 1fr 1fr; }
-  .consent-actions button { padding: .65rem .5rem; font-size: .73rem; }
+  .consent-banner strong { font-size: .98rem; line-height: 1.2; }
+  .consent-banner p { margin: .18rem 0; font-size: .7rem; line-height: 1.3; }
+  .consent-banner a { font-size: .68rem; }
+  .consent-actions { grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .consent-actions button { min-height: 44px; padding: .55rem .35rem; font-size: .7rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lead-image img, .card-image img, .category-lead-image img, .search-result-image img {
