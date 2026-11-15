@@ -176,6 +176,21 @@ for (const sample of [
       "Related discovery must appear after the full article body");
     assert((await discovery.locator('a[href^="/articles/"]').count()) > 0, "Discovery should link a real related article");
     assert((await discovery.locator('a[href^="/topics/"]').count()) > 0, "Discovery should link a populated topic hub");
+    const imageCaption = await page.locator("figure.article-hero figcaption").innerText();
+    assert(imageCaption.includes("Conceptual editorial illustration, not an official product screenshot."),
+      "Editorial images must not masquerade as real product screenshots");
+    if (sample.name === "desktop-light") {
+      const incidentResponse = await page.goto(base + "/articles/openai-agent-leak-53-chatgpt-user-images",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(incidentResponse?.status(), 200, "Existing incident article must remain reachable");
+      const incidentCaption = await page.locator("figure.article-hero figcaption").innerText();
+      assert(incidentCaption.includes("not a photograph or depiction of actual OpenAI facilities"),
+        "Fictional staged research scenes must carry a visible documentary-evidence warning");
+      assert((await page.locator("figure.article-hero img").getAttribute("alt"))?.includes("fictional OpenAI-branded"),
+        "Incident artwork alt text must acknowledge fictional staging");
+      await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+    }
     const articleDocumentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
     assert(articleDocumentWidth <= sample.width + 1, "Article discovery must not cause mobile overflow");
 
