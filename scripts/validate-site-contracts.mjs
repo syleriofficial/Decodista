@@ -154,8 +154,8 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
-assert(!navigation.includes('href: "/weekly"') && !footerGuides.includes('href: "/weekly"'),
-  "Paused Weekly Brief must not appear in primary or footer section navigation; preserve its existing archive URL");
+assert(!navigation.includes('href: "/weekly"') && footerSecondary.includes('href: "/weekly"'),
+  "Weekly Brief must remain a footer destination, not a primary menu item");
 assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
 assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
 assert(!homepage.includes('title="Reviews"'), "Do not promote the empty Reviews pillar in homepage sections");
