@@ -23,5 +23,5 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   // Duplicate or malformed search parameters must not crash the page.
   const initialQuery = normalizeSearchQuery(Array.isArray(q) ? q[0] : q);
   const records = articles.map((article) => ({ title: article.title, slug: article.slug, description: article.description, categoryName: CATEGORY_MAP[article.category].name, contentTypeName: CONTENT_TYPE_MAP[article.contentType].name, tags: article.tags, image: article.featuredImage, imageAlt: article.featuredImageAlt, readingTime: article.readingTime }));
-  return <main id="main-content" className="search-page wrap"><header className="page-intro"><span className="eyebrow">Find the signal</span><h1>Search DECODISTA</h1><p>Search published DECODISTA articles by title, category, content type or topic. Results are filtered locally in your browser.</p></header><SearchClient records={records} initialQuery={initialQuery} /></main>;
+  return <main id="main-content" className="search-page wrap"><header className="page-intro"><span className="eyebrow">Find the signal</span><h1>Search DECODISTA</h1><p>Search published DECODISTA articles by title, category, content type or topic. Choose a topic or search by keyword. You can share a link to your results.</p></header><SearchClient records={records} initialQuery={initialQuery} /></main>;
 }
