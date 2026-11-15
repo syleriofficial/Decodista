@@ -32,7 +32,12 @@ function EditorialSection({
       <SectionHeading eyebrow={eyebrow} title={title} href={href} id={titleId} />
       <div className={`home-topic-grid ${stories.length === 1 ? "home-topic-grid--single" : ""}`}>
         {stories.slice(0, 3).map((article) => (
-          <ArticleCard key={article.slug} article={article} variant={stories.length === 1 ? "horizontal" : "compact"} />
+          <ArticleCard
+            key={article.slug}
+            article={article}
+            variant={stories.length === 1 ? "horizontal" : "compact"}
+            imageSizes={stories.length === 1 ? undefined : "(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 32vw"}
+          />
         ))}
       </div>
     </section>
