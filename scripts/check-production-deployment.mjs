@@ -52,7 +52,7 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   if (!html) continue;
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
-  const links = [...nav.matchAll(/<a\\b[^>]*href="(\\/[^"]+)"/g)].map((match) => match[1]);
+  const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
   check(path + " six-pillar primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
     "Primary navigation must be Tech News, AI, Reviews, How-To, Security, Science");
@@ -65,7 +65,7 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   check(path + " no duplicate navigation links",
     new Set(links).size === links.length,
     "Navigation should not duplicate links");
-  const footer = html.match(/<footer\\b[^>]*class="site-footer"[^>]*>[\\s\\S]*?<\\/footer>/)?.[0] ?? "";
+  const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/)?.[0] ?? "";
   check(path + " secondary archive links in footer",
     ["/latest", "/digital-life", "/weekly"].every((dest) => footer.includes('href="' + dest + '"')),
     "Secondary and weekly archives must remain discoverable from the footer");
