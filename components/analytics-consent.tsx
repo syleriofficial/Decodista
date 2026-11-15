@@ -87,7 +87,7 @@ export function AnalyticsConsent({ measurementId }: { measurementId: string }) {
         <div className="consent-banner" role="dialog" aria-modal="false" aria-labelledby="consent-title" aria-describedby="consent-description" ref={dialogRef} tabIndex={-1}>
           <div>
             <strong id="consent-title">Your privacy choices</strong>
-            <p id="consent-description">Optional Google Analytics stays off unless you accept. Advertising storage and personalisation remain disabled. You can change this choice later.</p>
+            <p id="consent-description">Optional analytics is off unless you accept. Advertising storage and personalisation stay disabled.</p>
             <Link href="/privacy-policy">Read the privacy policy</Link>
           </div>
           <div className="consent-actions">
