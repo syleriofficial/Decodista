@@ -26,9 +26,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: issue.standfirst,
       url: `/weekly/${issue.slug}`,
       publishedTime: issue.publishedDate,
-      ...(issue.cover ? { images: [{ url: issue.cover.src, width: issue.cover.width, height: issue.cover.height, alt: issue.cover.alt }] } : {}),
+      ...(issue.cover ? { images: [{ url: issue.cover.socialSrc ?? issue.cover.src, width: issue.cover.socialSrc ? 1200 : issue.cover.width, height: issue.cover.socialSrc ? 630 : issue.cover.height, alt: issue.cover.alt }] } : {}),
     },
-    twitter: { card: issue.cover ? "summary_large_image" : "summary", title: `${issue.title} | ${SITE_NAME}`, description: issue.standfirst, ...(issue.cover ? { images: [issue.cover.src] } : {}) },
+    twitter: { card: issue.cover ? "summary_large_image" : "summary", title: `${issue.title} | ${SITE_NAME}`, description: issue.standfirst, ...(issue.cover ? { images: [issue.cover.socialSrc ?? issue.cover.src] } : {}) },
   };
 }
 
@@ -79,7 +79,7 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
       </header>
       {issue.cover && (
         <figure className="weekly-hero">
-          <Image src={issue.cover.src} alt={issue.cover.alt} width={issue.cover.width} height={issue.cover.height} priority />
+          <Image src={issue.cover.src} alt={issue.cover.alt} width={issue.cover.width} height={issue.cover.height} unoptimized priority />
         </figure>
       )}
       {issue.topTakeaways && issue.topTakeaways.length > 0 && (

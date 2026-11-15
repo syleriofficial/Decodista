@@ -50,3 +50,7 @@ next-env.d.ts
 
 # Generated during Vite dev and production builds; original images stay committed.
 /public/images/responsive/
+
+# Generated weekly image assets; source SVG is version-controlled
+/public/images/weekly/*-cover.webp
+/public/images/weekly/*-og.webp

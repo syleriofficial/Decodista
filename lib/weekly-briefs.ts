@@ -32,7 +32,7 @@ export interface WeeklyBrief {
   topTakeaways?: string[];
   checklist?: string[];
   earlierAlerts?: string;
-  cover?: { src: string; alt: string; width: number; height: number };
+  cover?: { src: string; alt: string; width: number; height: number; socialSrc?: string };
 }
 
 export const weeklyBriefs: WeeklyBrief[] = [
@@ -45,7 +45,8 @@ export const weeklyBriefs: WeeklyBrief[] = [
     title: "Chrome's 83 Security Fixes, Fake FTC Sites and AI Payments",
     standfirst: "Five source-verified updates from November 11–15: Chrome patches, fake government websites, Apple's Secure Exclaves, limited ChatGPT Wallet rollout, and exploited server vulnerabilities. Clear next steps without manufactured urgency.",
     cover: {
-      src: "/images/weekly/2026-11-16-cover.svg",
+      src: "/images/weekly/2026-11-16-cover.webp",
+      socialSrc: "/images/weekly/2026-11-16-og.webp",
       alt: "Editorial illustration of browser security, scam detection, device privacy and AI payment safeguards",
       width: 1600,
       height: 900
