@@ -109,7 +109,7 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .reader-paths-heading p, .topic-section-intro p { max-width: 720px; margin: 0; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 .reader-search-link { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; max-width: 100%; min-height: 48px; margin-top: 1.25rem; padding: .85rem 1.15rem; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font-size: .8rem; font-weight: 800; letter-spacing: .015em; text-decoration: none; }
 .reader-search-link svg { width: 17px; height: 17px; flex: none; }
-.reader-search-link:hover { color: #fff; border-color: var(--signal); background: var(--signal); }
+.reader-search-link:hover { color: var(--paper); border-color: var(--signal); background: var(--signal); }
 .reader-search-link:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
 
 .reader-paths-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
