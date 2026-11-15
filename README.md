@@ -26,6 +26,7 @@ Quality checks:
 
 ```bash
 npm run content:validate
+npm run content:links:test
 npm run lint
 npm run typecheck
 npm run build
@@ -41,7 +42,9 @@ npm run release:check
 
 Approved production articles live in `content/articles/<slug>.md`. Each file uses validated YAML front matter plus standard Markdown. The build-time adapter in `scripts/content-loader.mjs` converts those files to the existing typed article model, so public routes and rendering components do not depend on the CMS runtime.
 
-Every article has a primary category, a separate content type, topic tags, publication and verification metadata, a short answer, key takeaways, optional FAQs, sources, related-article controls and responsive artwork metadata. Build validation rejects unsupported fields, broken article links, missing images, invalid dates, duplicate slugs, multiple featured stories and oversized CMS uploads.
+Every article has a primary category, a separate content type, topic tags, publication and verification metadata, a short answer, key takeaways, optional FAQs, sources, related-article controls and responsive artwork metadata. Build validation rejects unsupported fields, broken internal article links (both root-relative and canonical absolute DECODISTA URLs), missing images, invalid dates, duplicate slugs, multiple featured stories and oversized CMS uploads.
+
+Human editorial review remains separate from technical validation. Follow [DECODISTA Editorial Standards](docs/editorial-standards.md) for source attribution, version/region caveats, original reporting, corrections and explicit publish approval. The dated [November 15 editorial inventory](docs/editorial-audit-2026-11-15.md) contains the 26-article quality snapshot and the next review queue; it is not a live status dashboard.
 
 Decap's harmless blank placeholders are normalized before validation. Entirely blank optional FAQ rows and list values are removed, while partly completed FAQ records still fail with a clear error. FAQ and Sources & Verification may each be authored either in the article body or in their structured CMS field; the renderer outputs one version only. Structured FAQs take precedence when both are present, without rewriting the Markdown source.
 
