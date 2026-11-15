@@ -61,19 +61,20 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "Reviews", "Science", "Entertainment", "Latest"],
+  ["Tech News", "Reviews", "Science", "Latest"],
   "Primary navigation must follow the selected editorial menu order",
 );
 
-const moreNavigation = site.match(/export const MORE_NAV_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
-assert(moreNavigation, "More navigation definition is missing");
+const footerGuides = site.match(/export const FOOTER_GUIDE_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
+assert(footerGuides, "Footer guide navigation definition is missing");
 assert.deepEqual(
-  [...moreNavigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life", "Weekly Brief"],
-  "More must retain published guide archives and Weekly Brief without duplicating primary navigation",
+  [...footerGuides.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
+  ["AI", "How-To", "Security", "Digital Life"],
+  "Footer must retain currently populated guide sections without reintroducing the header More menu",
 );
-assert(header.includes("MORE_NAV_ITEMS.map"), "Header More menu must list the other sections");
-assert(footer.includes("MORE_NAV_ITEMS.map"), "Footer must retain links to existing sections");
+assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
+  "Header must expose only the approved primary nav items, without a More dropdown");
+assert(footer.includes("FOOTER_GUIDE_ITEMS.map"), "Footer must keep real, populated guide archives accessible");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
 for (const category of ["ai", "security", "digital-life"]) {
@@ -84,17 +85,19 @@ assert(homepage.includes('getArticlesByContentType("how-to")'), "Homepage must p
 assert(howToPage.includes('import { ResponsiveImage } from "@/components/responsive-image"'), "How-To lead must use the shared responsive WebP implementation");
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
-assert(articles.some((article) => article.contentType === "how-to"), "The More menu must keep a real How-To archive");
-for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
+assert(articles.some((article) => article.contentType === "how-to"), "Footer How-To archive must have real guides");
+for (const category of ["tech-news", "reviews", "science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
 for (const category of ["ai", "how-to", "security", "digital-life"]) {
-  assert(moreNavigation.includes(`href: "/${category}"`), `More menu is missing populated ${category} archives`);
+  assert(footerGuides.includes(`href: "/${category}"`), `Footer guide navigation is missing ${category}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
-const moreHrefs = [...moreNavigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
-assert.equal(new Set([...primaryHrefs, ...moreHrefs]).size, primaryHrefs.length + moreHrefs.length,
-  "Primary and More navigation must not duplicate destinations");
+const footerHrefs = [...footerGuides.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
+assert.equal(new Set([...primaryHrefs, ...footerHrefs]).size, primaryHrefs.length + footerHrefs.length,
+  "Primary and footer guide navigation must not duplicate destinations");
+assert(!navigation.includes('href: "/entertainment"') && !site.includes("MORE_NAV_ITEMS"),
+  "Retired Entertainment and More navigation must not return");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
@@ -143,7 +146,7 @@ assert(contentHelpers.includes("getArticleTopicHubs") && contentHelpers.includes
 assert(articlePage.includes('className="article-discovery"') && articlePage.includes("topicHubs.slice(0, 2)"),
   "Article readers must find contextual guides and populated topic hubs before finishing the story");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
-assert(!homepage.includes('className="weekly-feature'), "Weekly Brief should remain in More and its archive, not dominate the homepage");
+assert(!homepage.includes('className="weekly-feature'), "Weekly Brief must not dominate the homepage");
 assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");
 assert(weeklyIssue.includes("getWeeklyBrief(slug)") && weeklyIssue.includes("notFound()"), "Weekly issue route must reject unknown slugs");
 assert(weeklyIssue.includes("Primary source:") && weeklyIssue.includes("rel=\"noopener noreferrer\""), "Weekly issue must attribute and safely link to primary sources");
@@ -151,14 +154,16 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
-assert(site.includes('href: "/weekly", label: "Weekly Brief"') && header.includes("MORE_NAV_ITEMS.map"), "Header More menu must expose Weekly Brief through its navigation data");
+assert(!navigation.includes('href: "/weekly"') && !footerGuides.includes('href: "/weekly"'),
+  "Paused Weekly Brief must not appear in primary or footer section navigation; preserve its existing archive URL");
 assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
 assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
 assert(!homepage.includes('title="Reviews"'), "Do not promote the empty Reviews pillar in homepage sections");
 assert(!homepage.includes('Tested and evaluated'), "Homepage must not imply unverified hands-on testing");
 assert(site.includes("Independent technology explainers and step-by-step guides"), "Site description must reflect presently published content rather than empty future categories");
-assert(!header.includes('href="/rss.xml"'), "RSS feed should remain discoverable in footer and metadata, not the More menu");
-assert(header.includes('moreMenuRef.current?.open') && header.includes('querySelector("summary")?.focus()'), "Escape must close the More menu and restore focus");
+assert(!header.includes('href="/rss.xml"'), "RSS feed should remain discoverable in footer and metadata, not the main navigation");
+assert(header.includes('event.key === "Escape" && open') && header.includes('setOpen(false)'),
+  "Escape must still close the mobile navigation when open");
 assert(footer.includes('href="/rss.xml"'), "RSS must have a permanent footer link");
 assert(weeklyArchive.includes("FollowDecodista"), "Weekly archive must preserve RSS follow options");
 assert(rssRoute.includes("articles.map(") && rssRoute.includes("weeklyBriefs.map("), "RSS must include both approved article and weekly issue records");
