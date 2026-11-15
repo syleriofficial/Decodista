@@ -126,6 +126,12 @@ for (const sample of [
     await page.screenshot({ path: out + "/" + sample.name + "-first-screen.png" });
     if (sample.name === "desktop-light" || sample.name === "mobile-light") {
       await page.screenshot({ path: out + "/" + sample.name + "-full-page.png", fullPage: true });
+      const privacyChoice = page.getByRole("button", { name: "Decline analytics" });
+      if (await privacyChoice.count()) {
+        await privacyChoice.click();
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.screenshot({ path: out + "/" + sample.name + "-unobstructed.png" });
+      }
     }
 
 
