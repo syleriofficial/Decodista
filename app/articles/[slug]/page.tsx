@@ -169,31 +169,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </aside>
             {introBlocks.length > 0 && <ArticleBody blocks={introBlocks} className="article-prose--intro" />}
             {takeawayBlocks.length > 0 && <ArticleBody blocks={takeawayBlocks} className="article-prose--takeaways" />}
-            {(related.length > 0 || topicHubs.length > 0) && (
-              <nav className="article-discovery" aria-label="Explore related guides and topics">
-                <span className="eyebrow">Continue exploring</span>
-                <ul>
-                  {related[0] && (
-                    <li>
-                      <Link href={`/articles/${related[0].slug}`}>
-                        <strong>Related guide</strong>
-                        <span>{related[0].title}</span>
-                        <ArrowRight aria-hidden="true" />
-                      </Link>
-                    </li>
-                  )}
-                  {topicHubs.slice(0, 2).map((topic) => (
-                    <li key={topic.slug}>
-                      <Link href={`/topics/${topic.slug}`}>
-                        <strong>Explore topic · {topic.articleCount} guides</strong>
-                        <span>{topic.name}</span>
-                        <ArrowRight aria-hidden="true" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
+
           </div>
 
           <div className="article-main-grid">
@@ -204,6 +180,32 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <ArticleBody blocks={mainBlocks} />
             <aside className="article-side-note"><span>DECODISTA</span><p>Clear context. Practical choices. No manufactured urgency.</p></aside>
           </div>
+
+          {(related.length > 0 || topicHubs.length > 0) && (
+            <nav className="article-discovery" aria-label="Explore related guides and topics">
+              <span className="eyebrow">Continue exploring</span>
+              <ul>
+                {related[0] && (
+                  <li>
+                    <Link href={`/articles/${related[0].slug}`}>
+                      <strong>Related guide</strong>
+                      <span>{related[0].title}</span>
+                      <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </li>
+                )}
+                {topicHubs.slice(0, 2).map((topic) => (
+                  <li key={topic.slug}>
+                    <Link href={`/topics/${topic.slug}`}>
+                      <strong>Explore topic · {topic.articleCount} guides</strong>
+                      <span>{topic.name}</span>
+                      <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
 
           <aside className="author-profile" aria-labelledby="author-profile-title">
             <span className="eyebrow">Editorial profile</span>
