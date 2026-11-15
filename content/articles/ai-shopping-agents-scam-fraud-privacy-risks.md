@@ -118,6 +118,8 @@ Users add an eligible card through a secure setup screen. Before **each** purcha
 
 **Approval is not order confirmation:** a merchant might decline or cancel an agent-initiated purchase. Check the merchant's order confirmation. The merchant remains responsible for its sale, fulfillment, return and customer service, while card rewards and **eligible** dispute protections still depend on the card and applicable terms. OpenAI describes spending-limit and category-based preapproval as a **future direction**, not an option all Wallet users can presently activate. [24][25]
 
+**Recurring-payment exception:** OpenAI's Wallet Help Center warns that if you authorize a **subscription or continuous-payment plan** in the purchase terms, the merchant may retain the checkout payment credential and make subsequent charges under those agreed terms. The initial Wallet purchase requires your biometric approval, but that does **not** guarantee a new biometric request for every later subscription renewal. Review recurring terms before approval and contact the merchant to cancel continuing charges. [25]
+
 ### Google’s documented UCP checkout
 
 Google says UCP currently supports card credentials based on Funding Primary Account Numbers stored in Google Wallet. In the native checkout flow, the merchant or its payment provider receives a Google Pay payment credential; the exact credential format depends on the payment setup. This does not mean every checkout passes a raw card number directly to the merchant or uses the same tokenization model. [6] See Google’s [native checkout documentation](https://developers.google.com/merchant/ucp/implementation/2026-04-08/native-checkout-api).
@@ -135,7 +137,7 @@ Approval can mean either approving the exact order now or approving rules for an
 | Platform/product | Can it initiate checkout? | Can it complete payment? | What user approval is required? | Who is responsible for the sale? |
 | --- | --- | --- | --- | --- |
 | ChatGPT Instant Checkout / ACP, where eligible | Yes | Yes, through merchant/payment-provider systems | Documented ACP flow requires order, shipping and payment confirmation; availability is conditional. | Merchant is merchant of record. [1][3][4][14] |
-| ChatGPT Wallet in dots (US eligibility applies) | Yes | Yes, via substitute payment credential at merchant checkout | **Review and biometric authorization for each purchase** at launch; check for merchant order confirmation afterwards. | Merchant handles order, fulfillment, returns and customer service. [24][25] |
+| ChatGPT Wallet in dots (US eligibility applies) | Yes | Yes, via substitute payment credential at merchant checkout | **Review and biometric authorization for each newly initiated purchase**; later charges under an approved recurring plan can follow that plan's terms. | Merchant handles order, fulfillment, returns and customer service. [24][25] |
 | Google UCP native checkout | Yes, on eligible listings or carts | Yes, using Google Pay and merchant processing | Google’s US terms require final purchase authorization after merchant terms are presented. | Merchant remains seller of record. [6][7] |
 | Google’s merchant-site agentic checkout | Yes, for supported purchases | Yes, on the merchant site using Google Pay | Google says it asks permission and confirms purchase and shipping details first. | Merchant operating the sale. [15] |
 
@@ -312,7 +314,7 @@ No. OpenAI’s ACP documentation identifies the merchant as merchant of record a
 
 ### Can ChatGPT Wallet pay without asking me?
 
-**Not under the November 13, 2026 launch rules.** Eligible users review each purchase and approve it through biometric verification. OpenAI has described possible future delegated purchases within preapproved limits, but that is not a reason to assume today's Wallet can buy without a per-transaction review. Card eligibility, dot availability and merchant acceptance may also limit a purchase. [24][25]
+**For a new purchase, not under the November 13, 2026 launch rules:** eligible users review it and approve it through biometric verification. **Important exception:** a subscription or continuous-payment plan that you agreed to may permit the merchant to charge the approved payment credential again under its terms without a new Wallet approval on every renewal. OpenAI has separately described possible future delegated purchases within preapproved limits, but that does not establish their availability now. Card eligibility, dot availability and merchant acceptance may also limit purchases. [24][25]
 
 ### Does Google Universal Cart buy products automatically?
 
