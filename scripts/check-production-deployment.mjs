@@ -34,9 +34,9 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
-const primaryNavigation = [...editorialSections, "/latest"];
+const primaryNavigation = ["/tech-news", "/ai", "/reviews", "/how-to", "/security", "/science"];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -52,18 +52,26 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   if (!html) continue;
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
-  const latestInPrimary = /<a\b[^>]*href="\/latest"[^>]*>\s*Latest\s*<\/a>/.test(nav);
-  check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
   const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " editorial primary nav order",
+  check(path + " six-pillar primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must be Tech News, Reviews, Science, Latest");
+    "Primary navigation must be Tech News, AI, Reviews, How-To, Security, Science");
+  check(path + " secondary sections excluded from primary navigation",
+    !links.includes("/latest") && !links.includes("/digital-life") && !links.includes("/weekly") && !links.includes("/entertainment"),
+    "Latest, Digital Life and Weekly Brief belong outside the main header; Entertainment is retired");
   check(path + " removed More menu stays removed",
     !nav.includes("more-menu") && !nav.includes("more-panel"),
     "The removed More dropdown must not be rendered");
   check(path + " no duplicate navigation links",
     new Set(links).size === links.length,
     "Navigation should not duplicate links");
+  const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/)?.[0] ?? "";
+  check(path + " secondary archive links in footer",
+    ["/latest", "/digital-life", "/weekly"].every((dest) => footer.includes('href="' + dest + '"')),
+    "Secondary and weekly archives must remain discoverable from the footer");
+  check(path + " Entertainment not promoted in footer",
+    !footer.includes('href="/entertainment"'),
+    "Retired Entertainment stays reachable at its existing URL but is not promoted");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
@@ -84,7 +92,7 @@ for (const section of currentSections) {
     /<a\b[^>]*href="\/articles\//.test(main) && !main.includes("Coverage in development"),
     "Every promoted section must lead to real published stories, not an empty placeholder");
 }
-for (const section of editorialSections) {
+for (const section of [...editorialSections, "/entertainment"]) {
   const html = snapshots[section]?.body ?? "";
   if (!html || !html.includes("Coverage in development")) continue;
   const head = html.split("</head>", 1)[0];

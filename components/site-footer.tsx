@@ -1,6 +1,6 @@
 import Link from "@/components/app-link";
 import { PrivacyChoicesButton } from "@/components/analytics-consent";
-import { FOOTER_GUIDE_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, SITE_DESCRIPTION, SITE_TAGLINE, TRUST_LINKS } from "@/lib/site";
+import { FOOTER_SECONDARY_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, SITE_DESCRIPTION, SITE_TAGLINE, TRUST_LINKS } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -16,7 +16,7 @@ export function SiteFooter() {
             <h2>Explore</h2>
             <ul>
               {NAV_ITEMS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
-              {FOOTER_GUIDE_ITEMS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
+              {FOOTER_SECONDARY_ITEMS.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}
               <li><a href="/rss.xml" type="application/rss+xml">RSS Feed</a></li>
             </ul>
           </div>
