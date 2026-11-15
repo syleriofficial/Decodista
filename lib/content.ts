@@ -120,9 +120,11 @@ export const getRelatedArticles = (article: Article, limit = 3) => {
         (candidate.contentType === article.contentType ? 1 : 0);
       return { candidate, contextScore, score };
     })
-    .filter(({ score }) => score > 0)
+    // Shared category or content type alone is not a sufficient reason
+    // to suggest an automatically related story. Manual editorial picks
+    // remain eligible even if their tags differ.
+    .filter(({ contextScore }) => contextScore > 0)
     .sort((a, b) =>
-      Number(b.contextScore > 0) - Number(a.contextScore > 0) ||
       b.score - a.score ||
       publicationOrder(a.candidate, b.candidate))
     .map(({ candidate }) => candidate);
