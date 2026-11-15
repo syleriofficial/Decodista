@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadArticles } from "./content-loader.mjs";
+import { getInternalArticleTarget } from "./article-link-utils.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { articles, parsed } = loadArticles(projectRoot);
@@ -52,7 +53,8 @@ function inspectRichText(value, article) {
   if (!Array.isArray(value)) return;
   for (const piece of value) {
     if (typeof piece !== "object" || piece?.type !== "link") continue;
-    if (piece.href.startsWith("/articles/")) internalArticleLinks.push({ article, href: piece.href });
+    const target = getInternalArticleTarget(piece.href);
+    if (target) internalArticleLinks.push({ article, href: piece.href, target });
   }
 }
 
@@ -84,8 +86,7 @@ for (const article of documents) {
   }
 }
 
-for (const { article, href } of internalArticleLinks) {
-  const target = href.slice("/articles/".length).split(/[?#]/, 1)[0];
+for (const { article, href, target } of internalArticleLinks) {
   if (!slugs.has(target)) throw new Error(`${article}: broken internal article link ${href}`);
 }
 
