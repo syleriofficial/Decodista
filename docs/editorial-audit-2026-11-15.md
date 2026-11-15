@@ -7,7 +7,7 @@
 | Check | Result | Interpretation |
 | --- | ---: | --- |
 | Published Markdown articles | 26 | `content/articles/*.md` on the snapshot commit |
-| Articles with at least one contextual article link in the body | 26 / 26 | Counted both root-relative and full `https://decodista.com/articles/...` forms; quality and relevance still need human review |
+| Articles with at least one article-to-article link in the Markdown body | 26 / 26 | Counted root-relative and full `https://decodista.com/articles/...` forms; destination relevance and editorial usefulness still need human review |
 | Articles with `informationCheckedAt: 2026-11-15` | 8 | These recently updated articles were reviewed in separate editorial PRs; verification metadata is not an automatic proof that facts remain current |
 | Articles with earlier `informationCheckedAt` | 18 | These need a risk-based future review queue, not automatic rewriting |
 | Missing `updatedAt` on an otherwise unedited article | Not inherently a defect | Do not invent an update date solely to make a page look fresher |
