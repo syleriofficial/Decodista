@@ -20,9 +20,11 @@ keyTakeaways:
   - Switch activity saving off if that is your preference for future everyday use.
   - Deleting older material is a separate decision.
   - Treat history, storage, training and personalisation as different questions.
+  - Gems you create can remain saved when Keep Activity is off, even though new chats with Gems are not saved.
 introduction: This guide covers the Gemini web and mobile apps with a **personal Google account**. Work and school accounts have a separate section below.
 publishedAt: 2026-09-17
-informationCheckedAt: 2026-09-16
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 10
 featured: false
@@ -43,7 +45,7 @@ faqs:
     id: work-account-setting
     answer: Availability and controls depend on your organisation. Check its policy with your administrator rather than copying instructions intended for a personal account. [Google’s work and school guidance](<https://support.google.com/gemini/answer/14620100>)
 sourcesVerification: |-
-  Information was checked against the official Google sources linked throughout this article on **16 September 2026 (UTC)**. The consumer Privacy Hub displayed an update date of 10 August 2026; the Workspace Privacy Hub displayed 14 August 2026.
+  Substantive consumer settings and retention guidance was rechecked against official Google Help on **15 November 2026 (UTC)**, including the documented behavior of saved Gems and connected apps when Keep Activity is off. The earlier September 2026 check also covered the separate Workspace and Vault documentation; managed-account rules should be rechecked before making administrative decisions.
 
   This is a documentation-based explanation. DECODISTA has not claimed hands-on testing or independent observation of Google’s storage systems. Recheck account-specific disclosures when changing settings.
 ---
@@ -58,7 +60,7 @@ Here, “normal chat” means an ordinary conversation with Keep Activity enable
 | --- | --- | --- | --- |
 | What does this choice cover? | Ordinary conversations while enabled | Future ordinary conversations until changed | The temporary conversation |
 | Saved to Gemini Apps Activity? | Yes | No, for new conversations | No |
-| Available as saved chat history? | Yes, until deleted | New conversations are not saved as history | No; unavailable after you leave |
+| Available as saved chat history? | Yes, until deleted | New conversations are not saved as history; separately created Gems can remain in your account | No; unavailable after you leave |
 | Routine chat retention | Your deletion/auto-delete settings | Up to 72 hours | Up to 72 hours |
 | AI model improvement/training | May be used\* | Excluded unless feedback is submitted\* | Chats excluded\* |
 | Memory of earlier chats | Available when eligible and enabled | Unavailable | No personalised responses or new information saved for personalisation |
@@ -74,6 +76,8 @@ The comparison follows Google’s [activity guide](<https://support.google.com/g
 History is the collection you can open again. For personal accounts, Google’s tools for finding and managing saved chats require activity saving to be enabled. Switching it off changes that experience; an absent conversation list is not proof that all older records were deleted. [Google’s chat-history guide](<https://support.google.com/gemini/answer/13666746>)
 
 A temporary conversation is deliberately disposable from your perspective. Google says you cannot return to it after leaving. If you need a packing list or a useful explanation later, copy the part you need before closing it. Remember that your copy then has its own storage location. [Temporary Chat help](<https://support.google.com/gemini/answer/13275745?hl=en>)
+
+**Gems are a separate saved object.** Google's current activity Help states that **Gems you created remain saved to your account even when Keep Activity is off**, although chats you start with those Gems are not saved as activity. Do not confuse an absent chat history with deletion of your Gem's instructions or configuration. Review any Gems you created separately if the goal is to remove stored personalization. [Gemini activity controls](<https://support.google.com/gemini/answer/13278892?hl=en>)
 
 For example, a one-off question about a surprise gift suits a temporary session. A project you plan to revisit needs a deliberate record-keeping choice.
 
@@ -130,6 +134,8 @@ Switching off future saving does not itself clear your previous history. Google 
 If an old topic is affecting responses, Google says deleting the relevant conversation can stop its use for personalisation, although there may be a short delay. Review deliberately saved instructions separately. [Memory guidance](<https://support.google.com/gemini/answer/16598469>), [instructions guidance](<https://support.google.com/gemini/answer/16598625>)
 
 Records in other Google services are separate: deleting Gemini activity does not delete those services’ data. [Gemini Apps Privacy Hub](<https://support.google.com/gemini/answer/13594961?hl=en>)
+
+**Connected Apps can also change when Keep Activity is off.** Google's current personal-account activity guide limits the available connections in that mode to Device assistance, Gemini Notebook, Messages, Phone and WhatsApp. This is a documented list of available connected-app categories, not a promise that every device, region or account has each one enabled. If a connection you rely on disappears, check that setting before assuming the app or its data was deleted. [Gemini Apps activity guide](<https://support.google.com/gemini/answer/13278892?hl=en>)
 
 ## Which option should you use? {#which-option}
 
