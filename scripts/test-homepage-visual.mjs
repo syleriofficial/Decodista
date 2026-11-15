@@ -122,6 +122,8 @@ for (const sample of [
     assert.equal(articleDiscoveryResponse?.status(), 200, "Existing article must remain reachable");
     const discovery = page.locator("nav.article-discovery");
     assert.equal(await discovery.count(), 1, "Article must have one contextual discovery section");
+    assert(await discovery.evaluate((element) => element.previousElementSibling?.classList.contains("article-main-grid")),
+      "Related discovery must appear after the full article body");
     assert((await discovery.locator('a[href^="/articles/"]').count()) > 0, "Discovery should link a real related article");
     assert((await discovery.locator('a[href^="/topics/"]').count()) > 0, "Discovery should link a populated topic hub");
     const articleDocumentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
@@ -151,6 +153,14 @@ for (const sample of [
       const searchInput = page.locator("#article-search");
       const initialResultCount = await page.locator(".search-results article").count();
       assert(initialResultCount > 0, "Search should initially list published guides");
+      const suggestion = page.locator('.search-suggestions button').filter({ hasText: "Privacy" });
+      assert(await suggestion.isVisible(), "Suggested search topics must be visible");
+      await suggestion.click();
+      assert.equal(await page.locator("#article-search").inputValue(), "Privacy", "Suggested topic must populate search");
+      assert.equal(new URL(page.url()).searchParams.get("q"), "Privacy", "Suggested topic must retain a shareable URL");
+      assert.equal(await suggestion.getAttribute("aria-pressed"), "true", "Selected search topic must be accessible");
+      await page.locator("button.search-clear").click();
+      assert.equal(await page.locator(".search-results article").count(), initialResultCount, "Clearing a suggested topic restores the library");
 
       await searchInput.fill("Google    Photos");
       assert((await page.locator(".search-results article").count()) > 0, "Separate Google Photos keywords should match published guides");
@@ -196,6 +206,8 @@ for (const sample of [
         "A category without published stories must remain noindex despite appearing in navigation");
       assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
         "Do not manufacture science articles to populate an editorial section");
+      assert((await page.locator(".section-explore-links a").count()) >= 2,
+        "Empty Science should offer real published alternative sections");
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
       const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
