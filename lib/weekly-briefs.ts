@@ -15,6 +15,8 @@ export interface BriefItem {
   whyItMatters: string;
   whatToDo: string;
   source: BriefSource;
+  additionalSources?: BriefSource[];
+  insight?: string;
 }
 
 export interface WeeklyBrief {
@@ -27,9 +29,129 @@ export interface WeeklyBrief {
   standfirst: string;
   items: BriefItem[];
   relatedArticleSlugs: string[];
+  topTakeaways?: string[];
+  checklist?: string[];
+  earlierAlerts?: string;
+  cover?: { src: string; alt: string; width: number; height: number; socialSrc?: string };
 }
 
 export const weeklyBriefs: WeeklyBrief[] = [
+  {
+    slug: "2026-11-16",
+    issueNumber: 3,
+    publishedDate: "2026-11-16",
+    periodStart: "2026-11-11",
+    periodEnd: "2026-11-15",
+    title: "Chrome's 83 Security Fixes, Fake FTC Sites and AI Payments",
+    standfirst: "Five source-verified updates from November 11–15: Chrome patches, fake government websites, Apple's Secure Exclaves, limited ChatGPT Wallet rollout, and exploited server vulnerabilities. Clear next steps without manufactured urgency.",
+    cover: {
+      src: "/images/weekly/2026-11-16-cover.webp",
+      socialSrc: "/images/weekly/2026-11-16-og.webp",
+      alt: "Editorial illustration of browser security, scam detection, device privacy and AI payment safeguards",
+      width: 1600,
+      height: 900
+    },
+    topTakeaways: [
+      "Update Chrome: Google's November 11 release addressed 83 security vulnerabilities, including five rated Critical.",
+      "Verify the real domain: fake government websites can mimic legitimate agencies and request personal information or money.",
+      "Approve AI payments carefully: agent-assisted checkout still requires reviewing merchants, amounts and order details."
+    ],
+    items: [
+      {
+        id: "chrome-157-security-fixes",
+        category: "Security",
+        headline: "Chrome gets 83 security fixes, including five rated Critical",
+        announcedDate: "2026-11-11",
+        whatChanged: "Google updated Chrome's Stable channel on November 11 with 83 security fixes, including five Critical use-after-free bugs in ServiceWorker, CSS, Layout, Skia and Accessibility. The update brought Chrome 157 to 157.0.8103.78/.79 on Windows and macOS and 157.0.8103.78 on Linux. A limited early Stable rollout of Chrome 158 began on November 12; that did not mean everyone had version 158.",
+        whyItMatters: "Browsers process unfamiliar web content, so security bugs can expose users to unwanted software behavior. An earlier November 9 Chrome fix addressed a vulnerability that Google said was being exploited. That is not evidence that the five Critical flaws fixed on November 11 were also actively exploited.",
+        whatToDo: "Open Chrome > Settings > About Chrome, install the latest supported update offered for your device, and relaunch. Other Chromium-based browsers should be updated through their own vendors.",
+        insight: "Patching is valuable when it actually reaches your device—not merely when an update makes headlines.",
+        source: {
+          label: "Google Chrome Stable release, November 11",
+          url: "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html"
+        }
+      },
+      {
+        id: "fake-ftc-websites",
+        category: "Security",
+        headline: "FTC warns about websites impersonating the US government",
+        announcedDate: "2026-11-12",
+        whatChanged: "The US Federal Trade Commission warned that scammers were copying its name, logo and website design to create fake government pages. The FTC said it had demanded the removal of more than 30 impostor sites since its impersonation rule took effect in April 2024.",
+        whyItMatters: "A fraudulent site can look professional and official while attempting to take money, personal details or account access. Legitimate FTC websites are on the ftc.gov domain, including official subdomains. A URL that merely contains the letters 'ftc' or an agency logo is not proof of authenticity.",
+        whatToDo: "Go to a known official government address directly, examine the actual hostname before entering information, and independently confirm unusual requests. Do not transfer funds because an unexpected caller claims it is necessary to protect your money. US readers can report fraud at ReportFraud.ftc.gov.",
+        insight: "Digital trust should be based on verified identity and context, not on how convincing a webpage looks.",
+        source: {
+          label: "FTC Consumer Alert, November 12",
+          url: "https://consumer.ftc.gov/consumer-alerts/2026/11/how-spot-fake-ftc-websites-and-ftc-impersonators"
+        }
+      },
+      {
+        id: "apple-secure-exclaves",
+        category: "Privacy",
+        headline: "Apple explains Secure Exclaves for camera and microphone privacy",
+        announcedDate: "2026-11-12",
+        whatChanged: "Apple described Secure Exclaves, isolated computing environments intended to process sensitive camera and microphone data while limiting access from the main operating system. Apple cited HomeView person recognition and selected Siri features among uses of this architecture.",
+        whyItMatters: "Ambient sensing features may recognize a face, voice or wake phrase without ordinary applications needing the full recording. Apple says its design isolates raw sensor data and limits which results can leave that protected environment. These are the company's architectural claims, not proof that every device or application offers identical protection.",
+        whatToDo: "No emergency action is needed because of this announcement alone. Review which applications can use your camera and microphone, monitor sensor indicators, and evaluate privacy information before enabling new always-available AI features.",
+        insight: "Privacy depends increasingly on limiting access by design rather than solely on user permission prompts.",
+        source: {
+          label: "Apple Security Research, November 12",
+          url: "https://security.apple.com/blog/secure-exclaves/"
+        }
+      },
+      {
+        id: "chatgpt-wallet",
+        category: "AI",
+        headline: "ChatGPT Wallet begins a limited rollout for AI-agent purchases",
+        announcedDate: "2026-11-13",
+        whatChanged: "OpenAI introduced ChatGPT Wallet for agent-assisted purchases through dots. The rollout initially targets eligible ChatGPT Pro subscribers aged 18 or older in the United States with US billing addresses and eligible US-issued cards. Users review the merchant, items, total and selected card before authorizing a transaction. The payment network supplies substitute credentials rather than disclosing the actual card details to the agent or merchant.",
+        whyItMatters: "AI-assisted shopping moves beyond comparing products into transaction execution. Tokenization can reduce exposure of payment credentials, but it does not guarantee that a merchant is trustworthy, an order is accepted or the purchase is correct. OpenAI describes broader pre-approved purchases as a future capability, not general availability today.",
+        whatToDo: "If eligible, review each merchant, total, return policy and payment approval carefully. Confirm the order directly with the merchant afterward. Do not assume availability outside supported plans, cards or regions.",
+        insight: "Reliable AI commerce should preserve clear human control of authorization and spending.",
+        source: {
+          label: "OpenAI Wallet announcement, November 13",
+          url: "https://openai.com/index/introducing-chatgpt-wallet/"
+        }
+      },
+      {
+        id: "cisa-unrealircd-checkpoint",
+        category: "Security",
+        headline: "CISA flags exploited vulnerabilities in UnrealIRCd and Check Point products",
+        announcedDate: "2026-11-13",
+        whatChanged: "On November 13, CISA listed CVE-2026-114713 (UnrealIRCd) and CVE-2026-123039 (Check Point) in its Known Exploited Vulnerabilities catalog. The UnrealIRCd flaw can enable command injection with server authority on affected linked IRC networks. UnrealIRCd published version 6.2.7.1 and a hot-patch. Check Point researchers documented attackers chaining a separate initial-access weakness with the DynamicCLI privilege-escalation flaw.",
+        whyItMatters: "These are product-specific server and network risks, not universal flaws affecting all home computers. The Check Point vulnerability requires relevant existing access; it should not be described as an unauthenticated remote takeover on its own. Confirmed exploitation makes the issues important for organizations deploying affected software.",
+        whatToDo: "Administrators should inventory affected deployments, consult the vendor guidance, update UnrealIRCd to 6.2.7.1 or its verified official hot-patch, and install appropriate Check Point fixes or mitigations. Investigate suspected compromise. Users who do not operate these products generally have no product-specific action.",
+        insight: "The right response to an exploited vulnerability begins by identifying whether you actually run the affected product.",
+        source: {
+          label: "CISA Known Exploited Vulnerabilities catalog",
+          url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        additionalSources: [
+          {
+            label: "UnrealIRCd security release and hot-patch",
+            url: "https://forums.unrealircd.org/viewtopic.php?t=9487"
+          },
+          {
+            label: "Check Point Research: PHP2Shell attack chain",
+            url: "https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/"
+          }
+        ]
+      }
+    ],
+    relatedArticleSlugs: [
+      "chrome-enhanced-protection-vs-standard-protection",
+      "fake-tech-support-scams-remote-access-verification-code",
+      "google-passkey-vs-2-step-verification"
+    ],
+    checklist: [
+      "Update your browser using the official software update screen.",
+      "Check the full domain before sharing information with an unfamiliar website.",
+      "Review camera and microphone permissions on your devices.",
+      "Verify merchants, totals and authorizations in any AI-assisted purchase.",
+      "Enable a passkey or strong multifactor authentication for important accounts."
+    ],
+    earlierAlerts: "Two exploited vulnerabilities disclosed before this edition's November 11–15 reporting period are still worth checking: Chrome CVE-2026-125350 (November 9) and Microsoft Outlook CVE-2026-124194 (November 10). They are follow-up reminders, not counted among this issue's five new developments."
+  },
   {
     slug: "2026-11-11",
     issueNumber: 2,

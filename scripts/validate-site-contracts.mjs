@@ -176,7 +176,23 @@ assert(legal.includes("DECODISTA does not operate a newsletter signup"), "Privac
 const weeklySources = [...weeklyData.matchAll(/url: "(https:\/\/[^"]+)"/g)].map((match) => match[1]);
 assert(weeklySources.length >= 4, "First weekly edition must cite multiple direct primary sources");
 assert(new Set(weeklySources).size === weeklySources.length, "Weekly issue should not repeat a primary source");
-assert(weeklySources.every((url) => /^https:\/\/(?:support\.apple\.com|www\.mozilla\.org|blog\.google|openai\.com|www\.microsoft\.com|about\.fb\.com)\//.test(url)), "Weekly sources must point directly to reviewed primary publishers");
+const verifiedWeeklyHosts = new Set([
+  "support.apple.com", "www.mozilla.org", "blog.google", "openai.com",
+  "www.microsoft.com", "about.fb.com", "chromereleases.googleblog.com",
+  "consumer.ftc.gov", "security.apple.com", "www.cisa.gov",
+  "forums.unrealircd.org", "research.checkpoint.com",
+]);
+assert(weeklySources.every((url) => {
+  try { const parsed = new URL(url); return parsed.protocol === "https:" && verifiedWeeklyHosts.has(parsed.hostname); }
+  catch { return false; }
+}), "Weekly sources must point directly to reviewed primary publishers");
+assert(weeklyData.includes('slug: "2026-11-16"') && weeklyData.includes('issueNumber: 3'), "Weekly issue 03 must be dated and numbered");
+const thirdIssue = weeklyData.split('slug: "2026-11-16"')[1]?.split('slug: "2026-11-11"')[0] ?? "";
+assert(thirdIssue.includes('periodStart: "2026-11-11"') && thirdIssue.includes('periodEnd: "2026-11-15"'), "Issue 03 must report on November 11–15");
+const thirdIssueDates = [...thirdIssue.matchAll(/announcedDate: "(2026-11-\d{2})"/g)].map((match) => match[1]);
+assert.equal(thirdIssueDates.length, 5, "Issue 03 must contain five dated developments");
+assert(thirdIssueDates.every((date) => date >= "2026-11-11" && date <= "2026-11-15"), "Issue 03 updates must fall within the reporting period");
+assert(weeklyData.indexOf('slug: "2026-11-16"') < weeklyData.indexOf('slug: "2026-11-11"'), "Weekly issue 03 must be newest");
 assert(weeklyData.indexOf('slug: "2026-11-11"') !== -1, "Weekly issue 02 must be dated");
 assert(weeklyData.indexOf('slug: "2026-11-11"') < weeklyData.indexOf('slug: "2026-11-01"'), "Newest weekly issue must come first");
 const secondIssue = weeklyData.split('slug: "2026-11-11"')[1]?.split('slug: "2026-11-01"')[0] ?? "";

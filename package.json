@@ -7,6 +7,8 @@
   },
   "scripts": {
     "install:ci": "node scripts/install-ci.mjs",
+    "predev": "node scripts/generate-weekly-covers.mjs",
+    "prebuild": "node scripts/generate-weekly-covers.mjs",
     "dev": "node scripts/run-framework.mjs dev",
     "build": "node scripts/run-framework.mjs build",
     "deploy": "vinext-cloudflare deploy",
