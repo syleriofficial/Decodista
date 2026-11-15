@@ -31,8 +31,8 @@ editorsPick: false
 seoTitle: Google Authenticator Codes Missing on a New Phone?
 metaDescription: Missing Google Authenticator codes on a new phone? Choose the right sync, transfer or account recovery path, then verify access before retiring the old phone.
 relatedArticles:
-  - remove-third-party-google-access-without-losing-login
-  - google-photos-android-undo-backup-keep-phone-photos
+  - google-passkey-vs-2-step-verification
+  - unknown-device-google-account-session
 faqs:
   - question: Can I transfer Google Authenticator without the old phone?
     id: transfer-without-old-phone
@@ -53,8 +53,6 @@ sourcesVerification: |-
   Information checked against current official documentation on **18 September 2026 (UTC)**, including Google’s Android and iPhone/iPad Authenticator instructions, Google Account backup-code and recovery guidance, and GitHub’s recovery policy as one service-specific example.
 
   This article is based on documentation review. DECODISTA has not performed the proposed device tests or captured the screenshots described in the editorial handoff.
-
-  Related reading: [removing a Google connection without losing access](</articles/remove-third-party-google-access-without-losing-login>), and [check what is stored on the phone and in the cloud](</articles/google-photos-android-undo-backup-keep-phone-photos>).
 ---
 
 ## Start here: choose your recovery path {#choose-recovery-path}
@@ -149,6 +147,8 @@ There is an indirect benefit: getting back into the Google Account may let you r
 
 For preparation, find **Backup codes** under your Google Account’s **Security & sign-in → 2-Step Verification** settings. Store them securely somewhere accessible without the phone you are replacing.
 
+For the distinction between an Authenticator code, a passkey, and another Google second step, read [Google Passkeys vs 2-Step Verification](</articles/google-passkey-vs-2-step-verification>).
+
 ## Verify the new phone before retiring the old one {#migration-checklist}
 
 This is **DECODISTA’s recommended migration checklist**, not a claim that we tested your setup.
@@ -180,7 +180,7 @@ Restoring access on the new phone and securing the missing phone are separate jo
 
 Use the relevant lost-device controls. For Android, Google documents remote locking and erasure through Find Hub, with prerequisites including connectivity for remote securing or erasure. Erasing a device permanently removes its data and may not erase an SD card. Read the consequences before confirming. [Google’s lost-Android guidance](<https://support.google.com/accounts/answer/6160491?hl=en>)
 
-Review the missing phone under your Google Account’s device sessions and sign it out. Google also recommends changing your Google Account password after a lost or stolen phone. [Device-session controls](<https://support.google.com/accounts/answer/3067630?hl=en>), [Google’s lost-phone advice](<https://support.google.com/accounts/answer/185834?hl=en>)
+Review the missing phone under your Google Account’s device sessions and sign it out. Google also recommends changing your Google Account password after a lost or stolen phone. If you need help distinguishing unfamiliar devices and browser sessions, follow DECODISTA’s [unknown Google Account device and session guide](</articles/unknown-device-google-account-session>). [Device-session controls](<https://support.google.com/accounts/answer/3067630?hl=en>), [Google’s lost-phone advice](<https://support.google.com/accounts/answer/185834?hl=en>)
 
 For affected third-party accounts, follow each provider’s procedure to replace a potentially exposed authenticator. Do not assume that transferring entries, changing a Google password or signing out a device immediately invalidates every third-party code.
 
