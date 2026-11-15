@@ -94,11 +94,19 @@ async function lighthouse(url, output) {
   });
 }
 
-const plan = [
-  ...Array.from({ length: homeRuns }, (_, index) => ({ route: "/", label: "homepage", index: index + 1 })),
-  ...Array.from({ length: controlRuns }, (_, index) => ({ route: "/how-to", label: "how-to", index: index + 1 })),
-  { route: "/latest", label: "latest", index: 1 },
-];
+// Interleave control and homepage measurements to reduce time-of-run bias.
+// A cold GitHub runner and a busy runner must not silently make every
+// homepage sample appear slower just because it was always tested first.
+const plan = [];
+for (let index = 0; index < homeRuns; index++) {
+  plan.push({ route: "/", label: "homepage", index: index + 1 });
+  if (index < controlRuns) {
+    plan.push({ route: "/how-to", label: "how-to", index: index + 1 });
+  }
+  if (index === Math.floor(homeRuns / 2)) {
+    plan.push({ route: "/latest", label: "latest", index: 1 });
+  }
+}
 
 const results = [];
 for (const sample of plan) {
@@ -146,7 +154,7 @@ const summary = {
   kind: "repeated-public-production-lighthouse-mobile-lab",
   checkedAt: new Date().toISOString(),
   target: base.href,
-  disclaimer: "Synthetic Lighthouse lab. No CrUX, real-user INP or production UX guarantee. Bootup attribution is not an additive causal breakdown of TBT.",
+  disclaimer: "Synthetic Lighthouse lab. No CrUX, real-user INP or production UX guarantee. Bootup attribution is not an additive causal breakdown of TBT. Interleaved controls reduce, but cannot eliminate, GitHub runner CPU/load and network variance.",
   environment: "GitHub Actions ubuntu-latest Chrome, Lighthouse 13.6.0",
   plannedRuns: plan.length,
   successfulRuns: passed.length,
