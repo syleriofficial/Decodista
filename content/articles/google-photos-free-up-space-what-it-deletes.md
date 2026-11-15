@@ -15,8 +15,8 @@ topics:
   - Android
   - Photo Recovery
 heroImage: /images/uploads/chatgpt-image-sep-23-2026-04_46_10-pm.webp
-heroImageAlt: Illustration of a phone with cleared photo storage beside a cloud
-  holding backed-up pictures.
+heroImageAlt: Illustration of Google Photos on a phone, with a device-deletion arrow
+  beside a cloud containing backed-up photo thumbnails.
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: Google Photos Free up space removes eligible, backed-up local
