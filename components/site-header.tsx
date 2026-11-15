@@ -3,10 +3,12 @@
 import Link from "@/components/app-link";
 import { Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -48,7 +50,7 @@ export function SiteHeader() {
         <nav id="site-navigation" className={`primary-nav ${open ? "is-open" : ""}`} aria-label="Main navigation">
           <div className="nav-scroll">
             {NAV_ITEMS.map((item) => (
-              <Link key={item.href} href={item.href} onClick={closeNavigation}>
+              <Link key={item.href} href={item.href} onClick={closeNavigation} aria-current={pathname === item.href ? "page" : undefined}>
                 {item.label}
               </Link>
             ))}
