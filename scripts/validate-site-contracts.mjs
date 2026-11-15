@@ -184,7 +184,7 @@ assert(weeklySources.every((url) => {
 assert(weeklyData.includes('slug: "2026-11-16"') && weeklyData.includes('issueNumber: 3'), "Weekly issue 03 must be dated and numbered");
 const thirdIssue = weeklyData.split('slug: "2026-11-16"')[1]?.split('slug: "2026-11-11"')[0] ?? "";
 assert(thirdIssue.includes('periodStart: "2026-11-11"') && thirdIssue.includes('periodEnd: "2026-11-15"'), "Issue 03 must report on November 11–15");
-const thirdIssueDates = [...thirdIssue.matchAll(/announcedDate: "(2026-11-\\d{2})"/g)].map((match) => match[1]);
+const thirdIssueDates = [...thirdIssue.matchAll(/announcedDate: "(2026-11-\d{2})"/g)].map((match) => match[1]);
 assert.equal(thirdIssueDates.length, 5, "Issue 03 must contain five dated developments");
 assert(thirdIssueDates.every((date) => date >= "2026-11-11" && date <= "2026-11-15"), "Issue 03 updates must fall within the reporting period");
 assert(weeklyData.indexOf('slug: "2026-11-16"') < weeklyData.indexOf('slug: "2026-11-11"'), "Weekly issue 03 must be newest");
