@@ -491,7 +491,23 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .weekly-bottom-nav a { display: inline-flex; align-items: center; gap: .55rem; font-size: .78rem; font-weight: 850; text-transform: uppercase; letter-spacing: .05em; }
 .weekly-bottom-nav a:hover { color: var(--signal); }
 .weekly-bottom-nav svg { width: 17px; height: 17px; }
+.weekly-hero { margin: 2rem 0 0; overflow: hidden; background: #101a2a; }
+.weekly-hero img { display: block; width: 100%; height: auto; }
+.weekly-top-takeaways { max-width: 940px; padding: 2rem 0 0; }
+.weekly-top-takeaways h2, .weekly-checklist h2, .weekly-earlier-alerts h2 { margin: 0 0 1rem; font: 500 clamp(1.65rem, 2.7vw, 2.3rem)/1.15 Georgia, 'Times New Roman', serif; }
+.weekly-top-takeaways ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; list-style: none; padding: 0; margin: 0; counter-reset: takeaway; }
+.weekly-top-takeaways li { position: relative; padding: 1.2rem; background: var(--surface); border-top: 3px solid var(--signal); font-size: .93rem; line-height: 1.55; counter-increment: takeaway; overflow-wrap: anywhere; }
+.weekly-top-takeaways li::before { content: '0' counter(takeaway); display: block; margin-bottom: .7rem; color: var(--signal); font-weight: 900; letter-spacing: .05em; }
+.weekly-insight { max-width: 790px; margin: 1.3rem 0 0; color: var(--muted); line-height: 1.65; }
+.weekly-insight strong { color: var(--ink); }
+.weekly-sources { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
+.weekly-sources .weekly-source { margin-top: 1rem; }
+.weekly-checklist, .weekly-earlier-alerts { max-width: 940px; margin: 3rem auto; padding: 1.5rem; background: var(--surface); }
+.weekly-checklist ul { margin: 0; padding-left: 1.2rem; }
+.weekly-checklist li { padding: .4rem 0; line-height: 1.5; }
+.weekly-earlier-alerts p { margin: 0; color: var(--muted); line-height: 1.7; }
 @media (max-width: 900px) {
+  .weekly-top-takeaways ol { grid-template-columns: 1fr; }
   .weekly-spotlight { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {

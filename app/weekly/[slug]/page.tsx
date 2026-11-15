@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "@/components/app-link";
 import { ArticleCard } from "@/components/article-card";
 import { notFound } from "next/navigation";
@@ -25,8 +26,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: issue.standfirst,
       url: `/weekly/${issue.slug}`,
       publishedTime: issue.publishedDate,
+      ...(issue.cover ? { images: [{ url: issue.cover.src, width: issue.cover.width, height: issue.cover.height, alt: issue.cover.alt }] } : {}),
     },
-    twitter: { card: "summary", title: `${issue.title} | ${SITE_NAME}`, description: issue.standfirst },
+    twitter: { card: issue.cover ? "summary_large_image" : "summary", title: `${issue.title} | ${SITE_NAME}`, description: issue.standfirst, ...(issue.cover ? { images: [issue.cover.src] } : {}) },
   };
 }
 
@@ -52,6 +54,7 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
     headline: issue.title,
     description: issue.standfirst,
     datePublished: issue.publishedDate,
+    ...(issue.cover ? { image: [`${SITE_URL}${issue.cover.src}`] } : {}),
     mainEntityOfPage: `${SITE_URL}/weekly/${issue.slug}`,
     author: { "@type": "Organization", name: SITE_NAME, url: `${SITE_URL}/editorial-team` },
     publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
@@ -74,6 +77,17 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
           <span>{issue.items.length} verified updates</span>
         </div>
       </header>
+      {issue.cover && (
+        <figure className="weekly-hero">
+          <Image src={issue.cover.src} alt={issue.cover.alt} width={issue.cover.width} height={issue.cover.height} priority />
+        </figure>
+      )}
+      {issue.topTakeaways && issue.topTakeaways.length > 0 && (
+        <section className="weekly-top-takeaways" aria-labelledby="weekly-takeaways-heading">
+          <h2 id="weekly-takeaways-heading">Three things to know</h2>
+          <ol>{issue.topTakeaways.map((takeaway) => <li key={takeaway}>{takeaway}</li>)}</ol>
+        </section>
+      )}
       <nav className="weekly-in-this-issue" aria-label="Jump to an update">
         <strong>In this edition</strong>
         <ol>{issue.items.map((item) => <li key={item.id}><a href={`#${item.id}`}>{item.headline}</a></li>)}</ol>
@@ -90,13 +104,30 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
                 <section><h3>Why it matters</h3><p>{item.whyItMatters}</p></section>
                 <section className="weekly-takeaway"><h3>What you can do</h3><p>{item.whatToDo}</p></section>
               </div>
-              <a className="weekly-source" href={item.source.url} target="_blank" rel="noopener noreferrer">
-                Primary source: {item.source.label} <ExternalLink aria-hidden="true" />
-              </a>
+              {item.insight && <p className="weekly-insight"><strong>DECODISTA insight:</strong> {item.insight}</p>}
+              <div className="weekly-sources">
+                {[item.source, ...(item.additionalSources ?? [])].map((source, sourceIndex) => (
+                  <a className="weekly-source" key={source.url} href={source.url} target="_blank" rel="noopener noreferrer">
+                    {sourceIndex === 0 ? "Primary source" : "Additional source"}: {source.label} <ExternalLink aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
             </div>
           </article>
         ))}
       </div>
+      {issue.earlierAlerts && (
+        <aside className="weekly-earlier-alerts" aria-labelledby="weekly-earlier-heading">
+          <h2 id="weekly-earlier-heading">Earlier alerts still worth checking</h2>
+          <p>{issue.earlierAlerts}</p>
+        </aside>
+      )}
+      {issue.checklist && issue.checklist.length > 0 && (
+        <section className="weekly-checklist" aria-labelledby="weekly-checklist-heading">
+          <h2 id="weekly-checklist-heading">Your five-minute digital safety checklist</h2>
+          <ul>{issue.checklist.map((task) => <li key={task}>{task}</li>)}</ul>
+        </section>
+      )}
       <aside className="weekly-editor-note" aria-labelledby="weekly-editor-note-title">
         <h2 id="weekly-editor-note-title">How we selected these updates</h2>
         <p>This edition records announcements and releases in the stated date range, based on the linked primary sources. It is a dated snapshot, not a continuously updated vulnerability tracker or a substitute for your device’s own update screen. Availability and policies may change after publication.</p>
