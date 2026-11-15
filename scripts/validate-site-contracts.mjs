@@ -74,6 +74,14 @@ assert.deepEqual(
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
+assert(header.includes('aria-current={pathname === item.href ? "page" : undefined}'),
+  "Navigation should identify the active editorial category accessibly");
+assert(homepage.includes('className="home-intro wrap"'), "Homepage needs a visible editorial introduction");
+assert(homepage.indexOf('className="section-block latest-home') < homepage.indexOf('className="reader-paths wrap"')
+  && homepage.indexOf('className="reader-paths wrap"') < homepage.indexOf('title="AI" href="/ai"'),
+  "Homepage should lead with recent stories and search discovery before category archives");
+assert(homepage.indexOf('const latest = takeDistinct(articles, 3, false)') < homepage.indexOf('const ai = takeDistinct('),
+  "Latest Stories should reserve distinct recent articles before category sections");
 assert(footer.includes("FOOTER_SECONDARY_ITEMS.map"), "Footer must keep secondary destinations accessible");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
