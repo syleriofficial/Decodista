@@ -128,7 +128,14 @@ export default function HomePage() {
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
         <SectionHeading eyebrow="Continue reading" title="Latest Stories" href="/latest" id="latest-title" />
         <div className="latest-feed">
-          {latest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" />)}
+          {latest.map((article) => (
+            <ArticleCard
+              key={article.slug}
+              article={article}
+              variant="horizontal"
+              imageSizes="(max-width: 600px) 38vw, (max-width: 1000px) 50vw, 32vw"
+            />
+          ))}
         </div>
       </section>
 
