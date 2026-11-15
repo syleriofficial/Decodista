@@ -93,9 +93,9 @@ That does not mean a previously deleted saved memory automatically returns. It m
 
 ## Does deleting a chat delete what ChatGPT remembers?
 
-Not necessarily. Saved memories are stored separately from chat history, so deleting the original conversation does not automatically delete a separate saved memory. A file retained in Library can also remain after its chat is deleted, and an enabled connected app may continue to provide relevant information. [1][6][7]
+Not necessarily. Saved memories are stored separately from chat history, so deleting the original conversation does not automatically delete a separate saved memory. A file saved separately in Library or Space can also remain after its chat is deleted, and an enabled connected app may continue to provide relevant information. [1][6][7]
 
-Deleting one chat therefore removes one source. It does not prove that the same information no longer exists in Memory, another conversation, a Library file or a connected service.
+Deleting one chat therefore removes one source. It does not prove that the same information no longer exists in Memory, another conversation, a file in Library or Space or a connected service.
 
 ## How do you actually remove something ChatGPT remembers?
 
@@ -112,7 +112,7 @@ The required action depends on where the information exists. For fuller removal,
 
 This is a model-improvement control under **Settings → Data controls**. For personal ChatGPT services, OpenAI may use eligible content to improve models when the setting is on. After the user turns it off, OpenAI says new conversations are not used for model improvement under the opt-out rule. [3][4]
 
-The switch does not delete or hide saved chats, Library files or Memory. Those sources and personalization controls must be managed separately. [1][3][6]
+The switch does not delete or hide saved chats, files stored in Library or Space, or Memory. Those sources and personalization controls must be managed separately. [1][3][6]
 
 ## Can Memory stay on while training is off?
 
@@ -143,7 +143,7 @@ Temporary Chat therefore does not mean zero retention, and the old blanket descr
 
 ## What happens if you save a Temporary Chat?
 
-Saving converts it into a regular chat. It then appears in history and follows the account’s normal personalization and model-improvement settings. If Memory is enabled, the saved conversation may help personalize future responses. Eligible uploaded files may also be saved to Library, subject to availability and storage limits. [2][6]
+Saving converts it into a regular chat. It then appears in history and follows the account’s normal personalization and model-improvement settings. If Memory is enabled, the saved conversation may help personalize future responses. Eligible uploaded files may also be saved in Library or Space, depending on your available file area and its storage rules. [2][6]
 
 OpenAI does not say that saving makes the earlier temporary period retroactively become training data. The documented rule is that the saved chat follows regular settings from that point forward. [2]
 
@@ -166,7 +166,7 @@ These actions remain subject to account availability, workspace controls and the
 
 Where supported and enabled, files saved separately from chats can contribute to Memory. Some accounts now show **Space instead of Library**, so check which file area is present. Deleting a conversation does not delete a file that remains saved separately; [deleting a ChatGPT chat and removing the saved file](</articles/delete-chatgpt-chat-uploaded-files-library>) are separate actions. [1][5][6]
 
-Temporary Chat uploads are not saved to Library while the conversation remains temporary. If the chat is saved as a regular chat, eligible files may then be saved, subject to availability and storage limits. [2][6]
+Temporary Chat uploads are not saved in the regular Library or Space file area while the conversation remains temporary. If the chat is saved as a regular chat, eligible files may then be saved in the account’s available file area, subject to feature and storage rules. [2][6]
 
 ## Connected apps and Memory
 
@@ -230,11 +230,11 @@ It becomes a regular chat, appears in history and follows normal personalization
 
 ### How do I make ChatGPT fully forget something?
 
-Remove it from Memory and from every relevant source where it remains, including chats, Library files and connected apps. Updates may take time to propagate. [1]
+Remove it from Memory and from every relevant source where it remains, including chats, files saved in Library or Space, and connected apps. Updates may take time to propagate. [1]
 
-### Can Library files affect Memory?
+### Can files saved in Library or Space affect Memory?
 
-Yes, where Library and Memory are supported and enabled. Delete a retained Library copy separately from its conversation. [1][6]
+Yes, where file access and Memory are supported and enabled. Delete a retained file copy in the available Library or Space interface separately from its conversation. [1][6]
 
 ### Can connected apps affect Memory?
 
