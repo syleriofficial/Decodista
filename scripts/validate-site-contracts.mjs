@@ -11,6 +11,7 @@ function read(relativePath) {
 const site = read("lib/site.ts");
 const legal = read("lib/legal.ts");
 const homepage = read("app/page.tsx");
+const mobileAudit = read("scripts/audit-mobile-performance.mjs");
 const layout = read("app/layout.tsx");
 const header = read("components/site-header.tsx");
 const footer = read("components/site-footer.tsx");
@@ -108,6 +109,12 @@ assert(homepage.indexOf('className="section-block latest-home') < homepage.index
   "Homepage should lead with recent stories and search discovery before category archives");
 assert(homepage.indexOf('const latest = takeDistinct(articles, 3, false)') < homepage.indexOf('const ai = takeDistinct('),
   "Latest Stories should reserve distinct recent articles before category sections");
+assert(homepage.includes('sizes="(max-width: 1180px) 100vw, 38vw"'),
+  "Signal Edition feature artwork should not overfetch oversized desktop WebP variants");
+assert(mobileAudit.includes('"small-mobile-homepage"') && mobileAudit.includes('"small-mobile-search"') &&
+  mobileAudit.includes('"small-mobile-article"') && mobileAudit.includes("hasTouch: true") &&
+  mobileAudit.includes("-after-consent.png"),
+  "Live mobile verification must cover 320px touch behavior, key pages and unobstructed screenshots");
 assert(homepage.includes('imageSizes="(max-width: 600px) 38vw, (max-width: 1000px) 50vw, 32vw"'),
   "Latest magazine tiles must preserve correct responsive image hints");
 assert(footer.includes("FOOTER_SECONDARY_ITEMS.map"), "Footer must keep secondary destinations accessible");
