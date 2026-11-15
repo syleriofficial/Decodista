@@ -100,7 +100,7 @@ try {
         assert(bounds && bounds.height <= (route.width === 320 ? 720 : 844) * .45 + 2,
           route.label + " privacy choice should not dominate the mobile viewport");
         await privacy.click();
-        assert.equal(await banner.count(), 0, route.label + " opting out should close the notice");
+        await banner.waitFor({ state: "detached", timeout: 10000 });
       }
 
       if (route.path === "/") {
