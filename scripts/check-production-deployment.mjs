@@ -54,7 +54,7 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const latestInPrimary = /<a\b[^>]*href="\/latest"[^>]*>\s*Latest\s*<\/a>/.test(nav);
   check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
-  const links = [...nav.matchAll(/<a\\b[^>]*href="(\\/[^"]+)"/g)].map((match) => match[1]);
+  const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
   check(path + " editorial primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
     "Primary navigation must be Tech News, Reviews, Science, Latest");
