@@ -27,7 +27,9 @@ shortAnswer: >-
   transaction. The risk depends on the permissions you grant and how the
   platform, seller, and payment provider divide the work. Before authorizing a
   purchase, verify the seller, final order, payment method, and route for
-  resolving problems.
+  resolving problems. OpenAI's November 13 ChatGPT Wallet adds tokenized,
+  per-purchase biometric approval in eligible US dot workflows; its launch
+  does not mean every ChatGPT user or merchant can use it. [24][25]
 keyTakeaways:
   - "Finding a product, filling a cart, and paying for it are different levels of authority."
   - "A recommendation is a starting point for checking a merchant, not proof that the seller is trustworthy."
@@ -36,10 +38,11 @@ keyTakeaways:
   - "Identify the seller and the relevant refund or payment-dispute contact before checkout."
   - "Limit connected accounts and personal information to what the task needs."
   - "Separate ordinary shopping scams, scams targeting an agent, and mistakes made by an agent."
+  - "ChatGPT Wallet launched November 13, 2026 for eligible US Pro users in dots, with a review and biometric security check for each purchase; it is separate from older Instant Checkout documentation. [24][25]"
 faqs: []
 publishedAt: 2026-09-26
-updatedAt: 2026-10-04
-informationCheckedAt: 2026-10-04
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 17
 seoTitle: "AI Shopping Agents: Scam, Fraud and Privacy Risks Explained"
@@ -63,7 +66,7 @@ An AI shopping agent is software that can take shopping-related actions for you.
 
 A tool may support only some of these steps. Calling it an “agent” does not tell you which ones.
 
-OpenAI’s March 2026 product-discovery update emphasized comparison and merchant-operated checkout. Its current Help Center also says Instant Checkout may appear for eligible products and merchants; developer guidance limits it to approved partners. Those statements support a conditional description of availability, not a claim that every ChatGPT shopping result can be purchased in chat. [1][2][3]
+OpenAI’s March 2026 product-discovery update emphasized comparison and merchant-operated checkout. Its shopping Help Center describes **Instant Checkout as conditional**, available only for some eligible products or merchants, not as a universal purchase button. Separately, on **November 13, 2026**, OpenAI introduced **ChatGPT Wallet**, initially in **dots** for eligible US ChatGPT Pro subscribers. These are different payment experiences with different availability rules. [1][2][3][24][25]
 
 Google’s Universal Commerce Protocol, or UCP, connects commerce systems. Universal Cart is a consumer shopping feature; UCP is the underlying standard that can support checkout. Neither name alone means permission to spend without further review. [5][6]
 
@@ -101,11 +104,19 @@ For your own comparison, ask: Is the lower price attached to the same model, con
 
 ## What happens to your payment data?
 
-### ChatGPT’s documented Instant Checkout flow
+### Earlier ChatGPT Instant Checkout and ACP flow
 
-OpenAI’s current ACP documentation says ChatGPT collects buyer, fulfillment, and payment information and communicates with the merchant. The merchant processes the order through its own systems and payment provider. A delegated payment request sets a maximum amount and expiry; the payment provider returns a token that OpenAI passes to the merchant. [4]
+OpenAI’s Agentic Commerce Protocol (ACP) documentation describes buyer, fulfillment, and payment information flowing between ChatGPT and a merchant. The merchant processes the order using its systems and payment provider. A delegated payment request sets a maximum amount and expiry, and a payment token can be passed to the merchant. This describes the **ACP design**, not proof that a particular merchant or account still offers Instant Checkout today. [1][3][4]
 
-A payment token is a controlled payment credential, not permission to assume every participant holds no sensitive data. Nor does it validate the quality of the goods. The documentation reviewed does not establish one storage-and-retention rule covering every external merchant checkout and ChatGPT integration.
+A payment token is a controlled credential, not proof that every integration has identical privacy or retention rules. Nor does it guarantee the quality of goods.
+
+### ChatGPT Wallet: November 2026 agent checkout
+
+OpenAI introduced **ChatGPT Wallet on November 13, 2026**. It begins rolling out inside **dots** for **ChatGPT Pro subscribers aged 18 or older in the United States**, with an eligible US-issued card and US billing address. OpenAI's Wallet Help Center says it is **not available in ordinary Chat, Work, or standalone Codex threads** at this stage. No India or general global availability is established by the launch. [24][25]
+
+Users add an eligible card through a secure setup screen. Before **each** purchase, the user reviews the merchant, items, total and selected card and authorizes the transaction using a supported biometric check such as Face ID or Touch ID. After approval, the payment network supplies a **substitute payment token** for checkout; OpenAI says the actual card details are not shared with the agent or merchant. Never paste the card number or bank verification code into the conversation itself. [24][25]
+
+**Approval is not order confirmation:** a merchant might decline or cancel an agent-initiated purchase. Check the merchant's order confirmation. The merchant remains responsible for its sale, fulfillment, return and customer service, while card rewards and **eligible** dispute protections still depend on the card and applicable terms. OpenAI describes spending-limit and category-based preapproval as a **future direction**, not an option all Wallet users can presently activate. [24][25]
 
 ### Google’s documented UCP checkout
 
@@ -123,7 +134,8 @@ Approval can mean either approving the exact order now or approving rules for an
 
 | Platform/product | Can it initiate checkout? | Can it complete payment? | What user approval is required? | Who is responsible for the sale? |
 | --- | --- | --- | --- | --- |
-| ChatGPT Instant Checkout, where eligible | Yes | Yes, through merchant/payment-provider systems | Documented flow requires confirmation of order, shipping, and payment details. | Merchant is merchant of record. [3][4][14] |
+| ChatGPT Instant Checkout / ACP, where eligible | Yes | Yes, through merchant/payment-provider systems | Documented ACP flow requires order, shipping and payment confirmation; availability is conditional. | Merchant is merchant of record. [1][3][4][14] |
+| ChatGPT Wallet in dots (US eligibility applies) | Yes | Yes, via substitute payment credential at merchant checkout | **Review and biometric authorization for each purchase** at launch; check for merchant order confirmation afterwards. | Merchant handles order, fulfillment, returns and customer service. [24][25] |
 | Google UCP native checkout | Yes, on eligible listings or carts | Yes, using Google Pay and merchant processing | Google’s US terms require final purchase authorization after merchant terms are presented. | Merchant remains seller of record. [6][7] |
 | Google’s merchant-site agentic checkout | Yes, for supported purchases | Yes, on the merchant site using Google Pay | Google says it asks permission and confirms purchase and shipping details first. | Merchant operating the sale. [15] |
 
@@ -296,7 +308,11 @@ Check identity, domain, contact information, independent reviews, and return ter
 
 ### Does ChatGPT Instant Checkout mean OpenAI is the seller?
 
-No. OpenAI’s ACP documentation identifies the merchant as merchant of record and places payment processing on merchant systems. [4]
+No. OpenAI’s ACP documentation identifies the merchant as merchant of record and places payment processing on merchant systems. This historical checkout description should not be confused with Wallet's separate launch and eligibility. [4][24]
+
+### Can ChatGPT Wallet pay without asking me?
+
+**Not under the November 13, 2026 launch rules.** Eligible users review each purchase and approve it through biometric verification. OpenAI has described possible future delegated purchases within preapproved limits, but that is not a reason to assume today's Wallet can buy without a per-transaction review. Card eligibility, dot availability and merchant acceptance may also limit a purchase. [24][25]
 
 ### Does Google Universal Cart buy products automatically?
 
@@ -308,7 +324,7 @@ Only when needed for a specific task and after reviewing its permissions and ter
 
 ## Sources & Verification
 
-**Verified October 4, 2026.** This article is based on publicly accessible documentation and reporting. No hands-on purchase, payment, refund, or chargeback testing was performed. Availability statements are limited to the documented scope; announced rollout schedules are not treated as proof of universal access.
+**Documentation reviewed November 15, 2026, including OpenAI's November 13 Wallet launch.** This article is based on publicly accessible documentation and reporting. No hands-on purchase, payment, refund or chargeback testing was performed. Wallet availability and payment safeguards are attributed to OpenAI, not independently audited by DECODISTA; rollout announcements are not treated as proof of universal access.
 
 ### Official sources
 
@@ -334,6 +350,8 @@ Only when needed for a specific task and after reviewing its permissions and ter
 - **[21]** [OpenAI — Using shopping research in ChatGPT](https://help.openai.com/en/articles/12911370-using-shopping-research-in-chatgpt). Consumer verification of price, variants, and retailer policies.
 - **[22]** [OpenAI — Commerce policies](https://openai.com/policies/commerce-policies/), updated June 24, 2026. Prohibited deceptive merchant practices.
 - **[23]** [Google — How to onboard to the UCP integration hub in Merchant Center](https://support.google.com/merchants/answer/16992327?hl=en). Merchant Center onboarding rollout, distinct from checkout eligibility.
+- **[24]** [OpenAI — Introducing ChatGPT Wallet](https://openai.com/index/introducing-chatgpt-wallet/), November 13, 2026. Tokenized agent payment, per-purchase review, merchant responsibility, eligible US dot rollout and future delegation direction.
+- **[25]** [OpenAI Help Center — Making purchases with ChatGPT Wallet](https://help.openai.com/en/articles/20001654-making-purchases-with-chatgpt-wallet). Detailed current eligibility, biometric controls, secure card setup, merchant checkout and dispute/support boundaries.
 
 ### Independent reporting
 
