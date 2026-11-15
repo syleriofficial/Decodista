@@ -207,23 +207,25 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
   (topic) => topic.showInNavigation,
 );
 
-// Primary editorial navigation follows the chosen newsroom hierarchy.
-// Sections awaiting real coverage remain visible but noindex and out of the sitemap;
-// never substitute placeholder or invented articles.
+// The primary editorial header prioritizes the selected newsroom pillars.
+// Latest provides an entry to currently published stories while these pillars
+// develop substantive coverage. Empty categories remain noindex and off sitemap.
 export const NAV_ITEMS = [
   { href: "/tech-news", label: "Tech News" },
   { href: "/reviews", label: "Reviews" },
   { href: "/science", label: "Science" },
-  { href: "/entertainment", label: "Entertainment" },
   { href: "/latest", label: "Latest" },
 ] as const;
 
-export const MORE_NAV_ITEMS = [
+// Keep useful, genuinely populated guide archives discoverable in the footer
+// and homepage without reintroducing the removed header More menu.
+// Existing Entertainment and Weekly Brief URLs remain available as archives;
+// do not promote empty or paused sections in the main navigation.
+export const FOOTER_GUIDE_ITEMS = [
   { href: "/ai", label: "AI" },
   { href: "/how-to", label: "How-To" },
   { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
-  { href: "/weekly", label: "Weekly Brief" },
 ] as const;
 
 export const TRUST_LINKS = [
