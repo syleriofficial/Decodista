@@ -33,10 +33,10 @@ function check(name, condition, details) {
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
-const editorialSections = ["/tech-news", "/reviews", "/science", "/entertainment"];
+const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = [...editorialSections, "/latest"];
-const moreNavigation = [...currentSections, "/weekly"];
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const weeklyIssuePath = "/weekly/2026-11-16";
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -53,21 +53,17 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const latestInPrimary = /<a\b[^>]*href="\/latest"[^>]*>\s*Latest\s*<\/a>/.test(nav);
-  const moreStarts = nav.indexOf("more-panel");
-  const moreRegion = moreStarts < 0 ? "" : nav.slice(moreStarts);
   check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
-  check(path + " no duplicate Latest in More", !/<a\b[^>]*href="\/latest"/.test(moreRegion), "Latest must not be duplicated in More");
-  const primary = nav.split("<details", 1)[0];
-  const links = [...primary.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
+  const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
   check(path + " editorial primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must be Tech News, Reviews, Science, Entertainment, Latest");
-  check(path + " More retains published guides",
-    moreNavigation.every((section) => moreRegion.includes('href="' + section + '"')),
-    "Published AI, How-To, Security, Digital Life and Weekly Brief must remain accessible under More");
-  check(path + " More has no duplicate primary sections",
-    primaryNavigation.every((section) => !moreRegion.includes('href="' + section + '"')),
-    "Each editorial navigation destination must appear in the intended menu only");
+    "Primary navigation must be Tech News, Reviews, Science, Latest");
+  check(path + " removed More menu stays removed",
+    !nav.includes("more-menu") && !nav.includes("more-panel"),
+    "The removed More dropdown must not be rendered");
+  check(path + " no duplicate navigation links",
+    new Set(links).size === links.length,
+    "Navigation should not duplicate links");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
@@ -158,6 +154,32 @@ if (latestHtml) {
 }
 const reviewHtml = snapshots["/review-methodology"]?.body ?? "";
 if (reviewHtml) check("Review Methodology content", reviewHtml.includes("Research versus hands-on testing"), "Policy page should be rendered");
+const weeklyArchiveHtml = snapshots["/weekly"]?.body ?? "";
+if (weeklyArchiveHtml) {
+  const spotlight = weeklyArchiveHtml.split('class="weekly-spotlight"', 2)[1] ?? "";
+  check("Weekly archive features Issue 3",
+    spotlight.includes("Chrome") && spotlight.includes("83 Security Fixes"),
+    "Weekly archive should display Issue 3 as the latest");
+  check("Weekly archive links Issue 3",
+    spotlight.includes('href="/weekly/2026-11-16"'),
+    "The issue must be linked in the public weekly archive");
+}
+const weeklyIssueHtml = snapshots[weeklyIssuePath]?.body ?? "";
+if (weeklyIssueHtml) {
+  const issueHead = weeklyIssueHtml.split("</head>", 1)[0];
+  check("Weekly Issue 3 headline and coverage",
+    weeklyIssueHtml.includes("Chrome") && weeklyIssueHtml.includes("Fake FTC") && weeklyIssueHtml.includes("Wallet"),
+    "Expected published issue content must be present");
+  check("Weekly Issue 3 canonical",
+    issueHead.includes('rel="canonical"') && issueHead.includes("/weekly/2026-11-16"),
+    "The new issue requires a canonical in <head>");
+  check("Weekly Issue 3 structured data",
+    weeklyIssueHtml.includes("BlogPosting") && weeklyIssueHtml.includes("BreadcrumbList"),
+    "BlogPosting and BreadcrumbList schema are required");
+  check("Weekly Issue 3 cover and social metadata",
+    weeklyIssueHtml.includes("/images/weekly/2026-11-16-cover.webp") && issueHead.includes("2026-11-16-og.webp"),
+    "The cover and social preview must use the approved WebP");
+}
 const robots = snapshots["/robots.txt"]?.body ?? "";
 if (robots) {
   check("Robots contains sitemap", robots.includes("/sitemap.xml"), "Sitemap discovery");
@@ -167,6 +189,7 @@ const sitemap = snapshots["/sitemap.xml"]?.body ?? "";
 if (sitemap) {
   check("Sitemap contains Latest", sitemap.includes("https://decodista.com/latest"), "Latest archive must be discoverable");
   check("Sitemap contains review methodology", sitemap.includes("https://decodista.com/review-methodology"), "Trust page discoverability");
+  check("Sitemap contains Weekly Issue 3", sitemap.includes("https://decodista.com/weekly/2026-11-16"), "New weekly issue discoverability");
 }
 
 const report = {
