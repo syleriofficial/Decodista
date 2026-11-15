@@ -122,7 +122,11 @@ for (const sample of [
     await page.locator("section.reader-paths").screenshot({ path: out + "/" + sample.name + "-discovery.png" });
     // Keep a first-screen screenshot for human design review; do not rely on a
     // Lighthouse score alone to judge editorial layout.
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: out + "/" + sample.name + "-first-screen.png" });
+    if (sample.name === "desktop-light" || sample.name === "mobile-light") {
+      await page.screenshot({ path: out + "/" + sample.name + "-full-page.png", fullPage: true });
+    }
 
 
     // Browser regression coverage for the navigation, including the mobile drawer.
