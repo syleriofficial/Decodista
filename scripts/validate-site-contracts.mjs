@@ -29,6 +29,7 @@ const latestArchive = read("app/latest/page.tsx");
 const paginationHelper = read("lib/pagination.ts");
 const sitemap = read("app/sitemap.ts");
 const robots = read("app/robots.ts");
+const productionAudit = read("scripts/check-production-deployment.mjs");
 const ads = read("public/ads.txt");
 const contactPage = read("app/contact/page.tsx");
 const searchPage = read("app/search/page.tsx");
@@ -75,6 +76,11 @@ assert.deepEqual(
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
 assert(footer.includes("FOOTER_GUIDE_ITEMS.map"), "Footer must keep real, populated guide archives accessible");
+assert(productionAudit.includes('const editorialSections = ["/tech-news", "/reviews", "/science"];') &&
+  productionAudit.includes('const footerGuides = currentSections;'),
+  "Live production HTTP QA must validate the selected primary pillars and published footer archives");
+assert(productionAudit.includes(' More dropdown removed"') && productionAudit.includes(' footer retains published guide archives"'),
+  "Live production HTTP QA must not expect the retired More dropdown");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
 for (const category of ["ai", "security", "digital-life"]) {
