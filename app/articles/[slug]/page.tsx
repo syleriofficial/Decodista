@@ -63,6 +63,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const category = CATEGORY_MAP[article.category];
   const contentType = CONTENT_TYPE_MAP[article.contentType];
   const heroCaptionSeparator = /[.!?…]$/.test(article.featuredImageAlt) ? " " : ". ";
+  // Editorial art illustrates a subject; it is not photographic evidence or
+  // a screenshot of the product. Incident illustrations need extra precision.
+  const artworkDisclosure = article.slug === "openai-agent-leak-53-chatgpt-user-images"
+    ? "This is fictional artwork, not a photograph or depiction of actual OpenAI facilities or systems."
+    : "Conceptual editorial illustration, not an official product screenshot.";
   const hasMeaningfulUpdate = article.updatedDate && article.updatedDate !== article.publishedDate;
   const related = getRelatedArticles(article);
   const topicHubs = getArticleTopicHubs(article);
@@ -157,7 +162,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <figure className="article-hero wrap">
           <div><ResponsiveImage src={article.featuredImage} alt={article.featuredImageAlt} fill priority sizes="(max-width: 1500px) 100vw, 1440px" /></div>
-          <figcaption>{article.featuredImageAlt}{heroCaptionSeparator}Original DECODISTA artwork.</figcaption>
+          <figcaption>{article.featuredImageAlt}{heroCaptionSeparator}{artworkDisclosure}</figcaption>
         </figure>
 
         <div className="article-reading wrap">
