@@ -32,8 +32,8 @@ keyTakeaways:
   - Standard uses privacy-preserving URL checks; limited visual phishing features may also be sent, while fuller URLs or page-content bits can be sent after suspicious behavior.
   - Enhanced can warn about dangerous sites, downloads and extensions that Google did not previously know about.
   - Enhanced sends URLs, small samples of page content, extension activity and system information to Google Safe Browsing.
-  - Google announced new 2026 Enhanced features: suspicious-site warnings, server-assisted Gemini scam detection and ClickFix command warnings. [6]
-  - Google's October “10 times safer” wording is based on the average number of safety warnings, not a measured tenfold reduction in actual victimization. [6]
+  - "Google announced new 2026 Enhanced features: suspicious-site warnings, server-assisted Gemini scam detection and ClickFix command warnings. [6]"
+  - "Google’s October tenfold-safety claim compares average safety-warning counts, not a measured tenfold reduction in victimization. [6]"
   - No Protection is not a privacy-friendly version of Standard; it removes Chrome's Safe Browsing warnings and Google does not recommend it.
 faqs: []
 publishedAt: 2026-10-15
