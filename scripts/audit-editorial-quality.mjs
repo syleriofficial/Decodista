@@ -7,7 +7,8 @@ import { loadArticles } from "./content-loader.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputDir = process.env.EDITORIAL_AUDIT_OUTPUT_DIR ?? "artifacts/editorial-quality";
-const { articles } = loadArticles(root);
+const { articles, parsed } = loadArticles(root);
+const editorialBySlug = new Map(parsed.map(entry => [entry.article.slug, entry.editorial]));
 const checks = [];
 const advisories = [];
 const imageByPath = new Map();
@@ -89,10 +90,19 @@ for (const article of articles) {
   }
 
   const links = sourceLinks(article);
+  const editorial = editorialBySlug.get(article.slug);
+  // Official citations in legacy articles often appear directly next to
+  // specific claims in the Markdown body, while Sources & Verification is a
+  // prose methodology statement. Count both placements: neither is inherently
+  // less transparent, and parser-generated rich text is not a full URL ledger.
+  const sourceMarkdown = [editorial?.bodyMarkdown ?? "", editorial?.sourcesMarkdown ?? ""].join("\n");
+  const rawUrls = [...sourceMarkdown.matchAll(/https?:\/\/[^\s<>\])]+/gi)]
+    .map(match => match[0].replace(/[.,;]+$/, ""));
+  const referencedUrls = new Set([...(links ?? []), ...rawUrls]);
   if (links === null) {
     note(article.slug, "source-section", "Sources & Verification section is missing.", "error");
-  } else if (links.length === 0) {
-    note(article.slug, "source-links", "No clickable external source URLs found in Sources & Verification; review source transparency.");
+  } else if (referencedUrls.size === 0) {
+    note(article.slug, "source-links", "No external source URL found in the article body or verification notes; review source transparency.");
   }
   if (!article.checkedDate) {
     note(article.slug, "fact-check-date", "Information checked date is not set; review before substantive updates.");
@@ -112,7 +122,7 @@ for (const article of articles) {
     hero: source,
     heroAltLength: alt.length,
     heroFileBytes: fs.existsSync(imageFile) ? fs.statSync(imageFile).size : null,
-    sourceLinks: links?.length ?? null,
+    sourceLinks: links === null ? null : referencedUrls.size,
     checkedDate: article.checkedDate ?? null,
     bodyImages: internalImageBlocks.length,
   });
@@ -121,7 +131,7 @@ for (const article of articles) {
 const sourceTotals = inventory.map(row => row.sourceLinks).filter(Number.isFinite);
 const report = {
   kind: "decodista-editorial-quality-audit",
-  scope: "All approved production article metadata, local hero assets and structured source blocks",
+  scope: "All approved production article metadata, local hero assets and external reference URLs in published article Markdown plus source verification notes",
   caveat: "Automated checks cannot establish whether an illustration visually matches its alt text, whether the art is original, or whether any cited source's facts remain current. These require human editorial review.",
   articles: inventory.length,
   distinctHeroPaths: imageByPath.size,
