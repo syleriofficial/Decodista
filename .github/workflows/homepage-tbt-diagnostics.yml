@@ -1,0 +1,56 @@
+name: Repeated Homepage TBT diagnostics
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/diagnose-homepage-tbt.mjs'
+      - '.github/workflows/homepage-tbt-diagnostics.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/diagnose-homepage-tbt.mjs'
+      - '.github/workflows/homepage-tbt-diagnostics.yml'
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: homepage-tbt-diagnostics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnostics:
+    name: Multi-sample public-site mobile Lighthouse comparison
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Wait for corresponding Cloudflare deployment on main
+        if: github.event_name == 'push'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/wait-for-cloudflare-build.mjs
+      - name: Confirm Chrome
+        run: google-chrome --version
+      - name: Install pinned Lighthouse
+        run: npm install --global lighthouse@13.6.0
+      - name: Compare repeated mobile lab results
+        env:
+          HOMEPAGE_DIAGNOSTIC_RUNS: '4'
+          CONTROL_DIAGNOSTIC_RUNS: '2'
+          HOMEPAGE_DIAGNOSTIC_DIR: artifacts/homepage-tbt-diagnostics
+        run: node scripts/diagnose-homepage-tbt.mjs
+      - name: Save all Lighthouse reports and diagnostic medians
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-tbt-diagnostics
+          path: artifacts/homepage-tbt-diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14
