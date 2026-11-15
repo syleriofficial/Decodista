@@ -38,6 +38,14 @@ for (const sample of [
     assert.equal(await search.count(), 1, "Homepage should have exactly one new guide-search link");
     assert((await search.innerText()).includes("Search all published guides"), "Search link has expected label");
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
+    const frontPageSections = await page.locator("main > section").evaluateAll((sections) => sections.map((section) => section.className));
+    assert(frontPageSections[0].includes("hero"), "Homepage must lead with the existing editorial hero");
+    assert(frontPageSections[1].includes("latest-home") && frontPageSections[2].includes("reader-paths"),
+      "Latest stories and guided search must precede editorial topic sections");
+    assert.equal(await page.locator(".home-intro").count(), 1, "Homepage must have one editorial introduction");
+    const articleHrefs = await page.locator(".lead-story h1 a, .hero-rail h2 a, .latest-feed .article-card h3 a, .home-topic .article-card h3 a")
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+    assert.equal(new Set(articleHrefs).size, articleHrefs.length, "Homepage headline positions must not repeat article destinations");
     assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
     const leadSrc = await page.locator(".lead-image img").getAttribute("src");
     assert(leadSrc?.startsWith("/images/"), "Homepage hero must fetch the real WebP directly, not redirect through /_next/image");
@@ -74,6 +82,7 @@ for (const sample of [
     });
     assert(measures.documentWidth <= measures.viewport + 1, "Unexpected horizontal overflow");
     assert(measures.searchBounds.width > 120 && measures.searchBounds.height > 15, "Search CTA should occupy visible area");
+    assert(measures.searchBounds.height >= 44, "Guide search CTA should meet comfortable touch-target height");
     await search.focus();
     assert(await search.evaluate(el => document.activeElement === el), "Search CTA must accept keyboard focus");
     await page.locator("section.reader-paths").screenshot({ path: out + "/" + sample.name + "-discovery.png" });
@@ -168,6 +177,10 @@ for (const sample of [
       for (const category of ["ai", "how-to", "security", "digital-life"]) {
         const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
         assert.equal(sectionResponse?.status(), 200, `Primary category ${category} should load`);
+        if (category === "how-to") {
+          assert.equal(await page.locator('header .nav-scroll > a[href="/how-to"][aria-current="page"]').count(), 1,
+            "Active How-To route must be identified in the main navigation");
+        }
         assert((await page.locator('main a[href^="/articles/"]').count()) > 0, `Primary category ${category} should link to published stories`);
         assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
         if (category === "how-to") {
