@@ -4,7 +4,7 @@ import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { getArticlesByCategory } from "@/lib/content";
+import { getArticlesByCategory, getArticlesByContentType } from "@/lib/content";
 import { parsePageNumber } from "@/lib/pagination";
 import { CATEGORY_DEFINITIONS, CATEGORY_MAP, CONTENT_TYPE_MAP, SITE_NAME, SITE_URL, type CategorySlug } from "@/lib/site";
 
@@ -63,6 +63,11 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const pages = Math.max(1, Math.ceil(listing.length / PAGE_SIZE));
   const visible = listing.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   if (page > pages) notFound();
+  const discoverySections = [
+    { href: "/ai", label: "AI", count: getArticlesByCategory("ai").length },
+    { href: "/how-to", label: "How-To", count: getArticlesByContentType("how-to").length },
+    { href: "/security", label: "Security", count: getArticlesByCategory("security").length },
+  ].filter((item) => item.count > 0 && item.href !== `/${section}`);
 
   const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: category.name, item: `${SITE_URL}/${section}` }] };
 
@@ -70,13 +75,28 @@ export default async function CategoryPage({ params, searchParams }: { params: P
     <main id="main-content" className="category-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <header className="category-header wrap">
-        <div><span className="eyebrow">Section / {category.mark}</span><h1>{category.name}</h1></div>
+        <div><span className="eyebrow">Section / {category.mark}</span><h1>{category.name}</h1><span className="category-count">{all.length > 0 ? `${all.length} published ${all.length === 1 ? "story" : "stories"}` : "Coverage coming when reporting is ready"}</span></div>
         <p>{category.description}</p>
       </header>
       {featured && page === 1 ? <section className="category-lead wrap" aria-labelledby="category-lead-title">
         <Link className="category-lead-image" href={`/articles/${featured.slug}`}><ResponsiveImage src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" /></Link>
         <div><span className="content-type-label">{CONTENT_TYPE_MAP[featured.contentType].name}</span><h2 id="category-lead-title"><Link href={`/articles/${featured.slug}`}>{featured.title}</Link></h2><p>{featured.standfirst}</p><Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the story <ArrowRight aria-hidden="true" /></Link></div>
-      </section> : !featured ? <section className="section-principle wrap" aria-labelledby="section-coverage-title"><span className="eyebrow">Editorial scope</span><h2 id="section-coverage-title">Coverage in development</h2><p>Our {category.name.toLowerCase()} section will publish original, verified stories as they are ready. We do not fill sections with placeholder articles.</p><p><Link className="read-link" href="/latest">Explore published stories <ArrowRight aria-hidden="true" /></Link></p></section> : null}
+      </section> : !featured ? (
+        <section className="section-principle wrap" aria-labelledby="section-coverage-title">
+          <span className="eyebrow">Editorial scope</span>
+          <h2 id="section-coverage-title">Coverage in development</h2>
+          <p>Our {category.name.toLowerCase()} section will publish original, verified stories as they are ready. We do not fill sections with placeholder articles.</p>
+          <div className="section-explore" aria-label="Explore published DECODISTA sections">
+            <span className="eyebrow">Explore published guides</span>
+            <div className="section-explore-links">
+              {discoverySections.map((item) => (
+                <Link href={item.href} key={item.href}>{item.label}<ArrowRight aria-hidden="true" /></Link>
+              ))}
+            </div>
+          </div>
+          <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
+        </section>
+      ) : null}
       {listing.length > 0 && <section className="section-block wrap" aria-labelledby="category-latest-title">
         <div className="section-heading"><div><span className="eyebrow">Page {page} of {pages}</span><h2 id="category-latest-title">More in {category.shortName}</h2></div></div>
         <div className="article-grid">{visible.map((article) => <ArticleCard key={article.slug} article={article} />)}</div>
