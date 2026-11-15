@@ -31,6 +31,7 @@ keyTakeaways:
   - "Recovery options and the security of every device holding a passkey still matter. [1][5]"
 faqs: []
 publishedAt: 2026-10-06
+updatedAt: 2026-11-15
 informationCheckedAt: 2026-10-06
 author: DECODISTA Editorial
 readingTime: 13
@@ -145,10 +146,13 @@ A stolen device alone is not necessarily enough to use the passkey; the person a
 
 If a device is lost or stolen:
 
-1. Sign in from another device or trusted session, if available.
-2. Remove the passkey associated with the lost device from the Google Account’s passkey settings.
-3. Review the account’s signed-in devices and remove sessions you no longer control.
-4. Use the account’s available alternative sign-in or recovery methods if needed.
+1. Sign in from a different device or an existing trusted session, if available.
+2. **For a passkey you manually created:** open **Google Account → Security & sign-in → Passkeys and security keys**, select the lost-device passkey and choose **Remove**. [1]
+3. **For an Android passkey automatically created by Google:** Google directs you to **Security & sign-in → Your devices → Manage all devices**, select that Android device and **Sign out**. Multiple same-name sessions may need separate sign-outs. [1]
+4. Review any remaining account sessions and sign out of devices you no longer control. If the passkey still appears as an option, also inspect your device or third-party credential manager and follow its removal instructions. [1]
+5. Use the account’s available alternative sign-in or recovery methods if needed.
+
+**Important time limit:** Google says an Android device may still sign in using its passkey for **up to six hours after sign-out**; after that window, a different sign-in method is needed. This is Google's documented behavior, not a guarantee of instant passkey invalidation or evidence that the lost device is safe. Use the relevant lost-device lock/erase and account-security steps when compromise is suspected. [1]
 
 Google’s fallback options depend on what was configured. They can include another passkey, a Google Prompt on another phone, a backup code, a security key, or account recovery. If those routes are unavailable, Google says 2-Step Verification recovery can take several business days. [5]
 
@@ -256,7 +260,7 @@ Google gives passkeys stronger phishing protection and warns that SMS or voice c
 
 ### What happens if I lose my phone with a passkey?
 
-Use another available sign-in method, remove the lost device’s passkey, and review device sessions. The exact fallbacks depend on what the account had configured; recovery may take time if none remain. [5]
+Use another available sign-in method and review device sessions. **Manually created passkey:** remove it under Passkeys and security keys. **Automatically created Android passkey:** Google instructs you to sign out the device under Manage all devices; its documented passkey sign-in window can continue for up to six hours after sign-out. If a passkey still appears, check the credential manager too. Recovery may take time if no fallback remains. [1][5]
 
 ### Can someone use my passkey if they steal my phone?
 
@@ -276,7 +280,7 @@ Consider it if targeted attacks are a realistic concern because of your role, vi
 
 ## Sources & Verification
 
-Information checked against current official documentation on **6 October 2026 (UTC)**. This article explains documented behavior; DECODISTA did not independently security-test Google’s sign-in systems.
+Core comparison originally checked against Google documentation on **6 October 2026 (UTC)**. The **lost-device passkey-removal steps** were rechecked against Google Account Help on **15 November 2026 (UTC)**, including manual versus automatically created Android passkeys and Google's up-to-six-hour post-sign-out allowance. This was a targeted correction, not a new end-to-end test of all sign-in flows. DECODISTA did not independently security-test Google's systems.
 
 ### Official Google Account sources
 
