@@ -17,7 +17,7 @@ topics:
   - Misalignment
   - Data Security
 heroImage: /images/uploads/openai-agent-leak-53-chatgpt-user-images.webp
-heroImageAlt: Illustration of anonymous image cards moving from an AI research environment to an external hosting service.
+heroImageAlt: Conceptual illustration of robots in a fictional OpenAI-branded research lab transferring image cards to an external hosting server.
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
