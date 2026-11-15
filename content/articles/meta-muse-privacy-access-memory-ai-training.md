@@ -24,21 +24,24 @@ shortAnswer: >-
   and internal instructions obtained by researchers and reviewed by WIRED
   indicate that this memory can include structured information about people in
   a user's life and their relationships. Meta also offers a model-training
-  opt-out. Those controls address different uses of your information. The
-  protections described here are primarily company claims, not independently
-  verified privacy guarantees. [1][10]
+  opt-out. Its November additions include live voice and configurable Spaces
+  that can refresh from connected apps in the background. These are distinct
+  controls and data flows; protections are primarily company claims, not
+  independently verified guarantees. [1][10][11][12]
 keyTakeaways:
   - "Review permissions before connecting an account."
   - "Treat persistent memory—including reported structured context about people and relationships—separately from conversation history. [4][10]"
   - "Check the training preference; do not assume it matches another Meta app."
   - "Credential protection does not eliminate the risks of account access."
   - "Examine sensitive-action approvals and any continuing permission you grant."
+  - "New Spaces can refresh using connected apps without another manual prompt for every update; review active connections and scheduled tasks. [12]"
+  - "Muse voice is rolling out initially in the U.S.; Meta's announcement does not establish a universal audio-retention rule. [11]"
   - "Separate advertising questions from training questions."
   - "Independent reporting adds reasons to scrutinize protections; it does not establish that every user experienced a security failure."
 faqs: []
 publishedAt: 2026-09-26
-updatedAt: 2026-10-04
-informationCheckedAt: 2026-10-04
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 11
 seoTitle: "Meta Muse Privacy: Access, Memory and AI Training Controls"
@@ -78,6 +81,14 @@ Meta says connections can be changed or removed. [1] Its engineering explanation
 Before accepting, ask: does the task need reading, sending, editing or purchasing? For example, identifying scheduling conflicts and creating meetings are different requests. Do not assume every connector offers the same choices.
 
 No universal, officially documented connection-settings path was verified for this article. Read the actual permission screen rather than following an assumed menu sequence.
+
+## Do Muse Spaces change when connected apps are updated?
+
+**New since the original article:** Meta introduced **Spaces** on November 6, 2026. You can create a personalized view—such as a calendar dashboard, order tracker or shopping planner—and connect apps so information in that Space refreshes in the background. Meta says the feature is available wherever Muse is available, but it does not provide an account-by-account permission and retention matrix in that announcement. [12]
+
+This means a previously authorized connection may continue supplying information to a Space even when you are not actively chatting. It does **not** establish that Spaces can bypass permissions or access accounts you never connected. Before using one, examine the data sources, which updates it may perform, what appears in the resulting view, and whether any task or connection remains active after you hide or stop using the Space.
+
+A hidden or rearranged Space is an interface change; Meta's announcement does not say that hiding it revokes connected-app access or erases its stored data. Use actual connection and task controls for those purposes, and verify the outcome rather than assuming it. [12]
 
 ## Can Muse see your passwords?
 
@@ -193,6 +204,12 @@ Meta documents Muse as available through WhatsApp, but the public materials revi
 
 The reviewed documentation did not establish a complete WhatsApp-specific retention or encryption boundary for agent processing. Do not assume protections for messages between people automatically describe everything an agent does after receiving a request. This article does not claim that Muse can read all your unrelated WhatsApp conversations.
 
+## Muse voice and expressive avatars: what is documented?
+
+On November 5, 2026, Meta announced that real-time voice conversations and expressive avatars were rolling out in the Muse app on mobile, web and Mac, **initially in the United States**. The feature can continue a task while you talk, and Meta says users can choose a voice-only or avatar display. It announced future support for AI Glasses and Muse Charm, rather than confirming that the new voice experience was already available on every wearable. [11]
+
+**Privacy limit:** The launch announcement explains the interaction and rollout, but does not establish an audio-retention period, a blanket promise that spoken content cannot be used for training, or identical microphone behavior across devices. Review the current app permissions and Muse's data controls before sharing sensitive spoken information. Do not infer continuous recording solely from an advertised real-time voice capability.
+
 ## Muse on AI glasses
 
 At Connect on September 23, Meta announced plans to bring Muse to its AI glasses for hands-free assistance. [6] The reviewed announcement does not establish universal availability on September 24 or a complete Muse-specific wearable privacy policy.
@@ -228,6 +245,8 @@ Reading access deserves attention too. An account can contain private informatio
 - Review the activity log and approved permissions.
 - Disconnect unused services; check retained information separately.
 - Read approval details, including any continuing authorization.
+- Review each Space's connected sources and any background refresh or scheduled task; hiding a Space is not proof that access is revoked.
+- For voice interactions, inspect microphone permissions and data-use settings rather than assuming text-chat rules cover every recording.
 - Revisit these choices after major updates or new device integrations.
 
 ## FAQ
@@ -282,7 +301,7 @@ Integration was announced at Connect. [6] Confirm availability for your model an
 
 ## Sources & verification
 
-**Verified October 4, 2026.** This article is documentation-based. No hands-on testing, network inspection, security audit or independent verification of Meta's backend privacy behavior was performed. “Verified” means the statements were checked against the accessible sources below; it does not mean their implementation was independently proven. Documentation gaps are identified in the relevant sections.
+**Documentation reviewed November 15, 2026 (including November 5–6 Meta announcements).** This article is documentation-based. No hands-on testing, network inspection, security audit or independent verification of Meta's backend privacy behavior was performed. “Verified” means the statements were checked against the accessible sources below; it does not mean their implementation was independently proven. Documentation gaps are identified in the relevant sections.
 
 ### Official Meta sources
 
@@ -293,6 +312,8 @@ Integration was announced at Connect. [6] Confirm availability for your model an
 5. [Download Muse](https://ai.meta.com/muse/download/) — current cross-device description, retrieved September 24, 2026.
 6. [Introducing Ray-Ban Meta Audio and More AI Glasses Styles](https://about.fb.com/news/2026/09/introducing-ray-ban-meta-audio-glasses-new-styles-plus-muse/) — September 23, 2026; Connect announcement.
 9. [The Future Is for Everyone: Muse for Small Business](https://about.fb.com/news/2026/09/introducing-muse-small-business/) — September 29, 2026; additional business connectors and United States/Canada availability context.
+11. [Meta Newsroom — Give Your Muse a Voice](https://about.fb.com/news/2026/11/introducing-muse-ai-voice-expressive-avatars) — November 5, 2026; voice and avatars, initial U.S. rollout, and future wearables.
+12. [Meta Newsroom — Design the Muse App, Just for You](https://about.fb.com/news/2026/11/introducing-spaces-customize-muse-app/) — November 6, 2026; customizable Spaces and connected-app background refresh.
 
 ### Independent reporting
 
