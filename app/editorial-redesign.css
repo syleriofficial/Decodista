@@ -203,7 +203,7 @@ body { background: var(--paper); }
 .related-section { padding-top: clamp(3rem, 5vw, 5rem); }
 
 /* 8. Search, latest, topic hubs, contact and editorial policies */
-.search-page, .info-page, .archive-page, .topic-page { max-width: 1150px; }
+.search-page, .info-page, .archive-page, .topic-page { max-width: 1150px; padding-top: clamp(2rem, 4vw, 4rem); }
 .page-intro {
   padding: clamp(2rem, 4vw, 3.2rem); background: var(--edition-panel); border-bottom: 0;
 }
@@ -222,7 +222,15 @@ body { background: var(--paper); }
 .contact-guidance { border-top-color: var(--signal); }
 
 /* 9. Weekly Brief and other trust surfaces follow the same visual language */
+.weekly-page { padding-top: clamp(2rem, 4vw, 4rem); }
 .weekly-page .page-intro { background: var(--edition-panel); }
+.weekly-page .page-intro h1 {
+  font: 500 clamp(2.9rem, 5.55vw, 5.5rem)/1.08 var(--font-editorial);
+  letter-spacing: -.047em; margin-bottom: 1.1rem; text-wrap: balance;
+}
+.weekly-page .page-intro > p { margin-top: 1.1rem; }
+.weekly-spotlight { border-top-color: var(--signal); }
+.weekly-issue-header h1 { font-size: clamp(2.75rem, 5.6vw, 5.4rem); line-height: 1.08; text-wrap: balance; }
 .weekly-issue-header { border-top: 3px solid var(--signal); }
 .weekly-top-takeaways { border-top-color: var(--signal); }
 .weekly-in-this-issue { border-top-color: var(--signal); }
