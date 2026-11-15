@@ -33,10 +33,10 @@ function check(name, condition, details) {
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
-const editorialSections = ["/tech-news", "/reviews", "/science", "/entertainment"];
+const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = [...editorialSections, "/latest"];
-const moreNavigation = [...currentSections, "/weekly"];
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const footerGuides = currentSections;
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/weekly", "/latest", "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -53,21 +53,21 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const latestInPrimary = /<a\b[^>]*href="\/latest"[^>]*>\s*Latest\s*<\/a>/.test(nav);
-  const moreStarts = nav.indexOf("more-panel");
-  const moreRegion = moreStarts < 0 ? "" : nav.slice(moreStarts);
+  const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
+  const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/)?.[0] ?? "";
   check(path + " Latest primary navigation", latestInPrimary, "Latest should be visible in main navigation");
-  check(path + " no duplicate Latest in More", !/<a\b[^>]*href="\/latest"/.test(moreRegion), "Latest must not be duplicated in More");
-  const primary = nav.split("<details", 1)[0];
-  const links = [...primary.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
   check(path + " editorial primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must be Tech News, Reviews, Science, Entertainment, Latest");
-  check(path + " More retains published guides",
-    moreNavigation.every((section) => moreRegion.includes('href="' + section + '"')),
-    "Published AI, How-To, Security, Digital Life and Weekly Brief must remain accessible under More");
-  check(path + " More has no duplicate primary sections",
-    primaryNavigation.every((section) => !moreRegion.includes('href="' + section + '"')),
-    "Each editorial navigation destination must appear in the intended menu only");
+    "Primary navigation must be Tech News, Reviews, Science, Latest");
+  check(path + " More dropdown removed",
+    !/<details\b/.test(nav) && !nav.includes("more-panel") && !nav.includes("more-menu"),
+    "Header must not render the retired More dropdown");
+  check(path + " footer retains published guide archives",
+    footerGuides.every((section) => footer.includes('href="' + section + '"')),
+    "AI, How-To, Security and Digital Life must remain accessible from the footer");
+  check(path + " paused sections not promoted in navigation",
+    ["/entertainment", "/weekly"].every((section) => !nav.includes('href="' + section + '"') && !footer.includes('href="' + section + '"')),
+    "Entertainment and Weekly Brief remain accessible at their URLs, but are not promoted in the header or footer");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
