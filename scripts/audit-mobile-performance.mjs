@@ -12,9 +12,13 @@ await mkdir(outDir, { recursive: true });
 
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const routes = [
-  { path: "/", label: "mobile-homepage" },
-  { path: "/latest", label: "mobile-latest" },
-  { path: "/articles/gmail-not-receiving-emails-google-storage-full", label: "mobile-article" },
+  { path: "/", label: "mobile-homepage", width: 390, theme: "light" },
+  { path: "/latest", label: "mobile-latest", width: 390, theme: "light" },
+  { path: "/how-to", label: "mobile-how-to", width: 390, theme: "light" },
+  { path: "/articles/gmail-not-receiving-emails-google-storage-full", label: "mobile-article", width: 390, theme: "light" },
+  { path: "/", label: "small-mobile-homepage", width: 320, theme: "dark" },
+  { path: "/search", label: "small-mobile-search", width: 320, theme: "dark" },
+  { path: "/articles/gmail-not-receiving-emails-google-storage-full", label: "small-mobile-article", width: 320, theme: "dark" },
 ];
 const records = [];
 const failures = [];
@@ -22,10 +26,11 @@ const failures = [];
 try {
   for (const route of routes) {
     const context = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: { width: route.width, height: route.width === 320 ? 720 : 844 },
       deviceScaleFactor: 2,
       isMobile: true,
       hasTouch: true,
+      colorScheme: route.theme,
       reducedMotion: "reduce",
     });
     const page = await context.newPage();
@@ -79,8 +84,43 @@ try {
       });
       assert(metrics.documentWidth <= metrics.viewportWidth + 1, route.path + " must not overflow the mobile viewport");
       assert(metrics.firstContentfulPaintMs !== null, route.path + " must render a paint entry");
-      assert.equal(errors.length, 0, route.path + " must have no uncaught browser exceptions: " + errors.join("; "));
-      records.push({ ...route, status: "passed", metrics });
+      assert.equal(errors.length, 0, route.label + " must have no uncaught browser exceptions: " + errors.join("; "));
+
+      // Capture real production HTML in touch-enabled Chrome, not a purely
+      // CSS-sized desktop browser. These remain synthetic emulations, not
+      // screenshots of a physical phone or CrUX field measurements.
+      if (route.path === "/" || route.width === 320) {
+        await page.screenshot({ path: outDir + "/" + route.label + "-before-consent.png" });
+      }
+
+      const privacy = page.getByRole("button", { name: "Decline analytics" });
+      if (await privacy.count()) {
+        const banner = page.locator(".consent-banner");
+        const bounds = await banner.boundingBox();
+        assert(bounds && bounds.height <= (route.width === 320 ? 720 : 844) * .45 + 2,
+          route.label + " privacy choice should not dominate the mobile viewport");
+        await privacy.click();
+        assert.equal(await banner.count(), 0, route.label + " opting out should close the notice");
+      }
+
+      if (route.path === "/") {
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.screenshot({ path: outDir + "/" + route.label + "-after-consent.png" });
+        const menu = page.locator(".mobile-menu-button");
+        assert(await menu.isVisible(), route.label + " needs an accessible mobile menu");
+        await menu.click();
+        assert(await page.locator("#site-navigation").isVisible(), route.label + " menu must open after tap");
+        const links = await page.locator("#site-navigation .nav-scroll > a").allTextContents();
+        assert.deepEqual(links, ["Tech News", "AI", "Reviews", "How-To", "Security", "Science"],
+          "Mobile menu must preserve all six editorial destinations");
+        await page.keyboard.press("Escape");
+        assert(!(await page.locator("#site-navigation").isVisible()), route.label + " Escape should close mobile menu");
+      }
+
+      records.push({ ...route, status: "passed", metrics,
+        caution: metrics.longTaskTotalMs > 500
+          ? "Unthrottled long tasks exceed 500 ms; investigate rather than interpreting one run as a real-user INP measurement"
+          : null });
     } catch (error) {
       failures.push(route.label + ": " + String(error));
       records.push({ ...route, status: "failed", error: String(error), errors });
@@ -97,7 +137,7 @@ const result = {
   target: base,
   disclaimer: isLocal
     ? "Local unthrottled Chrome preview. Not production Lighthouse, PageSpeed Insights, CrUX or real-user INP."
-    : "Unthrottled Chrome on a public website from GitHub Actions. This is not a mobile-network Lighthouse score, CrUX field data, or real-user INP.",
+    : "Touch-enabled, device-sized Chrome on public production from GitHub Actions. Screenshots are browser emulations, not physical-phone captures. Measurements are unthrottled lab data, not Lighthouse, CrUX field data or real-user INP.",
   records,
   failures,
 };
