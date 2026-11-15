@@ -61,20 +61,20 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "Reviews", "Science", "Latest"],
+  ["Tech News", "AI", "Reviews", "How-To", "Security", "Science"],
   "Primary navigation must follow the selected editorial menu order",
 );
 
-const footerGuides = site.match(/export const FOOTER_GUIDE_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
-assert(footerGuides, "Footer guide navigation definition is missing");
+const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
+assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
-  [...footerGuides.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life"],
-  "Footer must retain currently populated guide sections without reintroducing the header More menu",
+  [...footerSecondary.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
+  ["Latest", "Digital Life", "Weekly Brief"],
+  "Footer must retain Latest, Digital Life and Weekly Brief without restoring More",
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
-assert(footer.includes("FOOTER_GUIDE_ITEMS.map"), "Footer must keep real, populated guide archives accessible");
+assert(footer.includes("FOOTER_SECONDARY_ITEMS.map"), "Footer must keep secondary destinations accessible");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
 for (const category of ["ai", "security", "digital-life"]) {
@@ -85,18 +85,18 @@ assert(homepage.includes('getArticlesByContentType("how-to")'), "Homepage must p
 assert(howToPage.includes('import { ResponsiveImage } from "@/components/responsive-image"'), "How-To lead must use the shared responsive WebP implementation");
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
-assert(articles.some((article) => article.contentType === "how-to"), "Footer How-To archive must have real guides");
-for (const category of ["tech-news", "reviews", "science"]) {
+assert(articles.some((article) => article.contentType === "how-to"), "Primary How-To archive must have real guides");
+for (const category of ["tech-news", "ai", "reviews", "how-to", "security", "science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
-for (const category of ["ai", "how-to", "security", "digital-life"]) {
-  assert(footerGuides.includes(`href: "/${category}"`), `Footer guide navigation is missing ${category}`);
+for (const destination of ["latest", "digital-life", "weekly"]) {
+  assert(footerSecondary.includes(`href: "/${destination}"`), `Footer secondary navigation is missing ${destination}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
-const footerHrefs = [...footerGuides.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
+const footerHrefs = [...footerSecondary.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
 assert.equal(new Set([...primaryHrefs, ...footerHrefs]).size, primaryHrefs.length + footerHrefs.length,
-  "Primary and footer guide navigation must not duplicate destinations");
-assert(!navigation.includes('href: "/entertainment"') && !site.includes("MORE_NAV_ITEMS"),
+  "Primary and footer secondary navigation must not duplicate destinations");
+assert(!navigation.includes('href: "/entertainment"') && !navigation.includes('href: "/latest"') && !navigation.includes('href: "/weekly"') && !site.includes("MORE_NAV_ITEMS"),
   "Retired Entertainment and More navigation must not return");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
