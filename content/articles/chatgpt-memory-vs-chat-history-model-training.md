@@ -26,12 +26,13 @@ shortAnswer: >-
 keyTakeaways:
   - "Chat history and Memory are separate: turning Memory off does not delete past chats. [1][3][5]"
   - "Turning Improve the model for everyone off does not disable Memory or remove conversations from history. [1][3][4]"
-  - "Deleting a chat does not necessarily delete a separate saved memory or a file retained in Library. [1][5][6]"
+  - "Deleting a chat does not necessarily delete a separate saved memory or a file retained in Library or Space. [1][5][6]"
   - "Personalized Temporary Chat can use existing personalization; neither temporary mode creates or updates memories while the chat remains temporary. [1–3]"
-  - "Complete removal can require deleting information from Memory, chats, Library and connected sources separately. [1][6][7]"
+  - "Complete removal can require deleting information from Memory, chats, Library or Space, and connected sources separately. [1][6][7]"
 faqs: []
 publishedAt: 2026-10-09
-informationCheckedAt: 2026-10-09
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 12
 seoTitle: "ChatGPT Memory vs Chat History vs Training: What's the Difference?"
@@ -66,7 +67,7 @@ That storage and retention function is not the same as Memory.
 
 ## What is ChatGPT Memory in 2026?
 
-Memory is the personalization layer that can use relevant preferences and context in later responses. Depending on the account and available features, its sources can include past chats, saved memories, custom instructions, Library files and connected apps such as Gmail. It does not retain every detail from every conversation, and the context it considers useful can change. [1]
+Memory is the personalization layer that can use relevant preferences and context in later responses. Depending on the account and available features, its sources can include past chats, saved memories, custom instructions, files saved in Library or Space, and connected apps such as Gmail. It does not retain every detail from every conversation, and the context it considers useful can change. [1]
 
 The current route is **Settings → Personalization → Memory**. An account may show controls such as **Memory**, **Reference saved memories**, **Reference chat history**, **Memory summary**, **Manage**, or **Saved memories**. Not every account exposes every control. [1]
 
@@ -102,7 +103,7 @@ The required action depends on where the information exists. For fuller removal,
 
 1. Delete or correct the item in the Memory summary or saved-memory controls.
 2. Delete regular or archived chats containing the information.
-3. Delete related files from Library.
+3. Delete related files saved in Library or Space, depending on which one your account uses.
 4. Disconnect an app if ChatGPT should no longer retrieve information from it.
 
 **Don’t mention this again** is a personalization instruction, not source deletion. Similarly, deleting a saved memory stops that memory from being used in future personalization but does not remove mentions from old chats. OpenAI says Memory changes can take time to propagate and that logs of deleted saved memories may be retained for up to 30 days for safety and debugging. [1]
@@ -157,13 +158,13 @@ OpenAI does not say that saving makes the earlier temporary period retroactively
 | One-off chat with no history, no new memory and no training, while keeping existing personalization | Personalized Temporary Chat |
 | One-off chat without normal personalization | Unpersonalized Temporary Chat |
 | Stop future connected-app access | Disconnect that app |
-| Delete a saved uploaded file | Delete it from Library separately |
+| Delete a saved uploaded file | Delete it from Library or Space separately |
 
 These actions remain subject to account availability, workspace controls and the retention rules for each source. [1–7]
 
-## Library files and Memory
+## Saved files and Memory: Library or Space
 
-Library is a separate file store. Where supported and enabled, relevant Library files may contribute to Memory. Deleting the conversation does not delete a file that remains saved in Library, so [deleting a ChatGPT chat and deleting its Library file](</articles/delete-chatgpt-chat-uploaded-files-library>) are separate actions. [1][5][6]
+Where supported and enabled, files saved separately from chats can contribute to Memory. Some accounts now show **Space instead of Library**, so check which file area is present. Deleting a conversation does not delete a file that remains saved separately; [deleting a ChatGPT chat and removing the saved file](</articles/delete-chatgpt-chat-uploaded-files-library>) are separate actions. [1][5][6]
 
 Temporary Chat uploads are not saved to Library while the conversation remains temporary. If the chat is saved as a regular chat, eligible files may then be saved, subject to availability and storage limits. [2][6]
 
@@ -245,12 +246,12 @@ No. The opt-out controls model-improvement use of new eligible conversations. De
 
 ## Sources & Verification
 
-Information checked against current official OpenAI documentation on **October 9, 2026**. This article is documentation-based and does not claim hands-on account testing. Feature names and availability can vary by plan, region, platform, workspace policy and administrator settings.
+Information rechecked against current official OpenAI documentation on **November 15, 2026**. This article is documentation-based and does not claim hands-on account testing. Feature names and availability can vary by plan, region, platform, workspace policy and administrator settings.
 
 1. [OpenAI — Memory in ChatGPT](https://help.openai.com/en/articles/8590148-memory-in-chatgpt) — Memory sources and controls, Memory summary, Reference chat history, saved memories, Improved Memory, removal, Temporary Chat interaction and workspace defaults.
 2. [OpenAI — Temporary chat in ChatGPT](https://help.openai.com/en/articles/8914046-temporary-chat-in-chatgpt) — Personalized and Unpersonalized modes, history, Memory, training, retention and conversion to a saved chat.
 3. [OpenAI — Data controls in ChatGPT](https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt) — Improve the model for everyone, saved-chat behavior, Temporary Chat, feedback and managed-workspace defaults.
 4. [OpenAI — How your data is used to improve model performance](https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance) — personal-service opt-out, feedback exception and business-service defaults.
 5. [OpenAI — Chat and file retention in ChatGPT](https://help.openai.com/en/articles/8983778-chat-and-file-retention-in-chatgpt) — regular, archived, deleted and temporary-chat retention plus separately saved Library files.
-6. [OpenAI — Using Library to manage files in ChatGPT](https://help.openai.com/en/articles/20001052-using-library-to-manage-files-in-chatgpt) — Library separation, file deletion, Temporary Chat files and use under Memory/data controls.
+6. [OpenAI — Using Library to manage files in ChatGPT](https://help.openai.com/en/articles/20001052-using-library-to-manage-files-in-chatgpt) — Library/Space availability, separate file deletion, Temporary Chat uploads and Memory/data controls.
 7. [OpenAI — Google app data controls FAQ](https://help.openai.com/en/articles/10408842-google-app-data-controls-faq) — connected Google-app Memory, disconnection effects and Google-specific model-training limitations.
