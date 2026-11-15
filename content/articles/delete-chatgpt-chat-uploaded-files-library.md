@@ -2,9 +2,9 @@
 title: "Does Deleting a ChatGPT Chat Delete Uploaded Files? What Library Keeps"
 slug: delete-chatgpt-chat-uploaded-files-library
 deck: >-
-  Deleting a ChatGPT conversation and deleting a file saved in Library are
-  separate actions. Here is what happens to regular chats, Temporary Chats,
-  Projects, Memory, and connected files.
+  Deleting a ChatGPT conversation and deleting a separately saved file are
+  different actions. Some accounts now use Space instead of Library. Here is
+  what happens to regular chats, Temporary Chats, Projects and connected files.
 primaryCategory: ai
 contentType: how-to
 topics:
@@ -17,11 +17,11 @@ heroImageAlt: Conceptual illustration of a disappearing chat beside a document r
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
-  No—not if the uploaded file remains saved separately in ChatGPT Library.
-  Deleting the conversation removes the chat from your account view and
-  schedules it for permanent deletion, but the Library copy remains until you
-  delete that file separately. Temporary Chat files follow different rules and
-  are not saved to Library while the chat remains temporary. [1–4]
+  No—not if the uploaded file remains saved separately in ChatGPT Library
+  or Space. Deleting the conversation removes the chat from your account view
+  and schedules it for deletion, but separately saved files need their own
+  removal step. Some accounts show Space instead of Library. Temporary Chat
+  uploads follow separate rules while the chat remains temporary. [1–4]
 keyTakeaways:
   - "Deleting a regular chat does not remove a separately saved Library file. [1–3]"
   - "Chat deletion and Library-file deletion start separate retention processes, each subject to OpenAI’s documented exceptions. [1–3]"
@@ -30,24 +30,25 @@ keyTakeaways:
   - "Project files, custom GPT knowledge, and connected Google Drive items follow their own rules. [1][2][8]"
 faqs: []
 publishedAt: 2026-10-05
-informationCheckedAt: 2026-10-05
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 10
 seoTitle: "Does Deleting a ChatGPT Chat Delete Uploaded Files?"
 metaDescription: >-
-  Deleting a ChatGPT chat may leave a separately saved Library file in place.
-  Learn how to find and delete it safely, plus the rules for Temporary Chat.
+  Deleting a ChatGPT chat can leave saved files in Library or Space. Learn
+  where to find them and how to remove them, plus Temporary Chat rules.
 editorsPick: false
 featured: false
 ---
 ## Deleting a chat and deleting a file are now separate actions
 
-The answer depends on where the file still exists. When ChatGPT Library is available, an eligible file uploaded to or created in ChatGPT can be saved separately from the conversation that used it. OpenAI’s current Library and retention documentation explicitly says that deleting the chat does not delete that saved Library file. [1][2]
+The answer depends on where the file still exists. Files uploaded to or created in ChatGPT can be saved separately from the conversation that used them. OpenAI says some accounts now have **Space instead of Library**; where either file area is available, deleting a chat does not delete a separate saved file in that area. Check which name appears in your own account. [1][2]
 
 That makes four controls easy to confuse:
 
 - **Chat deletion** removes a conversation from your account view and starts the chat-deletion process.
-- **Library deletion** removes the separately saved file from your main Library and starts the file-deletion process.
+- **Saved-file deletion** removes the separately saved file from Library or Space using the controls available there and starts the file-deletion process.
 - **Memory removal** deals with information ChatGPT may use for personalization.
 - **Model-training opt-out** changes whether eligible new content can be used to improve OpenAI models.
 
@@ -76,15 +77,17 @@ Archiving is different. It removes the conversation from the regular sidebar wit
 
 Library is a separate retained-file location. OpenAI says files uploaded to or created in ChatGPT can be saved there when the feature is available. Those files remain available independently of the conversation until you manually delete them or an applicable workspace retention policy removes them. [1][2]
 
-This does not mean every file processed by every ChatGPT feature must appear in Library. Availability can vary by account, region, workspace permissions, and feature. The practical check is simple: open **Library** and see whether the file is listed. If it is, deleting only the conversation was not the file-removal step.
+This does not mean every file handled by ChatGPT appears in one file list. Availability varies by account, region, workspace permissions and feature. **If your account has Space, it takes the place of Library**; find saved files there using the available controls. If you still have Library, check Library. Files uploaded or created in a **locked chat** can be hidden from Library while the chat remains locked, so an absent Library listing does not always prove no file exists. [1]
 
-## How do you actually delete a saved Library file?
+## How do you actually delete a saved file?
 
-OpenAI’s current instructions are:
+If your account still uses Library, OpenAI’s file-deletion instructions are:
 
 1. Open **Library**.
 2. Select the file you want to remove.
 3. Choose **Delete** or the trash icon.
+
+If your account instead shows **Space**, use its corresponding file-management controls to remove the saved copy. The Library-specific button labels below should not be assumed to match every Space interface. [1][2]
 
 The file disappears from the main Library view immediately. OpenAI says deleted Library files are scheduled for permanent deletion within 30 days, unless they have already been de-identified and disassociated from the account or must be retained longer for security or legal reasons. [1]
 
@@ -137,7 +140,7 @@ This setting is a prospective model-improvement control, not a historical exposu
 | Where the information is | What you generally need to remove |
 | --- | --- |
 | Regular or archived chat | Delete the chat; archiving alone keeps it. |
-| Library file | Delete the file from Library separately. |
+| File saved in Library or Space | Delete the saved file separately using that area’s controls. |
 | Saved Memory | Remove the remembered information using current Memory controls, then remove relevant source material where it remains. |
 | Project file | Remove the file or delete the Project using Project controls; separately saved Library copies follow Library rules. |
 | Custom GPT knowledge | Manage the knowledge source in the GPT builder; deleting an ordinary chat is not enough. |
@@ -192,7 +195,7 @@ No. Project files are retained until the Project or file is deleted or a workspa
 
 Information checked against current official OpenAI documentation on **October 5, 2026**. This article is documentation-based and does not claim hands-on product testing. Feature availability and workspace policy can vary by account, plan, region, and administrator settings.
 
-1. [OpenAI — Using Library to manage files in ChatGPT](https://help.openai.com/en/articles/20001052-using-library-to-manage-files-in-chatgpt) — separate Library retention, file deletion, Recently deleted, Google Drive items, Temporary Chat files, and model-improvement context.
+1. [OpenAI — Using Library to manage files in ChatGPT](https://help.openai.com/en/articles/20001052-using-library-to-manage-files-in-chatgpt) — Library/Space availability, locked chat visibility, separate file retention, file deletion, Recently deleted, Google Drive items and Temporary Chat files.
 2. [OpenAI — Chat and file retention in ChatGPT](https://help.openai.com/en/articles/8983778-chat-and-file-retention-in-chatgpt) — regular, archived, deleted, temporary, Library, Project, and custom GPT retention.
 3. [OpenAI — Deleting and archiving chats in ChatGPT](https://help.openai.com/en/articles/8809935-deleting-and-archiving-chats-in-chatgpt) — deletion steps, immediate account-view removal, archive behavior, restoration limits, and connected-app data.
 4. [OpenAI — Temporary chat in ChatGPT](https://help.openai.com/en/articles/8914046-temporary-chat-in-chatgpt) — history, safety retention, Memory behavior, model improvement, and conversion to a saved chat.
