@@ -28,7 +28,7 @@ for (const sample of [
     await page.waitForLoadState("networkidle", { timeout: 30000 });
     assert.equal(await page.locator("main h1").count(), 1, "Exactly one H1");
     assert.match(await page.locator("main h1").innerText(), /Chrome.+83 Security Fixes/);
-    assert((await page.locator("main").innerText()).includes("Issue 3"), "Issue number must display");
+    assert(/issue\s+3/i.test(await page.locator(".weekly-issue-header .eyebrow").innerText()), "Issue number must display");
     assert.equal(await page.locator(".weekly-item").count(), 5, "Five verified developments");
     assert.equal(await page.locator(".weekly-top-takeaways li").count(), 3, "Three top takeaways");
     assert.equal(await page.locator(".weekly-checklist li").count(), 5, "Five practical steps");
