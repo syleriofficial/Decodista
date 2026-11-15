@@ -108,7 +108,7 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
               <div className="weekly-sources">
                 {[item.source, ...(item.additionalSources ?? [])].map((source, sourceIndex) => (
                   <a className="weekly-source" key={source.url} href={source.url} target="_blank" rel="noopener noreferrer">
-                    {sourceIndex === 0 ? "Primary source" : "Additional source"}: {source.label} <ExternalLink aria-hidden="true" />
+                    {sourceIndex === 0 ? "Primary source:" : "Additional source:"} {source.label} <ExternalLink aria-hidden="true" />
                   </a>
                 ))}
               </div>
