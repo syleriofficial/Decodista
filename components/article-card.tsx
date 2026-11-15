@@ -9,10 +9,16 @@ interface ArticleCardProps {
   article: Article;
   variant?: "standard" | "compact" | "horizontal";
   priority?: boolean;
+  imageSizes?: string;
 }
 
-export function ArticleCard({ article, variant = "standard", priority = false }: ArticleCardProps) {
+export function ArticleCard({ article, variant = "standard", priority = false, imageSizes }: ArticleCardProps) {
   const category = CATEGORY_MAP[article.category];
+  // Two-column grids need larger candidates than the three-column homepage.
+  // The homepage supplies its tighter three-column sizes explicitly.
+  const responsiveSizes = imageSizes ?? (variant === "horizontal"
+    ? "(max-width: 600px) 38vw, (max-width: 1000px) 34vw, 32vw"
+    : "(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 48vw");
 
   return (
     <article className={`article-card article-card--${variant}`}>
@@ -21,7 +27,7 @@ export function ArticleCard({ article, variant = "standard", priority = false }:
           src={article.featuredImage}
           alt={article.featuredImageAlt}
           fill
-          sizes={variant === "horizontal" ? "(max-width: 600px) 38vw, (max-width: 1000px) 34vw, 32vw" : "(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 32vw"}
+          sizes={responsiveSizes}
           priority={priority}
         />
       </Link>

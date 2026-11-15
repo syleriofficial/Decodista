@@ -56,6 +56,17 @@ for (const sample of [
     assert(heroSrcSet?.includes("/images/responsive/") && heroSrcSet.includes(" 320w"), "Homepage hero must advertise real responsive WebP variants");
     const feedSrcSet = await page.locator(".latest-feed .article-card--horizontal .card-image img").first().getAttribute("srcset");
     assert(feedSrcSet?.includes("/images/responsive/"), "Thumbnail must advertise responsive WebP variants");
+    const compactImage = page.locator(".home-topic .article-card--compact .card-image img").first();
+    if (await compactImage.count()) {
+      assert((await compactImage.getAttribute("sizes"))?.includes("32vw"),
+        "Three-column homepage images should request compact WebP candidates");
+    }
+    const imageFit = await page.locator(".lead-image img").evaluate((img) => getComputedStyle(img).objectFit);
+    assert.equal(imageFit, "cover", "Lead artwork must fill its image frame consistently");
+    if (sample.width <= 600) {
+      const sectionHeaderDirection = await page.locator(".latest-home .section-heading").evaluate((el) => getComputedStyle(el).flexDirection);
+      assert.equal(sectionHeaderDirection, "column", "Narrow screens must stack editorial headings and actions");
+    }
     if (sample.name === "mobile-light") {
       const heroVariant = await page.locator(".lead-image img").evaluate(img => img.currentSrc);
       assert(heroVariant.includes("/images/responsive/"), "Mobile homepage must select an actual resized WebP");
@@ -198,6 +209,9 @@ for (const sample of [
           assert.equal(await image.getAttribute("fetchpriority"), "high", "How-To lead must retain high fetch priority");
           assert((await image.getAttribute("src"))?.startsWith("/images/"), "How-To lead must avoid /_next/image redirects");
           assert((await image.getAttribute("srcset"))?.includes("/images/responsive/"), "How-To lead should serve generated responsive WebP variants");
+          const twoColumnCard = page.locator(".article-grid .article-card .card-image img").first();
+          assert((await twoColumnCard.getAttribute("sizes"))?.includes("48vw"),
+            "Two-column archive cards must request appropriately detailed artwork");
         }
       }
       const emptyScience = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });

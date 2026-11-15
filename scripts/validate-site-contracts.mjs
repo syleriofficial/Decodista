@@ -50,9 +50,20 @@ const howToPage = read("app/how-to/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
 const imageComponent = read("components/responsive-image.tsx");
+const cardComponent = read("components/article-card.tsx");
 const imageGenerator = read("build/responsive-images-vite-plugin.ts");
 const viteConfig = read("vite.config.ts");
 assert(imageComponent.includes("srcSet={info?.srcSet}"), "Responsive image component must use generated srcset");
+assert(cardComponent.includes("imageSizes?: string") && cardComponent.includes("sizes={responsiveSizes}"),
+  "Article cards must expose layout-aware image sizes");
+assert(cardComponent.includes('(max-width: 1000px) 50vw, 48vw'),
+  "Two-column article card images must not use undersized three-column candidates");
+assert(homepage.includes('imageSizes={stories.length === 1 ? undefined :'),
+  "Three-column homepage cards must retain efficient, layout-specific image sizes");
+assert(css.includes(".category-lead-image:hover img") && css.includes(".search-result-image:hover img"),
+  "Editorial media should share consistent hover presentation");
+assert(css.includes(".section-heading { align-items: flex-start; flex-direction: column; gap: .55rem; }"),
+  "Narrow-screen editorial headings must stack rather than overflow");
 assert(imageComponent.includes("fetchPriority={priority ?"), "Hero image must retain high fetch priority");
 assert(imageGenerator.includes("withoutEnlargement: true") && imageGenerator.includes("responsive-images.generated.json"), "Image pipeline must not enlarge originals and must write the manifest");
 assert(viteConfig.includes("responsiveImagesPlugin()"), "Vite must generate responsive WebP assets in local previews and production builds");
