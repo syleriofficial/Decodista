@@ -69,17 +69,21 @@ export default function HomePage() {
     selected.forEach((article) => alreadyShown.add(article.slug));
     return selected;
   };
-  // Feature existing, populated guide sections first. Do not advertise
-  // empty news, review, science or entertainment pillars as active coverage.
+  // Give recent reporting its own first-screen priority. Secondary sections
+  // only use stories not already featured; avoid repeating the same headlines.
+  const latest = takeDistinct(articles, 3, false);
   const ai = takeDistinct(getArticlesByCategory("ai"), 3, false);
-  const howTo = takeDistinct(getArticlesByContentType("how-to"), 3);
-  const security = takeDistinct(getArticlesByCategory("security"), 3);
-  const digitalLife = takeDistinct(getArticlesByCategory("digital-life"), 3);
-  const latest = takeDistinct(articles, 4);
+  const howTo = takeDistinct(getArticlesByContentType("how-to"), 3, false);
+  const security = takeDistinct(getArticlesByCategory("security"), 3, false);
+  const digitalLife = takeDistinct(getArticlesByCategory("digital-life"), 3, false);
   const editorsPicks = takeDistinct(getEditorsPicks(), 3, false);
 
   return (
     <main id="main-content">
+      <div className="home-intro wrap">
+        <span className="eyebrow">Independent technology journalism</span>
+        <span className="home-intro-note">Clear reporting. Practical answers. Better decisions.</span>
+      </div>
       <section className="hero wrap" aria-labelledby="lead-story-title">
         <article className="lead-story">
           <Link className="lead-image" href={`/articles/${lead.slug}`}>
@@ -116,11 +120,6 @@ export default function HomePage() {
         </aside>
       </section>
 
-      <EditorialSection eyebrow="Understand AI tools and choices" title="AI" href="/ai" stories={ai} />
-      <EditorialSection eyebrow="Solve everyday tech problems" title="How-To" href="/how-to" stories={howTo} />
-      <EditorialSection eyebrow="Protect your accounts" title="Security" href="/security" stories={security} />
-      <EditorialSection eyebrow="Manage your digital life" title="Digital Life" href="/digital-life" stories={digitalLife} />
-
       <section className="section-block latest-home wrap" aria-labelledby="latest-title">
         <SectionHeading eyebrow="Continue reading" title="Latest Stories" href="/latest" id="latest-title" />
         <div className="latest-feed">
@@ -152,6 +151,11 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      <EditorialSection eyebrow="Understand AI tools and choices" title="AI" href="/ai" stories={ai} />
+      <EditorialSection eyebrow="Solve everyday tech problems" title="How-To" href="/how-to" stories={howTo} />
+      <EditorialSection eyebrow="Protect your accounts" title="Security" href="/security" stories={security} />
+      <EditorialSection eyebrow="Manage your digital life" title="Digital Life" href="/digital-life" stories={digitalLife} />
 
       <EditorialSection eyebrow="Selected by DECODISTA" title="Editor’s Picks" href="/latest" stories={editorsPicks} />
     </main>
