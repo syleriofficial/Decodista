@@ -54,14 +54,14 @@ That makes four controls easy to confuse:
 
 One action does not automatically perform the other three.
 
-## Chat deletion vs Library deletion
+## Chat deletion vs saved-file deletion
 
-| Action | What happens to the chat? | What happens to a Library file? |
+| Action | What happens to the chat? | What happens to a separately saved file? |
 | --- | --- | --- |
-| Archive chat | It stays in the account under the same retention rules and remains searchable. | It stays in Library. |
-| Delete chat | It disappears from the account view immediately and is scheduled for permanent deletion within 30 days, subject to OpenAI’s documented exceptions. | A separately saved Library copy remains. |
-| Delete Library file | The chat is not automatically deleted. | The file leaves the main Library immediately and is scheduled for permanent deletion within 30 days, subject to documented exceptions. |
-| Use Temporary Chat | The conversation stays out of normal history unless you save it; OpenAI may retain a copy for up to 30 days for safety. | An uploaded file is not saved to Library while the chat remains temporary. |
+| Archive chat | It stays in the account under the same retention rules and remains searchable. | The saved file remains in Library or Space. |
+| Delete chat | It disappears from the account view immediately and is scheduled for permanent deletion within 30 days, subject to OpenAI’s documented exceptions. | A separately saved copy remains until removed through its file controls. |
+| Delete saved file | The chat is not automatically deleted. | The saved copy is removed from the file area and follows its applicable deletion and retention rules. |
+| Use Temporary Chat | The conversation stays out of normal history unless you save it; OpenAI may retain a copy for up to 30 days for safety. | An uploaded file is not saved to the account’s file area while the chat remains temporary. |
 
 Sources: [1–4].
 
@@ -73,9 +73,9 @@ That 30-day wording is not an unconditional guarantee. OpenAI documents exceptio
 
 Archiving is different. It removes the conversation from the regular sidebar without deleting it, and the archived chat remains searchable. Archiving does not change the chat’s retention period. [3]
 
-## Why can the uploaded file still be in Library?
+## Why can the uploaded file still be in Library or Space?
 
-Library is a separate retained-file location. OpenAI says files uploaded to or created in ChatGPT can be saved there when the feature is available. Those files remain available independently of the conversation until you manually delete them or an applicable workspace retention policy removes them. [1][2]
+When available, Library or Space holds files saved separately from the conversation. OpenAI says uploaded and generated files may remain available independently of that chat until you remove the saved copy or an applicable workspace retention policy removes it. [1][2]
 
 This does not mean every file handled by ChatGPT appears in one file list. Availability varies by account, region, workspace permissions and feature. **If your account has Space, it takes the place of Library**; find saved files there using the available controls. If you still have Library, check Library. Files uploaded or created in a **locked chat** can be hidden from Library while the chat remains locked, so an absent Library listing does not always prove no file exists. [1]
 
@@ -89,7 +89,7 @@ If your account still uses Library, OpenAI’s file-deletion instructions are:
 
 If your account instead shows **Space**, use its corresponding file-management controls to remove the saved copy. The Library-specific button labels below should not be assumed to match every Space interface. [1][2]
 
-The file disappears from the main Library view immediately. OpenAI says deleted Library files are scheduled for permanent deletion within 30 days, unless they have already been de-identified and disassociated from the account or must be retained longer for security or legal reasons. [1]
+On the Library interface, the file disappears from the main view immediately. OpenAI schedules deleted Library files for permanent deletion within 30 days, unless they have already been de-identified and disassociated from the account or must be retained longer for security or legal reasons. [1]
 
 If your Library includes **Recently deleted**, you may be able to restore the file before permanent deletion or use **Delete forever** for an earlier permanent-deletion request. Do not assume that view is available on every account. [1]
 
