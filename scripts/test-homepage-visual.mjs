@@ -279,6 +279,27 @@ for (const sample of [
       const secondPage = await page.goto(base + "/security?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(secondPage?.status(), 200, "Second Security archive page must work");
       assert.equal(await page.locator(".category-lead").count(), 0, "Featured article must not repeat on category page 2");
+      for (const [url, name] of [
+        ["/weekly", "weekly-archive"],
+        ["/topics/photos-backup", "topic-hub"],
+        ["/contact", "contact"],
+        ["/about", "about"],
+      ]) {
+        const response = await page.goto(base + url, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(response?.status(), 200, `Redesigned ${name} must be reachable`);
+        assert.equal(await page.locator("main h1").count(), 1, `Redesigned ${name} requires one main headline`);
+        const width = await page.evaluate(() => document.documentElement.scrollWidth);
+        assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
+        await page.screenshot({ path: out + "/" + name + "-desktop.png" });
+      }
+    }
+    if (sample.name === "small-mobile-dark") {
+      for (const url of ["/articles/gmail-not-receiving-emails-google-storage-full", "/how-to", "/search"]) {
+        const response = await page.goto(base + url, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(response?.status(), 200, `Mobile editorial route ${url} must load`);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        assert(overflow <= 1, `320px mobile reflow must not overflow on ${url}: ${overflow}px`);
+      }
     }
     report.status = "passed";
     report.measures = measures;
