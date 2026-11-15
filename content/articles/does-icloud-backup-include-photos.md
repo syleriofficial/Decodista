@@ -31,8 +31,8 @@ editorsPick: false
 seoTitle: Does iCloud Backup Include Photos? iCloud Photos Explained
 metaDescription: Does iCloud Backup include photos? Learn how iCloud Photos changes the answer, what deletion does, and what to check before replacing or erasing your iPhone.
 relatedArticles:
-  - google-photos-android-undo-backup-keep-phone-photos
-  - google-authenticator-new-phone-codes-missing
+  - turn-off-icloud-photos-without-losing-photos-iphone
+  - iphone-storage-full-icloud-has-space
 faqs:
   - question: Does iCloud Backup include photos if iCloud Photos is off?
     id: photos-off
@@ -85,6 +85,8 @@ The relationship is:
 
 There is no extra photo-backup stage at the end of “iPhone → iCloud Photos → iCloud Backup”.
 
+If the goal is to stop syncing photos on **one iPhone** while keeping the cloud library, the next decision is different: read [how to turn off iCloud Photos without losing photos](</articles/turn-off-icloud-photos-without-losing-photos-iphone>) before changing the device’s sync setting.
+
 ## What happens when you delete a photo? {#deleting-a-photo}
 
 With iCloud Photos enabled, deleting an item in Photos also removes it from iCloud Photos and other devices using that synced library. Having a Mac or iPad connected to the same library does not, by itself, preserve a separate copy. [Apple’s deletion guidance](<https://support.apple.com/en-us/104967>)
@@ -106,7 +108,7 @@ For synced photos, a successful device-backup message should never be your reaso
 
 These storage options are documented in Apple’s [photo-storage guide](<https://support.apple.com/en-us/105061>) and [archive instructions](<https://support.apple.com/en-us/108306>).
 
-**DECODISTA recommendation:** For phone-space pressure, consider optimisation after checking uploads. Allow enough device capacity and download time if you need local originals. Neither choice should replace an independent archive.
+**DECODISTA recommendation:** For phone-space pressure, consider optimisation after checking uploads. Allow enough device capacity and download time if you need local originals. Neither choice should replace an independent archive. If your iPhone remains full despite unused iCloud capacity, see [why iPhone storage and iCloud storage differ](</articles/iphone-storage-full-icloud-has-space>) before buying more cloud storage.
 
 Changing this storage preference does not turn the iPhone’s Photos library into a separate collection immune to synced deletions.
 
