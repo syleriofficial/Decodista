@@ -92,7 +92,15 @@ export default function HomePage() {
       <section className="hero wrap" aria-labelledby="lead-story-title">
         <article className="lead-story">
           <Link className="lead-image" href={`/articles/${lead.slug}`}>
-            <ResponsiveImage src={lead.featuredImage} alt={lead.featuredImageAlt} fill priority sizes="(max-width: 900px) 100vw, 65vw" />
+            <ResponsiveImage
+              src={lead.featuredImage}
+              alt={lead.featuredImageAlt}
+              fill
+              priority
+              // The cover image occupies ~half the feature column on wide screens,
+              // but becomes full width when the two-column magazine layout stacks.
+              sizes="(max-width: 1180px) 100vw, 38vw"
+            />
           </Link>
           <div className="lead-copy">
             <div className="card-labels">
