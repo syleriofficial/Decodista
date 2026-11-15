@@ -55,7 +55,7 @@ for (const sample of [
       assert.equal(imageResponse.status(), 200, "Chosen mobile WebP must exist");
       assert((imageResponse.headers()["content-type"] ?? "").includes("image/webp"), "Chosen mobile asset must be a WebP");
     }
-    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Entertainment", "Latest"], "Primary menu must use the approved five editorial sections");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science", "Latest"], "Primary menu must use the four approved editorial destinations");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
@@ -89,24 +89,25 @@ for (const sample of [
       assert(await page.locator("#site-navigation").isVisible(), "Desktop navigation must be visible");
     }
 
-    const more = page.locator(".more-menu > summary");
-    await more.click();
-    assert(await page.locator(".more-menu").evaluate(element => element.open), "More menu should expand");
-    assert(await page.locator('.more-panel a[href="/weekly"]').isVisible(), "Weekly Brief must be discoverable under More");
-    for (const category of ["ai", "how-to", "security", "digital-life"]) {
-      assert.equal(await page.locator(`.more-panel a[href="/${category}"]`).count(), 1, `Published ${category} archive must be reachable via More`);
-    }
-    assert.equal(await page.locator('.more-panel a[href="/latest"]').count(), 0, "Latest must not appear in More");
-    assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 1, "Latest must appear once in primary navigation");
-    for (const category of ["tech-news", "reviews", "science", "entertainment"]) {
+    assert.equal(await page.locator(".more-menu, .more-panel").count(), 0, "Removed More dropdown must not be rendered");
+    assert.equal(await page.locator('header .nav-scroll > a[href="/entertainment"]').count(), 0, "Paused Entertainment section must not be in the primary menu");
+    assert.equal(await page.locator('header .nav-scroll > a[href="/weekly"]').count(), 0, "Weekly Brief must not be in the primary menu");
+    assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 1, "Latest must appear exactly once in primary navigation");
+    for (const category of ["tech-news", "reviews", "science", "latest"]) {
       assert.equal(await page.locator(`header .nav-scroll > a[href="/${category}"]`).count(), 1, `Primary navigation must include ${category}`);
       assert.equal(await page.locator(`footer a[href="/${category}"]`).count(), 1, `Footer navigation must include ${category}`);
     }
-    assert(await page.locator('.more-panel a[href="/review-methodology"]').isVisible(), "Review Methodology must be discoverable");
+    for (const category of ["ai", "how-to", "security", "digital-life"]) {
+      assert.equal(await page.locator(`footer a[href="/${category}"]`).count(), 1, `Published ${category} guide archive must remain reachable from the footer`);
+    }
+    assert.equal(await page.locator('footer a[href="/weekly"]').count(), 0, "Paused Weekly Brief must not be promoted in footer navigation");
+    assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Review Methodology remains discoverable from the footer");
 
-    await page.keyboard.press("Escape");
-    assert(!await page.locator(".more-menu").evaluate(element => element.open), "Escape must close More");
-    assert(await more.evaluate(element => document.activeElement === element), "Escape restores focus to More");
+    if (sample.width <= 1000) {
+      await page.keyboard.press("Escape");
+      assert(!await page.locator("#site-navigation").isVisible(), "Escape must close the mobile navigation");
+      assert.equal(await mobileMenu.getAttribute("aria-expanded"), "false", "Mobile menu toggle must reflect its closed state");
+    }
 
     const articleDiscoveryResponse = await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert.equal(articleDiscoveryResponse?.status(), 200, "Existing article must remain reachable");

@@ -1,23 +1,16 @@
 "use client";
 
 import Link from "@/components/app-link";
-import { ChevronDown, Menu, Moon, Search, Sun, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { MORE_NAV_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, TRUST_LINKS } from "@/lib/site";
+import { Menu, Moon, Search, Sun, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { NAV_ITEMS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const moreMenuRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      if (moreMenuRef.current?.open) {
-        moreMenuRef.current.open = false;
-        moreMenuRef.current.querySelector("summary")?.focus();
-      } else if (open) {
-        setOpen(false);
-      }
+      if (event.key === "Escape" && open) setOpen(false);
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
@@ -29,20 +22,7 @@ export function SiteHeader() {
     localStorage.setItem("decodista-theme", next ? "dark" : "light");
   };
 
-  useEffect(() => {
-    const closeMoreOnOutsideClick = (event: PointerEvent) => {
-      if (moreMenuRef.current?.open && event.target instanceof Node && !moreMenuRef.current.contains(event.target)) {
-        moreMenuRef.current.open = false;
-      }
-    };
-    document.addEventListener("pointerdown", closeMoreOnOutsideClick);
-    return () => document.removeEventListener("pointerdown", closeMoreOnOutsideClick);
-  }, []);
-
-  const closeNavigation = () => {
-    setOpen(false);
-    if (moreMenuRef.current) moreMenuRef.current.open = false;
-  };
+  const closeNavigation = () => setOpen(false);
 
   return (
     <header className="site-header">
@@ -72,35 +52,6 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <details className="more-menu" ref={moreMenuRef}>
-              <summary>More <ChevronDown aria-hidden="true" /></summary>
-              <div className="more-panel">
-                <section aria-labelledby="more-sections-title">
-                  <h2 id="more-sections-title">More sections</h2>
-                  <ul>
-                    {MORE_NAV_ITEMS.map((item) => (
-                      <li key={item.href}><Link href={item.href} onClick={closeNavigation}>{item.label}</Link></li>
-                    ))}
-                  </ul>
-                </section>
-                <section aria-labelledby="more-topics-title">
-                  <h2 id="more-topics-title">Topics</h2>
-                  <ul>
-                    {NAV_TOPIC_HUBS.map((topic) => (
-                      <li key={topic.slug}><Link href={`/topics/${topic.slug}`} onClick={closeNavigation}>{topic.name}</Link></li>
-                    ))}
-                  </ul>
-                </section>
-                <section aria-labelledby="more-decodista-title">
-                  <h2 id="more-decodista-title">DECODISTA</h2>
-                  <ul>
-                    {TRUST_LINKS.map((item) => (
-                      <li key={item.href}><Link href={item.href} onClick={closeNavigation}>{item.label}</Link></li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-            </details>
             <button className="mobile-theme-toggle" type="button" onClick={toggleTheme}>
               <Moon className="theme-moon" aria-hidden="true" />
               <Sun className="theme-sun" aria-hidden="true" />
