@@ -5,6 +5,10 @@ import { FOOTER_SECONDARY_ITEMS, NAV_ITEMS, NAV_TOPIC_HUBS, SITE_DESCRIPTION, SI
 export function SiteFooter() {
   return (
     <footer className="site-footer">
+      <div className="footer-manifesto wrap">
+        <span>DECODISTA / OUR PURPOSE</span>
+        <strong>Technology makes more sense when you have the full picture.</strong>
+      </div>
       <div className="wrap">
         <div className="footer-grid">
           <div className="footer-brand">

@@ -1,0 +1,351 @@
+
+/*
+ * DECODISTA / Signal Edition — full editorial redesign, 2026.
+ * Presentation-only layer over the existing component contracts.
+ * No remote fonts, new JS dependencies, or fake story inventory.
+ */
+
+/* 1. A new, consistent brand and dark-mode system */
+:root {
+  --paper: #f4f6f9;
+  --surface: #ffffff;
+  --ink: #102033;
+  --muted: #566577;
+  --line: #d9e1ec;
+  --signal: #2454e8;
+  --signal-soft: #e9efff;
+  --orange: #e96b44;
+  --hero-panel: #101f39;
+  --hero-ink: #f5f8ff;
+  --edition-panel: #e8effb;
+  --max: 1360px;
+}
+html[data-theme="dark"] {
+  --paper: #0b1423;
+  --surface: #152239;
+  --ink: #f1f5fc;
+  --muted: #b0bfd1;
+  --line: #30445f;
+  --signal: #9ab6ff;
+  --signal-soft: #1c3054;
+  --orange: #ff946d;
+  --hero-panel: #162540;
+  --hero-ink: #f5f8ff;
+  --edition-panel: #172a47;
+}
+body { background: var(--paper); }
+::selection { background: var(--signal); color: var(--paper); }
+.wrap { max-width: var(--max); }
+.eyebrow, .category-label, .content-type-label { font-size: .72rem; letter-spacing: .075em; }
+.category-label, .eyebrow { font-weight: 850; }
+
+/* 2. A two-tier magazine masthead instead of a generic app toolbar */
+.site-header { border-top: 4px solid #2454e8; background: var(--surface); }
+.edition-line {
+  min-height: 30px; display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem;
+  border-bottom: 1px solid var(--line); color: var(--muted);
+  font-size: .65rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase;
+}
+.masthead {
+  min-height: 126px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 78px 48px;
+  align-items: center; column-gap: 1.5rem; row-gap: 0;
+}
+.masthead .wordmark { grid-column: 1; grid-row: 1; justify-self: start; font-size: clamp(1.75rem, 2.6vw, 2.4rem); }
+.wordmark { letter-spacing: -.075em; }
+.wordmark small { letter-spacing: .09em; }
+.masthead .header-actions { grid-column: 2; grid-row: 1; justify-self: end; }
+.masthead .primary-nav {
+  grid-column: 1 / -1; grid-row: 2; width: 100%; min-width: 0;
+  border-top: 1px solid var(--line); justify-self: stretch;
+}
+.masthead .nav-scroll { justify-content: flex-start; gap: clamp(1.2rem, 2.4vw, 2.5rem); height: 100%; }
+.masthead .nav-scroll > a {
+  display: inline-flex; align-items: center; min-height: 46px;
+  border-bottom: 3px solid transparent; font-size: .77rem; letter-spacing: .08em;
+}
+.masthead .nav-scroll > a[aria-current="page"] {
+  border-bottom-color: var(--signal); text-decoration: none;
+}
+.icon-button { width: 44px; height: 44px; border-radius: 50%; }
+.icon-button:focus-visible { outline-offset: 3px; }
+
+/* 3. Cover story: a real two-sided editorial spread */
+.home-intro { border-bottom: 0; padding-top: clamp(1.5rem, 3vw, 2.6rem); }
+.home-intro-note { font-size: .84rem; }
+.hero {
+  grid-template-columns: minmax(0, 3fr) minmax(265px, .95fr);
+  gap: clamp(1rem, 2vw, 1.85rem); padding-top: 1rem;
+  padding-bottom: clamp(3.5rem, 6vw, 6rem);
+}
+.lead-story {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  min-width: 0; min-height: 510px; background: var(--hero-panel); color: var(--hero-ink);
+}
+.lead-story .lead-image {
+  grid-column: 2; grid-row: 1; width: 100%; min-height: 510px;
+  aspect-ratio: auto; background: #172b4d;
+}
+.lead-story .lead-copy {
+  grid-column: 1; grid-row: 1; display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start; gap: 0;
+  min-width: 0; padding: clamp(1.6rem, 3.5vw, 3.5rem);
+}
+.lead-copy .card-labels { margin-bottom: 1.4rem; }
+.lead-copy h1 {
+  font-size: clamp(2.3rem, 3.45vw, 3.75rem);
+  line-height: 1.065; letter-spacing: -.05em; overflow-wrap: break-word;
+}
+.lead-copy .category-label { color: #a5c7ff; }
+.lead-copy .content-type-label, .lead-copy > p, .lead-meta { color: #d5e0f0; }
+.lead-copy > p { margin: 1.15rem 0 0; font-size: 1rem; line-height: 1.65; }
+.lead-meta {
+  width: 100%; margin-top: 2rem; border-top-color: #415471;
+  flex-wrap: wrap; gap: .55rem 1rem;
+}
+.lead-copy .read-link { color: #fff; margin-left: 0; min-height: 36px; }
+.lead-copy .read-link:hover { color: #a5c7ff; }
+.hero-rail { padding: .75rem 1.1rem; background: var(--surface); border-top: 4px solid var(--signal); }
+.hero-rail .rail-heading { font-size: .76rem; }
+.hero-rail article { grid-template-columns: 27px minmax(0,1fr); gap: .65rem; padding: 1.3rem 0; }
+.hero-rail h2 { font-size: clamp(1.15rem, 1.6vw, 1.52rem); line-height: 1.18; }
+.story-index { font-size: .78rem; }
+
+/* 4. Different visual hierarchies for latest, featured and guides */
+.latest-home { border-top: 0; padding-top: 0; padding-bottom: clamp(4rem, 7vw, 7rem); }
+.section-heading { border-bottom-width: 2px; }
+.section-heading h2 { font-size: clamp(2.2rem, 3.9vw, 4rem); }
+.section-heading > a { min-height: 44px; }
+.latest-feed {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.35rem;
+}
+.latest-feed .article-card--horizontal {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0; padding: 0; border-bottom: 0; background: var(--surface);
+}
+.latest-feed .article-card--horizontal .card-image { width: 100%; aspect-ratio: 16 / 10; }
+.latest-feed .article-card--horizontal .card-copy {
+  display: flex; flex: 1; flex-direction: column;
+  padding: 1.25rem 1.25rem 1.45rem;
+}
+.latest-feed .article-card--horizontal .card-copy h3 {
+  font-size: clamp(1.35rem, 1.85vw, 1.8rem); line-height: 1.14;
+}
+.latest-feed .article-card--horizontal .card-copy > p { font-size: .91rem; }
+.latest-feed .article-card--horizontal .meta-row { margin-top: auto; }
+.article-card .card-image { background: var(--edition-panel); }
+.article-card .card-copy h3 { line-height: 1.17; }
+.article-card--compact .card-copy h3 { line-height: 1.2; }
+.home-topic { padding-bottom: clamp(4rem, 6.5vw, 6.5rem); }
+.home-topic-grid { grid-template-columns: minmax(0, 1.22fr) repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.home-topic-grid .card-image { aspect-ratio: 16 / 9; }
+.meta-row { flex-wrap: wrap; }
+
+/* 5. Make practical discovery look like a distinct guide panel */
+.reader-paths {
+  padding: clamp(2rem, 4vw, 4rem);
+  margin-bottom: clamp(4rem, 6vw, 6rem);
+  background: var(--edition-panel); border: 0; border-left: 5px solid var(--signal);
+}
+.reader-paths-heading { max-width: 900px; }
+.reader-paths-heading h2 { font-size: clamp(2.2rem, 4vw, 3.8rem); }
+.reader-paths-grid { gap: clamp(.8rem, 2vw, 1.65rem); }
+.reader-path {
+  background: transparent; border: 0; border-top: 1px solid var(--line);
+  padding: 1.2rem 0 .5rem; min-height: 180px;
+}
+.reader-path:hover, .reader-path:focus-visible { border-top-color: var(--signal); }
+.reader-path strong { font-size: clamp(1.3rem, 1.8vw, 1.65rem); }
+.reader-search-link { border-radius: 0; }
+
+/* 6. Section pages: cinematic but honest about empty archives */
+.category-header {
+  padding: clamp(2.5rem, 5.5vw, 5.5rem) clamp(1.25rem, 4vw, 4rem);
+  margin-top: clamp(1.3rem, 3vw, 2.6rem);
+  background: var(--edition-panel); border-bottom: 0;
+}
+.category-header h1 { max-width: 900px; }
+.category-header > p { max-width: 440px; font-size: 1.14rem; }
+.category-lead { margin-top: clamp(1.25rem, 3vw, 2.5rem); border: 0; }
+.category-lead > div { background: var(--hero-panel); color: var(--hero-ink); }
+.category-lead > div p { color: #d7e1ef; }
+.category-lead .category-label, .category-lead .content-type-label { color: #a5c7ff; }
+.category-lead .read-link { color: #fff; margin-left: 0; }
+.category-lead .read-link:hover { color: #a5c7ff; }
+.section-principle {
+  max-width: var(--max); margin-top: clamp(1.25rem, 3vw, 2.5rem);
+  padding: clamp(2rem, 4vw, 4rem); background: var(--surface);
+  border-left: 4px solid var(--signal);
+}
+.section-principle h2 { max-width: 790px; line-height: 1.12; }
+.section-explore-links a { border-radius: 0; }
+.pagination a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* 7. Article experience: highly legible with a clear reading rail */
+.article-header { padding-top: clamp(2.5rem, 5vw, 5rem); }
+.article-header h1 { max-width: 1040px; line-height: 1.07; }
+.article-hero > div { aspect-ratio: 16 / 8.7; background: var(--edition-panel); }
+.article-reading { padding-block: clamp(2.5rem, 6vw, 6rem); }
+.short-answer {
+  border-top: 0; border-left: 5px solid var(--signal);
+  background: var(--edition-panel); padding: clamp(1.3rem, 3vw, 2rem);
+}
+.short-answer h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
+.article-main-grid { grid-template-columns: 175px minmax(0, 720px) 145px; gap: clamp(1.4rem, 3vw, 3rem); }
+.toc { top: 1rem; padding: 1.1rem; background: var(--surface); border-top: 3px solid var(--signal); }
+.toc ol { font-size: .81rem; line-height: 1.55; }
+.article-prose { line-height: 1.77; }
+.article-prose h2 { line-height: 1.14; }
+.article-side-note { border-top-width: 3px; }
+.author-profile { border-top-color: var(--signal); background: var(--surface); }
+.article-discovery { border-top-color: var(--signal); }
+.related-section { padding-top: clamp(3rem, 5vw, 5rem); }
+
+/* 8. Search, latest, topic hubs, contact and editorial policies */
+.search-page, .info-page, .archive-page, .topic-page { max-width: 1150px; padding-top: clamp(2rem, 4vw, 4rem); }
+.page-intro {
+  padding: clamp(2rem, 4vw, 3.2rem); background: var(--edition-panel); border-bottom: 0;
+}
+.page-intro h1 { font-size: clamp(3rem, 6vw, 6rem); }
+.search-form {
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgb(15 32 52 / .06);
+}
+.search-form input { min-height: 45px; }
+.search-form button { min-height: 48px; }
+.search-results article { padding: 1.6rem 0; }
+.search-result-image { background: var(--edition-panel); }
+.topic-grid { gap: 1.5rem; }
+.topic-reading-path { padding-top: clamp(2rem, 4vw, 4rem); }
+.contact-page .page-intro { margin-bottom: 2rem; }
+.contact-guidance { border-top-color: var(--signal); }
+
+/* 9. Weekly Brief and other trust surfaces follow the same visual language */
+.weekly-page { padding-top: clamp(2rem, 4vw, 4rem); }
+.weekly-page .page-intro { background: var(--edition-panel); }
+.weekly-page .page-intro h1 {
+  font: 500 clamp(2.9rem, 5.55vw, 5.5rem)/1.08 var(--font-editorial);
+  letter-spacing: -.047em; margin-bottom: 1.1rem; text-wrap: balance;
+}
+.weekly-page .page-intro > p { margin-top: 1.1rem; }
+.weekly-spotlight { border-top-color: var(--signal); }
+.weekly-issue-header h1 { font-size: clamp(2.75rem, 5.6vw, 5.4rem); line-height: 1.08; text-wrap: balance; }
+.weekly-issue-header { border-top: 3px solid var(--signal); }
+.weekly-top-takeaways { border-top-color: var(--signal); }
+.weekly-in-this-issue { border-top-color: var(--signal); }
+.weekly-item-number { color: var(--signal); }
+.info-content { max-width: 760px; }
+
+/* 10. A proper editorial colophon instead of a generic sitemap footer */
+.site-footer {
+  background: #101e32; color: #f2f6fc; border-top: 5px solid #2454e8;
+  --line: #334860; --muted: #bdc9d9; --signal: #9bbcff; --ink: #f2f6fc;
+}
+.footer-manifesto {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
+  padding-block: clamp(2rem, 3vw, 3.2rem); border-bottom: 1px solid var(--line);
+}
+.footer-manifesto span { font-size: .69rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
+.footer-manifesto strong { max-width: 800px; font: 500 clamp(1.45rem, 2.8vw, 2.9rem)/1.12 var(--font-editorial); letter-spacing: -.035em; }
+.footer-grid { padding-block: clamp(2.5rem, 4vw, 4.5rem); }
+.footer-brand p { color: var(--muted); }
+.footer-grid h2 { color: var(--signal); }
+.footer-grid li { line-height: 1.5; }
+
+/* 11. Consent should not swallow the mobile viewport */
+.consent-banner { width: min(calc(100% - 2rem), 580px); padding: 1rem 1.15rem; gap: 1rem; box-shadow: 0 9px 30px rgb(0 0 0 / .17); }
+.consent-banner strong { font-size: 1.13rem; }
+.consent-banner p { margin: .35rem 0; line-height: 1.4; }
+.consent-actions button { min-height: 44px; }
+.consent-banner .consent-accept { background: #2454e8; border-color: #2454e8; color: #fff; }
+
+/* 12. Responsive editorial layouts, tested down to 320 CSS pixels */
+@media (max-width: 1180px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-rail { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0 1rem; }
+  .hero-rail .rail-heading { grid-column: 1 / -1; }
+  .lead-copy h1 { font-size: clamp(2.3rem, 4.3vw, 3.75rem); }
+}
+@media (max-width: 1000px) {
+  .edition-line { display: none; }
+  .masthead {
+    min-height: 76px; grid-template-columns: 44px minmax(0,1fr) auto;
+    grid-template-rows: auto; gap: .8rem;
+  }
+  .masthead .mobile-menu-button { grid-column: 1; grid-row: 1; }
+  .masthead .wordmark { grid-column: 2; grid-row: 1; justify-self: center; font-size: clamp(1.3rem, 3vw, 1.8rem); }
+  .masthead .header-actions { grid-column: 3; grid-row: 1; }
+  .masthead .primary-nav { grid-column: 1 / -1; grid-row: 2; }
+  .masthead .primary-nav.is-open {
+    position: absolute; left: 0; top: 76px; width: 100%;
+    max-height: calc(100dvh - 76px); overflow-y: auto; background: var(--surface);
+  }
+  .masthead .nav-scroll { align-items: stretch; gap: 0; }
+  .masthead .nav-scroll > a { display: flex; min-height: 48px; border-bottom: 1px solid var(--line); }
+  .masthead .nav-scroll > a[aria-current="page"] { border-left: 3px solid var(--signal); padding-left: .75rem; }
+  .latest-feed { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .home-topic-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .reader-paths-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .article-main-grid { grid-template-columns: 180px minmax(0,720px); }
+  .article-side-note { display: none; }
+}
+@media (max-width: 800px) {
+  .lead-story { grid-template-columns: 1fr; min-height: 0; }
+  .lead-story .lead-image {
+    grid-column: 1; grid-row: 1; min-height: 0; aspect-ratio: 16 / 9;
+  }
+  .lead-story .lead-copy { grid-column: 1; grid-row: 2; padding: clamp(1.5rem,4vw,2.5rem); }
+  .lead-copy h1 { font-size: clamp(2.2rem, 6vw, 3.5rem); }
+  .hero-rail { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .article-main-grid { grid-template-columns: 1fr; }
+  .toc { position: static; max-width: 720px; margin-inline: auto; }
+  .category-header { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .masthead { min-height: 72px; }
+  .masthead .primary-nav.is-open { top: 72px; max-height: calc(100dvh - 72px); }
+  .masthead .wordmark { font-size: 1.25rem; }
+  .hero { padding-bottom: 2.3rem; }
+  .hero-rail { grid-template-columns: 1fr; }
+  .lead-story .lead-image { aspect-ratio: 4 / 3; }
+  .lead-story .lead-copy { padding: 1.35rem 1.2rem 1.55rem; }
+  .lead-copy h1 { font-size: clamp(2.15rem, 9.4vw, 3.15rem); }
+  .lead-meta { margin-top: 1.25rem; }
+  .latest-feed { grid-template-columns: 1fr; gap: 1rem; }
+  .latest-feed .article-card--horizontal {
+    display: grid; grid-template-columns: 38% minmax(0,1fr); align-items: start;
+    gap: .85rem; padding: 0 0 1rem; border-bottom: 1px solid var(--line); background: transparent;
+  }
+  .latest-feed .article-card--horizontal .card-image { aspect-ratio: 4 / 3; }
+  .latest-feed .article-card--horizontal .card-copy { padding: 0; }
+  .latest-feed .article-card--horizontal .card-copy h3 { font-size: clamp(1.08rem, 4.5vw, 1.3rem); }
+  .latest-feed .article-card--horizontal .card-copy > p { display: none; }
+  .latest-feed .article-card--horizontal .meta-row { padding-top: .25rem; }
+  .home-topic-grid { grid-template-columns: 1fr; }
+  .reader-paths { padding: 1.35rem 1.1rem 1.65rem; }
+  .reader-paths-grid { grid-template-columns: 1fr; gap: .55rem; }
+  .reader-path { min-height: 0; padding: 1.05rem 0; }
+  .reader-path-action { margin-top: .4rem; padding-top: .6rem; }
+  .section-heading { gap: .55rem; }
+  .category-header { padding: 2rem 1.2rem; }
+  .section-principle { padding: 2rem 1.3rem; }
+  .page-intro { padding: 1.7rem 1.25rem; }
+  .footer-manifesto { flex-direction: column; align-items: flex-start; }
+  .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .consent-banner {
+    left: .6rem; right: .6rem; bottom: .6rem; width: auto;
+    padding: .6rem .8rem .7rem; gap: .35rem;
+    border-top-width: 3px; max-height: min(45dvh, 280px); overflow-y: auto;
+  }
+  .consent-banner strong { font-size: .98rem; line-height: 1.2; }
+  .consent-banner p { margin: .18rem 0; font-size: .7rem; line-height: 1.3; }
+  .consent-banner a { font-size: .68rem; }
+  .consent-actions { grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .consent-actions button { min-height: 44px; padding: .55rem .35rem; font-size: .7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lead-image img, .card-image img, .category-lead-image img, .search-result-image img {
+    transition: none !important; transform: none !important;
+  }
+}

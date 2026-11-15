@@ -43,6 +43,29 @@ for (const sample of [
     assert(frontPageSections[1].includes("latest-home") && frontPageSections[2].includes("reader-paths"),
       "Latest stories and guided search must precede editorial topic sections");
     assert.equal(await page.locator(".home-intro").count(), 1, "Homepage must have one editorial introduction");
+    assert.equal(await page.locator(".edition-line").count(), 1, "Signal Edition masthead must appear once");
+    assert.equal(await page.locator(".footer-manifesto").count(), 1, "Signal Edition footer colophon must appear once");
+    const redesigned = await page.evaluate(() => {
+      const hero = document.querySelector(".lead-story");
+      const header = document.querySelector(".masthead");
+      const latest = document.querySelector(".latest-feed");
+      const footer = document.querySelector(".site-footer");
+      return {
+        heroDisplay: getComputedStyle(hero).display,
+        headerRows: getComputedStyle(header).gridTemplateRows,
+        latestDisplay: getComputedStyle(latest).display,
+        footerBackground: getComputedStyle(footer).backgroundColor,
+      };
+    });
+    assert.equal(redesigned.heroDisplay, "grid", "Lead story must use the new magazine spread");
+    assert.equal(redesigned.latestDisplay, "grid", "Latest Stories must use editorial grid tiles");
+    assert(redesigned.footerBackground !== "rgba(0, 0, 0, 0)", "Footer must have its own editorial surface");
+    if (sample.width > 1000) {
+      assert((await page.locator(".edition-line").isVisible()), "Desktop publication masthead must be visible");
+      assert((await page.locator(".masthead .primary-nav").isVisible()), "Desktop second-tier navigation must be visible");
+    } else {
+      assert(!(await page.locator(".edition-line").isVisible()), "Mobile masthead should avoid extra chrome");
+    }
     const articleHrefs = await page.locator(".lead-story h1 a, .hero-rail h2 a, .latest-feed .article-card h3 a, .home-topic .article-card h3 a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
     assert.equal(new Set(articleHrefs).size, articleHrefs.length, "Homepage headline positions must not repeat article destinations");
@@ -97,6 +120,19 @@ for (const sample of [
     await search.focus();
     assert(await search.evaluate(el => document.activeElement === el), "Search CTA must accept keyboard focus");
     await page.locator("section.reader-paths").screenshot({ path: out + "/" + sample.name + "-discovery.png" });
+    // Keep a first-screen screenshot for human design review; do not rely on a
+    // Lighthouse score alone to judge editorial layout.
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: out + "/" + sample.name + "-first-screen.png" });
+    if (sample.name === "desktop-light" || sample.name === "mobile-light") {
+      await page.screenshot({ path: out + "/" + sample.name + "-full-page.png", fullPage: true });
+      const privacyChoice = page.getByRole("button", { name: "Decline analytics" });
+      if (await privacyChoice.count()) {
+        await privacyChoice.click();
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.screenshot({ path: out + "/" + sample.name + "-unobstructed.png" });
+      }
+    }
 
 
     // Browser regression coverage for the navigation, including the mobile drawer.
@@ -243,6 +279,27 @@ for (const sample of [
       const secondPage = await page.goto(base + "/security?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(secondPage?.status(), 200, "Second Security archive page must work");
       assert.equal(await page.locator(".category-lead").count(), 0, "Featured article must not repeat on category page 2");
+      for (const [url, name] of [
+        ["/weekly", "weekly-archive"],
+        ["/topics/photos-backup", "topic-hub"],
+        ["/contact", "contact"],
+        ["/about", "about"],
+      ]) {
+        const response = await page.goto(base + url, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(response?.status(), 200, `Redesigned ${name} must be reachable`);
+        assert.equal(await page.locator("main h1").count(), 1, `Redesigned ${name} requires one main headline`);
+        const width = await page.evaluate(() => document.documentElement.scrollWidth);
+        assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
+        await page.screenshot({ path: out + "/" + name + "-desktop.png" });
+      }
+    }
+    if (sample.name === "small-mobile-dark") {
+      for (const url of ["/articles/gmail-not-receiving-emails-google-storage-full", "/how-to", "/search"]) {
+        const response = await page.goto(base + url, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(response?.status(), 200, `Mobile editorial route ${url} must load`);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        assert(overflow <= 1, `320px mobile reflow must not overflow on ${url}: ${overflow}px`);
+      }
     }
     report.status = "passed";
     report.measures = measures;

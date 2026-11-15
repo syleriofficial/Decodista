@@ -29,6 +29,10 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <a className="skip-link" href="#main-content">Skip to content</a>
+      <div className="edition-line wrap">
+        <span>DECODISTA / INDEPENDENT TECHNOLOGY COVERAGE</span>
+        <span>CLARITY OVER HYPE</span>
+      </div>
       <div className="masthead wrap">
         <button
           className="icon-button mobile-menu-button"

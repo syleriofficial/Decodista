@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GOOGLE_ANALYTICS_ID, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
+import "./editorial-redesign.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

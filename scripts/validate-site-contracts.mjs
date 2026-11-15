@@ -26,6 +26,7 @@ const articlePage = read("app/articles/[slug]/page.tsx");
 const contentHelpers = read("lib/content.ts");
 const science = read("app/[section]/page.tsx");
 const css = read("app/globals.css");
+const redesignedCss = read("app/editorial-redesign.css");
 const latestArchive = read("app/latest/page.tsx");
 const paginationHelper = read("lib/pagination.ts");
 const sitemap = read("app/sitemap.ts");
@@ -49,6 +50,15 @@ assert(css.includes(".search-suggestions button[aria-pressed"), "Search topic ch
 const howToPage = read("app/how-to/page.tsx");
 const standardsRedirect = read("app/editorial-standards/page.tsx");
 const nextConfig = read("next.config.ts");
+assert(layout.includes('import "./editorial-redesign.css";'), "All public pages must load the Signal Edition design system");
+assert(redesignedCss.includes(".lead-story") && redesignedCss.includes(".latest-feed") && redesignedCss.includes(".reader-paths") &&
+       redesignedCss.includes(".article-reading") && redesignedCss.includes(".category-header") &&
+       redesignedCss.includes(".search-page") && redesignedCss.includes(".weekly-page") &&
+       redesignedCss.includes(".site-footer"), "Full redesign must cover all public editorial page templates");
+assert(header.includes('className="edition-line wrap"'), "Editorial masthead must include publication identity line");
+assert(footer.includes('className="footer-manifesto wrap"'), "Footer must include editorial colophon");
+assert(redesignedCss.includes("@media (max-width: 600px)") && redesignedCss.includes("@media (max-width: 800px)"),
+  "Magazine layout must include compact mobile and tablet reflow");
 const imageComponent = read("components/responsive-image.tsx");
 const cardComponent = read("components/article-card.tsx");
 const imageGenerator = read("build/responsive-images-vite-plugin.ts");
@@ -98,6 +108,8 @@ assert(homepage.indexOf('className="section-block latest-home') < homepage.index
   "Homepage should lead with recent stories and search discovery before category archives");
 assert(homepage.indexOf('const latest = takeDistinct(articles, 3, false)') < homepage.indexOf('const ai = takeDistinct('),
   "Latest Stories should reserve distinct recent articles before category sections");
+assert(homepage.includes('imageSizes="(max-width: 600px) 38vw, (max-width: 1000px) 50vw, 32vw"'),
+  "Latest magazine tiles must preserve correct responsive image hints");
 assert(footer.includes("FOOTER_SECONDARY_ITEMS.map"), "Footer must keep secondary destinations accessible");
 assert(footer.includes("{SITE_DESCRIPTION}"), "Footer summary must stay in sync with site metadata");
 assert(footer.includes("{SITE_TAGLINE}"), "Footer tagline must stay in sync with the site-wide identity");
