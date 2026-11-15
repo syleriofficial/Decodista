@@ -24,6 +24,7 @@ const weeklyIssue = read("app/weekly/[slug]/page.tsx");
 const weeklyData = read("lib/weekly-briefs.ts");
 const topicPage = read("app/topics/[topic]/page.tsx");
 const articlePage = read("app/articles/[slug]/page.tsx");
+const visualReview = read("docs/EDITORIAL_HERO_VISUAL_REVIEW_2026-11-16.md");
 const contentHelpers = read("lib/content.ts");
 const science = read("app/[section]/page.tsx");
 const css = read("app/globals.css");
@@ -189,6 +190,11 @@ assert(contentHelpers.includes("contextScore = sharedTags * 6 + sharedHubs * 3")
   "Related guides must prefer a genuinely shared subject before generic category similarity");
 assert(contentHelpers.includes("getArticleTopicHubs") && contentHelpers.includes("articleCount >= topic.minimumArticles"),
   "Article discovery must link only to populated topic hubs");
+assert(articlePage.includes("Conceptual editorial illustration, not an official product screenshot.") &&
+  articlePage.includes("fictional artwork, not a photograph"),
+  "Published images must distinguish conceptual art from documentary evidence");
+assert(visualReview.includes("Complete article-to-image review") && visualReview.includes("openai-agent-leak-53-chatgpt-user-images"),
+  "Every published hero must have an accessible and honest visual review record");
 assert(articlePage.indexOf('className="article-discovery"') > articlePage.indexOf('className="article-main-grid"'),
   "Article discovery must follow the full article, not interrupt reading");
 assert(articlePage.includes('className="article-discovery"') && articlePage.includes("topicHubs.slice(0, 2)"),
