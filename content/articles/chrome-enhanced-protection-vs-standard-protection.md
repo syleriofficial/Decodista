@@ -24,16 +24,21 @@ shortAnswer: >-
   not seen before, but it does that by sending more browsing and security data
   to Google in real time. Pick Enhanced if the strongest available Chrome
   protection matters more to you than limiting that data sharing. Pick Standard
-  if you would rather keep it to a minimum. Either way, keep Safe Browsing on.
+  if you would rather keep it to a minimum. Google's October 2026 update adds
+  new scam warnings and server-assisted detection, with specific data-handling
+  rules. Either way, keep Safe Browsing on.
 keyTakeaways:
   - Standard Protection is on by default in Chrome.
   - Standard uses privacy-preserving URL checks; limited visual phishing features may also be sent, while fuller URLs or page-content bits can be sent after suspicious behavior.
   - Enhanced can warn about dangerous sites, downloads and extensions that Google did not previously know about.
   - Enhanced sends URLs, small samples of page content, extension activity and system information to Google Safe Browsing.
+  - Google announced new 2026 Enhanced features: suspicious-site warnings, server-assisted Gemini scam detection and ClickFix command warnings. [6]
+  - Google's October “10 times safer” wording is based on the average number of safety warnings, not a measured tenfold reduction in actual victimization. [6]
   - No Protection is not a privacy-friendly version of Standard; it removes Chrome's Safe Browsing warnings and Google does not recommend it.
 faqs: []
 publishedAt: 2026-10-15
-informationCheckedAt: 2026-10-15
+updatedAt: 2026-11-15
+informationCheckedAt: 2026-11-15
 author: DECODISTA Editorial
 readingTime: 13
 seoTitle: "Chrome Enhanced vs Standard Protection: Privacy & Security"
@@ -128,9 +133,19 @@ That does not make Enhanced a privacy disaster. It is a security feature with a 
 
 Google calls Enhanced its most secure Chrome browsing experience. It is designed to catch dangerous sites, downloads and extensions that Google did not previously know about, while Standard is primarily based on known lists with more limited phishing checks. [1][2]
 
-Google has also put a number on it. On **February 11, 2025**, Google said more than 1 billion Chrome users had Enhanced turned on and that they were “two times as safe” from phishing and other scams as Standard users. [4]
+Google published a comparison in **February 2025**, describing Enhanced users as “two times as safe” from phishing and scams. On **October 20, 2026**, Google updated the claim to **“ten times safer”** for phishing, social engineering, notification abuse and other scams. [4][6]
 
-Treat that as Google's own aggregate figure, not an independent benchmark or a guaranteed reduction in your personal risk. Enhanced will not stop every phishing page, so it does not replace caution with links, attachments and unexpected requests.
+**Important measurement caveat:** Google's October footnote says the figure was calculated by comparing **average numbers of safety warnings displayed** to users with Enhanced versus Standard enabled. It is **not** a published controlled measure showing that individual users are ten times less likely to be defrauded or infected. Both claims are Google's, not independently verified DECODISTA findings. Enhanced will not catch every deceptive site. [6]
+
+## What changed in Enhanced Protection in 2026?
+
+Google's October 20 announcement names three additions or expansions: [6]
+
+1. **Suspicious-site vs dangerous-site warnings.** A new warning category identifies pages with deceptive patterns at lower confidence; confirmed dangerous pages retain the stronger red interstitial warning. The labels represent different confidence levels, not proof that a “suspicious” page is safe.
+2. **Gemini-assisted scam detection.** Google says it expanded from an on-device model for supported devices to a more powerful **server-side model** for Enhanced users, including fake antivirus and browser-update scams. When high-confidence scam signals appear, limited page text may be sent for analysis. Google says that specific submitted text is processed ephemerally and not logged, retained or used for model training. This promise describes that particular scam-analysis process; it does not mean Enhanced never sends security data to Google.
+3. **ClickFix command warnings.** Chrome can inspect suspicious commands copied from a deceptive page. Google says the clipboard payload is scrubbed of personally identifiable information before being sent to Safe Browsing for further assessment, and a warning can appear if it is judged dangerous. That is a vendor-described safeguard, not an independently audited guarantee of perfect redaction.
+
+The change to server-side analysis is relevant to the privacy trade-off. An earlier description of on-device scam detection should **not** be applied to every 2026 Enhanced feature. Google's [Chrome security announcement](https://blog.google/security/our-latest-defenses-against-evolving-web-scams/) is the primary source; the product's [current Safe Browsing help](https://support.google.com/chrome/answer/9890866?co=GENIE.Platform%3DDesktop&hl=en) remains the source for general data sharing and settings.
 
 ## Enhanced Protection and suspicious downloads
 
@@ -246,10 +261,11 @@ It depends on your priorities. Enhanced suits people who want Google's strongest
 
 ## Sources & Verification
 
-Information checked against current official Google documentation on **October 15, 2026**. Product behavior comes from Google's help documentation; the comparative safety figure comes from Google's February 2025 announcement and remains attributed to Google. This article is documentation-based and does not claim hands-on security or performance testing.
+Information checked against official Google documentation on **November 15, 2026**. The February 2025 and October 2026 comparative claims are separately dated and attributed to Google; Google's October metric counts average safety warnings, not independently measured real-world victimization. This article is documentation-based and does not claim hands-on security or performance testing.
 
 1. [Google Chrome Help — Choose your Safe Browsing protection level in Chrome](https://support.google.com/chrome/answer/9890866?co=GENIE.Platform%3DDesktop&hl=en) — protection levels, data Enhanced sends, Standard's privacy-preserving URL checks, suspicious-behavior reports, signed-in behavior, performance claim and desktop settings path.
 2. [Google Chrome Help — How Chrome Safe Browsing keeps your browsing data private](https://support.google.com/chrome/answer/13844634?co=GENIE.Platform%3DDesktop&hl=en) — local lists, privacy server, visual phishing features, Standard's fuller reporting path, Enhanced data categories, Incognito and platform settings.
 3. [Google Chrome Help — Google Chrome blocks some downloads](https://support.google.com/chrome/answer/6261569?hl=en) — suspicious-file deep scans, password-protected archives, post-scan deletion and local archive checks under Standard.
 4. [Google — Defending 1 billion Chrome users with Enhanced Protection](https://blog.google/products-and-platforms/products/chrome/google-chrome-safe-browsing-one-billion-users/) — February 11, 2025 user count and “two times as safe” claim, AI/ML detection, monthly deep-scan figure, anonymization and retention.
 5. [Google Account Help — Manage Enhanced Safe Browsing for your account](https://support.google.com/accounts/answer/11577602?hl=en) — account-level Enhanced Safe Browsing, Chrome and Gmail protection, temporary account association and signed-in cross-service use.
+6. [Google Security Blog — Our latest defenses against evolving web scams](https://blog.google/security/our-latest-defenses-against-evolving-web-scams/) — October 20, 2026; new suspicious-site warnings, server-side Gemini detection, ClickFix command warnings and a tenfold safety-warning comparison with its stated methodology.
