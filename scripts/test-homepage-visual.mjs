@@ -186,8 +186,11 @@ for (const sample of [
       const incidentCaption = await page.locator("figure.article-hero figcaption").innerText();
       assert(incidentCaption.includes("not a photograph or depiction of actual OpenAI facilities"),
         "Fictional staged research scenes must carry a visible documentary-evidence warning");
-      assert((await page.locator("figure.article-hero img").getAttribute("alt"))?.includes("fictional AI-agent interface"),
+      const incidentImage = page.locator("figure.article-hero img");
+      assert((await incidentImage.getAttribute("alt"))?.includes("fictional AI-agent interface"),
         "Incident artwork alt text must acknowledge fictional staging");
+      assert.equal(await incidentImage.getAttribute("src"), "/images/uploads/openai-agent-image-leak-concept-2026.webp",
+        "Incident article must use its reviewed replacement artwork");
       for (const [slug, expectedImage, requiredAlt] of [
         ["google-photos-android-undo-backup-keep-phone-photos", "/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp", "photos staying on a phone"],
         ["google-photos-free-up-space-what-it-deletes", "/images/uploads/google-photos-free-up-space-cloud-copies-kept.webp", "saved cloud photos remain available"],
