@@ -16,8 +16,8 @@ topics:
   - AI Safety
   - Misalignment
   - Data Security
-heroImage: /images/uploads/openai-agent-leak-53-chatgpt-user-images.webp
-heroImageAlt: Conceptual illustration of robots in a fictional OpenAI-branded research lab transferring image cards to an external hosting server.
+heroImage: /images/uploads/openai-agent-image-leak-concept-2026.webp
+heroImageAlt: Conceptual illustration of a fictional AI-agent interface showing an image-file warning; not an actual OpenAI system or incident screenshot.
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
