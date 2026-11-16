@@ -64,6 +64,8 @@ assert(redesignedCss.includes("@media (max-width: 600px)") && redesignedCss.incl
 const imageComponent = read("components/responsive-image.tsx");
 const cardComponent = read("components/article-card.tsx");
 const imageGenerator = read("build/responsive-images-vite-plugin.ts");
+const issue78Generator = read("scripts/generate-issue78-heroes.mjs");
+const packageInfo = read("package.json");
 const viteConfig = read("vite.config.ts");
 assert(imageComponent.includes("srcSet={info?.srcSet}"), "Responsive image component must use generated srcset");
 assert(cardComponent.includes("imageSizes?: string") && cardComponent.includes("sizes={responsiveSizes}"),
@@ -77,6 +79,13 @@ assert(css.includes(".category-lead-image:hover img") && css.includes(".search-r
 assert(css.includes(".section-heading { align-items: flex-start; flex-direction: column; gap: .55rem; }"),
   "Narrow-screen editorial headings must stack rather than overflow");
 assert(imageComponent.includes("fetchPriority={priority ?"), "Hero image must retain high fetch priority");
+assert(issue78Generator.includes("Refusing to overwrite a different existing editorial asset") &&
+  packageInfo.includes('"precontent:validate": "node scripts/generate-issue78-heroes.mjs"') &&
+  packageInfo.includes('node scripts/generate-issue78-heroes.mjs && node scripts/generate-weekly-covers.mjs'),
+  "New approved editorial artwork must generate before validation, development and builds without overwriting old originals");
+for (const name of ["openai-agent-image-leak-concept", "google-photos-undo-backup-local-kept-cloud-removed", "google-photos-free-up-space-cloud-copies-kept"]) {
+  assert(issue78Generator.includes(name), "All three Issue #78 hero artworks must be reproducibly generated");
+}
 assert(imageGenerator.includes("withoutEnlargement: true") && imageGenerator.includes("responsive-images.generated.json"), "Image pipeline must not enlarge originals and must write the manifest");
 assert(viteConfig.includes("responsiveImagesPlugin()"), "Vite must generate responsive WebP assets in local previews and production builds");
 assert(nextConfig.includes("images: { unoptimized: true }"), "Do not generate redirecting image optimizer URLs until Vinext has a working image backend");
