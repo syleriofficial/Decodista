@@ -9,39 +9,48 @@ import sharp from "sharp";
 // The three existing published WebPs and their URLs are deliberately preserved.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const assets = [
-  ["openai-agent-image-leak-concept", "openai-agent-image-leak-concept-2026"],
-  ["google-photos-undo-backup-local-kept-cloud-removed", "google-photos-undo-backup-local-kept-cloud-removed"],
-  ["google-photos-free-up-space-cloud-copies-kept", "google-photos-free-up-space-cloud-copies-kept"],
+  ["openai-agent-image-leak-concept", "openai-agent-image-leak-concept-2026", "b4d544420b0017177b270a5b87a879a2898885043682778b78c9dc868efc496f"],
+  ["google-photos-undo-backup-local-kept-cloud-removed", "google-photos-undo-backup-local-kept-cloud-removed", "0ab9b86ea80e480d1a8c5dc070d4123a0433c21af2c102850e2c0ec2407bcb12"],
+  ["google-photos-free-up-space-cloud-copies-kept", "google-photos-free-up-space-cloud-copies-kept", "29e4e9b809ec1c9fa7474ca89a58b59bc25eb998b894a374d581b3fa2a9e51a8"],
 ];
 const hash = b => createHash("sha256").update(b).digest("hex");
 
-for (const [svgName, webpName] of assets) {
+for (const [svgName, webpName, expectedHash] of assets) {
   const input = path.join(root, "artwork", "issue78", svgName + ".svg");
   const output = path.join(root, "public", "images", "uploads", webpName + ".webp");
   const source = await fs.readFile(input, "utf8");
   if (!source.includes('width="1600" height="900"') || /<script|<foreignObject|\bonload\s*=|href\s*=\s*["'](?:https?:|data:)/i.test(source)) {
     throw new Error("Unapproved or non-self-contained source artwork: " + svgName);
   }
-  // Sharp is already a pinned dependency; no new font or runtime script is loaded.
+  let old;
+  try { old = await fs.readFile(output); } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  if (old) {
+    // Trust the reviewed, source-controlled WebP bytes. Encoding a vector on
+    // macOS and Linux can differ by a few bytes across libvips builds.
+    const info = await sharp(old).metadata();
+    if (info.format !== "webp" || info.width !== 1600 || info.height !== 900 ||
+        old.byteLength > 2_000_000 || hash(old) !== expectedHash) {
+      throw new Error("Refusing to overwrite a different existing editorial asset: " + output);
+    }
+    console.log("ISSUE78_IMAGE " + JSON.stringify({
+      path: path.relative(root, output), width: info.width, height: info.height,
+      bytes: old.length, sha256: hash(old), action: "verified"
+    }));
+    continue;
+  }
+  // Generate only when the original is absent, such as an unpacked archive.
   const { data, info } = await sharp(Buffer.from(source), { density: 72 })
     .webp({ quality: 80, effort: 6 })
     .toBuffer({ resolveWithObject: true });
   if (info.format !== "webp" || info.width !== 1600 || info.height !== 900 || data.byteLength > 2_000_000) {
     throw new Error("Image does not meet the 1600×900 / 2MB WebP contract: " + webpName);
   }
-  let old;
-  try { old = await fs.readFile(output); } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-  }
-  if (old && hash(old) !== hash(data)) {
-    throw new Error("Refusing to overwrite a different existing editorial asset: " + output);
-  }
-  if (!old) {
-    await fs.mkdir(path.dirname(output), { recursive: true });
-    await fs.writeFile(output, data, { flag: "wx" });
-  }
+  await fs.mkdir(path.dirname(output), { recursive: true });
+  await fs.writeFile(output, data, { flag: "wx" });
   console.log("ISSUE78_IMAGE " + JSON.stringify({
     path: path.relative(root, output), width: info.width, height: info.height,
-    bytes: data.length, sha256: hash(data), action: old ? "verified" : "created"
+    bytes: data.length, sha256: hash(data), action: "created"
   }));
 }
