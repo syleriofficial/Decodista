@@ -11,10 +11,10 @@ topics:
   - Cloud Storage
   - Photo Storage
   - Data Protection
-heroImage: /images/google-photos-undo-backup.webp
-heroImageAlt: Unbranded smartphone displaying photo thumbnails beneath a floating cloud of photos, with curved lines between phone and cloud.
-heroImageWidth: 1672
-heroImageHeight: 941
+heroImage: /images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp
+heroImageAlt: Conceptual diagram showing photos staying on a phone, corresponding cloud backup copies removed, and backup switched off.
+heroImageWidth: 1600
+heroImageHeight: 900
 shortAnswer: "**On Android, Undo backup removes Google Photos copies of items currently on that device while keeping the device files. It does not clear every cloud-only photo in your account.** Before using it, verify the files and make an independent copy of anything important. [Google’s Android deletion guide](<https://support.google.com/photos/answer/6128858?co=GENIE.Platform%3DAndroid&hl=en>)"
 keyTakeaways:
   - Decide whether you need space in your Google Account or on your phone.
