@@ -23,7 +23,7 @@ for (const [svgName, webpName] of assets) {
     throw new Error("Unapproved or non-self-contained source artwork: " + svgName);
   }
   // Sharp is already a pinned dependency; no new font or runtime script is loaded.
-  const { data, info } = await sharp(Buffer.from(source), { density: 96 })
+  const { data, info } = await sharp(Buffer.from(source), { density: 72 })
     .webp({ quality: 80, effort: 6 })
     .toBuffer({ resolveWithObject: true });
   if (info.format !== "webp" || info.width !== 1600 || info.height !== 900 || data.byteLength > 2_000_000) {
