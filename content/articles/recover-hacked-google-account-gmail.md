@@ -21,13 +21,13 @@ heroImageAlt: Conceptual security illustration showing a locked email account, a
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
-  Start at Google's official [Account Recovery page](<https://accounts.google.com/signin/recovery>)
-  if you cannot sign in. Use a familiar device, browser and location, and
-  answer the identity questions as accurately as you can. If you still have
-  access, review recent security events and devices first, then change a
-  compromised password and inspect Gmail forwarding and filters. Google
-  does not guarantee recovery and does not work with paid account-recovery
-  services.
+  Can't sign in? Use Google's official
+  [Account Recovery page](<https://accounts.google.com/signin/recovery>)
+  from a familiar device and location. Lost your verification phone?
+  Try a backup code, another signed-in device or an enrolled passkey.
+  Still signed in but suspect hacking? Review security events, secure
+  the account and check Gmail forwarding and filters. Google's recovery
+  checks are not guaranteed, and paid "unlock" services are not a shortcut.
 keyTakeaways:
   - If you are locked out, use Google's own recovery flow, not a third-party "Gmail unlock" service.
   - A familiar device, browser and location can help Google verify an account recovery request.
@@ -112,17 +112,15 @@ sourcesVerification: |-
 
 ## First, identify the problem {#identify-the-problem}
 
-A password you forgot, a stolen phone and a truly compromised Google Account can all look like “I can't get into Gmail.” But the first safe step differs.
+Choose the situation that best describes **what you can do right now**:
 
-| What happened | First action | Important distinction |
-| --- | --- | --- |
-| You forgot your password or are rejected at sign-in | Open the [official Account Recovery page](<https://accounts.google.com/signin/recovery>) | Do not pay anyone to “reset” Gmail |
-| You know the password but your verification phone is gone | Check your previously configured alternative verification methods | Losing the phone does not automatically erase all possible recovery routes |
-| You see an unfamiliar device or security alert but **can still sign in** | Review **Recent security events** and device sessions | A session may be a browser or app, not necessarily a different physical phone |
-| Somebody changed your password or recovery information | Start [Google Account Recovery](<https://accounts.google.com/signin/recovery>) immediately | Account ownership still has to be verified |
-| This is a work or school account | Contact your organisation's administrator | Managed-account recovery follows the administrator's policies |
+- **Can't sign in, or someone changed your password?** Go to **Path A** below and open Google's [official Account Recovery page](<https://accounts.google.com/signin/recovery>). The process checks account ownership; recovery is not guaranteed.
+- **Know your password, but lost your verification phone?** Go to **Path B**. Check an already configured backup code, another signed-in device, a security key or a passkey.
+- **Can still sign in, but suspect someone else accessed the account?** Go to **Path C**. Review security events, protect your sign-in methods and check Gmail for hidden forwarding or filters.
 
-Google's [hacked-account instructions](<https://support.google.com/accounts/answer/6294825?hl=en>) distinguish getting back in from checking security activity after you have access.
+**Work or school account?** Contact your organisation's administrator. Managed-account recovery may follow different policies.
+
+A Google Account session may come from a browser or app rather than a separate physical device. Google's [hacked-account instructions](<https://support.google.com/accounts/answer/6294825?hl=en>) explain why regaining access and securing an account are separate tasks.
 
 > **DECODISTA safety note:** Never share a password, live verification code, backup code or passkey approval with a supposed recovery agent. If you receive an unexpected security-warning email, open Google's account pages yourself rather than following a suspicious link.
 
@@ -142,9 +140,9 @@ These are **Google's own recovery tips**, not a guarantee of approval. Google ex
 
 ### Step 3: handle an unavailable recovery email or phone {#recovery-method-unavailable}
 
-If a recovery email is inaccessible or an old number is no longer yours, use the other options Google actually displays. Do not buy an old SIM, bypass 2-Step Verification with an unofficial tool, or enter codes on a third-party website.
+If a recovery email is inaccessible or an old number is no longer yours, use the other options Google actually displays. **Never enter recovery codes on a third-party website.** If you still control your phone number, your mobile carrier may be able to transfer it to a replacement SIM; that is different from bypassing Google's security checks. [Google's lost-phone guidance](<https://support.google.com/accounts/answer/185834?hl=en>).
 
-If Google offers no usable path, continue through its recovery questions. It might not be possible to recover the account. Google does not promise that knowing a username or an old password alone will prove ownership. [Recovery guidance](<https://support.google.com/accounts/answer/7682439?hl=en>).
+If no available option works, follow Google's recovery questions as far as possible. Google may not be able to verify ownership, and knowing only a username or an old password does not guarantee access. [Recovery guidance](<https://support.google.com/accounts/answer/7682439?hl=en>).
 
 ### Step 4: respect a security hold {#security-hold}
 
@@ -156,18 +154,14 @@ There is a separate timing distinction: Google says a change to recovery informa
 
 ## Path B: your verification phone is missing {#lost-verification-phone}
 
-If you still know your password but cannot complete 2-Step Verification, look for a previously set-up fallback.
+If you know your password but cannot complete 2-Step Verification, check for a backup you **set up before losing the phone**:
 
-| Possible method | What it can do | Limitation |
-| --- | --- | --- |
-| Another signed-in phone | May receive a Google prompt | It has to be available and trusted by the account |
-| A backup phone number | May receive a verification challenge | Google may restrict SMS in unusual sign-ins |
-| Saved Google backup code | Replaces one second-step challenge | A code can be used only once, and only for the account that issued it |
-| Registered security key | Verifies ownership using the key | It must have been enrolled beforehand |
-| Passkey on another device | May complete sign-in without the missing phone | It must already exist and be available |
-| Previously trusted computer | May offer an alternative sign-in route | Trust status and account checks still apply |
+- **Another signed-in phone or trusted computer:** A Google prompt or an existing trusted sign-in may let you continue.
+- **Saved Google backup code:** Each code can replace one second step only for the Google Account that issued it. A code works once.
+- **Registered passkey or hardware security key:** Use one that is already enrolled and still accessible.
+- **Another verified phone number:** If you added one previously, Google may offer a challenge there. SMS may be limited after an unusual sign-in.
 
-The options above come from [Google's lost-phone and 2-Step Verification guidance](<https://support.google.com/accounts/answer/185834?hl=en>) and [backup-code instructions](<https://support.google.com/accounts/answer/1187538?hl=en>). None should be presented as a button every user will see.
+These are possible routes, **not guaranteed choices shown to every user**. If none is available, use Google's Account Recovery flow. [Google's lost-phone and 2-Step Verification guidance](<https://support.google.com/accounts/answer/185834?hl=en>) and [backup-code instructions](<https://support.google.com/accounts/answer/1187538?hl=en>).
 
 If you lost **Google Authenticator** rather than your phone number, check whether your entries were synced before treating them as irrecoverable. DECODISTA has a separate [new-phone Authenticator guide](</articles/google-authenticator-new-phone-codes-missing>) for the distinction between sync, transfer and individual account recovery.
 
@@ -175,7 +169,7 @@ If you lost **Google Authenticator** rather than your phone number, check whethe
 
 ## Path C: you still have access, but suspect a hack {#still-have-access}
 
-If you remain signed in on a device you trust, do not assume that signing out of that only working session will help recovery. First use the available access to review security activity and plan replacement verification methods.
+If you are signed in on a trusted device, **keep that working session available** while you review suspicious activity and secure another sign-in method. Signing out your only working session can make recovery harder.
 
 ### Step 1: examine security alerts {#review-security-events}
 
@@ -209,9 +203,12 @@ An account can look normal after its password is reset while Gmail settings stil
 
 ### Forwarding and filters {#forwarding-filters}
 
-On Gmail on a computer, open **Settings → See all settings**. Check **Forwarding and POP/IMAP** for an unfamiliar forwarding destination and check **Filters and Blocked Addresses** for rules you did not create, especially rules that forward, archive or delete mail.
+In Gmail on a computer, open **Settings → See all settings**, then check two places:
 
-Google documents that automatic forwarding can send new mail to a verified external address and that individual filters can forward selected messages. Suspicious forwarding or deletion rules deserve investigation—but a rule you knowingly set up is not evidence of compromise. [Gmail forwarding](<https://support.google.com/mail/answer/10957?hl=en>) and [Gmail filters](<https://support.google.com/mail/answer/6579?hl=en>).
+- **Forwarding and POP/IMAP:** Look for a forwarding address you do not recognise.
+- **Filters and Blocked Addresses:** Look for rules you did not create that forward, archive or delete messages.
+
+Google says automatic forwarding can send new messages to a verified destination, and filters can forward selected messages. Investigate unfamiliar rules, but do not assume a rule you knowingly configured proves a hack. [Gmail forwarding](<https://support.google.com/mail/answer/10957?hl=en>) and [Gmail filters](<https://support.google.com/mail/answer/6579?hl=en>).
 
 If important email appears missing, review Spam, Trash, All Mail and your relevant clients as well. A missing message by itself does not prove an intruder deleted it.
 
@@ -223,7 +220,7 @@ If you notice unexpected purchases, payment methods or access to another account
 
 ## Watch for fake “Gmail recovery experts” {#avoid-recovery-scams}
 
-Google says it does **not** work with account/password recovery services and that you cannot call Google to get consumer sign-in assistance. A person who asks for an OTP, a backup code, remote-control access or money to unlock your account is not an alternative recovery route. [Google Account Recovery](<https://support.google.com/accounts/answer/7682439?hl=en>).
+Google says it does **not** work with account/password recovery services and that you cannot call Google for consumer account sign-in help. Anyone asking for a one-time code, a backup code, remote-control access or money to unlock your account is not an alternative recovery route. [Google Account Recovery](<https://support.google.com/accounts/answer/7682439?hl=en>).
 
 Be suspicious of:
 - Paid promises of guaranteed or instant recovery.
