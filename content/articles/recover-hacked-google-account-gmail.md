@@ -21,13 +21,14 @@ heroImageAlt: Conceptual security illustration showing a locked email account, a
 heroImageWidth: 1600
 heroImageHeight: 900
 shortAnswer: >-
-  Can't sign in? Use Google's official
-  [Account Recovery page](<https://accounts.google.com/signin/recovery>)
-  from a familiar device and location. Lost your verification phone?
-  Try a backup code, another signed-in device or an enrolled passkey.
-  Still signed in but suspect hacking? Review security events, secure
-  the account and check Gmail forwarding and filters. Google's recovery
-  checks are not guaranteed, and paid "unlock" services are not a shortcut.
+  Can't sign in to Google or Gmail? Open Google's official
+  [Account Recovery page](<https://accounts.google.com/signin/recovery>).
+  Know your password but lost your verification phone? Check for a saved
+  backup code, another signed-in device or an enrolled passkey.
+  Still signed in but suspect hacking? Keep that trusted session available
+  while you review security events, devices and Gmail forwarding or filters.
+  Available options vary. Recovery is not guaranteed, and no paid "unlock"
+  service can bypass Google's ownership checks.
 keyTakeaways:
   - If you are locked out, use Google's own recovery flow, not a third-party "Gmail unlock" service.
   - A familiar device, browser and location can help Google verify an account recovery request.
@@ -49,9 +50,9 @@ metaDescription: >-
 relatedArticles:
   - unknown-device-google-account-session
   - google-authenticator-new-phone-codes-missing
+  - remove-third-party-google-access-without-losing-login
   - google-passkey-vs-2-step-verification
   - fake-tech-support-scams-remote-access-verification-code
-  - remove-third-party-google-access-without-losing-login
 faqs:
   - question: Can I recover Gmail without my old phone?
     id: recovery-without-old-phone
@@ -106,8 +107,9 @@ sourcesVerification: |-
   - [Gmail filters](<https://support.google.com/mail/answer/6579?hl=en>)
   This is a documentation-based guide. DECODISTA did not access a reader's
   account, run a real account-recovery attempt, capture live Google account
-  screens or verify any individual recovery outcome. Menu labels and
-  recovery prompts may change, and not all options appear on every account.
+  screens or verify any individual recovery outcome. The route-map artwork is
+  an original editorial illustration, not a Google interface screenshot.
+  Menu labels and recovery prompts may change, and not all options appear on every account.
 ---
 
 ## First, identify the problem {#identify-the-problem}
@@ -119,6 +121,10 @@ Choose the situation that best describes **what you can do right now**:
 - **Can still sign in, but suspect someone else accessed the account?** Go to **Path C**. Review security events, protect your sign-in methods and check Gmail for hidden forwarding or filters.
 
 **Work or school account?** Contact your organisation's administrator. Managed-account recovery may follow different policies.
+
+**Visual route map:** This DECODISTA illustration summarizes the three choices above; it is not a screenshot of Google's sign-in screens.
+
+![Three-path recovery map: Path A for an account you cannot sign in to; Path B for a missing verification phone; Path C when you can still sign in but suspect a hack.](/images/uploads/google-account-recovery-route-map.svg "DECODISTA's illustrated recovery decision map — not a Google interface")
 
 A Google Account session may come from a browser or app rather than a separate physical device. Google's [hacked-account instructions](<https://support.google.com/accounts/answer/6294825?hl=en>) explain why regaining access and securing an account are separate tasks.
 
@@ -247,5 +253,14 @@ Once you are safely signed in, this is DECODISTA's **recommended checklist**, no
 10. Recheck the account later for unfamiliar activity rather than assuming one password change settled every risk.
 
 You can run [Google's Security Checkup](<https://myaccount.google.com/security-checkup>) for its current recommendations. It cannot guarantee that no information was previously seen or copied by someone else.
+
+## Related guides for your next step {#related-recovery-guides}
+
+Use the guide that matches the *specific* issue you still need to solve:
+
+- **An unfamiliar device or session?** [Understand Google's device and session list](</articles/unknown-device-google-account-session>) before assuming every entry is a separate intruder.
+- **Authenticator codes missing after switching phones?** [Check sync, transfer and recovery options](</articles/google-authenticator-new-phone-codes-missing>) without deleting your remaining working codes.
+- **Unknown third-party app connection?** [Review and remove Google Account access safely](</articles/remove-third-party-google-access-without-losing-login>), keeping legitimate sign-ins in mind.
+- **A passkey or verification method on a lost device?** [Understand passkeys versus 2-Step Verification](</articles/google-passkey-vs-2-step-verification>) before removing a working fallback.
 
 **Bottom line:** Account recovery and account security are separate stages. Get back in through Google's own process, then verify devices, mail settings, connected apps and recovery methods. No article or paid service can guarantee that Google will restore a particular account.
