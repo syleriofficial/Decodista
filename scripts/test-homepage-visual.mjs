@@ -208,6 +208,23 @@ for (const sample of [
         assert((originalResponse.headers()["content-type"] ?? "").includes("image/webp"),
           "Replacement original must be a WebP served with the correct content type");
       }
+      const recoveryGuide = await page.goto(base + "/articles/recover-hacked-google-account-gmail",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(recoveryGuide?.status(), 200, "New researched Gmail recovery guide must render");
+      assert((await page.locator("h1").first().innerText()).includes("Google Account Hacked or Locked Out"),
+        "New article must have its intended editorial title");
+      const recoveryHero = page.locator("figure.article-hero img");
+      assert.equal(await recoveryHero.getAttribute("src"), "/images/uploads/recover-hacked-google-account-gmail.webp",
+        "New security article must use its own original hero image");
+      assert((await recoveryHero.getAttribute("alt"))?.includes("Conceptual security illustration"),
+        "Hero alt must describe conceptual artwork and not imply a Google screenshot");
+      assert((await recoveryHero.getAttribute("srcset"))?.includes("/images/responsive/"),
+        "New article must have responsive WebP variants");
+      const newHeroResponse = await page.request.get(base + "/images/uploads/recover-hacked-google-account-gmail.webp");
+      assert.equal(newHeroResponse.status(), 200, "New WebP must be reachable");
+      assert((newHeroResponse.headers()["content-type"] ?? "").includes("image/webp"), "Original must be served as WebP");
+      assert((await page.locator("main").innerText()).includes("No article or paid service can guarantee"),
+        "Safety-first recovery warning must remain visible");
       await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full",
         { waitUntil: "domcontentloaded", timeout: 45000 });
     }
