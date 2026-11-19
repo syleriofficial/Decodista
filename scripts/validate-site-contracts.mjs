@@ -118,6 +118,15 @@ assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") &&
 assert(header.includes('aria-current={pathname === item.href ? "page" : undefined}'),
   "Navigation should identify the active editorial category accessibly");
 assert(homepage.includes('className="home-intro wrap"'), "Homepage needs a visible editorial introduction");
+assert(homepage.includes('className="home-quick-search wrap"') && homepage.includes('action="/search" method="get"') &&
+  homepage.includes('id="home-quick-search-input"') && homepage.includes('name="q"') &&
+  homepage.includes('type="search"'), "Homepage quick search must work with an accessible GET form before hydration");
+assert(redesignedCss.includes(".home-quick-search-controls") && redesignedCss.includes(".home-quick-search-controls:focus-within"),
+  "First-screen search needs responsive and visible focus styling");
+assert(science.includes("!featured && articles.length > 0") &&
+  science.includes("Latest published across DECODISTA") &&
+  science.includes("These articles are from other published sections"),
+  "Empty categories must clearly label genuine cross-section reading options without miscategorizing content");
 assert(homepage.indexOf('className="section-block latest-home') < homepage.indexOf('className="reader-paths wrap"')
   && homepage.indexOf('className="reader-paths wrap"') < homepage.indexOf('title="AI" href="/ai"'),
   "Homepage should lead with recent stories and search discovery before category archives");
