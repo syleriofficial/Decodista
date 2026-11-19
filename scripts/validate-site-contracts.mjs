@@ -118,18 +118,13 @@ assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") &&
 assert(header.includes('aria-current={pathname === item.href ? "page" : undefined}'),
   "Navigation should identify the active editorial category accessibly");
 assert(homepage.includes('className="home-intro wrap"'), "Homepage needs a visible editorial introduction");
-assert(homepage.includes('className="home-quick-search wrap"') && homepage.includes('action="/search" method="get"') &&
-  homepage.includes('id="home-quick-search-input"') && homepage.includes('name="q"') &&
-  homepage.includes('type="search"'), "Homepage quick search must work with an accessible GET form before hydration");
-assert(redesignedCss.includes(".home-quick-search-controls") && redesignedCss.includes(".home-quick-search-controls:focus-within"),
-  "First-screen search needs responsive and visible focus styling");
 assert(science.includes("!featured && articles.length > 0") &&
   science.includes("Latest published across DECODISTA") &&
   science.includes("These articles are from other published sections"),
   "Empty categories must clearly label genuine cross-section reading options without miscategorizing content");
 assert(homepage.indexOf('className="section-block latest-home') < homepage.indexOf('className="reader-paths wrap"')
   && homepage.indexOf('className="reader-paths wrap"') < homepage.indexOf('title="AI" href="/ai"'),
-  "Homepage should lead with recent stories and search discovery before category archives");
+  "Homepage should lead with recent stories and guided discovery before category archives");
 assert(homepage.indexOf('const latest = takeDistinct(articles, 3, false)') < homepage.indexOf('const ai = takeDistinct('),
   "Latest Stories should reserve distinct recent articles before category sections");
 assert(homepage.includes('sizes="(max-width: 1180px) 100vw, 38vw"'),
@@ -197,13 +192,7 @@ assert(/ContactForm/.test(contactPage), "Contact page must expose the protected 
 assert(/TURNSTILE_SITE_KEY/.test(contactPage), "Contact page must configure Cloudflare Turnstile");
 assert(/private delivery address is never shown/i.test(contactPage), "Contact page must keep the recipient private");
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
-const homepageForms = [...homepage.matchAll(/<form\b[^>]*>/g)].map(([tag]) => tag);
-assert(homepageForms.length === 1 &&
-  homepageForms[0].includes('role="search"') &&
-  homepageForms[0].includes('action="/search"') &&
-  homepageForms[0].includes('method="get"') &&
-  !/contact-form|newsletter-form|email-signup/i.test(homepage),
-  "Homepage must contain only its functional GET search form, not a contact or signup form");
+assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-functional contact or signup form");
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
 assert(homepage.includes("const lead = articles[0]"), "Homepage must lead with the newest published story");
 assert(homepage.includes("readerJourneys") && homepage.includes("reader-paths"), "Homepage must offer curated reader journeys");
