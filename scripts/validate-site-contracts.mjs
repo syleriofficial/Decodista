@@ -197,7 +197,13 @@ assert(/ContactForm/.test(contactPage), "Contact page must expose the protected 
 assert(/TURNSTILE_SITE_KEY/.test(contactPage), "Contact page must configure Cloudflare Turnstile");
 assert(/private delivery address is never shown/i.test(contactPage), "Contact page must keep the recipient private");
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
-assert(!/<form|contact-form/i.test(homepage), "Homepage must not expose a non-functional contact or signup form");
+const homepageForms = [...homepage.matchAll(/<form\\b[^>]*>/g)].map(([tag]) => tag);
+assert(homepageForms.length === 1 &&
+  homepageForms[0].includes('role="search"') &&
+  homepageForms[0].includes('action="/search"') &&
+  homepageForms[0].includes('method="get"') &&
+  !/contact-form|newsletter-form|email-signup/i.test(homepage),
+  "Homepage must contain only its functional GET search form, not a contact or signup form");
 assert(!/Trending|Preview only/i.test(homepage), "Homepage must not expose unsupported traffic or preview claims");
 assert(homepage.includes("const lead = articles[0]"), "Homepage must lead with the newest published story");
 assert(homepage.includes("readerJourneys") && homepage.includes("reader-paths"), "Homepage must offer curated reader journeys");
