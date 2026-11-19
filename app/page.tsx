@@ -12,7 +12,6 @@ import {
   getArticlesByTopic,
 } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, TOPIC_MAP } from "@/lib/site";
-import { SEARCH_QUERY_LIMIT } from "@/lib/search.mjs";
 
 function EditorialSection({
   eyebrow,
@@ -90,21 +89,6 @@ export default function HomePage() {
         <span className="eyebrow">Independent technology journalism</span>
         <span className="home-intro-note">Clear reporting. Practical answers. Better decisions.</span>
       </div>
-      <form className="home-quick-search wrap" role="search" action="/search" method="get">
-        <label htmlFor="home-quick-search-input">Looking for an answer? Search our published guides.</label>
-        <div className="home-quick-search-controls">
-          <Search aria-hidden="true" />
-          <input
-            id="home-quick-search-input"
-            name="q"
-            type="search"
-            maxLength={SEARCH_QUERY_LIMIT}
-            placeholder="Try Gmail recovery, Google Photos, or privacy"
-            autoComplete="off"
-          />
-          <button type="submit">Search guides</button>
-        </div>
-      </form>
       <section className="hero wrap" aria-labelledby="lead-story-title">
         <article className="lead-story">
           <Link className="lead-image" href={`/articles/${lead.slug}`}>
