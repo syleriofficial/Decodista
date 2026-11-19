@@ -197,7 +197,7 @@ assert(/ContactForm/.test(contactPage), "Contact page must expose the protected 
 assert(/TURNSTILE_SITE_KEY/.test(contactPage), "Contact page must configure Cloudflare Turnstile");
 assert(/private delivery address is never shown/i.test(contactPage), "Contact page must keep the recipient private");
 assert(/permanentRedirect\("\/editorial-policy"\)/.test(standardsRedirect), "Editorial Standards alias must resolve to the canonical policy route");
-const homepageForms = [...homepage.matchAll(/<form\\b[^>]*>/g)].map(([tag]) => tag);
+const homepageForms = [...homepage.matchAll(/<form\b[^>]*>/g)].map(([tag]) => tag);
 assert(homepageForms.length === 1 &&
   homepageForms[0].includes('role="search"') &&
   homepageForms[0].includes('action="/search"') &&
