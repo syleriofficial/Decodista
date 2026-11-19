@@ -12,6 +12,7 @@ import {
   getArticlesByTopic,
 } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, TOPIC_MAP } from "@/lib/site";
+import { SEARCH_QUERY_LIMIT } from "@/lib/search.mjs";
 
 function EditorialSection({
   eyebrow,
@@ -97,7 +98,7 @@ export default function HomePage() {
             id="home-quick-search-input"
             name="q"
             type="search"
-            maxLength={120}
+            maxLength={SEARCH_QUERY_LIMIT}
             placeholder="Try Gmail recovery, Google Photos, or privacy"
             autoComplete="off"
           />
