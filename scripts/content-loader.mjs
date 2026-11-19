@@ -18,7 +18,7 @@ const CALLOUT_PREFIX = "DECODISTA callout — ";
 // A single source-reviewed, self-contained illustration is intentionally allowed
 // as inline article art. Do not open SVG support to arbitrary CMS uploads.
 const APPROVED_INLINE_EDITORIAL_SVGS = new Set([
-  "/images/uploads/google-account-recovery-route-map.svg",
+  "/images/editorial/google-account-recovery-route-map.svg",
 ]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
