@@ -15,6 +15,11 @@ import {
 
 const ARTICLE_DIRECTORY = "content/articles";
 const CALLOUT_PREFIX = "DECODISTA callout — ";
+// A single source-reviewed, self-contained illustration is intentionally allowed
+// as inline article art. Do not open SVG support to arbitrary CMS uploads.
+const APPROVED_INLINE_EDITORIAL_SVGS = new Set([
+  "/images/uploads/google-account-recovery-route-map.svg",
+]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
@@ -284,7 +289,9 @@ function validateBlocks(blocks, source) {
       }
       [...block.headers, ...block.rows.flat()].forEach((cell) => validateRichText(cell, source));
     } else if (block.type === "image") {
-      if (!IMAGE_PATTERN.test(block.src) || !block.alt.trim()) fail(source, "body images need a valid /images/ path and alt text");
+      if (!(IMAGE_PATTERN.test(block.src) || APPROVED_INLINE_EDITORIAL_SVGS.has(block.src)) || !block.alt.trim()) {
+        fail(source, "body images need a valid approved /images/ path and alt text");
+      }
     }
   }
 }
