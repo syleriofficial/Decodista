@@ -124,7 +124,7 @@ Choose the situation that best describes **what you can do right now**:
 
 **Visual route map:** This DECODISTA illustration summarizes the three choices above; it is not a screenshot of Google's sign-in screens.
 
-![Three-path recovery map: Path A for an account you cannot sign in to; Path B for a missing verification phone; Path C when you can still sign in but suspect a hack.](/images/uploads/google-account-recovery-route-map.svg "DECODISTA's illustrated recovery decision map — not a Google interface")
+![Three-path recovery map: Path A for an account you cannot sign in to; Path B for a missing verification phone; Path C when you can still sign in but suspect a hack.](/images/editorial/google-account-recovery-route-map.svg "DECODISTA's illustrated recovery decision map — not a Google interface")
 
 A Google Account session may come from a browser or app rather than a separate physical device. Google's [hacked-account instructions](<https://support.google.com/accounts/answer/6294825?hl=en>) explain why regaining access and securing an account are separate tasks.
 
