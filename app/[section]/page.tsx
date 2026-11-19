@@ -4,7 +4,7 @@ import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { getArticlesByCategory, getArticlesByContentType } from "@/lib/content";
+import { articles, getArticlesByCategory, getArticlesByContentType } from "@/lib/content";
 import { parsePageNumber } from "@/lib/pagination";
 import { CATEGORY_DEFINITIONS, CATEGORY_MAP, CONTENT_TYPE_MAP, SITE_NAME, SITE_URL, type CategorySlug } from "@/lib/site";
 
@@ -97,6 +97,21 @@ export default async function CategoryPage({ params, searchParams }: { params: P
           <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
         </section>
       ) : null}
+      {!featured && articles.length > 0 && (
+        <section className="section-block wrap" aria-labelledby="cross-section-title">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Elsewhere in DECODISTA</span>
+              <h2 id="cross-section-title">Latest published across DECODISTA</h2>
+            </div>
+            <Link href="/latest">View all published stories <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <p className="cross-section-note">These articles are from other published sections, not {category.name.toLowerCase()} coverage.</p>
+          <div className="article-grid">
+            {articles.slice(0, 3).map((article) => <ArticleCard key={article.slug} article={article} />)}
+          </div>
+        </section>
+      )}
       {listing.length > 0 && <section className="section-block wrap" aria-labelledby="category-latest-title">
         <div className="section-heading"><div><span className="eyebrow">Page {page} of {pages}</span><h2 id="category-latest-title">More in {category.shortName}</h2></div></div>
         <div className="article-grid">{visible.map((article) => <ArticleCard key={article.slug} article={article} />)}</div>
