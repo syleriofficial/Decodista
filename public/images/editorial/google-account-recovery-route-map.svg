@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Three Google Account recovery routes</title>
+  <desc id="desc">Path A: cannot sign in, use official Google Account Recovery. Path B: verification phone missing, try an existing backup method. Path C: still signed in, review Google security activity and Gmail settings. Recovery is not guaranteed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101b2b"/><stop offset="1" stop-color="#1d2c3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <text x="64" y="75" fill="#87b9ff" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="5">DECODISTA / SECURITY GUIDE</text>
+  <text x="64" y="145" fill="#ffffff" font-family="Arial,sans-serif" font-size="59" font-weight="700">Choose your recovery route</text>
+  <g font-family="Arial,sans-serif">
+    <g transform="translate(64,192)">
+      <rect width="360" height="388" rx="22" fill="#233a54" stroke="#598fd7" stroke-width="2"/>
+      <circle cx="66" cy="70" r="40" fill="#4286e0"/>
+      <rect x="49" y="68" width="34" height="26" rx="5" fill="none" stroke="#fff" stroke-width="5"/>
+      <path d="M56 68V58a10 10 0 0 1 20 0v10" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <text x="30" y="157" font-size="31" font-weight="700" fill="#a6cafa">PATH A</text>
+      <text x="30" y="225" font-size="48" font-weight="700" fill="#ffffff">Locked out?</text>
+      <text x="30" y="289" font-size="31" fill="#ddeaff">Use Google's</text>
+      <text x="30" y="334" font-size="31" fill="#ddeaff">recovery page</text>
+    </g>
+    <g transform="translate(460,192)">
+      <rect width="360" height="388" rx="22" fill="#233d3e" stroke="#55bd9c" stroke-width="2"/>
+      <circle cx="66" cy="70" r="40" fill="#259e79"/>
+      <rect x="50" y="46" width="31" height="50" rx="5" fill="none" stroke="#fff" stroke-width="5"/>
+      <path d="M62 88h7" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <text x="30" y="157" font-size="31" font-weight="700" fill="#a1ecd2">PATH B</text>
+      <text x="30" y="225" font-size="45" font-weight="700" fill="#ffffff">Phone lost?</text>
+      <text x="30" y="289" font-size="31" fill="#e2fcf3">Try a previously</text>
+      <text x="30" y="334" font-size="31" fill="#e2fcf3">set backup</text>
+    </g>
+    <g transform="translate(856,192)">
+      <rect width="360" height="388" rx="22" fill="#48362e" stroke="#d49970" stroke-width="2"/>
+      <circle cx="66" cy="70" r="40" fill="#b76e43"/>
+      <path d="M66 44L89 54V70c0 19-11 28-23 34-12-6-23-15-23-34V54z" fill="none" stroke="#fff" stroke-width="5"/>
+      <path d="M56 73l7 7 15-17" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="30" y="157" font-size="31" font-weight="700" fill="#ffcda8">PATH C</text>
+      <text x="30" y="225" font-size="42" font-weight="700" fill="#ffffff">Suspect a hack?</text>
+      <text x="30" y="289" font-size="31" fill="#fff0e5">Check security</text>
+      <text x="30" y="334" font-size="31" fill="#fff0e5">and Gmail</text>
+    </g>
+  </g>
+  <text x="640" y="654" text-anchor="middle" fill="#f3f5fa" font-family="Arial,sans-serif" font-size="27" font-weight="500">Follow Google's official steps. No paid unlocks or guaranteed recovery.</text>
+  <rect x="64" y="682" width="1152" height="2" fill="#4c6480" opacity=".7"/>
+</svg>
