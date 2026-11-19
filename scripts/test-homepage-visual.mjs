@@ -223,7 +223,19 @@ for (const sample of [
       const newHeroResponse = await page.request.get(base + "/images/uploads/recover-hacked-google-account-gmail.webp");
       assert.equal(newHeroResponse.status(), 200, "New WebP must be reachable");
       assert((newHeroResponse.headers()["content-type"] ?? "").includes("image/webp"), "Original must be served as WebP");
+      const routeMap = page.locator('figure.prose-image img[src="/images/uploads/google-account-recovery-route-map.svg"]');
+      assert.equal(await routeMap.count(), 1, "Recovery article must include exactly one original route-map visual");
+      assert((await routeMap.getAttribute("alt"))?.includes("Three-path recovery map"),
+        "Route map must explain all three paths in accessible alternate text");
+      const routeMapResponse = await page.request.get(base + "/images/uploads/google-account-recovery-route-map.svg");
+      assert.equal(routeMapResponse.status(), 200, "Original route-map SVG must be publicly reachable in preview");
+      assert((routeMapResponse.headers()["content-type"] ?? "").includes("image/svg+xml"),
+        "Route-map illustration must be served as SVG and not masquerade as a Google screenshot");
+      const recoveryPageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      assert(recoveryPageWidth <= sample.width + 1, "Recovery route-map must not cause horizontal overflow");
       const recoveryText = await page.locator("main").innerText();
+      assert(recoveryText.includes("Related guides for your next step"),
+        "Recovery article must include contextual next-step guides");
       for (const prompt of [
         "Can't sign in, or someone changed your password?",
         "Know your password, but lost your verification phone?",
