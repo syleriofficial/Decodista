@@ -12,6 +12,14 @@ export const LEGACY_UPLOAD_IMAGE_PATHS = new Set([
   "/images/uploads/chatgpt-image-sep-23-2026-04_46_10-pm.webp",
 ]);
 
+// Only these three previously reviewed replacement assets may use a filename
+// other than the article slug. All NEW CMS uploads must remain slug-based.
+export const APPROVED_ARTWORK_REPLACEMENTS = new Map([
+  ["openai-agent-leak-53-chatgpt-user-images", "/images/uploads/openai-agent-image-leak-concept-2026.webp"],
+  ["google-photos-android-undo-backup-keep-phone-photos", "/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp"],
+  ["google-photos-free-up-space-what-it-deletes", "/images/uploads/google-photos-free-up-space-cloud-copies-kept.webp"],
+]);
+
 const OPTIONAL_SCALAR_FIELDS = [
   "introduction",
   "updatedAt",
@@ -148,6 +156,7 @@ export function validateCmsArticleData(input) {
     && SLUG_PATTERN.test(data.slug.trim())
     && data.heroImage !== `/images/uploads/${data.slug.trim()}.webp`
     && !LEGACY_UPLOAD_IMAGE_PATHS.has(data.heroImage)
+    && APPROVED_ARTWORK_REPLACEMENTS.get(data.slug.trim()) !== data.heroImage
   ) {
     errors.push("Hero Image filename must match the article slug and use WebP, for example /images/uploads/your-article-slug.webp.");
   }

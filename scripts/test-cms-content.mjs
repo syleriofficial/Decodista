@@ -164,5 +164,18 @@ assert.match(
   /filename must match the article slug/,
 );
 console.log("CMS filename rule passed: new uploads use the article slug without changing legacy production URLs.");
+for (const [slug, heroImage] of [
+  ["openai-agent-leak-53-chatgpt-user-images", "/images/uploads/openai-agent-image-leak-concept-2026.webp"],
+  ["google-photos-android-undo-backup-keep-phone-photos", "/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp"],
+  ["google-photos-free-up-space-what-it-deletes", "/images/uploads/google-photos-free-up-space-cloud-copies-kept.webp"],
+]) {
+  assert.deepEqual(validateCmsArticleData({ ...base, slug, heroImage, body: defaultBody }), [],
+    "Approved editorial replacements must be allowed for their exact article slugs");
+  assert.match(validateCmsArticleData({
+    ...base, slug: base.slug, heroImage, body: defaultBody,
+  }).join(" "), /filename must match the article slug/,
+    "Approved replacement assets must never be reusable in unrelated new CMS articles");
+}
+console.log("CMS approved replacements passed without relaxing slug-based naming for new uploads.");
 
 console.log("CMS publishing validation suite passed without creating files or public routes.");

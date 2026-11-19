@@ -1,0 +1,51 @@
+name: Stage Issue 78 generated hero WebP assets
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "artwork/issue78/**"
+      - "scripts/generate-issue78-heroes.mjs"
+      - ".github/workflows/issue78-materialize-webp.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stage-issue78-heroes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  stage-assets:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feat/issue78-generated-hero-webp-art-20261116'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout owned feature branch only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install pinned image build dependency
+        run: npm ci --include=dev
+      - name: Generate and verify editorial WebP originals
+        run: npm run issue78:images
+      - name: Commit binary WebPs to the PR branch (never main)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- public/images/uploads/openai-agent-image-leak-concept-2026.webp
+          git add -- public/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp
+          git add -- public/images/uploads/google-photos-free-up-space-cloud-copies-kept.webp
+          if git diff --cached --quiet; then
+            echo "Three verified binary assets are already tracked"
+          else
+            git commit -m "artwork(issue78): store three generated WebP originals"
+            git push origin "HEAD:feat/issue78-generated-hero-webp-art-20261116"
+          fi

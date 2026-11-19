@@ -186,8 +186,28 @@ for (const sample of [
       const incidentCaption = await page.locator("figure.article-hero figcaption").innerText();
       assert(incidentCaption.includes("not a photograph or depiction of actual OpenAI facilities"),
         "Fictional staged research scenes must carry a visible documentary-evidence warning");
-      assert((await page.locator("figure.article-hero img").getAttribute("alt"))?.includes("fictional OpenAI-branded"),
+      const incidentImage = page.locator("figure.article-hero img");
+      assert((await incidentImage.getAttribute("alt"))?.includes("fictional AI-agent interface"),
         "Incident artwork alt text must acknowledge fictional staging");
+      assert.equal(await incidentImage.getAttribute("src"), "/images/uploads/openai-agent-image-leak-concept-2026.webp",
+        "Incident article must use its reviewed replacement artwork");
+      for (const [slug, expectedImage, requiredAlt] of [
+        ["google-photos-android-undo-backup-keep-phone-photos", "/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp", "photos staying on a phone"],
+        ["google-photos-free-up-space-what-it-deletes", "/images/uploads/google-photos-free-up-space-cloud-copies-kept.webp", "saved cloud photos remain available"],
+      ]) {
+        const updatedPage = await page.goto(base + "/articles/" + slug, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(updatedPage?.status(), 200, "Updated hero article must remain reachable: " + slug);
+        const art = page.locator("figure.article-hero img");
+        assert.equal(await art.getAttribute("src"), expectedImage, "Article must display its replacement editorial artwork");
+        assert((await art.getAttribute("alt"))?.includes(requiredAlt), "Updated artwork must have accurate alt text");
+        assert((await art.getAttribute("srcset"))?.includes("/images/responsive/"), "Updated artwork must use real WebP srcset");
+        await art.evaluate(async image => { if (!image.complete) await new Promise(resolve => image.addEventListener("load", resolve, { once: true })); });
+        assert(await art.evaluate(image => image.complete && image.naturalWidth > 0), "Published editorial image must load successfully");
+        const originalResponse = await page.request.get(base + expectedImage);
+        assert.equal(originalResponse.status(), 200, "Full-size WebP original must remain directly accessible");
+        assert((originalResponse.headers()["content-type"] ?? "").includes("image/webp"),
+          "Replacement original must be a WebP served with the correct content type");
+      }
       await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full",
         { waitUntil: "domcontentloaded", timeout: 45000 });
     }
