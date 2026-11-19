@@ -170,6 +170,31 @@ for (const sample of [
 
     const articleDiscoveryResponse = await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert.equal(articleDiscoveryResponse?.status(), 200, "Existing article must remain reachable");
+    const articleToc = page.locator("nav.toc");
+    assert.equal(await articleToc.count(), 1, "Long-form guide must retain its in-page table of contents");
+    const tocHref = await articleToc.locator('a[href^="#"]').first().getAttribute("href");
+    assert(tocHref && tocHref.length > 1, "TOC must link to an actual in-page heading");
+    assert(await page.locator(".article-prose h2[id]").evaluateAll(
+      (headings, href) => headings.some((heading) => "#" + heading.id === href), tocHref),
+      "TOC destinations must resolve to article section headings");
+    const tocMetrics = await articleToc.evaluate((node) => ({
+      overflowY: getComputedStyle(node).overflowY,
+      height: node.getBoundingClientRect().height,
+      viewportHeight: window.innerHeight,
+      linkMinHeight: parseFloat(getComputedStyle(node.querySelector("a")).minHeight),
+    }));
+    assert(tocMetrics.linkMinHeight >= 44, "TOC links need at least 44px tap and focus targets");
+    if (sample.width > 800) {
+      assert.equal(tocMetrics.overflowY, "auto", "Desktop TOC must scroll independently when long");
+      assert(tocMetrics.height <= tocMetrics.viewportHeight, "Sticky TOC must stay within the viewport");
+    } else {
+      assert.equal(tocMetrics.overflowY, "visible", "Mobile TOC must flow naturally instead of trapping scroll");
+      if (sample.width <= 600) {
+        const bodyFontPx = await page.locator(".article-main-grid .article-prose").evaluate(
+          (element) => parseFloat(getComputedStyle(element).fontSize));
+        assert(bodyFontPx >= 18, "Mobile article body must remain at least 18px for comfortable reading");
+      }
+    }
     const discovery = page.locator("nav.article-discovery");
     assert.equal(await discovery.count(), 1, "Article must have one contextual discovery section");
     assert(await discovery.evaluate((element) => element.previousElementSibling?.classList.contains("article-main-grid")),
