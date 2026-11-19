@@ -223,8 +223,17 @@ for (const sample of [
       const newHeroResponse = await page.request.get(base + "/images/uploads/recover-hacked-google-account-gmail.webp");
       assert.equal(newHeroResponse.status(), 200, "New WebP must be reachable");
       assert((newHeroResponse.headers()["content-type"] ?? "").includes("image/webp"), "Original must be served as WebP");
-      assert((await page.locator("main").innerText()).includes("No article or paid service can guarantee"),
-        "Safety-first recovery warning must remain visible");
+      const recoveryText = await page.locator("main").innerText();
+      for (const prompt of [
+        "Can't sign in, or someone changed your password?",
+        "Know your password, but lost your verification phone?",
+        "Can still sign in, but suspect someone else accessed the account?",
+        "No article or paid service can guarantee",
+      ]) {
+        assert(recoveryText.includes(prompt), "Reader-first recovery route or safety warning must remain visible: " + prompt);
+      }
+      assert(await page.locator('a[href="https://accounts.google.com/signin/recovery"]').count() > 0,
+        "Guide must link directly to Google's official recovery page");
       await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full",
         { waitUntil: "domcontentloaded", timeout: 45000 });
     }
