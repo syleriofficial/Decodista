@@ -79,10 +79,14 @@ assert(css.includes(".category-lead-image:hover img") && css.includes(".search-r
 assert(css.includes(".section-heading { align-items: flex-start; flex-direction: column; gap: .55rem; }"),
   "Narrow-screen editorial headings must stack rather than overflow");
 assert(imageComponent.includes("fetchPriority={priority ?"), "Hero image must retain high fetch priority");
+const articleHeroGenerator = read("scripts/generate-article-heroes.mjs");
+const packageScripts = JSON.parse(packageInfo).scripts;
 assert(issue78Generator.includes("Refusing to overwrite a different existing editorial asset") &&
-  packageInfo.includes('"precontent:validate": "node scripts/generate-issue78-heroes.mjs"') &&
-  packageInfo.includes('node scripts/generate-issue78-heroes.mjs && node scripts/generate-weekly-covers.mjs'),
-  "New approved editorial artwork must generate before validation, development and builds without overwriting old originals");
+  articleHeroGenerator.includes("recover-hacked-google-account-gmail") &&
+  ["precontent:validate", "prebuild", "predev"].every(hook =>
+    packageScripts[hook].includes("node scripts/generate-issue78-heroes.mjs") &&
+    packageScripts[hook].includes("node scripts/generate-article-heroes.mjs")),
+  "Reviewed hero art must be checked before validation, development and builds without overwriting existing originals");
 for (const name of ["openai-agent-image-leak-concept", "google-photos-undo-backup-local-kept-cloud-removed", "google-photos-free-up-space-cloud-copies-kept"]) {
   assert(issue78Generator.includes(name), "All three Issue #78 hero artworks must be reproducibly generated");
 }
