@@ -208,6 +208,44 @@ for (const sample of [
         assert((originalResponse.headers()["content-type"] ?? "").includes("image/webp"),
           "Replacement original must be a WebP served with the correct content type");
       }
+      const recoveryGuide = await page.goto(base + "/articles/recover-hacked-google-account-gmail",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(recoveryGuide?.status(), 200, "New researched Gmail recovery guide must render");
+      assert((await page.locator("h1").first().innerText()).includes("Google Account Hacked or Locked Out"),
+        "New article must have its intended editorial title");
+      const recoveryHero = page.locator("figure.article-hero img");
+      assert.equal(await recoveryHero.getAttribute("src"), "/images/uploads/recover-hacked-google-account-gmail.webp",
+        "New security article must use its own original hero image");
+      assert((await recoveryHero.getAttribute("alt"))?.includes("Conceptual security illustration"),
+        "Hero alt must describe conceptual artwork and not imply a Google screenshot");
+      assert((await recoveryHero.getAttribute("srcset"))?.includes("/images/responsive/"),
+        "New article must have responsive WebP variants");
+      const newHeroResponse = await page.request.get(base + "/images/uploads/recover-hacked-google-account-gmail.webp");
+      assert.equal(newHeroResponse.status(), 200, "New WebP must be reachable");
+      assert((newHeroResponse.headers()["content-type"] ?? "").includes("image/webp"), "Original must be served as WebP");
+      const routeMap = page.locator('figure.prose-image img[src="/images/editorial/google-account-recovery-route-map.svg"]');
+      assert.equal(await routeMap.count(), 1, "Recovery article must include exactly one original route-map visual");
+      assert((await routeMap.getAttribute("alt"))?.includes("Three-path recovery map"),
+        "Route map must explain all three paths in accessible alternate text");
+      const routeMapResponse = await page.request.get(base + "/images/editorial/google-account-recovery-route-map.svg");
+      assert.equal(routeMapResponse.status(), 200, "Original route-map SVG must be publicly reachable in preview");
+      assert((routeMapResponse.headers()["content-type"] ?? "").includes("image/svg+xml"),
+        "Route-map illustration must be served as SVG and not masquerade as a Google screenshot");
+      const recoveryPageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      assert(recoveryPageWidth <= sample.width + 1, "Recovery route-map must not cause horizontal overflow");
+      const recoveryText = await page.locator("main").innerText();
+      assert(recoveryText.includes("Related guides for your next step"),
+        "Recovery article must include contextual next-step guides");
+      for (const prompt of [
+        "Can't sign in, or someone changed your password?",
+        "Know your password, but lost your verification phone?",
+        "Can still sign in, but suspect someone else accessed the account?",
+        "No article or paid service can guarantee",
+      ]) {
+        assert(recoveryText.includes(prompt), "Reader-first recovery route or safety warning must remain visible: " + prompt);
+      }
+      assert(await page.locator('a[href="https://accounts.google.com/signin/recovery"]').count() > 0,
+        "Guide must link directly to Google's official recovery page");
       await page.goto(base + "/articles/gmail-not-receiving-emails-google-storage-full",
         { waitUntil: "domcontentloaded", timeout: 45000 });
     }
