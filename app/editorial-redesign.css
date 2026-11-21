@@ -113,7 +113,8 @@ body { background: var(--paper); }
 .story-index { font-size: .78rem; }
 
 /* 4. Different visual hierarchies for latest, featured and guides */
-.latest-home { border-top: 0; padding-top: 0; padding-bottom: clamp(4rem, 7vw, 7rem); }
+.latest-home { border-top: 0; padding-top: 0; padding-bottom: clamp(3rem, 4.8vw, 5.25rem); }
+.latest-home .section-heading, .home-topic .section-heading { margin-bottom: clamp(1.1rem, 2vw, 1.6rem); }
 .section-heading { border-bottom-width: 2px; }
 .section-heading h2 { font-size: clamp(2rem, 3.5vw, 3.5rem); }
 .section-heading > a { min-height: 44px; }
@@ -122,7 +123,11 @@ body { background: var(--paper); }
 }
 .latest-feed .article-card--horizontal {
   display: flex; flex-direction: column; align-items: stretch;
-  gap: 0; padding: 0; border-bottom: 0; background: var(--surface);
+  gap: 0; padding: 0; border: 1px solid var(--line); background: var(--surface);
+  transition: border-color .2s ease;
+}
+@media (hover: hover) {
+  .latest-feed .article-card--horizontal:hover { border-color: color-mix(in srgb, var(--signal) 55%, var(--line)); }
 }
 .latest-feed .article-card--horizontal .card-image { width: 100%; aspect-ratio: 16 / 10; }
 .latest-feed .article-card--horizontal .card-copy {
@@ -138,9 +143,18 @@ body { background: var(--paper); }
 .article-card .card-copy h3 { line-height: 1.19; text-wrap: pretty; }
 .article-card:focus-within .card-copy h3 a { color: var(--signal); text-decoration: underline; text-underline-offset: .16em; }
 .article-card--compact .card-copy h3 { line-height: 1.2; }
-.home-topic { padding-bottom: clamp(4rem, 6.5vw, 6.5rem); }
-.home-topic-grid { grid-template-columns: minmax(0, 1.22fr) repeat(2, minmax(0, 1fr)); gap: 1.15rem; }
-.home-topic-grid .card-image { aspect-ratio: 16 / 9; }
+.home-topic { padding-bottom: clamp(3rem, 5.2vw, 5rem); }
+.home-topic-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 1.7vw, 1.4rem); }
+/* Use the full editorial width when only one real story is available. */
+.home-topic-grid.home-topic-grid--single { grid-template-columns: minmax(0, 1fr); }
+.home-topic-grid .card-image { aspect-ratio: 16 / 10; }
+.home-topic-grid .article-card--compact .card-copy { padding-top: .85rem; }
+.home-topic-grid--single .article-card--horizontal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: clamp(.8rem, 1.7vw, 1.5rem);
+}
+.home-topic-grid--single .article-card--horizontal .card-image { aspect-ratio: 16 / 10; }
 .meta-row { flex-wrap: wrap; }
 
 /* 5. Make practical discovery look like a distinct guide panel */
@@ -328,14 +342,35 @@ body { background: var(--paper); }
   .latest-feed { grid-template-columns: 1fr; gap: 1rem; }
   .latest-feed .article-card--horizontal {
     display: grid; grid-template-columns: 38% minmax(0,1fr); align-items: start;
-    gap: .85rem; padding: 0 0 1rem; border-bottom: 1px solid var(--line); background: transparent;
+    gap: .85rem; padding: 0 0 1rem; border: 0; border-bottom: 1px solid var(--line); background: transparent;
   }
   .latest-feed .article-card--horizontal .card-image { aspect-ratio: 4 / 3; }
   .latest-feed .article-card--horizontal .card-copy { padding: 0; }
   .latest-feed .article-card--horizontal .card-copy h3 { font-size: clamp(1.08rem, 4.5vw, 1.3rem); }
   .latest-feed .article-card--horizontal .card-copy > p { display: none; }
   .latest-feed .article-card--horizontal .meta-row { padding-top: .25rem; }
-  .home-topic-grid { grid-template-columns: 1fr; }
+  .home-topic-grid { grid-template-columns: 1fr; gap: 1rem; }
+  /* On phones, the section feed is easier to scan as compact editorial rows. */
+  .home-topic-grid .article-card--compact {
+    display: grid; grid-template-columns: 40% minmax(0, 1fr);
+    align-items: start; gap: .85rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .home-topic-grid .article-card--compact .card-image { width: 100%; aspect-ratio: 4 / 3; }
+  .home-topic-grid .article-card--compact .card-copy { min-width: 0; padding-top: 0; }
+  .home-topic-grid .article-card--compact .card-labels { margin-bottom: .15rem; flex-wrap: wrap; }
+  .home-topic-grid .article-card--compact .content-type-label { display: none; }
+  .home-topic-grid .article-card--compact .card-copy h3 {
+    margin: .35rem 0 .5rem; font-size: clamp(1.05rem, 4.35vw, 1.3rem);
+  }
+  .home-topic-grid .article-card--compact .meta-row { border-top: 0; padding-top: .2rem; gap: .5rem; }
+  .home-topic-grid .article-card--compact .meta-row time { display: none; }
+  .home-topic-grid--single .article-card--horizontal {
+    grid-template-columns: 38% minmax(0,1fr); align-items: start;
+    gap: .85rem; padding: 0 0 1rem; border: 0; border-bottom: 1px solid var(--line);
+    background: transparent;
+  }
+  .home-topic-grid--single .article-card--horizontal .card-image { aspect-ratio: 4 / 3; }
   .reader-paths { padding: 1.35rem 1.1rem 1.65rem; }
   .reader-paths-grid { grid-template-columns: 1fr; gap: .55rem; }
   .reader-path { min-height: 0; padding: 1.05rem 0; }
@@ -362,6 +397,7 @@ body { background: var(--paper); }
   .lead-image img, .card-image img, .category-lead-image img, .search-result-image img {
     transition: none !important; transform: none !important;
   }
+  .latest-feed .article-card--horizontal { transition: none; }
 }
 
 .cross-section-note { margin: 0 0 1.25rem; color: var(--muted); font-size: .92rem; }
