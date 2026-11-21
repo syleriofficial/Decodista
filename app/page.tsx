@@ -36,7 +36,7 @@ function EditorialSection({
             key={article.slug}
             article={article}
             variant={stories.length === 1 ? "horizontal" : "compact"}
-            imageSizes={stories.length === 1 ? undefined : "(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 32vw"}
+            imageSizes={stories.length === 1 ? undefined : "(max-width: 600px) 40vw, (max-width: 1000px) 50vw, 32vw"}
           />
         ))}
       </div>
