@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'app/page.tsx'
+      - 'app/ai-tools/**'
+      - 'components/ai-tools-explorer.tsx'
+      - 'lib/ai-tools.ts'
+      - 'scripts/test-ai-tools-browser.mjs'
       - 'app/search/page.tsx'
       - 'components/search-client.tsx'
       - 'lib/search.mjs'
@@ -63,6 +67,8 @@ jobs:
         run: node scripts/test-responsive-images.mjs
       - name: Check homepage using Chrome
         run: node scripts/test-homepage-visual.mjs
+      - name: Verify AI Tools directory and comparison interactions
+        run: node scripts/test-ai-tools-browser.mjs
       - name: Capture synthetic mobile performance baseline
         run: node scripts/audit-mobile-performance.mjs
       - name: Save screenshots, report and preview log
@@ -75,6 +81,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: homepage-visual-qa
-          path: artifacts/homepage-qa/
+          path: |
+            artifacts/homepage-qa/
+            artifacts/ai-tools-qa/
           if-no-files-found: ignore
           retention-days: 3

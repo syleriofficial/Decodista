@@ -107,8 +107,27 @@ assert.deepEqual(
 );
 
 const aiToolsPage = read("app/ai-tools/page.tsx");
-assert(aiToolsPage.includes('title: "AI Tools"') && aiToolsPage.includes('index: false'),
-  "AI Tools landing page must exist and remain noindex until the comparison directory is published");
+const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
+const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
+const aiToolsData = read("lib/ai-tools.ts");
+const aiToolsCss = read("app/ai-tools/ai-tools.css");
+assert(aiToolsPage.includes('title: "AI Tools Directory & Comparison"') && aiToolsPage.includes('index: false'),
+  "AI Tools starter directory must stay noindex until its editorial verification is complete");
+assert(aiToolsPage.includes("<AiToolsExplorer />") && aiToolsPage.includes('href="/ai-tools/compare"'),
+  "AI Tools directory must expose actual discovery and a comparison destination");
+assert(aiToolsCompare.includes('title: "Compare AI Tools"') && aiToolsCompare.includes('index: false'),
+  "AI tools comparison must be honest, functional and noindex until editorial review");
+assert(aiToolsCompare.includes('action="/ai-tools/compare"') && aiToolsCompare.includes('findAiTool('),
+  "Comparisons must support shareable form-based tool selection");
+assert(aiToolsExplorer.includes('aria-pressed={isSelected}') && aiToolsExplorer.includes('filtered.length') &&
+  aiToolsExplorer.includes('getCategoryLabel') && aiToolsExplorer.includes('Compare selected tools'),
+  "Directory needs accessible search, filters and two-tool selection");
+assert(aiToolsData.includes('officialUrl:') && aiToolsData.includes('practicalNote:') &&
+  aiToolsData.includes('export const AI_TOOLS: readonly AiTool[]'),
+  "Editorial tool entries must link to providers and explain practical caveats");
+assert(aiToolsCss.includes('@media (max-width: 600px)') &&
+  aiToolsCss.includes('.ai-tools-compare-table') && aiToolsCss.includes('.ai-tools-grid'),
+  "AI Tools needs responsive directory and comparison styles");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
