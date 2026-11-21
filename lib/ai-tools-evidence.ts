@@ -7,7 +7,8 @@ export const AI_EVIDENCE_CHECKED_ON = "2026-11-21";
 export const AI_EVIDENCE_REVIEW_INTERVAL_DAYS = 30;
 
 export type AiToolEvidence = {
-  slug: "chatgpt" | "claude" | "gemini" | "perplexity" | "github-copilot";
+  slug: "chatgpt" | "claude" | "gemini" | "perplexity" | "github-copilot"
+    | "adobe-firefly" | "canva" | "cursor" | "elevenlabs" | "midjourney" | "notebooklm" | "runway";
   sourceUrl: string;
   sourceLabel: string;
   checkedOn: string;
@@ -75,6 +76,91 @@ export const AI_TOOL_EVIDENCE: readonly AiToolEvidence[] = [
       "Student and organizational plans have different eligibility and controls.",
     ],
     caveat: "Model access and agent allowances are affected by plan, credits, admin policy and region.",
+  },
+
+  {
+    slug: "adobe-firefly",
+    sourceUrl: "https://www.adobe.com/in/products/firefly.html",
+    sourceLabel: "Adobe Firefly product features (India)",
+    checkedOn: "2026-11-22",
+    findings: [
+      "Adobe describes text-driven image and video creation as Firefly capabilities.",
+      "Its image workflows include AI editing and Generative Fill.",
+      "Some premium and partner-model generations consume plan-based generative credits.",
+    ],
+    caveat: "Model availability, credit consumption, usage rights and promotional entitlements depend on feature, plan and market.",
+  },
+  {
+    slug: "canva",
+    sourceUrl: "https://www.canva.com/help/use-magic-design/",
+    sourceLabel: "Canva Help: Magic Design",
+    checkedOn: "2026-11-22",
+    findings: [
+      "Magic Design uses a prompt, uploaded images or ideas to generate design suggestions.",
+      "Suggested designs can be customized with a user's own photos, video and text.",
+      "Canva also offers stock media and AI-generated media for design workflows.",
+    ],
+    caveat: "Feature access, stock-asset rights and template availability may differ by plan; generated outputs still require human checking.",
+  },
+  {
+    slug: "cursor",
+    sourceUrl: "https://cursor.com/docs/agent/overview",
+    sourceLabel: "Cursor Docs: Agent overview",
+    checkedOn: "2026-11-22",
+    findings: [
+      "Cursor Agent can inspect a codebase and edit project files.",
+      "Its supported tools can search files and run terminal commands.",
+      "Agent checkpoints can preserve snapshots before significant edits.",
+    ],
+    caveat: "Review and test generated changes before deployment; tool permissions, environments and plan limits may vary.",
+  },
+  {
+    slug: "elevenlabs",
+    sourceUrl: "https://elevenlabs.io/docs/eleven-creative/quickstart",
+    sourceLabel: "ElevenLabs: ElevenCreative quickstart",
+    checkedOn: "2026-11-22",
+    findings: [
+      "ElevenCreative supports text-to-speech and voice-changing workflows.",
+      "Its creative tools include sound effects and dubbing workflows.",
+      "The documentation describes voice-cloning and Studio narration workflows.",
+    ],
+    caveat: "Obtain consent for voice use; verify cloning permissions, commercial rights and generation limits for the account.",
+  },
+  {
+    slug: "midjourney",
+    sourceUrl: "https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor",
+    sourceLabel: "Midjourney documentation: Editor",
+    checkedOn: "2026-11-22",
+    findings: [
+      "The Midjourney Editor can modify images from a user's gallery.",
+      "Its editing tools include regional erasure and broader retexturing workflows.",
+      "Layers can be used to add reference imagery to an edit.",
+    ],
+    caveat: "The Editor's availability, permitted source material, privacy options and output rights require checking the current account terms.",
+  },
+  {
+    slug: "notebooklm",
+    sourceUrl: "https://workspace.google.com/intl/en_in/products/gemini-notebook/",
+    sourceLabel: "Google Workspace: Gemini Notebook (formerly NotebookLM)",
+    checkedOn: "2026-11-22",
+    findings: [
+      "Google renamed NotebookLM to Gemini Notebook in July 2026.",
+      "The product accepts source material such as PDFs, Google Docs and web URLs.",
+      "It helps research and learning with source-grounded responses and citations.",
+    ],
+    caveat: "Supported formats, citation quality, app availability and usage limits may differ by plan and surface; verify against original sources.",
+  },
+  {
+    slug: "runway",
+    sourceUrl: "https://help.runwayml.com/hc/en-us/articles/37425232841875-Getting-Started-with-Generative-Video",
+    sourceLabel: "Runway Help: Getting Started with Generative Video",
+    checkedOn: "2026-11-22",
+    findings: [
+      "Runway's creative workspace provides text-to-video generation.",
+      "Image-to-video lets a supplied image guide a generated scene.",
+      "Model choices can differ in generation speed, output behavior and required credits.",
+    ],
+    caveat: "Available models, credit costs, output restrictions and rights change; check the selected model and account terms.",
   },
 ];
 
