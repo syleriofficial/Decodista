@@ -7,7 +7,7 @@ import sharp from "sharp";
 // Editorial vectors are source-controlled. A reviewed WebP is never silently
 // re-encoded on another OS/libvips build, which might change its content hash.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const assets = ["recover-hacked-google-account-gmail"];
+const assets = ["recover-hacked-google-account-gmail", "what-is-agentic-ai"];
 const expectedHashes = {
   "recover-hacked-google-account-gmail": "f9d510da92d6a1fb709fd9da20181dbd2e7c9129d3d6a82294744ab154bae02d",
 };

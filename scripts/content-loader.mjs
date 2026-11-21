@@ -19,6 +19,7 @@ const CALLOUT_PREFIX = "DECODISTA callout — ";
 // as inline article art. Do not open SVG support to arbitrary CMS uploads.
 const APPROVED_INLINE_EDITORIAL_SVGS = new Set([
   "/images/editorial/google-account-recovery-route-map.svg",
+  "/images/editorial/agentic-ai-agent-loop.svg",
 ]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
