@@ -97,6 +97,17 @@ const notFound = read("app/not-found.tsx");
 const staticHeaders = read("public/_headers");
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { articles } = loadArticles(projectRoot);
+const chromeSeoExperiment = read("content/articles/chrome-enhanced-protection-vs-standard-protection.md");
+assert(chromeSeoExperiment.includes('seoTitle: "Chrome Enhanced vs Standard Protection: Which Is Better?"') &&
+  chromeSeoExperiment.includes('Is Chrome Enhanced Protection better than Standard?'),
+  "Chrome SEO metadata must answer the observed comparison-intent query without claiming a universal winner");
+assert(chromeSeoExperiment.includes("updatedAt: 2026-11-15") &&
+  chromeSeoExperiment.includes("informationCheckedAt: 2026-11-15"),
+  "A metadata-only CTR experiment must preserve the genuine source-review and editorial update dates");
+assert(articlePage.includes("const metadataTitle = article.seoTitle ?? article.title") &&
+  articlePage.includes("description: article.description"),
+  "Published article HTML must render the targeted SEO title and description fields");
+
 
 const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(navigation, "Primary navigation definition is missing");
