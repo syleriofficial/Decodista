@@ -19,6 +19,19 @@ export const AI_TOOLS_RESEARCH_GUIDES = [
     scenarios: 4,
     readerTests: 3,
   },
+  {
+    slug: "chatgpt-vs-gemini-for-research",
+    title: "ChatGPT vs Gemini for Research: Files, Sources and Workflows",
+    subtitle:
+      "A source-led guide to research with ChatGPT and Gemini: web citations, uploaded documents, connected services, project continuity and an independent reader test worksheet.",
+    reviewedOn: "2026-11-22",
+    sourceCount: 7,
+    decisionFactors: 6,
+    scenarios: 4,
+    readerTests: 3,
+  },
 ] as const;
 
 export const PERPLEXITY_NOTEBOOK_RESEARCH_GUIDE = AI_TOOLS_RESEARCH_GUIDES[0];
+
+export const CHATGPT_GEMINI_RESEARCH_GUIDE = AI_TOOLS_RESEARCH_GUIDES[1];
