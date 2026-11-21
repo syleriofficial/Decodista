@@ -164,6 +164,7 @@ try {
         assert((await page.locator(".ai-guide-test-privacy").innerText()).includes("Nothing is saved between reloads"),
           "Visitors must understand that scores are session-only");
 
+        await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
         const firstCase = cases.first();
         await firstCase.locator("summary").click();
         assert(await firstCase.locator("pre").isVisible(), "The repeatable evaluation prompt must be readable");
@@ -172,6 +173,7 @@ try {
         await ratings.nth(0).selectOption("5");
         await ratings.nth(1).selectOption("4");
         await firstCase.locator("textarea").fill("=2+2 test workbook note");
+        await page.waitForFunction(() => (document.querySelector(".ai-guide-test-progress")?.textContent ?? "").includes("1 of 3"), null, { timeout: 15000 });
         assert((await page.locator(".ai-guide-test-progress").innerText()).includes("1 of 3"),
           "Only paired, reader-entered ratings count as completed");
         const [download] = await Promise.all([
