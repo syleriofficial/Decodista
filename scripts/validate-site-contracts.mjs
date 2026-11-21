@@ -97,6 +97,15 @@ const notFound = read("app/not-found.tsx");
 const staticHeaders = read("public/_headers");
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { articles } = loadArticles(projectRoot);
+const icloudMetadataExperiment = read("content/articles/does-icloud-backup-include-photos.md");
+assert(icloudMetadataExperiment.includes("seoTitle: Does iCloud Backup Include Photos? On vs Off Explained") &&
+  icloudMetadataExperiment.includes("With iCloud Photos on, synced photos aren't in iCloud device backups.") &&
+  icloudMetadataExperiment.includes("With it off, iCloud Backup may include them."),
+  "iCloud search snippet must give the qualified on/off answer from Apple support");
+assert(icloudMetadataExperiment.includes("publishedAt: 2026-09-20") &&
+  icloudMetadataExperiment.includes("informationCheckedAt: 2026-09-18"),
+  "Metadata-only experiment must not falsify original publish or review dates");
+
 const chromeSeoExperiment = read("content/articles/chrome-enhanced-protection-vs-standard-protection.md");
 assert(chromeSeoExperiment.includes('seoTitle: "Chrome Enhanced vs Standard Protection: Which Is Better?"') &&
   chromeSeoExperiment.includes('Is Chrome Enhanced Protection better than Standard?'),

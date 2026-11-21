@@ -33,12 +33,13 @@ function check(name, condition, details) {
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const chromeExperimentPath = "/articles/chrome-enhanced-protection-vs-standard-protection";
+const icloudExperimentPath = "/articles/does-icloud-backup-include-photos";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
 const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -129,7 +130,7 @@ for (const guidePath of ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides
   check(guidePath + " self-canonical and indexable metadata",
     head.includes('rel="canonical"') &&
     head.includes(guidePath) &&
-    !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Original editorial guides are indexable with unique canonical metadata");
 }
 
@@ -148,6 +149,22 @@ for (const section of [...editorialSections, "/entertainment"]) {
   check(section + " empty page has noindex",
     /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Empty editorial sections should not be search-indexable");
+}
+
+const icloudExperimentHtml = snapshots[icloudExperimentPath]?.body ?? "";
+if (icloudExperimentHtml) {
+  const head = icloudExperimentHtml.split("</head>", 1)[0];
+  check("iCloud Backup title answers on/off question",
+    /<title>[^<]*Does iCloud Backup Include Photos\? On vs Off Explained/.test(head),
+    "Search intent metadata must be readable from the response head");
+  check("iCloud Backup description gives a qualified answer",
+    head.includes("With iCloud Photos on, synced photos aren") &&
+    head.includes("With it off, iCloud Backup may include them."),
+    "Description must distinguish syncing from conditional device backup inclusion");
+  check("iCloud original guide remains indexable with self-canonical",
+    head.includes('href="' + base + icloudExperimentPath + '"') &&
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    "Metadata-only edit must preserve indexed URL and canonical");
 }
 
 const chromeExperimentHtml = snapshots[chromeExperimentPath]?.body ?? "";
