@@ -102,7 +102,7 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "AI", "Reviews", "How-To", "Security", "Science"],
+  ["Tech News", "Reviews", "Science"],
   "Primary navigation must follow the selected editorial menu order",
 );
 
@@ -110,8 +110,8 @@ const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
   [...footerSecondary.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Latest", "Digital Life", "Weekly Brief"],
-  "Footer must retain Latest, Digital Life and Weekly Brief without restoring More",
+  ["AI", "How-To", "Security", "Digital Life", "Latest"],
+  "Footer must keep useful existing sections reachable without restoring More or Weekly Brief",
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
@@ -147,10 +147,10 @@ assert(howToPage.includes('import { ResponsiveImage } from "@/components/respons
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
 assert(articles.some((article) => article.contentType === "how-to"), "Primary How-To archive must have real guides");
-for (const category of ["tech-news", "ai", "reviews", "how-to", "security", "science"]) {
+for (const category of ["tech-news", "reviews", "science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
-for (const destination of ["latest", "digital-life", "weekly"]) {
+for (const destination of ["ai", "how-to", "security", "digital-life", "latest"]) {
   assert(footerSecondary.includes(`href: "/${destination}"`), `Footer secondary navigation is missing ${destination}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
@@ -159,6 +159,7 @@ assert.equal(new Set([...primaryHrefs, ...footerHrefs]).size, primaryHrefs.lengt
   "Primary and footer secondary navigation must not duplicate destinations");
 assert(!navigation.includes('href: "/entertainment"') && !navigation.includes('href: "/latest"') && !navigation.includes('href: "/weekly"') && !site.includes("MORE_NAV_ITEMS"),
   "Retired Entertainment and More navigation must not return");
+assert(!footerSecondary.includes('href: "/weekly"'), "Weekly Brief must not be promoted in the footer");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
@@ -225,8 +226,8 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
-assert(!navigation.includes('href: "/weekly"') && footerSecondary.includes('href: "/weekly"'),
-  "Weekly Brief must remain a footer destination, not a primary menu item");
+assert(!navigation.includes('href: "/weekly"') && !footerSecondary.includes('href: "/weekly"'),
+  "Weekly Brief must not appear in visible header or footer navigation, while existing archives remain intact");
 assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
 assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
 assert(!homepage.includes('title="Reviews"'), "Do not promote the empty Reviews pillar in homepage sections");
