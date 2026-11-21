@@ -89,6 +89,38 @@ for (const sample of [
     }
     const imageFit = await page.locator(".lead-image img").evaluate((img) => getComputedStyle(img).objectFit);
     assert.equal(imageFit, "cover", "Lead artwork must fill its image frame consistently");
+    // Card geometry must follow the editorial rhythm at every tested viewport,
+    // including category sections that contain only one published story.
+    const cardGeometry = await page.evaluate(() => {
+      const latest = document.querySelector(".latest-feed .article-card--horizontal .card-image");
+      const singleGrid = document.querySelector(".home-topic-grid--single");
+      const compactCard = document.querySelector(".home-topic-grid .article-card--compact");
+      const compactImage = compactCard?.querySelector(".card-image");
+      const latestBox = latest?.getBoundingClientRect();
+      const singleGridBox = singleGrid?.getBoundingClientRect();
+      const singleCardBox = singleGrid?.querySelector(".article-card")?.getBoundingClientRect();
+      return {
+        latestAspectRatio: latestBox ? latestBox.width / latestBox.height : null,
+        singleGridFullWidth: singleGridBox && singleCardBox
+          ? Math.abs(singleGridBox.width - singleCardBox.width) <= 2 : null,
+        compactImageWidthFraction: compactCard && compactImage
+          ? compactImage.getBoundingClientRect().width / compactCard.getBoundingClientRect().width : null,
+        compactImageAspectRatio: compactImage
+          ? compactImage.getBoundingClientRect().width / compactImage.getBoundingClientRect().height : null,
+      };
+    });
+    const expectedLatestRatio = sample.width <= 600 ? 4 / 3 : 16 / 10;
+    assert(cardGeometry.latestAspectRatio && Math.abs(cardGeometry.latestAspectRatio - expectedLatestRatio) < .06,
+      "Latest card images must keep their intended desktop or mobile aspect ratio");
+    if (cardGeometry.singleGridFullWidth !== null) {
+      assert(cardGeometry.singleGridFullWidth, "A single-story topic grid must use the full available width");
+    }
+    if (sample.width <= 600 && cardGeometry.compactImageWidthFraction !== null) {
+      assert(cardGeometry.compactImageWidthFraction <= .43,
+        "Mobile topic cards should use a compact side thumbnail, not a towering full-width image");
+      assert(Math.abs(cardGeometry.compactImageAspectRatio - 4 / 3) < .06,
+        "Mobile topic thumbnails should retain the cropped 4:3 editorial frame");
+    }
     if (sample.width <= 600) {
       const sectionHeaderDirection = await page.locator(".latest-home .section-heading").evaluate((el) => getComputedStyle(el).flexDirection);
       assert.equal(sectionHeaderDirection, "column", "Narrow screens must stack editorial headings and actions");
