@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
 // Browser checks against local preview: no production writes.
@@ -155,6 +155,42 @@ try {
         assert.equal(await page.locator(".ai-guide-table tbody tr").count(), 5, "Comparison table should have five dimensions");
         assert.equal(await page.locator(".ai-guide-scenario").count(), 4, "Every guide must include four realistic use cases");
         assert.equal(await page.locator(".ai-guide-faq-list > div").count(), 3, "Every guide must address three reader questions");
+
+        const cases = page.locator(".ai-guide-test-case");
+        assert.equal(await cases.count(), 3, "Guides need three repeatable, synthetic tests");
+        assert.equal(await page.locator(".ai-guide-test-rating select").count(), 6, "Two independently controlled ratings per test");
+        assert((await page.locator(".ai-guide-test-progress").innerText()).includes("0 of 3"), "No product scores before a reader runs the tests");
+        assert(await page.getByRole("button", { name: /Export my results/ }).isDisabled(), "Do not export a fabricated/empty result set");
+        assert((await page.locator(".ai-guide-test-privacy").innerText()).includes("Nothing is saved between reloads"),
+          "Visitors must understand that scores are session-only");
+
+        await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
+        const firstCase = cases.first();
+        await firstCase.locator("summary").click();
+        assert(await firstCase.locator("pre").isVisible(), "The repeatable evaluation prompt must be readable");
+        assert((await firstCase.locator("pre").innerText()).length > 150, "Prompt must give a meaningful controlled assignment");
+        const ratings = firstCase.locator("select");
+        await ratings.nth(0).selectOption("5");
+        await ratings.nth(1).selectOption("4");
+        await firstCase.locator("textarea").fill("=2+2 test workbook note");
+        await page.waitForFunction(() => (document.querySelector(".ai-guide-test-progress")?.textContent ?? "").includes("1 of 3"), null, { timeout: 15000 });
+        assert((await page.locator(".ai-guide-test-progress").innerText()).includes("1 of 3"),
+          "Only paired, reader-entered ratings count as completed");
+        const [download] = await Promise.all([
+          page.waitForEvent("download"),
+          page.getByRole("button", { name: /Export my results/ }).click(),
+        ]);
+        assert(download.suggestedFilename().includes("my-test-results.csv"), "Export must identify personal results, not official benchmarks");
+        const saved = await download.path();
+        assert(saved, "CSV output should be available for inspection");
+        const csv = await readFile(saved, "utf8");
+        assert(csv.includes("'=2+2 test workbook note"), "CSV formula injection must be escaped");
+        assert(csv.includes("5") && csv.includes("4"), "CSV must include user-entered ratings");
+        await page.reload({ waitUntil: "domcontentloaded" });
+        await page.locator(".ai-guide-test-case").first().waitFor();
+        assert((await page.locator(".ai-guide-test-progress").innerText()).includes("0 of 3"),
+          "Reload must clear unsaved reader data instead of pretending it was persisted");
+
         assert.equal(await page.locator(".ai-guide-sources ol li").count(), 5, "Five official documentation references required");
         assert.equal(await page.locator(".ai-guide-sources a[target=\"_blank\"]").count(), 5, "Every source must link to official documentation");
         assert((await page.locator(".ai-guide-byline").innerText()).includes("21 November 2026"), "Display research date");

@@ -113,6 +113,8 @@ const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
 const aiToolsGuidesIndex = read("app/ai-tools/guides/page.tsx");
 const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
+const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
+const aiToolsEvaluationData = read("lib/ai-tools-evaluation.ts");
 const aiToolsPricingData = read("lib/ai-tools-pricing.ts");
 const aiToolsEvidence = read("lib/ai-tools-evidence.ts");
 const aiToolsEvidenceClient = read("components/ai-tools-evidence-status.tsx");
@@ -232,6 +234,30 @@ assert(aiToolsCss.includes('.ai-guide-layout') &&
   aiToolsCss.includes('.ai-guide-scenarios') &&
   aiToolsCss.includes('.ai-guide-sources'),
   "Editorial guides require responsive sections and source-led layout");
+assert(aiToolsGuidePage.includes('AiComparisonEvaluation') &&
+  aiToolsGuidePage.includes('href="#test-it-yourself"') &&
+  aiToolsGuidePage.includes('getAiEvaluationTasks(guide.slug)'),
+  "Both editorial comparison guides should include the same-tasks reader evaluation");
+assert(aiToolsEvaluationData.includes('chatgpt-vs-claude') &&
+  aiToolsEvaluationData.includes('cursor-vs-github-copilot') &&
+  aiToolsEvaluationData.includes('source-accuracy') &&
+  aiToolsEvaluationData.includes('typed-function') &&
+  aiToolsEvaluationData.includes('checklist'),
+  "Comparisons must provide concrete synthetic tasks and checkable expected outcomes");
+assert(aiToolsEvaluationComponent.includes('setResults(') &&
+  aiToolsEvaluationComponent.includes('navigator.clipboard.writeText') &&
+  aiToolsEvaluationComponent.includes('safeCsvCell') &&
+  aiToolsEvaluationComponent.includes('Export my results (CSV)') &&
+  aiToolsEvaluationComponent.includes('No winner or provider ranking is inferred'),
+  "Visitor-only results must be entered locally, safely exported and never described as DECODISTA ratings");
+assert(!aiToolsEvaluationComponent.includes('localStorage') &&
+  !aiToolsEvaluationComponent.includes('fetch(') &&
+  !aiToolsEvaluationComponent.includes('sendBeacon('),
+  "Evaluation inputs must never be persisted or submitted without reader consent");
+assert(aiToolsCss.includes('.ai-guide-test-cases') &&
+  aiToolsCss.includes('.ai-guide-test-rating') &&
+  aiToolsCss.includes('.ai-guide-test-prompt pre'),
+  "Fair-test worksheet needs accessible, compact and responsive styling");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
