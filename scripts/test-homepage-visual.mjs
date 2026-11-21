@@ -20,6 +20,14 @@ for (const sample of [
 ]) {
   const ctx = await browser.newContext({ viewport: { width: sample.width, height: sample.height }, colorScheme: sample.theme, reducedMotion: "reduce" });
   const page = await ctx.newPage();
+  // Cloudflare Turnstile refuses the localhost origin (110200) and injects
+  // an unrelated Vite error overlay. In visual/hydration QA only, neutralize
+  // its external loader; API validation is exercised in test-contact.mjs.
+  // Do not apply this interception to real production browser checks.
+  if (new URL(base).hostname === "localhost") {
+    await page.route(/https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js/, route =>
+      route.fulfill({ status: 200, contentType: "application/javascript", body: "/* Turnstile unavailable on localhost; stub for visual QA only */" }));
+  }
   const pageErrors = [];
   const unexpectedHttpErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
@@ -440,6 +448,10 @@ for (const sample of [
         const width = await page.evaluate(() => document.documentElement.scrollWidth);
         assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
         if (name === "contact") {
+          // Unlike the server-rendered form, React onChange handlers only
+          // exist after client hydration. Test the hydrated UI, not a DOM-only
+          // pre-hydration select option change.
+          await page.waitForLoadState("networkidle", { timeout: 30000 });
           // Confirm the React form actually hydrates and handles a controlled
           // field change, not just that server-rendered markup is visible.
           // DOMContentLoaded is not enough for the React-controlled form.
