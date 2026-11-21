@@ -54,3 +54,6 @@ next-env.d.ts
 # Generated weekly image assets; source SVG is version-controlled
 /public/images/weekly/*-cover.webp
 /public/images/weekly/*-og.webp
+
+# Private AI-tool trial evidence, raw outputs and potentially sensitive reviewer notes.
+/local-ai-trials/
