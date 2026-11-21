@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "@/components/app-link";
+import { AiComparisonEvaluation } from "@/components/ai-comparison-evaluation";
+import { getAiEvaluationTasks } from "@/lib/ai-tools-evaluation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CircleHelp, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS } from "@/lib/ai-tools";
 import { AI_COMPARISON_GUIDES, AI_GUIDES_REVIEWED_ON, findAiComparisonGuide } from "@/lib/ai-tools-comparison-guides";
@@ -85,6 +87,7 @@ export default async function AiComparisonGuidePage({ params }: PageProps) {
         <div className="ai-guide-hero-actions">
           <Link href={compareUrl}><GitCompareArrows size={17} aria-hidden="true" /> Open interactive comparison</Link>
           <Link href="/review-methodology"><BookOpen size={17} aria-hidden="true" /> Review methodology</Link>
+          <a href="#test-it-yourself"><BookOpen size={17} aria-hidden="true" /> Run a fair test</a>
         </div>
       </header>
 
@@ -184,6 +187,8 @@ export default async function AiComparisonGuidePage({ params }: PageProps) {
             </ol>
             <p className="ai-guide-disclosure"><strong>Methodology and limits:</strong> This guide interprets official documentation and presents an original decision framework. It does not contain sponsored placements, user reviews, model benchmarks or personal performance testing. Recheck plan conditions and evaluate outputs with your own material before purchasing.</p>
           </section>
+
+          <AiComparisonEvaluation guideSlug={guide.slug} firstName={first.name} secondName={second.name} tasks={getAiEvaluationTasks(guide.slug)} />
         </article>
 
         <aside className="ai-guide-aside" aria-label="Guide navigation">
@@ -195,6 +200,7 @@ export default async function AiComparisonGuidePage({ params }: PageProps) {
             <a href="#verdict">Practical takeaway</a>
             <a href="#questions">Common questions</a>
             <a href="#sources">Sources &amp; disclosures</a>
+            <a href="#test-it-yourself">Run your own test</a>
           </nav>
           <div className="ai-guide-side-links">
             <span className="ai-tools-eyebrow">Explore next</span>
