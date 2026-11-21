@@ -28,8 +28,8 @@ author: DECODISTA Editorial
 readingTime: 12
 featured: true
 editorsPick: false
-seoTitle: Does iCloud Backup Include Photos? iCloud Photos Explained
-metaDescription: Does iCloud Backup include photos? Learn how iCloud Photos changes the answer, what deletion does, and what to check before replacing or erasing your iPhone.
+seoTitle: Does iCloud Backup Include Photos? On vs Off Explained
+metaDescription: With iCloud Photos on, synced photos aren't in iCloud device backups. With it off, iCloud Backup may include them. Here's what to check before deleting.
 relatedArticles:
   - turn-off-icloud-photos-without-losing-photos-iphone
   - iphone-storage-full-icloud-has-space
