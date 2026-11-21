@@ -111,8 +111,8 @@ try {
         await menu.click();
         assert(await page.locator("#site-navigation").isVisible(), route.label + " menu must open after tap");
         const links = await page.locator("#site-navigation .nav-scroll > a").allTextContents();
-        assert.deepEqual(links, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science"],
-          "Mobile menu must preserve all seven approved destinations");
+        assert.deepEqual(links, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"],
+          "Mobile menu must preserve all six approved destinations");
         await page.keyboard.press("Escape");
         assert(!(await page.locator("#site-navigation").isVisible()), route.label + " Escape should close mobile menu");
       }
