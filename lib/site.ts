@@ -215,13 +215,13 @@ export const NAV_ITEMS = [
   { href: "/ai-tools", label: "AI Tools" },
   { href: "/reviews", label: "Reviews" },
   { href: "/how-to", label: "How-To" },
-  { href: "/security", label: "Security" },
   { href: "/science", label: "Science" },
 ] as const;
 
-// Secondary destinations stay in the footer; no More menu. Weekly Brief stays
+// Security and other secondary destinations stay in the footer; no More menu. Weekly Brief stays
 // discoverable here while Entertainment remains unpromoted.
 export const FOOTER_SECONDARY_ITEMS = [
+  { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
   { href: "/latest", label: "Latest" },
   { href: "/weekly", label: "Weekly Brief" },
