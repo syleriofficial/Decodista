@@ -402,7 +402,7 @@ try {
         const sitemapXml = await sitemapResponse.text();
         assert.equal((sitemapXml.match(/<loc>[^<]*\/ai-tools\/guides\/perplexity-vs-gemini-notebook<\/loc>/g) ?? []).length, 1,
           "Source-reviewed AI Tools research guide must have exactly one sitemap URL");
-        assert.equal((sitemapXml.match(/<loc>[^<]*\\/ai-tools\\/guides\\/chatgpt-vs-gemini-for-research<\\/loc>/g) ?? []).length, 1,
+        assert.equal(sitemapXml.split("<loc>https://decodista.com/ai-tools/guides/chatgpt-vs-gemini-for-research</loc>").length - 1, 1,
           "Fourth original AI Tools research guide must appear once in sitemap");
         assert(!sitemapXml.includes("<loc>https://decodista.com/ai-tools</loc>"),
           "Noindex AI Tools directory should not be accidentally submitted in sitemap");
