@@ -269,7 +269,7 @@ assert(aiToolsResearchData.includes('slug: "chatgpt-vs-gemini-for-research"') &&
   chatGeminiResearchPage.includes('robots: { index: true, follow: true }') &&
   chatGeminiResearchPage.includes('canonical: PAGE_URL') &&
   chatGeminiResearchPage.includes('AiComparisonEvaluation') &&
-  chatGeminiResearchPage.includes('reviewedOn: REVIEWED_ON') === false &&
+  chatGeminiResearchPage.includes('reviewedOn: REVIEWED_ON') &&
   chatGeminiResearchPage.includes('No hands-on benchmark claimed') &&
   chatGeminiResearchPage.includes('https://support.google.com/gemini/answer/15719111?hl=en') &&
   chatGeminiResearchPage.includes('https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt'),
