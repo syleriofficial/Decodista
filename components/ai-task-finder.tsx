@@ -143,6 +143,7 @@ export function AiTaskFinder() {
         <div className="ai-task-panel-foot">
           <p><strong>Before you choose:</strong> {task.caution} This is a descriptive shortlist, not a comparative benchmark.</p>
           {pair && <Link href={pair} className="ai-task-compare-link"><GitCompareArrows size={16} aria-hidden="true" /> Compare two starting points</Link>}
+          {task.id === "research" && <Link href="/ai-tools/guides/perplexity-vs-gemini-notebook" className="ai-task-compare-link"><BookOpen size={16} aria-hidden="true" /> Read source-led research guide</Link>}
         </div>
       </div>
     </section>
