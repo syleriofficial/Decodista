@@ -100,7 +100,7 @@ for (const sample of [
       assert.equal(imageResponse.status(), 200, "Chosen mobile WebP must exist");
       assert((imageResponse.headers()["content-type"] ?? "").includes("image/webp"), "Chosen mobile asset must be a WebP");
     }
-    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "AI", "Reviews", "How-To", "Security", "Science"], "Primary menu must use the six approved editorial destinations");
+    assert.deepEqual(await page.locator(".primary-nav .nav-scroll > a").allTextContents(), ["Tech News", "Reviews", "Science"], "Primary menu must use the three approved editorial destinations");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Footer links to Review Methodology");
     assert.equal(await page.locator(".follow-decodista").count(), 0, "Do not promote RSS on homepage");
     assert((await page.locator('footer a[href="/rss.xml"]').count()) > 0, "Footer should retain RSS");
@@ -152,14 +152,15 @@ for (const sample of [
     assert.equal(await page.locator('header .nav-scroll > a[href="/entertainment"]').count(), 0, "Paused Entertainment section must not be in the primary menu");
     assert.equal(await page.locator('header .nav-scroll > a[href="/weekly"]').count(), 0, "Weekly Brief must not be in the primary menu");
     assert.equal(await page.locator('.primary-nav .nav-scroll > a[href="/latest"]').count(), 0, "Latest should be in the footer, not primary navigation");
-    for (const category of ["tech-news", "ai", "reviews", "how-to", "security", "science"]) {
+    for (const category of ["tech-news", "reviews", "science"]) {
       assert.equal(await page.locator(`header .nav-scroll > a[href="/${category}"]`).count(), 1, `Primary navigation must include ${category}`);
       assert.equal(await page.locator(`footer a[href="/${category}"]`).count(), 1, `Footer Explore must include ${category}`);
     }
-    for (const destination of ["latest", "digital-life", "weekly"]) {
+    for (const destination of ["ai", "how-to", "security", "digital-life", "latest"]) {
       assert.equal(await page.locator(`footer a[href="/${destination}"]`).count(), 1, `Footer must retain ${destination}`);
       assert.equal(await page.locator(`header .nav-scroll > a[href="/${destination}"]`).count(), 0, `Secondary destination ${destination} must not be in the header`);
     }
+    assert.equal(await page.locator('footer a[href="/weekly"]').count(), 0, "Weekly Brief must not be promoted in the footer");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Review Methodology remains discoverable from the footer");
 
     if (sample.width <= 1000) {
@@ -336,8 +337,8 @@ for (const sample of [
         const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
         assert.equal(sectionResponse?.status(), 200, `Primary category ${category} should load`);
         if (category === "how-to") {
-          assert.equal(await page.locator('header .nav-scroll > a[href="/how-to"][aria-current="page"]').count(), 1,
-            "Active How-To route must be identified in the main navigation");
+          assert.equal(await page.locator('header .nav-scroll > a[href="/how-to"]').count(), 0,
+            "How-To belongs in the footer, not the three-item primary navigation");
         }
         assert((await page.locator('main a[href^="/articles/"]').count()) > 0, `Primary category ${category} should link to published stories`);
         assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
