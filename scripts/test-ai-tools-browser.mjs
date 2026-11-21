@@ -408,6 +408,53 @@ try {
           "Noindex AI Tools directory should not be accidentally submitted in sitemap");
         const invalid = await page.request.get(base + "/ai-tools/guides/not-a-guide");
         assert.equal(invalid.status(), 404, "Unknown editorial guide must return 404");
+
+        // Consent-gated AI Tools engagement metrics: test only on local preview.
+        // Stub third-party analytics to avoid polluting the real GA4 property.
+        const telemetry = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+        try {
+          await telemetry.route(/https:\/\/www\.googletagmanager\.com\//, (route) =>
+            route.fulfill({ status: 200, contentType: "application/javascript", body: "/* local QA only */" }));
+          await telemetry.route(/https:\/\/(www\.)?google-analytics\.com\//, (route) => route.abort());
+          await telemetry.goto(base + "/ai-tools", { waitUntil: "domcontentloaded", timeout: 45000 });
+          await telemetry.locator("#ai-tool-query").waitFor();
+          await telemetry.evaluate(() => {
+            window.__aiToolsCapturedEvents = [];
+            window.gtag = (...args) => { window.__aiToolsCapturedEvents.push(args); };
+          });
+          const getEvents = () => telemetry.evaluate(() =>
+            window.__aiToolsCapturedEvents.filter((args) => args[0] === "event" &&
+              typeof args[1] === "string" && args[1].startsWith("ai_tools_")));
+          await telemetry.getByRole("button", { name: "Create visuals" }).click();
+          assert.equal((await getEvents()).length, 0,
+            "Without explicit analytics opt-in, AI Tools selections must generate zero GA4 events");
+          await telemetry.getByRole("button", { name: "Accept analytics" }).click();
+          // Different from either the original Research task or the pre-consent
+          // Create visuals selection, even if hydration remounted the finder.
+          await telemetry.getByRole("button", { name: "Build software" }).click();
+          await telemetry.getByRole("button", { name: "Build software" }).click();
+          await telemetry.getByRole("button", { name: "Coding", exact: true }).click();
+          await telemetry.locator(".ai-tools-card .ai-tools-select").first().click();
+          await telemetry.locator("#ai-tool-query").fill("private-person@example.org secret report");
+          await telemetry.getByRole("button", { name: "Research a topic" }).click();
+          const gaEvents = await getEvents();
+          assert.deepEqual(gaEvents.map((args) => args[1]), [
+            "ai_tools_task_select", "ai_tools_category_select", "ai_tools_compare_select",
+            "ai_tools_task_select",
+          ], "Only deliberate task, category and comparison selections are collected");
+          assert.deepEqual(gaEvents[0][2], { task_id: "coding" });
+          assert.deepEqual(gaEvents[1][2], { category_id: "coding" });
+          assert.deepEqual(gaEvents[2][2], { tool_slug: "cursor", selection: "add" });
+          assert(!JSON.stringify(gaEvents).includes("private-person@example.org"),
+            "Free-text search and private input must never appear in analytics payloads");
+          await telemetry.evaluate(() =>
+            window.localStorage.setItem("decodista-analytics-consent", "denied"));
+          await telemetry.getByRole("button", { name: "Create visuals" }).click();
+          assert.equal((await getEvents()).length, 4,
+            "Subsequent storage-level analytics denial must immediately prevent any further interaction events");
+        } finally {
+          await telemetry.close();
+        }
       }
 
       checks.push({ view: view.label, result: "passed" });
