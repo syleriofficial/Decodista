@@ -143,6 +143,45 @@ try {
         assert.equal((await page.locator(".ai-tools-alternatives-context h2").innerText()).trim(), "ChatGPT");
       }
 
+      // Original editorial comparisons are distinct from noindex directory pages.
+      const guideIndexResponse = await page.goto(base + "/ai-tools/guides", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(guideIndexResponse?.status(), 200, "Comparison guides archive must render");
+      assert.equal(await page.locator(".ai-guide-index-card").count(), 2, "Both editorial comparisons must be discoverable");
+
+      for (const route of ["chatgpt-vs-claude", "cursor-vs-github-copilot"]) {
+        const guideResponse = await page.goto(base + "/ai-tools/guides/" + route, { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(guideResponse?.status(), 200, "Researched comparison must render: " + route);
+        assert.equal(await page.locator("main h1").count(), 1, "Exactly one editorial H1");
+        assert.equal(await page.locator(".ai-guide-table tbody tr").count(), 5, "Comparison table should have five dimensions");
+        assert.equal(await page.locator(".ai-guide-scenario").count(), 4, "Every guide must include four realistic use cases");
+        assert.equal(await page.locator(".ai-guide-faq-list > div").count(), 3, "Every guide must address three reader questions");
+        assert.equal(await page.locator(".ai-guide-sources ol li").count(), 5, "Five official documentation references required");
+        assert.equal(await page.locator(".ai-guide-sources a[target=\"_blank\"]").count(), 5, "Every source must link to official documentation");
+        assert((await page.locator(".ai-guide-byline").innerText()).includes("21 November 2026"), "Display research date");
+        assert((await page.locator(".ai-guide-disclosure").innerText()).includes("does not contain sponsored placements"), "Show research limits and conflicts policy");
+
+        const guideDimensions = await page.evaluate(() => ({
+          body: document.documentElement.scrollWidth,
+          viewport: document.documentElement.clientWidth,
+        }));
+        assert(guideDimensions.body <= guideDimensions.viewport + 1,
+          `Guide must not cause horizontal page overflow at ${view.width}px: ${JSON.stringify(guideDimensions)}`);
+        await page.screenshot({ path: `${outputDir}/${view.label}-${route}-guide.png`, fullPage: true });
+      }
+
+      if (view.label === "desktop") {
+        const guidePage = await page.goto(base + "/ai-tools/guides/chatgpt-vs-claude", { waitUntil: "networkidle", timeout: 45000 });
+        assert.equal(guidePage?.status(), 200);
+        const canonical = await page.locator('head link[rel="canonical"]').getAttribute("href");
+        assert(canonical?.endsWith("/ai-tools/guides/chatgpt-vs-claude"), "Guide should have a self-canonical URL");
+        const robots = await page.locator('head meta[name="robots"]').count()
+          ? await page.locator('head meta[name="robots"]').getAttribute("content")
+          : "index,follow";
+        assert(!robots?.includes("noindex"), "Original editorial comparison guide should be indexable");
+        const invalid = await page.request.get(base + "/ai-tools/guides/not-a-guide");
+        assert.equal(invalid.status(), 404, "Unknown editorial guide must return 404");
+      }
+
       checks.push({ view: view.label, result: "passed" });
     } finally {
       await page.close();
