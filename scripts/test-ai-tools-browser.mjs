@@ -51,6 +51,31 @@ try {
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
       assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
 
+      // Task-first discovery complements filters without fake scores or rankings.
+      const taskFinder = page.locator(".ai-task-finder");
+      assert.equal(await taskFinder.count(), 1, "Task-first finder must appear on the AI Tools landing");
+      assert.equal(await taskFinder.locator(".ai-task-option").count(), 7, "Curated tasks must use existing sourced tools");
+      await taskFinder.getByRole("button", { name: "Build software" }).click();
+      assert.deepEqual((await taskFinder.locator(".ai-task-match h4").allInnerTexts()).map((name) => name.trim()).sort(),
+        ["Cursor", "GitHub Copilot"], "Coding task must show both documented products without a fabricated winner");
+      const taskCompare = taskFinder.getByRole("link", { name: "Compare two starting points" });
+      assert((await taskCompare.getAttribute("href"))?.includes("first=cursor&second=github-copilot"),
+        "Task comparison should re-use the original existing comparison route");
+      await taskFinder.getByRole("button", { name: "Narration and dubbing" }).click();
+      assert.deepEqual((await taskFinder.locator(".ai-task-match h4").allInnerTexts()).map((name) => name.trim()), ["ElevenLabs"]);
+      assert.equal(await taskCompare.count(), 0, "Single-tool tasks must not offer a fake pair comparison");
+      await taskFinder.getByRole("button", { name: "Research a topic" }).click();
+      assert.deepEqual((await taskFinder.locator(".ai-task-match h4").allInnerTexts()).map((name) => name.trim()),
+        ["Perplexity", "Gemini Notebook"], "Research task should distinguish web and source-based research");
+      assert((await taskFinder.innerText()).includes("not a comparative benchmark"),
+        "Task finder must disclose that matching is descriptive, not tested performance");
+      const taskGeometry = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      assert(taskGeometry.body <= taskGeometry.viewport + 1,
+        "Task finder must not create horizontal overflow at " + view.width + "px");
+
       const cards = page.locator(".ai-tools-card");
       assert.equal(await cards.count(), 12, "All starting tool profiles must render");
 
