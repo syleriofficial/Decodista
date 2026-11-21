@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'app/page.tsx'
+      - 'app/[section]/page.tsx'
+      - 'components/ai-comparison-discovery.tsx'
       - 'app/ai-tools/**'
       - 'components/ai-tools-explorer.tsx'
       - 'lib/ai-tools.ts'

@@ -37,7 +37,7 @@ const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
 const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -83,6 +83,28 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   const canonical = linkTags.find(tag => /\brel=["']canonical["']/.test(tag));
   check(path + " description in head", Boolean(description && /\bcontent=["'][^"']{30,}["']/.test(description)), "SEO description must be present in <head>");
   check(path + " canonical in head", Boolean(canonical && canonical.includes(path === "/" ? base : path)), "Canonical URL must be present in <head>");
+}
+
+
+const researchedGuidePaths = ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
+for (const route of ["/", "/ai"]) {
+  const html = snapshots[route]?.body ?? "";
+  const head = html.split("</head>", 1)[0];
+  const placement = route === "/" ? "home" : "category";
+  const match = html.match(new RegExp('<section[^>]+editorial-ai-guides--' + placement + '[\\s\\S]*?<\\/section>'));
+  const block = match?.[0] ?? "";
+  check(route + " indexable editorial page links directly to reviewed comparisons",
+    researchedGuidePaths.every((path) => block.includes('href="' + path + '"')) &&
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    "Contextual guide links should be accessible from indexable editorial pages");
+}
+for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/guides"]) {
+  const html = snapshots[path]?.body ?? "";
+  if (!html) continue;
+  const head = html.split("</head>", 1)[0];
+  check(path + " introductory page remains noindex",
+    /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    "Unreviewed or introductory AI Tools pages must remain noindex");
 }
 
 const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
@@ -224,6 +246,16 @@ if (sitemap) {
   check("Sitemap contains Latest", sitemap.includes("https://decodista.com/latest"), "Latest archive must be discoverable");
   check("Sitemap contains review methodology", sitemap.includes("https://decodista.com/review-methodology"), "Trust page discoverability");
   check("Sitemap contains Weekly Issue 3", sitemap.includes("https://decodista.com/weekly/2026-11-16"), "New weekly issue discoverability");
+  for (const guidePath of researchedGuidePaths) {
+    check("Sitemap contains reviewed guide " + guidePath,
+      sitemap.includes("<loc>" + base + guidePath + "</loc>"),
+      "The XML sitemap should contain the full preferred URL of each indexable guide");
+  }
+  for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/guides", "/ai-tools/chatgpt"]) {
+    check("Sitemap excludes noindex path " + path,
+      !sitemap.includes("<loc>" + base + path + "</loc>"),
+      "Thin or unreviewed directory pages must not appear in XML sitemap");
+  }
 }
 
 const report = {

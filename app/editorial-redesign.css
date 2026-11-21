@@ -437,3 +437,31 @@ body { background: var(--paper); }
 }
 
 .cross-section-note { margin: 0 0 1.25rem; color: var(--muted); font-size: .92rem; }
+
+/* Contextual internal discovery for the two original AI comparison articles.
+   These guide links belong in indexable editorial pages, not thin noindex listings. */
+.editorial-ai-guides { padding-block: clamp(2rem,4vw,3.4rem); border-block:1px solid var(--line); margin-bottom:clamp(2.5rem,5vw,4.5rem); }
+.editorial-ai-guides-heading { display:flex; justify-content:space-between; align-items:end; gap:1rem 2rem; margin-bottom:1.5rem; }
+.editorial-ai-guides-heading > div { max-width:830px; }
+.editorial-ai-guides-heading .eyebrow { display:inline-flex; gap:.55rem; align-items:center; }
+.editorial-ai-guides-heading h2 { margin:.55rem 0 .65rem; font:500 clamp(1.65rem,3vw,2.8rem)/1.12 var(--font-editorial); letter-spacing:-.045em; text-wrap:balance; }
+.editorial-ai-guides-heading p { font-size:.94rem; line-height:1.72; color:var(--muted); margin:0; max-width:780px; }
+.editorial-ai-guides-archive { display:inline-flex; flex:none; align-items:center; gap:.5rem; color:var(--signal); font-size:.78rem; font-weight:850; }
+.editorial-ai-guides-archive:hover,.editorial-ai-guide-action:hover { text-decoration:underline; text-underline-offset:3px; }
+.editorial-ai-guides-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+.editorial-ai-guide { display:flex; flex-direction:column; min-width:0; padding:clamp(1.15rem,2.5vw,1.7rem); border:1px solid var(--line); background:var(--surface); }
+.editorial-ai-guide-category { display:inline-flex; align-items:center; gap:.5rem; color:var(--signal); font-size:.7rem; letter-spacing:.07em; font-weight:850; text-transform:uppercase; }
+.editorial-ai-guide h3 { margin:.8rem 0 .65rem; font:500 clamp(1.35rem,2vw,1.9rem)/1.2 var(--font-editorial); letter-spacing:-.025em; }
+.editorial-ai-guide h3 a:hover { color:var(--signal); }
+.editorial-ai-guide > p { color:var(--muted); font-size:.85rem; line-height:1.68; margin:0 0 1.25rem; }
+.editorial-ai-guide-action { display:inline-flex; gap:.5rem; align-items:center; border-top:1px solid var(--line); padding-top:1rem; margin-top:auto; color:var(--signal); font-weight:850; font-size:.8rem; }
+.editorial-ai-guides-note { margin:1rem 0 0; color:var(--muted); font-size:.76rem; line-height:1.6; }
+.editorial-ai-guides--category { margin-top:clamp(2rem,4vw,3rem); }
+@media(max-width:800px) {
+  .editorial-ai-guides-heading { align-items:flex-start; flex-direction:column; }
+}
+@media(max-width:600px) {
+  .editorial-ai-guides-grid { grid-template-columns:1fr; }
+  .editorial-ai-guides { padding-block:1.55rem 2rem; }
+  .editorial-ai-guide { padding:1.1rem; }
+}

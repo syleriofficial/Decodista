@@ -111,6 +111,8 @@ const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
 const aiToolsGuidesIndex = read("app/ai-tools/guides/page.tsx");
+const aiToolsDiscovery = read("components/ai-comparison-discovery.tsx");
+const categoryPage = read("app/[section]/page.tsx");
 const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
@@ -276,6 +278,16 @@ assert(aiToolsProtocol.includes('not an automated vendor benchmark') &&
   aiToolsProtocol.includes('never contacts either vendor') &&
   gitignore.includes('/local-ai-trials/'),
   "Local AI trials must remain private and explicitly unverified");
+assert(aiToolsDiscovery.includes('AI_COMPARISON_GUIDES.map(') &&
+  aiToolsDiscovery.includes('href={`/ai-tools/guides/${guide.slug}`}') &&
+  aiToolsDiscovery.includes("No untested winners"),
+  "Contextual cards should link only the two documented editorial guides without synthetic rankings");
+assert(homepage.includes('<AiComparisonDiscovery placement="home" />') &&
+  categoryPage.includes('section === "ai" && page === 1 && featured && <AiComparisonDiscovery placement="category" />'),
+  "Original AI comparison guides must be linked from indexable homepage and published AI editorial category");
+assert(redesignedCss.includes('.editorial-ai-guides-grid') &&
+  redesignedCss.includes('.editorial-ai-guide-action'),
+  "Editorial guide discovery cards need layout styling and descriptive anchors");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(

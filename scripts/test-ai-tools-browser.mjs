@@ -22,6 +22,28 @@ try {
       await page.locator("#ai-tool-query").waitFor();
       await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
 
+      // Search discovery: research articles must be reachable directly from an
+      // indexable editorial category, not only from the thin noindex directory.
+      const editorialAi = await page.goto(base + "/ai", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(editorialAi?.status(), 200, "Published AI editorial category must render");
+      await page.locator("section.editorial-ai-guides--category").waitFor();
+      const editorialLinks = page.locator("section.editorial-ai-guides--category a.editorial-ai-guide-action");
+      assert.equal(await editorialLinks.count(), 2, "AI editorial section must link both researched guides");
+      const expectedGuidePaths = ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
+      assert.deepEqual((await editorialLinks.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).sort(), expectedGuidePaths,
+        "Only two indexable, source-reviewed comparison pages should be promoted");
+      if (view.label === "desktop") {
+        const headRobots = await page.locator('head meta[name="robots"]').getAttribute("content");
+        assert(!headRobots?.includes("noindex"), "Published AI editorial category must be indexable");
+      }
+      const editorialSize = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      assert(editorialSize.body <= editorialSize.viewport + 1,
+        "AI editorial comparison cards must not overflow a " + view.width + "px viewport");
+
+      await page.goto(base + "/ai-tools", { waitUntil: "domcontentloaded", timeout: 45000 });
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
       assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
 
