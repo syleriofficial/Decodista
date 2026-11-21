@@ -38,7 +38,8 @@ const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
 const aiToolsResearchGuidePath = "/ai-tools/guides/perplexity-vs-gemini-notebook";
-const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot", aiToolsResearchGuidePath];
+const chatGeminiResearchGuidePath = "/ai-tools/guides/chatgpt-vs-gemini-for-research";
+const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot", aiToolsResearchGuidePath, chatGeminiResearchGuidePath];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -153,6 +154,26 @@ const aiToolsGuideArchive = snapshots["/ai-tools/guides"]?.body ?? "";
 check("AI Tools-only guide archive discovers the new research comparison",
   aiToolsGuideArchive.includes('href="' + aiToolsResearchGuidePath + '"'),
   "New guide must be reachable from AI Tools guide archive");
+
+const chatGeminiBody = snapshots[chatGeminiResearchGuidePath]?.body ?? "";
+const chatGeminiHead = chatGeminiBody.split("</head>", 1)[0];
+check("AI Tools-only ChatGPT vs Gemini research guide renders source-led scenarios and test worksheet",
+  chatGeminiBody.includes("Six questions to ask before choosing") &&
+  chatGeminiBody.includes("ai-guide-scenarios") &&
+  chatGeminiBody.includes("ai-guide-sources") &&
+  chatGeminiBody.includes("22 November 2026") &&
+  chatGeminiBody.includes("No hands-on benchmark claimed") &&
+  chatGeminiBody.includes('href="https://support.google.com/gemini/answer/15719111?hl=en"') &&
+  chatGeminiBody.includes('href="https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt"'),
+  "Guide must render documented workflows, factual limitations and official citations");
+check("AI Tools-only ChatGPT vs Gemini research guide self-canonical and indexable",
+  chatGeminiHead.includes('rel="canonical"') &&
+  chatGeminiHead.includes(chatGeminiResearchGuidePath) &&
+  !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(chatGeminiHead),
+  "New individually reviewed guide must have a self-canonical and indexable metadata");
+check("AI Tools guide archive discovers ChatGPT vs Gemini",
+  aiToolsGuideArchive.includes('href="' + chatGeminiResearchGuidePath + '"'),
+  "Fourth guide must be visible in AI Tools-only archive");
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";
@@ -300,7 +321,7 @@ if (sitemap) {
   check("Sitemap contains Latest", sitemap.includes("https://decodista.com/latest"), "Latest archive must be discoverable");
   check("Sitemap contains review methodology", sitemap.includes("https://decodista.com/review-methodology"), "Trust page discoverability");
   check("Sitemap contains Weekly Issue 3", sitemap.includes("https://decodista.com/weekly/2026-11-16"), "New weekly issue discoverability");
-  for (const guidePath of [...researchedGuidePaths, aiToolsResearchGuidePath]) {
+  for (const guidePath of [...researchedGuidePaths, aiToolsResearchGuidePath, chatGeminiResearchGuidePath]) {
     check("Sitemap contains reviewed guide " + guidePath,
       sitemap.includes("<loc>" + base + guidePath + "</loc>"),
       "The XML sitemap should contain the full preferred URL of each indexable guide");
