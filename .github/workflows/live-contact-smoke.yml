@@ -1,0 +1,37 @@
+name: Live Contact smoke QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/test-live-contact.mjs'
+      - '.github/workflows/live-contact-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --include=dev
+      - name: Install browser test runner
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Check real production Contact form without submitting data
+        run: node scripts/test-live-contact.mjs
+      - name: Save live QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-contact-qa
+          path: artifacts/live-contact-qa/
+          if-no-files-found: ignore
+          retention-days: 3
