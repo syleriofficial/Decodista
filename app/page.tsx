@@ -2,6 +2,7 @@ import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { ArrowRight, Search } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
+import { AiComparisonDiscovery } from "@/components/ai-comparison-discovery";
 import { SectionHeading } from "@/components/section-heading";
 import {
   articles,
@@ -188,6 +189,7 @@ export default function HomePage() {
       </section>
 
       <EditorialSection eyebrow="Understand AI tools and choices" title="AI" href="/ai" stories={ai} />
+      <AiComparisonDiscovery placement="home" />
       <EditorialSection eyebrow="Solve everyday tech problems" title="How-To" href="/how-to" stories={howTo} />
       <EditorialSection eyebrow="Protect your accounts" title="Security" href="/security" stories={security} />
       <EditorialSection eyebrow="Manage your digital life" title="Digital Life" href="/digital-life" stories={digitalLife} />
