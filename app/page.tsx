@@ -12,6 +12,7 @@ import {
   getArticlesByTopic,
 } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, TOPIC_MAP } from "@/lib/site";
+import { weeklyBriefs } from "@/lib/weekly-briefs";
 
 function EditorialSection({
   eyebrow,
@@ -48,6 +49,7 @@ export default function HomePage() {
   // Lead with the newest published story. Older curated selections remain
   // available in the dedicated Editors' Picks section.
   const lead = articles[0];
+  const currentWeeklyBrief = weeklyBriefs[0];
   const readerJourneys = ([
     {
       slug: "photos-backup",
@@ -144,6 +146,19 @@ export default function HomePage() {
               imageSizes="(max-width: 600px) 38vw, (max-width: 1000px) 50vw, 32vw"
             />
           ))}
+        </div>
+      </section>
+
+      <section className="home-weekly-brief wrap" aria-labelledby="home-weekly-brief-title">
+        <div className="home-weekly-brief-heading">
+          <span className="eyebrow">Independent weekly edition · No. {currentWeeklyBrief.issueNumber}</span>
+          <h2 id="home-weekly-brief-title">Weekly Brief</h2>
+          <p>Important AI, privacy and security updates—explained with sources and practical context.</p>
+        </div>
+        <div className="home-weekly-brief-latest">
+          <time dateTime={currentWeeklyBrief.publishedDate}>{formatDate(currentWeeklyBrief.publishedDate)}</time>
+          <h3><Link href={`/weekly/${currentWeeklyBrief.slug}`}>{currentWeeklyBrief.title}</Link></h3>
+          <Link className="home-weekly-brief-all" href="/weekly">Explore all editions <ArrowRight aria-hidden="true" /></Link>
         </div>
       </section>
 
