@@ -151,8 +151,28 @@ const aiToolsFreshnessAudit = read("scripts/check-ai-tools-source-freshness.mjs"
 const aiToolsReviewWorkflow = read(".github/workflows/ai-tools-source-review.yml");
 const aiToolsAlternatives = read("app/ai-tools/alternatives/page.tsx");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
+const aiToolsTaskFinder = read("components/ai-task-finder.tsx");
+const aiToolsInteractions = read("lib/ai-tools-interactions.ts");
+const aiToolsMeasurementPlaybook = read("docs/ai-tools-measurement-playbook.md");
 const aiToolsData = read("lib/ai-tools.ts");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
+assert(aiToolsInteractions.includes('CONSENT_STORAGE_KEY = "decodista-analytics-consent"') &&
+  aiToolsInteractions.includes('=== "granted"') &&
+  aiToolsInteractions.includes('isAiToolsPath(window.location.pathname)') &&
+  aiToolsInteractions.includes('window.gtag("event", event.name') &&
+  !aiToolsInteractions.includes('window.gtag("event", "page_view"') &&
+  !aiToolsInteractions.includes('search_query:') &&
+  !aiToolsInteractions.includes('email:'),
+  "AI Tools telemetry needs consent, strict path matching, static event taxonomy and no duplicate pageview / private content");
+assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
+  aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
+  aiToolsExplorer.includes('name: "ai_tools_compare_select"'),
+  "Only actual task, category and comparison selections should generate opt-in AI Tools events");
+assert(aiToolsMeasurementPlaybook.includes('^/ai-tools(?:/|$)') &&
+  aiToolsMeasurementPlaybook.includes('No additional') &&
+  aiToolsMeasurementPlaybook.includes('GSC Wizard connection returned') &&
+  aiToolsMeasurementPlaybook.includes('Not available'),
+  "AI Tools scorecard must isolate path-only pageviews, distinguish search clicks and disclose missing data");
 assert(aiToolsPage.includes('title: "AI Tools Directory & Comparison"') && aiToolsPage.includes('index: false'),
   "AI Tools starter directory must stay noindex until its editorial verification is complete");
 assert(aiToolsPage.includes("<AiToolsExplorer />") && aiToolsPage.includes('href="/ai-tools/compare"'),
