@@ -700,3 +700,29 @@
   .ai-guide-test-buttons button:first-child { flex:1; }
   .ai-guide-test-prompt pre { font-size:.72rem; }
 }
+
+/* Editorial source transparency — original audits are dated, never live scores. */
+.ai-tools-source-toggle {
+  display:flex; align-items:flex-start; gap:.65rem; margin-top:1.05rem; padding:.9rem 1rem;
+  border:1px solid var(--line); border-radius:6px; background:var(--edition-panel);
+  cursor:pointer;
+}
+.ai-tools-source-toggle input { flex:none; width:18px; height:18px; margin:.13rem 0 0; accent-color:var(--signal); cursor:pointer; }
+.ai-tools-source-toggle span { min-width:0; display:grid; gap:.25rem; }
+.ai-tools-source-toggle strong { color:var(--ink); font-size:.84rem; font-weight:850; line-height:1.45; }
+.ai-tools-source-toggle small { color:var(--muted); font-size:.72rem; line-height:1.6; }
+.ai-tools-source-toggle:focus-within { outline:2px solid var(--signal); outline-offset:2px; }
+.ai-tools-card-evidence {
+  display:flex; align-items:flex-start; flex-wrap:wrap; gap:.35rem .45rem; color:var(--muted);
+  border-top:1px solid var(--line); padding-top:.72rem; font-size:.72rem; line-height:1.6;
+}
+.ai-tools-card-evidence > svg { flex:none; margin-top:.13rem; color:var(--signal); }
+.ai-tools-card-evidence span { min-width:0; flex:1 1 130px; overflow-wrap:anywhere; }
+.ai-tools-card-evidence time { font-weight:750; color:var(--ink); white-space:nowrap; }
+.ai-tools-card-evidence a { display:inline-flex; align-items:center; gap:.23rem; color:var(--signal); font-weight:800; white-space:nowrap; }
+.ai-tools-card-evidence a:hover { text-decoration:underline; text-underline-offset:3px; }
+.ai-tools-card-evidence.is-pending > svg { color:var(--muted); }
+@media(max-width:600px) {
+ .ai-tools-source-toggle { padding:.8rem; }
+ .ai-tools-card-evidence { gap:.4rem; }
+}

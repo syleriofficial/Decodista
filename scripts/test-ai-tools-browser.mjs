@@ -44,11 +44,46 @@ try {
         "AI editorial comparison cards must not overflow a " + view.width + "px viewport");
 
       await page.goto(base + "/ai-tools", { waitUntil: "domcontentloaded", timeout: 45000 });
+      await page.locator("#ai-tool-query").waitFor();
+      // Returning from the editorial /ai route starts a fresh client hydration.
+      // Wait for it to settle before testing React-controlled filter changes.
+      await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
       assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
 
       const cards = page.locator(".ai-tools-card");
       assert.equal(await cards.count(), 12, "All starting tool profiles must render");
+
+      // Dated official documentation is not the same as an unsourced directory
+      // entry or a real hands-on benchmark; every card must communicate the
+      // distinction, including when filters are combined and reset.
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed").count(), 5,
+        "Exactly five tool cards have recorded official-source checks");
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 7,
+        "Remaining listings must not imply they have dated review evidence");
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed a[target='_blank']").count(), 5,
+        "Every source-reviewed tool must offer its official documentation link");
+      const sourceOnly = page.getByRole("checkbox", { name: /Show source-checked listings only/ });
+      assert.equal(await sourceOnly.count(), 1, "Source review filter must be keyboard and screen-reader accessible");
+      await sourceOnly.check();
+      await page.waitForFunction(() => document.querySelectorAll(".ai-tools-card").length === 5, null, { timeout: 12000 });
+      assert.equal(await cards.count(), 5, "Source-only filter should show five documented listings");
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 0,
+        "Unsourced introductory listings must be excluded by source-only filter");
+      await page.getByRole("button", { name: "Coding", exact: true }).click();
+      assert.equal(await cards.count(), 1, "Only the source-reviewed coding listing should remain when filters combine");
+      assert.equal((await cards.locator("h3").first().innerText()).trim(), "GitHub Copilot",
+        "The coding result must be backed by an actual record, not a fabricated Cursor audit");
+      await page.getByRole("button", { name: "Clear filters" }).click();
+      assert.equal(await cards.count(), 12, "Clearing filters must restore all introductory and source-checked entries");
+      assert.equal(await sourceOnly.isChecked(), false, "Clear filters must reset the source-check checkbox");
+      const reviewGeometry = await page.evaluate(() => ({
+        width: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      assert(reviewGeometry.width <= reviewGeometry.viewport + 1,
+        "Source-review filter and source links must not overflow at " + view.width + "px");
+
       assert.equal(await page.locator(".ai-tools-hero h1").count(), 1);
       await page.screenshot({ path: `${outputDir}/${view.label}-directory.png`, fullPage: true });
 
