@@ -11,7 +11,7 @@ import { AI_TOOL_CATEGORIES, AI_TOOLS } from "@/lib/ai-tools";
 
 const CONSENT_STORAGE_KEY = "decodista-analytics-consent";
 const taskIds = new Set(["research", "writing", "coding", "visuals", "video", "voice", "presentations"]);
-const categoryIds = new Set(AI_TOOL_CATEGORIES.map((category) => category.slug));
+const categoryIds = new Set<string>(AI_TOOL_CATEGORIES.map((category) => category.slug));
 const toolIds = new Set(AI_TOOLS.map((tool) => tool.slug));
 
 export type AiToolsInteraction =
