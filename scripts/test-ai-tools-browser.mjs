@@ -181,8 +181,22 @@ try {
         "Show the guide-specific source review date");
       assert((await page.locator(".ai-guide-article").innerText()).includes("create a separate pasted-text source"),
         "Gemini Notebook readers must understand source import before comparing products");
-      assert.equal(await page.locator('script[type="application/ld+json"]').count(), 2,
-        "Individually reviewed research guide should expose breadcrumb and Article structured data");
+      const researchJsonLdScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+      const researchSchemas = researchJsonLdScripts.flatMap((entry) => {
+        try {
+          const value = JSON.parse(entry);
+          return Array.isArray(value) ? value : [value];
+        } catch {
+          return [];
+        }
+      });
+      assert(researchSchemas.some((entry) => entry?.["@type"] === "BreadcrumbList" &&
+        entry.itemListElement?.some((item) => item?.item?.endsWith("/ai-tools/guides/perplexity-vs-gemini-notebook"))),
+        "Research guide should supply its own breadcrumb structured data");
+      assert(researchSchemas.some((entry) => entry?.["@type"] === "Article" &&
+        entry.mainEntityOfPage?.endsWith("/ai-tools/guides/perplexity-vs-gemini-notebook") &&
+        entry.datePublished === "2026-11-22"),
+        "Guide should supply its own reviewed Article schema regardless of global JSON-LD scripts");
       const researchDimensions = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
       }));
