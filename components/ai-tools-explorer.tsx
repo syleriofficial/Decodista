@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "@/components/app-link";
 import { ArrowRight, ArrowUpRight, Check, GitCompareArrows, Search, X } from "lucide-react";
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
 
@@ -116,7 +117,7 @@ export function AiToolsExplorer() {
                   <span className="ai-tools-card-category">{getCategoryLabel(tool.category as AiToolCategory)}</span>
                 </div>
                 <div className="ai-tools-card-copy">
-                  <h3>{tool.name}</h3>
+                  <h3><Link href={`/ai-tools/${tool.slug}`}>{tool.name}</Link></h3>
                   <p className="ai-tools-provider">By {tool.provider}</p>
                   <p className="ai-tools-summary">{tool.description}</p>
                 </div>
@@ -135,9 +136,14 @@ export function AiToolsExplorer() {
                     {isSelected ? <Check size={16} aria-hidden="true" /> : <GitCompareArrows size={16} aria-hidden="true" />}
                     {isSelected ? "Selected" : "Compare"}
                   </button>
-                  <a href={tool.officialUrl} target="_blank" rel="noopener noreferrer" className="ai-tools-official" aria-label={`Visit ${tool.name} official website (opens in new tab)`}>
-                    Official site <ArrowUpRight size={15} aria-hidden="true" />
-                  </a>
+                  <div className="ai-tools-card-links">
+                    <Link href={`/ai-tools/${tool.slug}`} className="ai-tools-profile-link">
+                      Overview <ArrowRight size={15} aria-hidden="true" />
+                    </Link>
+                    <a href={tool.officialUrl} target="_blank" rel="noopener noreferrer" className="ai-tools-official" aria-label={`Visit ${tool.name} official website (opens in new tab)`}>
+                      Official <ArrowUpRight size={15} aria-hidden="true" />
+                    </a>
+                  </div>
                 </div>
               </article>
             );
