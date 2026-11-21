@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from "react";
 import Link from "@/components/app-link";
-import { ArrowRight, ArrowUpRight, Check, GitCompareArrows, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Check, GitCompareArrows, Info, Search, X } from "lucide-react";
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
+import { AI_TOOL_EVIDENCE, getAiToolEvidence } from "@/lib/ai-tools-evidence";
 
 type CategoryFilter = (typeof AI_TOOL_CATEGORIES)[number]["slug"];
 
@@ -11,15 +12,17 @@ export function AiToolsExplorer() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [selected, setSelected] = useState<string[]>([]);
+  const [sourceCheckedOnly, setSourceCheckedOnly] = useState(false);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
     return AI_TOOLS.filter((tool) => {
       if (category !== "all" && tool.category !== category) return false;
+      if (sourceCheckedOnly && !getAiToolEvidence(tool.slug)) return false;
       return !query || [tool.name, tool.provider, tool.description, ...tool.useCases, getCategoryLabel(tool.category)]
         .join(" ").toLocaleLowerCase().includes(query);
     });
-  }, [category, search]);
+  }, [category, search, sourceCheckedOnly]);
 
   const toggleCompare = (slug: string) => {
     setSelected((current) => current.includes(slug)
@@ -72,10 +75,22 @@ export function AiToolsExplorer() {
               </button>
             ))}
           </div>
+          <label className="ai-tools-source-toggle" htmlFor="ai-tools-source-only">
+            <input
+              id="ai-tools-source-only"
+              type="checkbox"
+              checked={sourceCheckedOnly}
+              onChange={(event) => setSourceCheckedOnly(event.target.checked)}
+            />
+            <span>
+              <strong>Show source-checked listings only</strong>
+              <small>{AI_TOOL_EVIDENCE.length} of {AI_TOOLS.length} listings have a dated review of official documentation. This is not a hands-on test.</small>
+            </span>
+          </label>
           <div className="ai-tools-filter-foot">
             <p aria-live="polite" aria-atomic="true">{filtered.length} {filtered.length === 1 ? "tool" : "tools"} shown</p>
-            {(category !== "all" || search) && (
-              <button type="button" className="ai-tools-reset" onClick={() => { setSearch(""); setCategory("all"); }}>
+            {(category !== "all" || search || sourceCheckedOnly) && (
+              <button type="button" className="ai-tools-reset" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); }}>
                 Clear filters
               </button>
             )}
@@ -108,6 +123,7 @@ export function AiToolsExplorer() {
       {filtered.length > 0 ? (
         <div className="ai-tools-grid">
           {filtered.map((tool) => {
+            const evidence = getAiToolEvidence(tool.slug);
             const isSelected = selected.includes(tool.slug);
             const isDisabled = !isSelected && selected.length >= 2;
             return (
@@ -120,6 +136,22 @@ export function AiToolsExplorer() {
                   <h3><Link href={`/ai-tools/${tool.slug}`}>{tool.name}</Link></h3>
                   <p className="ai-tools-provider">By {tool.provider}</p>
                   <p className="ai-tools-summary">{tool.description}</p>
+                </div>
+                <div className={evidence ? "ai-tools-card-evidence is-reviewed" : "ai-tools-card-evidence is-pending"}>
+                  {evidence ? (
+                    <>
+                      <BookOpen size={15} aria-hidden="true" />
+                      <span>Official source reviewed <time dateTime={evidence.checkedOn}>{evidence.checkedOn}</time>. Not live data.</span>
+                      <a href={evidence.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`Read ${tool.name} documentation source (opens in new tab)`}>
+                        Source <ArrowUpRight size={14} aria-hidden="true" />
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <Info size={15} aria-hidden="true" />
+                      <span>Detailed source review pending. Introductory listing only.</span>
+                    </>
+                  )}
                 </div>
                 <ul className="ai-tools-use-tags" aria-label={`${tool.name} common use cases`}>
                   {tool.useCases.map((use) => <li key={use}>{use}</li>)}
@@ -154,7 +186,7 @@ export function AiToolsExplorer() {
           <Search size={26} aria-hidden="true" />
           <h3>No matching tools in this starter directory</h3>
           <p>Try a broader search or clear the category. We do not list tools we haven&apos;t described yet.</p>
-          <button type="button" onClick={() => { setSearch(""); setCategory("all"); }}>Show all tools</button>
+          <button type="button" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); }}>Show all tools</button>
         </div>
       )}
       <p className="ai-tools-disclosure">
