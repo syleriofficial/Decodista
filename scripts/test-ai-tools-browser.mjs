@@ -69,6 +69,8 @@ try {
         ["Perplexity", "Gemini Notebook"], "Research task should distinguish web and source-based research");
       assert((await taskFinder.innerText()).includes("not a comparative benchmark"),
         "Task finder must disclose that matching is descriptive, not tested performance");
+      assert.equal(await taskFinder.locator('a[href="/ai-tools/guides/chatgpt-vs-gemini-for-research"]').count(), 1,
+        "AI Tools research intent should link the fourth documented research guide");
       const taskGeometry = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth,
         viewport: document.documentElement.clientWidth,
