@@ -204,6 +204,48 @@ try {
         "Research guide must not overflow at " + view.width + "px");
       await page.screenshot({ path: `${outputDir}/${view.label}-research-guide-draft.png`, fullPage: true });
 
+      // Fourth indexable comparison guide: ChatGPT vs Gemini, AI Tools ONLY.
+      const chatGeminiPath = "/ai-tools/guides/chatgpt-vs-gemini-for-research";
+      const chatGeminiResponse = await page.goto(base + chatGeminiPath, { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(chatGeminiResponse?.status(), 200, "ChatGPT vs Gemini research guide must load");
+      assert.equal(await page.locator("main h1").count(), 1, "New research guide must have exactly one H1");
+      assert((await page.locator("main h1").innerText()).includes("ChatGPT vs Gemini for Research"));
+      const chatGeminiRobots = await page.locator('head meta[name="robots"]').count()
+        ? await page.locator('head meta[name="robots"]').getAttribute("content") : "index,follow";
+      assert(!chatGeminiRobots?.includes("noindex"), "This individually sourced guide is indexable");
+      assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith(chatGeminiPath),
+        "New guide needs its own exact canonical");
+      assert.equal(await page.locator(".ai-guide-table tbody tr").count(), 6,
+        "ChatGPT vs Gemini needs six evidence-based decision factors");
+      assert.equal(await page.locator(".ai-guide-scenario").count(), 4,
+        "The guide should include four distinct research scenarios");
+      assert.equal(await page.locator(".ai-guide-sources ol li").count(), 7,
+        "Seven official primary sources must be visible");
+      assert.equal(await page.locator(".ai-guide-test-case").count(), 3,
+        "Three synthetic reader-run tasks are required");
+      assert.equal(await page.locator(".ai-guide-test-rating select").count(), 6,
+        "Reader has independent and unscored selectors for both providers");
+      assert((await page.locator(".ai-guide-test-progress").innerText()).includes("0 of 3"),
+        "No product score may be prefilled");
+      assert((await page.locator(".ai-guide-byline").innerText()).includes("22 November 2026"),
+        "Show source check date");
+      const newSchemas = (await page.locator('script[type="application/ld+json"]').allTextContents()).flatMap((entry) => {
+        try { const value = JSON.parse(entry); return Array.isArray(value) ? value : [value]; }
+        catch { return []; }
+      });
+      assert(newSchemas.some((entry) => entry?.["@type"] === "Article" &&
+        entry.mainEntityOfPage?.endsWith(chatGeminiPath) && entry.datePublished === "2026-11-22"),
+        "Individually dated Article structured data must exist");
+      assert(newSchemas.some((entry) => entry?.["@type"] === "BreadcrumbList" &&
+        entry.itemListElement?.some((item) => item?.item?.endsWith(chatGeminiPath))),
+        "New guide should have its own breadcrumb");
+      const chatGeminiGeometry = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
+      }));
+      assert(chatGeminiGeometry.body <= chatGeminiGeometry.viewport + 1,
+        "Research guide must not overflow at " + view.width + "px");
+      await page.screenshot({ path: `${outputDir}/${view.label}-chatgpt-gemini-research.png`, fullPage: true });
+
       // Profile discovery is fully browsable and remains descriptive / noindex.
       const profileResponse = await page.goto(base + "/ai-tools/chatgpt", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(profileResponse?.status(), 200, "A real profile should load");
@@ -280,8 +322,10 @@ try {
       // Original editorial comparisons are distinct from noindex directory pages.
       const guideIndexResponse = await page.goto(base + "/ai-tools/guides", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(guideIndexResponse?.status(), 200, "Comparison guides archive must render");
-      assert.equal(await page.locator(".ai-guide-index-card").count(), 3,
-        "All three individually researched AI Tools guides must be discoverable");
+      assert.equal(await page.locator(".ai-guide-index-card").count(), 4,
+        "All four individually researched AI Tools guides must be discoverable");
+      assert.equal(await page.locator('.ai-guide-index-card a[href="/ai-tools/guides/chatgpt-vs-gemini-for-research"]').count(), 2,
+        "New AI Tools guide must be discoverable from archive title and action");
       assert.equal(await page.locator('.ai-guide-index-card a[href="/ai-tools/guides/perplexity-vs-gemini-notebook"]').count(), 2,
         "AI Tools guide archive must link the new research guide from its title and read action");
 
@@ -356,6 +400,8 @@ try {
         const sitemapXml = await sitemapResponse.text();
         assert.equal((sitemapXml.match(/<loc>[^<]*\/ai-tools\/guides\/perplexity-vs-gemini-notebook<\/loc>/g) ?? []).length, 1,
           "Source-reviewed AI Tools research guide must have exactly one sitemap URL");
+        assert.equal((sitemapXml.match(/<loc>[^<]*\\/ai-tools\\/guides\\/chatgpt-vs-gemini-for-research<\\/loc>/g) ?? []).length, 1,
+          "Fourth original AI Tools research guide must appear once in sitemap");
         assert(!sitemapXml.includes("<loc>https://decodista.com/ai-tools</loc>"),
           "Noindex AI Tools directory should not be accidentally submitted in sitemap");
         const invalid = await page.request.get(base + "/ai-tools/guides/not-a-guide");
