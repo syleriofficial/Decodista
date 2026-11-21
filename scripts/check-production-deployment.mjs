@@ -37,7 +37,8 @@ const icloudExperimentPath = "/articles/does-icloud-backup-include-photos";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
-const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
+const aiToolsResearchGuidePath = "/ai-tools/guides/perplexity-vs-gemini-notebook";
+const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot", aiToolsResearchGuidePath];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -133,6 +134,25 @@ for (const guidePath of ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides
     !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Original editorial guides are indexable with unique canonical metadata");
 }
+
+const researchBody = snapshots[aiToolsResearchGuidePath]?.body ?? "";
+const researchHead = researchBody.split("</head>", 1)[0];
+check("AI Tools-only Perplexity vs Gemini Notebook guide has original evidence and tests",
+  researchBody.includes("Five decisions that matter") &&
+  researchBody.includes("ai-guide-sources") &&
+  researchBody.includes("22 November 2026") &&
+  researchBody.includes("create a separate pasted-text source") &&
+  researchBody.includes('href="https://support.google.com/gemininotebook/answer/16215270?hl=en"'),
+  "Research guide must provide dated sources and honest source-import test instructions");
+check("AI Tools-only research guide self-canonical and indexable",
+  researchHead.includes('rel="canonical"') &&
+  researchHead.includes(aiToolsResearchGuidePath) &&
+  !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(researchHead),
+  "Individually reviewed AI Tools guide may be indexed without indexing thin directory pages");
+const aiToolsGuideArchive = snapshots["/ai-tools/guides"]?.body ?? "";
+check("AI Tools-only guide archive discovers the new research comparison",
+  aiToolsGuideArchive.includes('href="' + aiToolsResearchGuidePath + '"'),
+  "New guide must be reachable from AI Tools guide archive");
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";
@@ -280,7 +300,7 @@ if (sitemap) {
   check("Sitemap contains Latest", sitemap.includes("https://decodista.com/latest"), "Latest archive must be discoverable");
   check("Sitemap contains review methodology", sitemap.includes("https://decodista.com/review-methodology"), "Trust page discoverability");
   check("Sitemap contains Weekly Issue 3", sitemap.includes("https://decodista.com/weekly/2026-11-16"), "New weekly issue discoverability");
-  for (const guidePath of researchedGuidePaths) {
+  for (const guidePath of [...researchedGuidePaths, aiToolsResearchGuidePath]) {
     check("Sitemap contains reviewed guide " + guidePath,
       sitemap.includes("<loc>" + base + guidePath + "</loc>"),
       "The XML sitemap should contain the full preferred URL of each indexable guide");

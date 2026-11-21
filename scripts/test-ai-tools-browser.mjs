@@ -152,14 +152,16 @@ try {
         `Comparison must not cause page overflow at ${view.width}px: ${JSON.stringify(dimensions)}`);
       await page.screenshot({ path: `${outputDir}/${view.label}-comparison.png`, fullPage: true });
       
-      // Focused research guide candidate: AI Tools-only, without global editorial promotion.
+      // Individually reviewed AI Tools research guide, without global news-category promotion.
       const researchGuide = await page.goto(base + "/ai-tools/guides/perplexity-vs-gemini-notebook",
         { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(researchGuide?.status(), 200, "New AI Tools research guide candidate must render");
       assert.equal(await page.locator("main h1").count(), 1, "Research guide should have one H1");
       assert((await page.locator("main h1").innerText()).includes("Perplexity vs Gemini Notebook"));
-      const researchRobots = await page.locator('head meta[name="robots"]').getAttribute("content");
-      assert(researchRobots?.includes("noindex"), "Unapproved research guide must stay noindex");
+      const researchRobots = await page.locator('head meta[name="robots"]').count()
+        ? await page.locator('head meta[name="robots"]').getAttribute("content")
+        : "index,follow";
+      assert(!researchRobots?.includes("noindex"), "Editorially reviewed research guide must be indexable");
       assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.includes(
         "/ai-tools/guides/perplexity-vs-gemini-notebook"), "Guide must retain a unique canonical");
       assert.equal(await page.locator(".ai-guide-table tbody tr").count(), 5,
@@ -177,6 +179,24 @@ try {
         "Every reference should open its primary source");
       assert((await page.locator(".ai-guide-byline").innerText()).includes("22 November 2026"),
         "Show the guide-specific source review date");
+      assert((await page.locator(".ai-guide-article").innerText()).includes("create a separate pasted-text source"),
+        "Gemini Notebook readers must understand source import before comparing products");
+      const researchJsonLdScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+      const researchSchemas = researchJsonLdScripts.flatMap((entry) => {
+        try {
+          const value = JSON.parse(entry);
+          return Array.isArray(value) ? value : [value];
+        } catch {
+          return [];
+        }
+      });
+      assert(researchSchemas.some((entry) => entry?.["@type"] === "BreadcrumbList" &&
+        entry.itemListElement?.some((item) => item?.item?.endsWith("/ai-tools/guides/perplexity-vs-gemini-notebook"))),
+        "Research guide should supply its own breadcrumb structured data");
+      assert(researchSchemas.some((entry) => entry?.["@type"] === "Article" &&
+        entry.mainEntityOfPage?.endsWith("/ai-tools/guides/perplexity-vs-gemini-notebook") &&
+        entry.datePublished === "2026-11-22"),
+        "Guide should supply its own reviewed Article schema regardless of global JSON-LD scripts");
       const researchDimensions = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
       }));
@@ -260,7 +280,10 @@ try {
       // Original editorial comparisons are distinct from noindex directory pages.
       const guideIndexResponse = await page.goto(base + "/ai-tools/guides", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(guideIndexResponse?.status(), 200, "Comparison guides archive must render");
-      assert.equal(await page.locator(".ai-guide-index-card").count(), 2, "Both editorial comparisons must be discoverable");
+      assert.equal(await page.locator(".ai-guide-index-card").count(), 3,
+        "All three individually researched AI Tools guides must be discoverable");
+      assert.equal(await page.locator('.ai-guide-index-card a[href="/ai-tools/guides/perplexity-vs-gemini-notebook"]').count(), 2,
+        "AI Tools guide archive must link the new research guide from its title and read action");
 
       for (const route of ["chatgpt-vs-claude", "cursor-vs-github-copilot"]) {
         const guideResponse = await page.goto(base + "/ai-tools/guides/" + route, { waitUntil: "domcontentloaded", timeout: 45000 });
@@ -328,6 +351,13 @@ try {
           ? await page.locator('head meta[name="robots"]').getAttribute("content")
           : "index,follow";
         assert(!robots?.includes("noindex"), "Original editorial comparison guide should be indexable");
+        const sitemapResponse = await page.request.get(base + "/sitemap.xml");
+        assert.equal(sitemapResponse.status(), 200, "Sitemap should render");
+        const sitemapXml = await sitemapResponse.text();
+        assert.equal((sitemapXml.match(/<loc>[^<]*\/ai-tools\/guides\/perplexity-vs-gemini-notebook<\/loc>/g) ?? []).length, 1,
+          "Source-reviewed AI Tools research guide must have exactly one sitemap URL");
+        assert(!sitemapXml.includes("<loc>https://decodista.com/ai-tools</loc>"),
+          "Noindex AI Tools directory should not be accidentally submitted in sitemap");
         const invalid = await page.request.get(base + "/ai-tools/guides/not-a-guide");
         assert.equal(invalid.status(), 404, "Unknown editorial guide must return 404");
       }

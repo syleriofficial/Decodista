@@ -3,34 +3,32 @@ import Link from "@/components/app-link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CircleHelp, GitCompareArrows } from "lucide-react";
 import { AiComparisonEvaluation } from "@/components/ai-comparison-evaluation";
 import type { EvaluationTask } from "@/lib/ai-tools-evaluation";
+import { PERPLEXITY_NOTEBOOK_RESEARCH_GUIDE } from "@/lib/ai-tools-research-guides";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "../../ai-tools.css";
 
 /**
- * Standalone, isolated editorial candidate. Do not add to AI_COMPARISON_GUIDES
- * or sitemap yet: that collection would also surface this candidate on the
- * general homepage and /ai news category, beyond the AI Tools-only scope.
- *
- * Source check date is specific to THIS guide and must not rewrite historical
- * dates on the two already-published editorial guides.
+ * This original decision guide belongs exclusively to /ai-tools.
+ * It has a separate source-review date and is not promoted to news sections.
+ * Source-led editorial analysis is NOT an independent hands-on model benchmark.
  */
-const REVIEWED_ON = "2026-11-22";
-const PAGE_URL = "/ai-tools/guides/perplexity-vs-gemini-notebook";
-const TITLE = "Perplexity vs Gemini Notebook: Research the web or your sources?";
-const SUBTITLE = "A practical, evidence-led decision guide for comparing public web research, curated documents, citations and privacy constraints. Gemini Notebook was formerly called NotebookLM.";
+const { slug, title: TITLE, subtitle: SUBTITLE, reviewedOn: REVIEWED_ON } = PERPLEXITY_NOTEBOOK_RESEARCH_GUIDE;
+const PAGE_URL = "/ai-tools/guides/" + slug;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: SUBTITLE,
   alternates: { canonical: PAGE_URL },
-  // Editorial candidate only. Indexing and sitemap require an explicit
-  // separate quality decision after independent review and preview QA.
-  robots: { index: false, follow: true },
+  // Independently checked research guide: original scenarios and evidence
+  // limitations are visible. Generic directory/profiles remain noindex.
+  robots: { index: true, follow: true },
   openGraph: {
     type: "article",
     title: TITLE,
     description: SUBTITLE,
     url: PAGE_URL,
+    publishedTime: REVIEWED_ON,
+    modifiedTime: REVIEWED_ON,
   },
   twitter: { card: "summary", title: TITLE + " | " + SITE_NAME, description: SUBTITLE },
 };
@@ -223,19 +221,33 @@ const trials: readonly EvaluationTask[] = [
 ];
 
 export default function PerplexityGeminiNotebookGuide() {
-  const structured = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "AI Tools", item: SITE_URL + "/ai-tools" },
-      { "@type": "ListItem", position: 3, name: "Comparison Guides", item: SITE_URL + "/ai-tools/guides" },
-      { "@type": "ListItem", position: 4, name: TITLE, item: SITE_URL + PAGE_URL },
-    ],
-  };
+  const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "AI Tools", item: SITE_URL + "/ai-tools" },
+        { "@type": "ListItem", position: 3, name: "Comparison Guides", item: SITE_URL + "/ai-tools/guides" },
+        { "@type": "ListItem", position: 4, name: TITLE, item: SITE_URL + PAGE_URL },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: TITLE,
+      description: SUBTITLE,
+      datePublished: REVIEWED_ON,
+      dateModified: REVIEWED_ON,
+      mainEntityOfPage: SITE_URL + PAGE_URL,
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    },
+  ];
   return (
     <main id="main-content" className="ai-tools-page ai-guide-page">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structured) }} />
+      {structured.map((entry, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(entry) }} />
+      ))}
       <header className="ai-guide-hero wrap">
         <Link className="ai-tools-back" href="/ai-tools"><ArrowLeft size={17} aria-hidden="true" /> AI Tools</Link>
         <span className="ai-tools-eyebrow">DECODISTA / AI TOOLS DECISION GUIDE</span>
@@ -326,6 +338,11 @@ export default function PerplexityGeminiNotebookGuide() {
             <p className="ai-guide-disclosure"><strong>Methodology:</strong> Original research synthesis using seven provider-owned documentation pages. No firsthand use of either account, model output, independently measured accuracy, sponsored placement or universal performance verdict. The blank worksheet below is for reader-run tests only.</p>
           </section>
 
+          <div className="ai-guide-insight">
+            <h3>Prepare source material before comparing</h3>
+            <p>For tests 1 and 2, use the fictional SOURCE text in the prompts: create a separate pasted-text source in Gemini Notebook and, where your plan supports it, add the same material to Perplexity as file or Space context. Then ask the same TASK text in both tools. If you instead paste everything into the chat, record that difference; do not imply this is a fully equivalent source-retrieval test.</p>
+            <p>For test 3, both tools should produce a proposed verification protocol only. The task explicitly prohibits pretending to browse. Do not upload client documents or secrets, and record any plan or source-access limits that affect comparability.</p>
+          </div>
           <AiComparisonEvaluation
             guideSlug="perplexity-vs-gemini-notebook"
             firstName="Perplexity"
