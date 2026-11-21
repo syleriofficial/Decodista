@@ -84,8 +84,10 @@ for (const sample of [
     assert(feedSrcSet?.includes("/images/responsive/"), "Thumbnail must advertise responsive WebP variants");
     const compactImage = page.locator(".home-topic .article-card--compact .card-image img").first();
     if (await compactImage.count()) {
-      assert((await compactImage.getAttribute("sizes"))?.includes("32vw"),
-        "Three-column homepage images should request compact WebP candidates");
+      const sizes = await compactImage.getAttribute("sizes");
+      assert(sizes?.includes("32vw"), "Three-column homepage images should request compact WebP candidates");
+      assert(sizes?.includes("(max-width: 600px) 40vw"),
+        "Mobile topic images should request thumbnail-sized WebP rather than full-viewport variants");
     }
     const imageFit = await page.locator(".lead-image img").evaluate((img) => getComputedStyle(img).objectFit);
     assert.equal(imageFit, "cover", "Lead artwork must fill its image frame consistently");
