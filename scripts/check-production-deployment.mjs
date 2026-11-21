@@ -34,7 +34,7 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
-const primaryNavigation = ["/tech-news","/ai","/ai-tools","/reviews","/how-to","/security","/science"];
+const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -53,12 +53,12 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " seven-section primary nav order",
+  check(path + " six-section primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must match all seven approved sections");
+    "Primary navigation must match all six approved sections");
   check(path + " secondary sections excluded from primary navigation",
-    !["/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
-    "Digital Life, Latest and Weekly Brief are secondary; Entertainment is not promoted");
+    !["/security", "/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
+    "Security, Digital Life, Latest and Weekly Brief are secondary; Entertainment is not promoted");
   check(path + " removed More menu stays removed",
     !nav.includes("more-menu") && !nav.includes("more-panel"),
     "The removed More dropdown must not be rendered");
@@ -68,7 +68,7 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/)?.[0] ?? "";
   check(path + " secondary archive links in footer",
     ["/ai", "/how-to", "/security", "/digital-life", "/latest", "/weekly"].every((dest) => footer.includes('href="' + dest + '"')),
-    "All published secondary sections and Weekly Brief must remain discoverable from the footer");
+    "Security and all other published secondary sections must remain discoverable from the footer");
   check(path + " paused Entertainment not promoted in footer",
     !footer.includes('href="/entertainment"'),
     "Entertainment retains its archive URL but is not promoted");

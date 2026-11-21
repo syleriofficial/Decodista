@@ -23,7 +23,7 @@ try {
       await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
 
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
-      assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science"]);
+      assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
 
       const cards = page.locator(".ai-tools-card");
       assert.equal(await cards.count(), 12, "All starting tool profiles must render");
