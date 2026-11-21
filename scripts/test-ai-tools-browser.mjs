@@ -54,6 +54,7 @@ try {
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Claude"));
       assert.equal(await page.getByText("invented rating", { exact: false }).count(), 0);
 
+      assert.equal(await page.locator(".ai-tools-compare-evidence-card").count(), 2, "Comparison should show two source status cards");
       await page.locator("#compare-first").selectOption("perplexity");
       await page.locator("#compare-second").selectOption("notebooklm");
       await page.getByRole("button", { name: "Compare", exact: true }).click();
@@ -80,6 +81,9 @@ try {
         "Profile should link to Claude as a same-category alternative");
       assert.equal(await page.locator('a[href="/ai-tools/gemini"]').count(), 1,
         "Profile should link to Gemini as a same-category alternative");
+      assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 1, "Researched profile must have official evidence");
+      assert.equal(await page.locator(".ai-tools-profile-evidence-panel a[target=\"_blank\"]").count(), 1, "Evidence panel must link to official source");
+      assert((await page.locator(".ai-tools-evidence-status").first().innerText()).includes("2026-11-21"), "Last checked date must be visible");
       assert.equal(await page.locator(".ai-tools-profile-actions a").count(), 2,
         "Profile should provide official-site and comparison actions");
 
@@ -93,6 +97,7 @@ try {
 
       const singleCategoryResponse = await page.goto(base + "/ai-tools/runway", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(singleCategoryResponse?.status(), 200, "Runway profile should load");
+      assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 0, "Unverified tool should not gain invented evidence");
       assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 0,
         "Single-entry video category must not fabricate alternatives");
       assert((await page.locator(".ai-tools-profile-related-card").innerText()).includes("no other video"));
@@ -108,6 +113,7 @@ try {
       assert.equal(await page.locator(".ai-tools-price-card").count(), 4, "Exactly four sourced pricing records");
       assert.equal(await page.locator(".ai-tools-price-card a[target=\"_blank\"]").count(), 4, "Each priced tool needs an official source");
       assert((await page.locator(".ai-tools-feature-meta").innerText()).includes("21 November 2026"), "Display source check date");
+      assert.equal(await page.locator(".ai-tools-evidence-status").count(), 1, "Pricing must show source age and caution");
       assert((await page.locator(".ai-tools-verified-amount").innerText()).includes("US$20"), "Claude monthly USD figure is labeled");
       await page.screenshot({ path: `${outputDir}/${view.label}-pricing.png`, fullPage: true });
 

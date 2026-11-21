@@ -111,6 +111,10 @@ const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
 const aiToolsPricingData = read("lib/ai-tools-pricing.ts");
+const aiToolsEvidence = read("lib/ai-tools-evidence.ts");
+const aiToolsEvidenceClient = read("components/ai-tools-evidence-status.tsx");
+const aiToolsFreshnessAudit = read("scripts/check-ai-tools-source-freshness.mjs");
+const aiToolsReviewWorkflow = read(".github/workflows/ai-tools-source-review.yml");
 const aiToolsAlternatives = read("app/ai-tools/alternatives/page.tsx");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
 const aiToolsData = read("lib/ai-tools.ts");
@@ -173,6 +177,31 @@ assert(aiToolsCss.includes('.ai-tools-price-grid') &&
   "Pricing and alternative pages need responsive scoped styles");
 assert(!sitemap.includes('"/ai-tools/pricing"') && !sitemap.includes('"/ai-tools/alternatives"'),
   "Early-stage pricing and alternatives pages must remain outside the sitemap");
+assert(aiToolsEvidence.includes('AI_EVIDENCE_CHECKED_ON = "2026-11-21"') &&
+  aiToolsEvidence.includes('AI_EVIDENCE_REVIEW_INTERVAL_DAYS = 30') &&
+  aiToolsEvidence.includes('docs.github.com/en/copilot/get-started/plans') &&
+  aiToolsEvidence.includes('https://claude.com/pricing'),
+  "Five selected AI Tools must have dated official verification evidence");
+assert(aiToolsProfile.includes('getAiToolEvidence(tool.slug)') &&
+  aiToolsProfile.includes('source.sourceUrl') &&
+  aiToolsCompare.includes('getAiToolEvidence(tool.slug)') &&
+  aiToolsCompare.includes('ai-tools-compare-evidence'),
+  "Profiles and comparisons must surface source trail where available");
+assert(aiToolsPricing.includes('<AiEvidenceStatus checkedOn={PRICING_CHECKED_ON} />') &&
+  aiToolsEvidenceClient.includes('is-stale') &&
+  aiToolsEvidenceClient.includes('daysSinceEvidenceCheck'),
+  "Pricing and source pages must visibly warn readers about outdated snapshots");
+assert(aiToolsFreshnessAudit.includes('MAX_AGE_DAYS = 30') &&
+  aiToolsFreshnessAudit.includes('PRICING_CHECKED_ON') &&
+  aiToolsFreshnessAudit.includes('AI_EVIDENCE_CHECKED_ON'),
+  "Source check audit must include dated pricing and feature records");
+assert(aiToolsReviewWorkflow.includes("cron: '0 9 * * 1'") &&
+  aiToolsReviewWorkflow.includes('gh issue create') &&
+  aiToolsReviewWorkflow.includes('steps.freshness.outcome'),
+  "Weekly audit must request human review when source records are stale");
+assert(aiToolsCss.includes('.ai-tools-evidence-status.is-stale') &&
+  aiToolsCss.includes('.ai-tools-compare-evidence-grid'),
+  "Source evidence and date warning must be readable on mobile");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(

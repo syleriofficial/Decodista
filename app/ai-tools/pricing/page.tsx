@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
+import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarClock, CircleAlert, ShieldCheck } from "lucide-react";
 import { AI_TOOLS } from "@/lib/ai-tools";
 import { AI_TOOL_PRICING, PRICING_CHECKED_ON } from "@/lib/ai-tools-pricing";
@@ -30,6 +31,7 @@ export default function AiToolsPricingPage() {
         <h1>Know the plan <em>before you pay.</em></h1>
         <p>Four official provider sources, one readable starting point. No scraped checkout totals, made-up discounts or universal &ldquo;best value&rdquo; labels.</p>
         <div className="ai-tools-feature-meta"><CalendarClock size={17} aria-hidden="true" /> Sources checked: <time dateTime={PRICING_CHECKED_ON}>21 November 2026</time> <span aria-hidden="true">·</span> Not real-time pricing</div>
+        <AiEvidenceStatus checkedOn={PRICING_CHECKED_ON} />
       </section>
 
       <section className="ai-tools-price-section wrap" aria-labelledby="ai-tools-pricing-title">
@@ -55,7 +57,7 @@ export default function AiToolsPricingPage() {
                   <p className="ai-tools-price-summary">{record.priceSummary}</p>
                   {record.verifiedAmount && (
                     <div className="ai-tools-verified-amount">
-                      <span>{record.verifiedAmount.plan} · published USD list price</span>
+                      <span>{record.verifiedAmount.plan} · USD list price checked 21 November 2026</span>
                       <strong>{record.verifiedAmount.price}</strong>
                       <small>{record.verifiedAmount.billing}</small>
                     </div>

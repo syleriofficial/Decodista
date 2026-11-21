@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
+import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
+import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Info, ShieldCheck } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -39,6 +41,7 @@ export default async function AiToolProfilePage({ params }: PageProps) {
   const tool = findAiTool(slug);
   if (!tool) notFound();
 
+  const source = getAiToolEvidence(tool.slug);
   const alternatives = AI_TOOLS.filter((candidate) =>
     candidate.category === tool.category && candidate.slug !== tool.slug
   );
@@ -122,8 +125,23 @@ export default async function AiToolProfilePage({ params }: PageProps) {
               Offerings and regional access can change.
             </p>
           </section>
+          {source && (
+            <section className="ai-tools-profile-panel ai-tools-profile-evidence-panel" aria-labelledby="profile-sources-title">
+              <span className="ai-tools-eyebrow">03 / Provider documentation</span>
+              <h2 id="profile-sources-title">What the official source describes</h2>
+              <p>Selected product and plan details from the provider. These are not hands-on test findings.</p>
+              <ul className="ai-tools-profile-evidence-list">
+                {source.findings.map((finding) => <li key={finding}>{finding}</li>)}
+              </ul>
+              <p className="ai-tools-evidence-caveat">{source.caveat}</p>
+              <AiEvidenceStatus checkedOn={source.checkedOn} />
+              <a className="ai-tools-evidence-source" href={source.sourceUrl} target="_blank" rel="noopener noreferrer">
+                {source.sourceLabel} <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+            </section>
+          )}
           <section className="ai-tools-profile-panel" aria-labelledby="profile-method-title">
-            <span className="ai-tools-eyebrow">03 / Editorial context</span>
+            <span className="ai-tools-eyebrow">Editorial context</span>
             <h2 id="profile-method-title">How to read this profile</h2>
             <p>
               This is a descriptive overview from DECODISTA&apos;s starter directory.

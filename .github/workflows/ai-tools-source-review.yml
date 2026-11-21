@@ -1,0 +1,37 @@
+name: AI Tools source freshness review
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check date of manual provider research
+        id: freshness
+        continue-on-error: true
+        run: node scripts/check-ai-tools-source-freshness.mjs
+      - name: Open one issue for overdue editorial review
+        if: steps.freshness.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="AI Tools source records need re-verification"
+          existing=$(gh issue list --state open --json title --jq '.[] | select(.title == "AI Tools source records need re-verification") | .title' | head -n 1)
+          if [ -z "$existing" ]; then
+            gh issue create --title "$title" --body "The AI Tools source ledger is more than 30 UTC days old, invalid, or future-dated. Review each official provider source in lib/ai-tools-pricing.ts and lib/ai-tools-evidence.ts, update source-backed claims and pricing details as needed, and only then change the review dates. This workflow never republishes or invents pricing automatically."
+          fi
+      - name: Report overdue editorial review as unsuccessful
+        if: steps.freshness.outcome == 'failure'
+        run: exit 1
