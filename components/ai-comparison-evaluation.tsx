@@ -78,7 +78,7 @@ export function AiComparisonEvaluation({
     const anchor = document.createElement("a");
     anchor.href = objectUrl;
     anchor.download = "decodista-" + guideSlug + "-my-test-results.csv";
-    document.body.append(anchor);
+    document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
     setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
