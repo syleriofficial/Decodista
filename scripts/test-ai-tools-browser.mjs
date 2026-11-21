@@ -44,6 +44,10 @@ try {
         "AI editorial comparison cards must not overflow a " + view.width + "px viewport");
 
       await page.goto(base + "/ai-tools", { waitUntil: "domcontentloaded", timeout: 45000 });
+      await page.locator("#ai-tool-query").waitFor();
+      // Returning from the editorial /ai route starts a fresh client hydration.
+      // Wait for it to settle before testing React-controlled filter changes.
+      await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
       assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
 
@@ -62,6 +66,7 @@ try {
       const sourceOnly = page.getByRole("checkbox", { name: /Show source-checked listings only/ });
       assert.equal(await sourceOnly.count(), 1, "Source review filter must be keyboard and screen-reader accessible");
       await sourceOnly.check();
+      await page.waitForFunction(() => document.querySelectorAll(".ai-tools-card").length === 5, null, { timeout: 12000 });
       assert.equal(await cards.count(), 5, "Source-only filter should show five documented listings");
       assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 0,
         "Unsourced introductory listings must be excluded by source-only filter");
