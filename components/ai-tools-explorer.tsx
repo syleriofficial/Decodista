@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "@/components/app-link";
 import { ArrowRight, ArrowUpRight, BookOpen, Check, GitCompareArrows, Info, Search, X } from "lucide-react";
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
+import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { AI_TOOL_EVIDENCE, getAiToolEvidence } from "@/lib/ai-tools-evidence";
 
 type CategoryFilter = (typeof AI_TOOL_CATEGORIES)[number]["slug"];
@@ -25,9 +26,14 @@ export function AiToolsExplorer() {
   }, [category, search, sourceCheckedOnly]);
 
   const toggleCompare = (slug: string) => {
-    setSelected((current) => current.includes(slug)
-      ? current.filter((item) => item !== slug)
-      : current.length < 2 ? [...current, slug] : current);
+    const wasSelected = selected.includes(slug);
+    if (!wasSelected && selected.length >= 2) return;
+    setSelected(wasSelected ? selected.filter((item) => item !== slug) : [...selected, slug]);
+    trackAiToolsInteraction({
+      name: "ai_tools_compare_select",
+      tool_slug: slug,
+      selection: wasSelected ? "remove" : "add",
+    });
   };
 
   const selectedNames = selected.map((slug) => AI_TOOLS.find((tool) => tool.slug === slug)?.name ?? slug);
@@ -69,7 +75,11 @@ export function AiToolsExplorer() {
                 type="button"
                 className={category === item.slug ? "ai-tools-chip is-selected" : "ai-tools-chip"}
                 aria-pressed={category === item.slug}
-                onClick={() => setCategory(item.slug)}
+                onClick={() => {
+                  if (category === item.slug) return;
+                  setCategory(item.slug);
+                  trackAiToolsInteraction({ name: "ai_tools_category_select", category_id: item.slug });
+                }}
               >
                 {item.label}
               </button>
