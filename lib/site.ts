@@ -216,14 +216,15 @@ export const NAV_ITEMS = [
   { href: "/science", label: "Science" },
 ] as const;
 
-// Keep real published destinations accessible in the footer without restoring More.
-// Weekly Brief and Entertainment archives keep their URLs but are not promoted.
+// Keep published destinations accessible in the footer without restoring More.
+// Weekly Brief is a published recurring edition; Entertainment stays unpromoted.
 export const FOOTER_SECONDARY_ITEMS = [
   { href: "/ai", label: "AI" },
   { href: "/how-to", label: "How-To" },
   { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
   { href: "/latest", label: "Latest" },
+  { href: "/weekly", label: "Weekly Brief" },
 ] as const;
 
 export const TRUST_LINKS = [
