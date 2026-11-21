@@ -152,6 +152,38 @@ try {
         `Comparison must not cause page overflow at ${view.width}px: ${JSON.stringify(dimensions)}`);
       await page.screenshot({ path: `${outputDir}/${view.label}-comparison.png`, fullPage: true });
       
+      // Focused research guide candidate: AI Tools-only, without global editorial promotion.
+      const researchGuide = await page.goto(base + "/ai-tools/guides/perplexity-vs-gemini-notebook",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(researchGuide?.status(), 200, "New AI Tools research guide candidate must render");
+      assert.equal(await page.locator("main h1").count(), 1, "Research guide should have one H1");
+      assert((await page.locator("main h1").innerText()).includes("Perplexity vs Gemini Notebook"));
+      const researchRobots = await page.locator('head meta[name="robots"]').getAttribute("content");
+      assert(researchRobots?.includes("noindex"), "Unapproved research guide must stay noindex");
+      assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.includes(
+        "/ai-tools/guides/perplexity-vs-gemini-notebook"), "Guide must retain a unique canonical");
+      assert.equal(await page.locator(".ai-guide-table tbody tr").count(), 5,
+        "Research guide must include five clear decision dimensions");
+      assert.equal(await page.locator(".ai-guide-scenario").count(), 4,
+        "Research guide must explain four workflow choices");
+      assert.equal(await page.locator(".ai-guide-test-case").count(), 3,
+        "Reader worksheet must offer three fictional, repeatable tasks");
+      assert.equal(await page.locator(".ai-guide-test-rating select").count(), 6,
+        "No fabricated scores: reader scores start as independent empty inputs");
+      assert((await page.locator(".ai-guide-test-progress").innerText()).includes("0 of 3"));
+      assert.equal(await page.locator(".ai-guide-sources ol li").count(), 7,
+        "Research guide requires seven documented primary sources");
+      assert.equal(await page.locator('.ai-guide-sources a[target="_blank"]').count(), 7,
+        "Every reference should open its primary source");
+      assert((await page.locator(".ai-guide-byline").innerText()).includes("22 November 2026"),
+        "Show the guide-specific source review date");
+      const researchDimensions = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
+      }));
+      assert(researchDimensions.body <= researchDimensions.viewport + 1,
+        "Research guide must not overflow at " + view.width + "px");
+      await page.screenshot({ path: `${outputDir}/${view.label}-research-guide-draft.png`, fullPage: true });
+
       // Profile discovery is fully browsable and remains descriptive / noindex.
       const profileResponse = await page.goto(base + "/ai-tools/chatgpt", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(profileResponse?.status(), 200, "A real profile should load");
