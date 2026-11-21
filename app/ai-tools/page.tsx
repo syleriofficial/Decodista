@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Search } from "lucide-react";
 import { AiToolsExplorer } from "@/components/ai-tools-explorer";
+import { AiTaskFinder } from "@/components/ai-task-finder";
 import { AI_TOOLS } from "@/lib/ai-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./ai-tools.css";
@@ -86,6 +87,8 @@ export default function AIToolsPage() {
           <span>Source-backed analysis, real-world scenarios and questions to test <ArrowRight size={16} aria-hidden="true" /></span>
         </Link>
       </nav>
+
+      <AiTaskFinder />
 
       <AiToolsExplorer />
 
