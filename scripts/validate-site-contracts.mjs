@@ -157,7 +157,7 @@ const aiToolsMeasurementPlaybook = read("docs/ai-tools-measurement-playbook.md")
 const aiToolsData = read("lib/ai-tools.ts");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
 assert(aiToolsInteractions.includes('CONSENT_STORAGE_KEY = "decodista-analytics-consent"') &&
-  aiToolsInteractions.includes('=== "granted"') &&
+  aiToolsInteractions.includes('!== "granted"') &&
   aiToolsInteractions.includes('isAiToolsPath(window.location.pathname)') &&
   aiToolsInteractions.includes('window.gtag("event", event.name') &&
   !aiToolsInteractions.includes('window.gtag("event", "page_view"') &&
