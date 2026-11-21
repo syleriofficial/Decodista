@@ -185,7 +185,7 @@ export function AiComparisonEvaluation({
         </div>
       </div>
       <p className="ai-guide-test-privacy">
-        Privacy: inputs stay in this page's temporary memory. We do not ask you to sign in,
+        Privacy: inputs stay in this page&apos;s temporary memory. We do not ask you to sign in,
         submit results to DECODISTA, or upload proprietary files. Nothing is saved between
         reloads; export your CSV before leaving. Do not paste secrets or personal data into test tools.
       </p>
