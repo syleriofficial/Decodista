@@ -110,6 +110,9 @@ const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
+const aiToolsGuidesIndex = read("app/ai-tools/guides/page.tsx");
+const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
+const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsPricingData = read("lib/ai-tools-pricing.ts");
 const aiToolsEvidence = read("lib/ai-tools-evidence.ts");
 const aiToolsEvidenceClient = read("components/ai-tools-evidence-status.tsx");
@@ -148,8 +151,8 @@ assert(aiToolsExplorer.includes('href={`/ai-tools/${tool.slug}`}') &&
   "Tool directory and comparison must link to individual tool profiles");
 assert(aiToolsCss.includes('.ai-tools-profile-body') && aiToolsCss.includes('.ai-tools-profile-related'),
   "Individual tool profiles require responsive content and related-tool styles");
-assert(!sitemap.includes('"/ai-tools"') && !sitemap.includes('`/ai-tools/'),
-  "Introductory noindex AI Tools profiles should not appear in XML sitemaps before editorial review");
+assert(!sitemap.includes('AI_TOOLS.map(') && !sitemap.includes('route: "/ai-tools"'),
+  "Introductory noindex AI Tools directory and tool profiles must stay out of sitemap");
 assert(aiToolsPricing.includes('title: "AI Tool Pricing & Plans"') &&
   aiToolsPricing.includes('index: false') &&
   aiToolsPricing.includes('record.pricingUrl') &&
@@ -175,7 +178,7 @@ assert(aiToolsCss.includes('.ai-tools-price-grid') &&
   aiToolsCss.includes('.ai-tools-alternatives-grid') &&
   aiToolsCss.includes('.ai-tools-decision-links'),
   "Pricing and alternative pages need responsive scoped styles");
-assert(!sitemap.includes('"/ai-tools/pricing"') && !sitemap.includes('"/ai-tools/alternatives"'),
+assert(!sitemap.includes('route: "/ai-tools/pricing"') && !sitemap.includes('route: "/ai-tools/alternatives"'),
   "Early-stage pricing and alternatives pages must remain outside the sitemap");
 assert(aiToolsEvidence.includes('AI_EVIDENCE_CHECKED_ON = "2026-11-21"') &&
   aiToolsEvidence.includes('AI_EVIDENCE_REVIEW_INTERVAL_DAYS = 30') &&
@@ -202,6 +205,33 @@ assert(aiToolsReviewWorkflow.includes("cron: '0 9 * * 1'") &&
 assert(aiToolsCss.includes('.ai-tools-evidence-status.is-stale') &&
   aiToolsCss.includes('.ai-tools-compare-evidence-grid'),
   "Source evidence and date warning must be readable on mobile");
+assert(aiToolsGuideData.includes('AI_GUIDES_REVIEWED_ON = "2026-11-21"') &&
+  aiToolsGuideData.includes('chatgpt-vs-claude') &&
+  aiToolsGuideData.includes('cursor-vs-github-copilot') &&
+  aiToolsGuideData.includes('https://cursor.com/docs/agent/overview') &&
+  aiToolsGuideData.includes('https://claude.com/pricing'),
+  "Editorial guides must have dated official sources and two meaningful researched pairings");
+assert(aiToolsGuidesIndex.includes('index: false') &&
+  aiToolsGuidesIndex.includes('AI_COMPARISON_GUIDES.map('),
+  "Thin comparison-guide archive must remain noindex while linking researched guides");
+assert(aiToolsGuidePage.includes('generateStaticParams()') &&
+  aiToolsGuidePage.includes('notFound()') &&
+  aiToolsGuidePage.includes('robots: { index: true, follow: true }') &&
+  aiToolsGuidePage.includes('findAiComparisonGuide(slug)') &&
+  aiToolsGuidePage.includes('guide.sources.map(') &&
+  aiToolsGuidePage.includes('review-methodology'),
+  "Research guides need valid 404s, canonical/indexable metadata, linked sources and methodology");
+assert(sitemap.includes('AI_COMPARISON_GUIDES.map(') &&
+  sitemap.includes('AI_GUIDES_REVIEWED_ON') &&
+  aiToolsPage.includes('href="/ai-tools/guides"') &&
+  aiToolsCompare.includes('findGuideForTools(first.slug, second.slug)'),
+  "Original guides must be present in sitemap and reachable from directory and exact pair comparisons");
+assert(aiToolsFreshnessAudit.includes('AI_GUIDES_REVIEWED_ON'),
+  "Weekly manual-source review must include editorial guides' review date");
+assert(aiToolsCss.includes('.ai-guide-layout') &&
+  aiToolsCss.includes('.ai-guide-scenarios') &&
+  aiToolsCss.includes('.ai-guide-sources'),
+  "Editorial guides require responsive sections and source-led layout");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
