@@ -429,18 +429,20 @@ try {
           assert.equal((await getEvents()).length, 0,
             "Without explicit analytics opt-in, AI Tools selections must generate zero GA4 events");
           await telemetry.getByRole("button", { name: "Accept analytics" }).click();
-          await telemetry.getByRole("button", { name: "Research a topic" }).click();
-          await telemetry.getByRole("button", { name: "Research a topic" }).click();
+          // Different from either the original Research task or the pre-consent
+          // Create visuals selection, even if hydration remounted the finder.
+          await telemetry.getByRole("button", { name: "Build software" }).click();
+          await telemetry.getByRole("button", { name: "Build software" }).click();
           await telemetry.getByRole("button", { name: "Coding", exact: true }).click();
           await telemetry.locator(".ai-tools-card .ai-tools-select").first().click();
           await telemetry.locator("#ai-tool-query").fill("private-person@example.org secret report");
-          await telemetry.getByRole("button", { name: "Build software" }).click();
+          await telemetry.getByRole("button", { name: "Research a topic" }).click();
           const gaEvents = await getEvents();
           assert.deepEqual(gaEvents.map((args) => args[1]), [
             "ai_tools_task_select", "ai_tools_category_select", "ai_tools_compare_select",
             "ai_tools_task_select",
           ], "Only deliberate task, category and comparison selections are collected");
-          assert.deepEqual(gaEvents[0][2], { task_id: "research" });
+          assert.deepEqual(gaEvents[0][2], { task_id: "coding" });
           assert.deepEqual(gaEvents[1][2], { category_id: "coding" });
           assert.deepEqual(gaEvents[2][2], { tool_slug: "cursor", selection: "add" });
           assert(!JSON.stringify(gaEvents).includes("private-person@example.org"),
