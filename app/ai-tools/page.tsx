@@ -1,44 +1,29 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Search } from "lucide-react";
+import { AiToolsExplorer } from "@/components/ai-tools-explorer";
+import { AI_TOOLS } from "@/lib/ai-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import "./ai-tools.css";
 
-const description = "Discover Decodista's upcoming AI tool directory, comparisons, pricing research and alternatives, with links to published AI guides in the meantime.";
+const description =
+  "Explore a curated starter directory of AI assistants, research, coding, design, video and voice tools. Search by use case and compare two tools side by side.";
 
 export const metadata: Metadata = {
-  title: "AI Tools",
+  title: "AI Tools Directory & Comparison",
   description,
   alternates: { canonical: "/ai-tools" },
+  // Keep this early directory noindex until individual claims and discovery content
+  // have passed the full editorial review process.
   robots: { index: false, follow: true },
   openGraph: {
     type: "website",
-    title: `AI Tools | ${SITE_NAME}`,
+    title: `AI Tools Directory | ${SITE_NAME}`,
     description,
     url: "/ai-tools",
   },
-  twitter: { card: "summary", title: `AI Tools | ${SITE_NAME}`, description },
+  twitter: { card: "summary", title: `AI Tools Directory | ${SITE_NAME}`, description },
 };
-
-const existingResources = [
-  {
-    href: "/ai",
-    title: "AI reporting & explainers",
-    description: "Understand the developments, features and privacy choices shaping AI.",
-    action: "Explore AI",
-  },
-  {
-    href: "/how-to",
-    title: "Practical how-to guides",
-    description: "Follow carefully researched instructions for everyday technology decisions.",
-    action: "Read guides",
-  },
-  {
-    href: "/search?q=AI",
-    title: "Search published coverage",
-    description: "Find existing reporting on AI products, assistants and related services.",
-    action: "Search coverage",
-  },
-] as const;
 
 export default function AIToolsPage() {
   const breadcrumb = {
@@ -51,43 +36,64 @@ export default function AIToolsPage() {
   };
 
   return (
-    <main id="main-content" className="category-page">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
-      <header className="category-header wrap">
-        <div>
-          <span className="eyebrow">Discover / Compare / Decide</span>
-          <h1>AI Tools</h1>
-        </div>
-        <p>
-          A dedicated home for finding AI tools, comparing capabilities and
-          prices, and exploring alternatives—separate from our AI news coverage.
-        </p>
-      </header>
-
-      <section className="reader-paths wrap" aria-labelledby="ai-tools-status-title">
-        <div className="reader-paths-heading">
-          <span className="eyebrow">In development</span>
-          <h2 id="ai-tools-status-title">Tool comparisons are on the way</h2>
-          <p>
-            The directory, side-by-side comparisons, pricing pages and
-            alternatives are not published yet. Until they are ready, use
-            Decodista&apos;s existing reporting and guides below. We won&apos;t
-            display invented tool ratings, prices or reviews.
+    <main id="main-content" className="ai-tools-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      <section className="ai-tools-hero wrap" aria-labelledby="ai-tools-hero-title">
+        <div className="ai-tools-hero-copy">
+          <span className="ai-tools-kicker"><span className="ai-tools-kicker-dot" /> DECODISTA / AI DISCOVERY</span>
+          <h1 id="ai-tools-hero-title">Find the right <em>AI tool</em> for the job.</h1>
+          <p className="ai-tools-hero-lede">
+            Less hype, clearer choices. Browse tools by the work you need to do,
+            then compare their focus and everyday uses side by side.
           </p>
+          <div className="ai-tools-hero-actions">
+            <a href="#ai-tools-directory-heading" className="ai-tools-primary-action"><Search size={17} aria-hidden="true" /> Explore tools <ArrowRight size={17} aria-hidden="true" /></a>
+            <Link href="/ai-tools/compare" className="ai-tools-secondary-action"><GitCompareArrows size={17} aria-hidden="true" /> Compare tools</Link>
+          </div>
+          <div className="ai-tools-hero-stats">
+            <div><strong>{AI_TOOLS.length}</strong><span>starting listings</span></div>
+            <div><strong>6</strong><span>use-case categories</span></div>
+            <div><strong>0</strong><span>invented ratings</span></div>
+          </div>
         </div>
-        <div className="reader-paths-grid">
-          {existingResources.map((resource) => (
-            <Link className="reader-path" href={resource.href} key={resource.href}>
-              <strong>{resource.title}</strong>
-              <span>{resource.description}</span>
-              <span className="reader-path-action">
-                {resource.action} <ArrowRight aria-hidden="true" />
-              </span>
-            </Link>
-          ))}
+        <div className="ai-tools-hero-art" aria-hidden="true">
+          <div className="ai-tools-art-label">DISCOVER / COMPARE</div>
+          <div className="ai-tools-art-card ai-tools-art-card-one"><span className="ai-tools-art-symbol">AI</span><span>Find a starting point</span><span className="ai-tools-art-line" /></div>
+          <div className="ai-tools-art-card ai-tools-art-card-two"><span className="ai-tools-art-symbol">↔</span><span>Compare the essentials</span><span className="ai-tools-art-line" /></div>
+          <div className="ai-tools-art-footer"><span>NO LEADERBOARD</span><span>NO PAY-TO-RANK CLAIMS</span></div>
+        </div>
+      </section>
+
+      <div className="ai-tools-utility-strip wrap">
+        <span>Built for informed choices, not popularity contests</span>
+        <span><BookOpen size={16} aria-hidden="true" /> Descriptive listings · Official links · No fabricated scores</span>
+      </div>
+
+      <AiToolsExplorer />
+
+      <section className="ai-tools-method wrap" aria-labelledby="ai-tools-method-title">
+        <div className="ai-tools-method-head">
+          <span className="ai-tools-eyebrow">A note on comparisons</span>
+          <h2 id="ai-tools-method-title">What this directory does—and doesn&apos;t—measure</h2>
+          <p>Our starter comparison focuses on what each product is made for, not a universal &ldquo;best tool&rdquo; score.</p>
+        </div>
+        <div className="ai-tools-method-grid">
+          <article><span>01 / PURPOSE</span><h3>Find the job fit</h3><p>Start with the kind of work you want to complete. Different tools serve different workflows.</p></article>
+          <article><span>02 / CONTEXT</span><h3>Know the caveats</h3><p>See practical notes and follow official links for the most current features, access and usage rights.</p></article>
+          <article><span>03 / TRANSPARENCY</span><h3>No untested verdicts</h3><p>These profiles do not imply benchmark testing, first-hand review or verified real-time subscription prices.</p></article>
+        </div>
+      </section>
+
+      <section className="ai-tools-next wrap" aria-labelledby="ai-tools-next-title">
+        <div>
+          <span className="ai-tools-eyebrow">Also on DECODISTA</span>
+          <h2 id="ai-tools-next-title">Go beyond the tool list.</h2>
+          <p>Explore AI news and practical guides separately from the directory.</p>
+        </div>
+        <div className="ai-tools-next-links">
+          <Link href="/ai">AI reporting <ArrowUpRight size={16} aria-hidden="true" /></Link>
+          <Link href="/how-to">How-To guides <ArrowUpRight size={16} aria-hidden="true" /></Link>
+          <Link href="/review-methodology">Review methodology <ArrowUpRight size={16} aria-hidden="true" /></Link>
         </div>
       </section>
     </main>
