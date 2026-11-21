@@ -109,6 +109,9 @@ assert.deepEqual(
 const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
+const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
+const aiToolsPricingData = read("lib/ai-tools-pricing.ts");
+const aiToolsAlternatives = read("app/ai-tools/alternatives/page.tsx");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
 const aiToolsData = read("lib/ai-tools.ts");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
@@ -143,6 +146,33 @@ assert(aiToolsCss.includes('.ai-tools-profile-body') && aiToolsCss.includes('.ai
   "Individual tool profiles require responsive content and related-tool styles");
 assert(!sitemap.includes('"/ai-tools"') && !sitemap.includes('`/ai-tools/'),
   "Introductory noindex AI Tools profiles should not appear in XML sitemaps before editorial review");
+assert(aiToolsPricing.includes('title: "AI Tool Pricing & Plans"') &&
+  aiToolsPricing.includes('index: false') &&
+  aiToolsPricing.includes('record.pricingUrl') &&
+  aiToolsPricing.includes('PRICING_CHECKED_ON'),
+  "Pricing page must disclose official sources, checked date and noindex");
+assert(aiToolsPricingData.includes('PRICING_CHECKED_ON = "2026-11-21"') &&
+  aiToolsPricingData.includes('https://chatgpt.com/pricing/') &&
+  aiToolsPricingData.includes('https://claude.com/pricing') &&
+  aiToolsPricingData.includes('https://one.google.com/intl/en_in/about/google-ai-plans/') &&
+  aiToolsPricingData.includes('https://www.perplexity.ai/pro') &&
+  aiToolsPricingData.includes('US$200/year'),
+  "Dated pricing claims must point to official provider sources with billing context");
+assert(aiToolsAlternatives.includes('title: "AI Tool Alternatives"') &&
+  aiToolsAlternatives.includes('index: false') &&
+  aiToolsAlternatives.includes('tool.category === selected.category') &&
+  aiToolsAlternatives.includes('action="/ai-tools/alternatives"'),
+  "Alternative discovery must remain noindex and use same-category matching");
+assert(aiToolsPage.includes('href="/ai-tools/pricing"') &&
+  aiToolsPage.includes('href="/ai-tools/alternatives"') &&
+  aiToolsProfile.includes('/ai-tools/alternatives?tool='),
+  "Directory and tool profiles must link to Pricing and Alternatives");
+assert(aiToolsCss.includes('.ai-tools-price-grid') &&
+  aiToolsCss.includes('.ai-tools-alternatives-grid') &&
+  aiToolsCss.includes('.ai-tools-decision-links'),
+  "Pricing and alternative pages need responsive scoped styles");
+assert(!sitemap.includes('"/ai-tools/pricing"') && !sitemap.includes('"/ai-tools/alternatives"'),
+  "Early-stage pricing and alternatives pages must remain outside the sitemap");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(

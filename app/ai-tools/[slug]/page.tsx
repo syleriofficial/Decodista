@@ -154,6 +154,10 @@ export default async function AiToolProfilePage({ params }: PageProps) {
               </>
             ) : <p>There are no other {category.toLowerCase()} profiles in this starter directory yet. Explore the full list for adjacent workflows.</p>}
             <Link className="ai-tools-profile-browse" href="/ai-tools">Browse all AI tools <ArrowRight size={16} aria-hidden="true" /></Link>
+            <div className="ai-tools-profile-more-links">
+              <Link href={`/ai-tools/alternatives?tool=${tool.slug}`}>Explore alternatives <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link href="/ai-tools/pricing">Browse sourced pricing <ArrowRight size={16} aria-hidden="true" /></Link>
+            </div>
           </div>
           <div className="ai-tools-profile-verify">
             <strong>Check the source</strong>

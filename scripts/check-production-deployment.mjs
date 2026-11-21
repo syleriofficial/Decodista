@@ -35,8 +35,9 @@ const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
+const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude"];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -83,6 +84,15 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   check(path + " description in head", Boolean(description && /\bcontent=["'][^"']{30,}["']/.test(description)), "SEO description must be present in <head>");
   check(path + " canonical in head", Boolean(canonical && canonical.includes(path === "/" ? base : path)), "Canonical URL must be present in <head>");
 }
+
+const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
+const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?? "";
+check("AI Tools pricing includes official-source confirmation",
+  pricingHtml.includes("US$20") && pricingHtml.includes("https://claude.com/pricing") && pricingHtml.includes("21 November 2026"),
+  "Dated Claude USD list price and official pricing source must render");
+check("AI Tools alternatives keeps category matching",
+  alternativesHtml.includes("Claude") && alternativesHtml.includes("ChatGPT") && alternativesHtml.includes("Gemini"),
+  "Claude should surface other assistant listings without invented rankings");
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";

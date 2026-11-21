@@ -69,6 +69,19 @@ export default function AIToolsPage() {
         <span><BookOpen size={16} aria-hidden="true" /> Descriptive listings · Official links · No fabricated scores</span>
       </div>
 
+      <nav className="ai-tools-decision-links wrap" aria-label="Explore AI tools by decision">
+        <Link href="/ai-tools/pricing" className="ai-tools-decision-link">
+          <span className="ai-tools-eyebrow">Know the costs</span>
+          <strong>Pricing &amp; Plans</strong>
+          <span>Official sources, dated checks and clear caveats <ArrowRight size={16} aria-hidden="true" /></span>
+        </Link>
+        <Link href="/ai-tools/alternatives" className="ai-tools-decision-link">
+          <span className="ai-tools-eyebrow">Consider other options</span>
+          <strong>Alternatives</strong>
+          <span>Other tools for related workflows, without rankings <ArrowRight size={16} aria-hidden="true" /></span>
+        </Link>
+      </nav>
+
       <AiToolsExplorer />
 
       <section className="ai-tools-method wrap" aria-labelledby="ai-tools-method-title">

@@ -101,6 +101,42 @@ try {
         const missing = await page.request.get(base + "/ai-tools/not-an-actual-listed-tool");
         assert.equal(missing.status(), 404, "Unknown tool profiles must return 404");
       }
+      // Source-linked pricing: no made-up regional totals or unverified rankings.
+      const pricingResponse = await page.goto(base + "/ai-tools/pricing", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(pricingResponse?.status(), 200, "Pricing overview must render");
+      await page.locator(".ai-tools-price-card").first().waitFor();
+      assert.equal(await page.locator(".ai-tools-price-card").count(), 4, "Exactly four sourced pricing records");
+      assert.equal(await page.locator(".ai-tools-price-card a[target=\"_blank\"]").count(), 4, "Each priced tool needs an official source");
+      assert((await page.locator(".ai-tools-feature-meta").innerText()).includes("21 November 2026"), "Display source check date");
+      assert((await page.locator(".ai-tools-verified-amount").innerText()).includes("US$20"), "Claude monthly USD figure is labeled");
+      await page.screenshot({ path: `${outputDir}/${view.label}-pricing.png`, fullPage: true });
+
+      // Shareable alternatives queries are bounded by the curated directory.
+      const alternativesResponse = await page.goto(base + "/ai-tools/alternatives?tool=claude", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(alternativesResponse?.status(), 200, "Alternatives overview must render");
+      assert.equal(await page.locator(".ai-tools-alternatives-context h2").innerText(), "Claude");
+      assert.equal(await page.locator(".ai-tools-alternative-card").count(), 2, "Claude should show two same-category listings");
+      assert((await page.locator('.ai-tools-alternative-actions a[href*="first=claude&second=chatgpt"]').count()) === 1,
+        "Alternative comparisons must use shareable valid tool IDs");
+      await page.screenshot({ path: `${outputDir}/${view.label}-alternatives.png`, fullPage: true });
+
+      const runwayAlternatives = await page.goto(base + "/ai-tools/alternatives?tool=runway", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(runwayAlternatives?.status(), 200, "One-listing categories must work");
+      assert.equal(await page.locator(".ai-tools-alternative-card").count(), 0, "No invented video alternatives");
+      assert.equal(await page.locator(".ai-tools-alternatives-empty").count(), 1, "Show honest zero-result state");
+      
+      const altDimensions = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      assert(altDimensions.body <= altDimensions.viewport + 1,
+        `Alternatives must not overflow at ${view.width}px: ${JSON.stringify(altDimensions)}`);
+      if (view.label === "desktop") {
+        const invalidTool = await page.goto(base + "/ai-tools/alternatives?tool=not-in-our-directory", { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(invalidTool?.status(), 200, "Unknown query must safely fall back to default");
+        assert.equal((await page.locator(".ai-tools-alternatives-context h2").innerText()).trim(), "ChatGPT");
+      }
+
       checks.push({ view: view.label, result: "passed" });
     } finally {
       await page.close();
