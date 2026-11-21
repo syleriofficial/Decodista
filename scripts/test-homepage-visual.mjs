@@ -3,6 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
 const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://localhost:5173";
+const previewOrigin = new URL(base).origin;
+const expectedNotFoundPaths = new Set(["/latest?page=1.5", "/security?page=abc"]);
 const out = "artifacts/homepage-qa";
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -18,10 +20,29 @@ for (const sample of [
 ]) {
   const ctx = await browser.newContext({ viewport: { width: sample.width, height: sample.height }, colorScheme: sample.theme, reducedMotion: "reduce" });
   const page = await ctx.newPage();
+  // Cloudflare Turnstile refuses the localhost origin (110200) and injects
+  // an unrelated Vite error overlay. In visual/hydration QA only, neutralize
+  // its external loader; API validation is exercised in test-contact.mjs.
+  // Do not apply this interception to real production browser checks.
+  if (new URL(base).hostname === "localhost") {
+    await page.route(/https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js/, route =>
+      route.fulfill({ status: 200, contentType: "application/javascript", body: "/* Turnstile unavailable on localhost; stub for visual QA only */" }));
+  }
   const pageErrors = [];
+  const unexpectedHttpErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
   page.on("console", message => {
     if (message.type() === "error") pageErrors.push("console: " + message.text());
+  });
+  // Browser console 404s do not identify URLs. Track same-origin responses
+  // separately so the two intentionally invalid pagination tests are not
+  // mistaken for broken assets or production regressions.
+  page.on("response", response => {
+    const url = new URL(response.url());
+    if (url.origin !== previewOrigin || response.status() < 400) return;
+    const pathAndQuery = url.pathname + url.search;
+    if (response.status() === 404 && expectedNotFoundPaths.has(pathAndQuery)) return;
+    unexpectedHttpErrors.push({ status: response.status(), path: pathAndQuery });
   });
   const report = { ...sample };
   try {
@@ -426,7 +447,33 @@ for (const sample of [
         assert.equal(await page.locator("main h1").count(), 1, `Redesigned ${name} requires one main headline`);
         const width = await page.evaluate(() => document.documentElement.scrollWidth);
         assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
-        await page.screenshot({ path: out + "/" + name + "-desktop.png" });
+        if (name === "contact") {
+          // Unlike the server-rendered form, React onChange handlers only
+          // exist after client hydration. Test the hydrated UI, not a DOM-only
+          // pre-hydration select option change.
+          await page.waitForLoadState("networkidle", { timeout: 30000 });
+          // Confirm the React form actually hydrates and handles a controlled
+          // field change, not just that server-rendered markup is visible.
+          // DOMContentLoaded is not enough for the React-controlled form.
+          // Turnstile may poll forever on localhost, so never use networkidle.
+          // The pinned React 19 DOM renderer attaches __reactProps$ to hydrated
+          // controls; wait for those listeners before exercising onChange.
+          await page.waitForFunction(() => {
+            const select = document.querySelector("select#contact-type");
+            return Boolean(select && Object.keys(select).some(key => key.startsWith("__reactProps$")));
+          }, null, { timeout: 25000 });
+          const enquiryType = page.locator('select#contact-type');
+          await enquiryType.selectOption("Correction");
+          await page.locator('input#contact-article-url').waitFor({ state: "visible", timeout: 15000 });
+          await enquiryType.selectOption("General enquiry");
+          await page.locator('input#contact-article-url').waitFor({ state: "detached", timeout: 15000 });
+          const hydrationWarnings = pageErrors.filter(error => error.includes("A tree hydrated but some attributes"));
+          assert.equal(hydrationWarnings.length, 0,
+            "Contact form must hydrate without React attribute mismatch warnings");
+        }
+        // Playwright defaults to hiding the caret for screenshots, which can
+        // mutate inline input styles during React hydration in dev previews.
+        await page.screenshot({ path: out + "/" + name + "-desktop.png", caret: "initial" });
       }
     }
     if (sample.name === "small-mobile-dark") {
@@ -437,13 +484,17 @@ for (const sample of [
         assert(overflow <= 1, `320px mobile reflow must not overflow on ${url}: ${overflow}px`);
       }
     }
+    assert.deepEqual(unexpectedHttpErrors, [],
+      "Unexpected failed first-party HTTP responses: " + JSON.stringify(unexpectedHttpErrors));
     report.status = "passed";
     report.measures = measures;
     report.pageErrors = pageErrors;
+    report.unexpectedHttpErrors = unexpectedHttpErrors;
   } catch (err) {
     report.status = "failed";
     report.error = String(err);
     report.pageErrors = pageErrors;
+    report.unexpectedHttpErrors = unexpectedHttpErrors;
     failed.push(sample.name + ": " + String(err));
     await page.screenshot({ path: out + "/" + sample.name + "-failure.png", fullPage: false }).catch(() => {});
   } finally {
