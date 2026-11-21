@@ -119,13 +119,13 @@ export const AI_TOOLS: readonly AiTool[] = [
   },
   {
     slug: "notebooklm",
-    name: "NotebookLM",
+    name: "Gemini Notebook",
     provider: "Google",
     category: "research",
-    description: "Research and study workspace built around documents and sources you add.",
+    description: "Formerly NotebookLM, Google's source-based research workspace for documents, study and cited answers.",
     useCases: ["Source summaries", "Studying material", "Research notes"],
-    practicalNote: "Outputs should be checked against the original material you supply.",
-    officialUrl: "https://notebooklm.google.com/",
+    practicalNote: "Formerly called NotebookLM. Check generated answers and citations against original sources.",
+    officialUrl: "https://notebook.google.com/",
   },
   {
     slug: "perplexity",

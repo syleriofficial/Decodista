@@ -57,23 +57,23 @@ try {
       // Dated official documentation is not the same as an unsourced directory
       // entry or a real hands-on benchmark; every card must communicate the
       // distinction, including when filters are combined and reset.
-      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed").count(), 5,
-        "Exactly five tool cards have recorded official-source checks");
-      assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 7,
-        "Remaining listings must not imply they have dated review evidence");
-      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed a[target='_blank']").count(), 5,
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed").count(), 12,
+        "All twelve tool cards have recorded official-source checks");
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 0,
+        "All twelve listings must have documented evidence");
+      assert.equal(await page.locator(".ai-tools-card-evidence.is-reviewed a[target='_blank']").count(), 12,
         "Every source-reviewed tool must offer its official documentation link");
       const sourceOnly = page.getByRole("checkbox", { name: /Show source-checked listings only/ });
       assert.equal(await sourceOnly.count(), 1, "Source review filter must be keyboard and screen-reader accessible");
       await sourceOnly.check();
-      await page.waitForFunction(() => document.querySelectorAll(".ai-tools-card").length === 5, null, { timeout: 12000 });
-      assert.equal(await cards.count(), 5, "Source-only filter should show five documented listings");
+      await page.waitForFunction(() => document.querySelectorAll(".ai-tools-card").length === 12, null, { timeout: 12000 });
+      assert.equal(await cards.count(), 12, "Source-only filter should show twelve documented listings");
       assert.equal(await page.locator(".ai-tools-card-evidence.is-pending").count(), 0,
         "Unsourced introductory listings must be excluded by source-only filter");
       await page.getByRole("button", { name: "Coding", exact: true }).click();
-      assert.equal(await cards.count(), 1, "Only the source-reviewed coding listing should remain when filters combine");
-      assert.equal((await cards.locator("h3").first().innerText()).trim(), "GitHub Copilot",
-        "The coding result must be backed by an actual record, not a fabricated Cursor audit");
+      assert.equal(await cards.count(), 2, "Both source-reviewed coding listings should remain when filters combine");
+      assert.deepEqual((await cards.locator("h3").allInnerTexts()).map((name) => name.trim()).sort(), ["Cursor", "GitHub Copilot"],
+        "Coding results must be backed by real review records");
       await page.getByRole("button", { name: "Clear filters" }).click();
       assert.equal(await cards.count(), 12, "Clearing filters must restore all introductory and source-checked entries");
       assert.equal(await sourceOnly.isChecked(), false, "Clear filters must reset the source-check checkbox");
@@ -117,7 +117,7 @@ try {
       await page.getByRole("button", { name: "Compare", exact: true }).click();
       await page.locator(".ai-tools-compare-table").waitFor();
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Perplexity"));
-      assert((await page.locator(".ai-tools-compare-table").innerText()).includes("NotebookLM"));
+      assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Gemini Notebook"));
 
       const dimensions = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth,
@@ -154,7 +154,7 @@ try {
 
       const singleCategoryResponse = await page.goto(base + "/ai-tools/runway", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(singleCategoryResponse?.status(), 200, "Runway profile should load");
-      assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 0, "Unverified tool should not gain invented evidence");
+      assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 1, "Runway profile should have official documentation evidence");
       assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 0,
         "Single-entry video category must not fabricate alternatives");
       assert((await page.locator(".ai-tools-profile-related-card").innerText()).includes("no other video"));
