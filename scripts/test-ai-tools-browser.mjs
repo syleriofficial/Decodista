@@ -68,6 +68,39 @@ try {
       assert(dimensions.body <= dimensions.viewport + 1,
         `Comparison must not cause page overflow at ${view.width}px: ${JSON.stringify(dimensions)}`);
       await page.screenshot({ path: `${outputDir}/${view.label}-comparison.png`, fullPage: true });
+      
+      // Profile discovery is fully browsable and remains descriptive / noindex.
+      const profileResponse = await page.goto(base + "/ai-tools/chatgpt", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(profileResponse?.status(), 200, "A real profile should load");
+      await page.locator(".ai-tools-profile-title h1").waitFor();
+      assert.equal((await page.locator(".ai-tools-profile-title h1").innerText()).trim(), "ChatGPT");
+      assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 2,
+        "ChatGPT should link to two same-category profiles");
+      assert.equal(await page.locator('a[href="/ai-tools/claude"]').count(), 1,
+        "Profile should link to Claude as a same-category alternative");
+      assert.equal(await page.locator('a[href="/ai-tools/gemini"]').count(), 1,
+        "Profile should link to Gemini as a same-category alternative");
+      assert.equal(await page.locator(".ai-tools-profile-actions a").count(), 2,
+        "Profile should provide official-site and comparison actions");
+
+      const profileDimensions = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      assert(profileDimensions.body <= profileDimensions.viewport + 1,
+        `Profile must not overflow at ${view.width}px: ${JSON.stringify(profileDimensions)}`);
+      await page.screenshot({ path: `${outputDir}/${view.label}-profile.png`, fullPage: true });
+
+      const singleCategoryResponse = await page.goto(base + "/ai-tools/runway", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(singleCategoryResponse?.status(), 200, "Runway profile should load");
+      assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 0,
+        "Single-entry video category must not fabricate alternatives");
+      assert((await page.locator(".ai-tools-profile-related-card").innerText()).includes("no other video"));
+
+      if (view.label === "desktop") {
+        const missing = await page.request.get(base + "/ai-tools/not-an-actual-listed-tool");
+        assert.equal(missing.status(), 404, "Unknown tool profiles must return 404");
+      }
       checks.push({ view: view.label, result: "passed" });
     } finally {
       await page.close();

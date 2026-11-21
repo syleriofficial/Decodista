@@ -108,6 +108,7 @@ assert.deepEqual(
 
 const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
+const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
 const aiToolsData = read("lib/ai-tools.ts");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
@@ -128,6 +129,20 @@ assert(aiToolsData.includes('officialUrl:') && aiToolsData.includes('practicalNo
 assert(aiToolsCss.includes('@media (max-width: 600px)') &&
   aiToolsCss.includes('.ai-tools-compare-table') && aiToolsCss.includes('.ai-tools-grid'),
   "AI Tools needs responsive directory and comparison styles");
+assert(aiToolsProfile.includes("generateStaticParams()") &&
+  aiToolsProfile.includes("notFound()") && aiToolsProfile.includes("index: false"),
+  "Individual tool profile pages must exist, return real 404s and remain noindex pending original editorial research");
+assert(aiToolsProfile.includes('candidate.category === tool.category') &&
+  aiToolsProfile.includes('/ai-tools/compare?first=') &&
+  aiToolsProfile.includes('tool.officialUrl'),
+  "Profiles must show same-category alternatives, comparison routes and official providers");
+assert(aiToolsExplorer.includes('href={`/ai-tools/${tool.slug}`}') &&
+  aiToolsCompare.includes('href={`/ai-tools/${first.slug}`}'),
+  "Tool directory and comparison must link to individual tool profiles");
+assert(aiToolsCss.includes('.ai-tools-profile-body') && aiToolsCss.includes('.ai-tools-profile-related'),
+  "Individual tool profiles require responsive content and related-tool styles");
+assert(!sitemap.includes('"/ai-tools"') && !sitemap.includes('`/ai-tools/'),
+  "Introductory noindex AI Tools profiles should not appear in XML sitemaps before editorial review");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(

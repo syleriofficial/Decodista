@@ -33,7 +33,7 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
   const requestedSecond = findAiTool(single(params.second) ?? "");
   const second = requestedSecond && requestedSecond.slug !== first.slug
     ? requestedSecond
-    : AI_TOOLS.find((tool) => tool.slug !== first.slug && tool.slug === "claude")
+    : AI_TOOLS.find((tool) => tool.slug !== first.slug && tool.category === first.category)
       ?? AI_TOOLS.find((tool) => tool.slug !== first.slug)!;
 
   const rows = [
@@ -87,8 +87,8 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
             <thead>
               <tr>
                 <th scope="col">At a glance</th>
-                <th scope="col"><span className="ai-tools-compare-tool-name">{first.name}</span><small>{first.provider}</small></th>
-                <th scope="col"><span className="ai-tools-compare-tool-name">{second.name}</span><small>{second.provider}</small></th>
+                <th scope="col"><Link href={`/ai-tools/${first.slug}`} className="ai-tools-compare-tool-name">{first.name}</Link><small>{first.provider}</small></th>
+                <th scope="col"><Link href={`/ai-tools/${second.slug}`} className="ai-tools-compare-tool-name">{second.name}</Link><small>{second.provider}</small></th>
               </tr>
             </thead>
             <tbody>
