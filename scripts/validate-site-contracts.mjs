@@ -115,6 +115,10 @@ const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
 const aiToolsEvaluationData = read("lib/ai-tools-evaluation.ts");
+const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
+const aiToolsTrialTests = read("scripts/test-verify-ai-tool-trial.mjs");
+const aiToolsProtocol = read("docs/ai-tools-evaluation-protocol.md");
+const gitignore = read(".gitignore");
 const aiToolsPricingData = read("lib/ai-tools-pricing.ts");
 const aiToolsEvidence = read("lib/ai-tools-evidence.ts");
 const aiToolsEvidenceClient = read("components/ai-tools-evidence-status.tsx");
@@ -258,6 +262,20 @@ assert(aiToolsCss.includes('.ai-guide-test-cases') &&
   aiToolsCss.includes('.ai-guide-test-rating') &&
   aiToolsCss.includes('.ai-guide-test-prompt pre'),
   "Fair-test worksheet needs accessible, compact and responsive styling");
+assert(aiToolsTrialAudit.includes('auditTrialPacket(') &&
+  aiToolsTrialAudit.includes('trialTemplate(') &&
+  aiToolsTrialAudit.includes('promptSha256') &&
+  aiToolsTrialAudit.includes('independentReview') &&
+  aiToolsTrialAudit.includes('originalOutput'),
+  "Private trial packets must require original responses, the exact prompt and a distinct reviewer");
+assert(aiToolsTrialTests.includes('syntheticPacket(') &&
+  aiToolsTrialTests.includes('Blank templates must not be accepted') &&
+  aiToolsTrialTests.includes('unsupported winner'),
+  "Trial audit must test incomplete and manipulated synthetic packets");
+assert(aiToolsProtocol.includes('not an automated vendor benchmark') &&
+  aiToolsProtocol.includes('never contacts either vendor') &&
+  gitignore.includes('/local-ai-trials/'),
+  "Local AI trials must remain private and explicitly unverified");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
