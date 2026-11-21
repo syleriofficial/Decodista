@@ -137,6 +137,7 @@ const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsResearchData = read("lib/ai-tools-research-guides.ts");
 const aiToolsResearchPage = read("app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx");
+const chatGeminiResearchPage = read("app/ai-tools/guides/chatgpt-vs-gemini-for-research/page.tsx");
 const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
 const aiToolsEvaluationData = read("lib/ai-tools-evaluation.ts");
 const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
@@ -263,6 +264,16 @@ assert(aiToolsResearchData.includes('slug: "perplexity-vs-gemini-notebook"') &&
   aiToolsResearchPage.includes('AiComparisonEvaluation') &&
   aiToolsResearchPage.includes('create a separate pasted-text source'),
   "Perplexity vs Gemini Notebook must be individually source-reviewed, canonical and independently testable");
+assert(aiToolsResearchData.includes('slug: "chatgpt-vs-gemini-for-research"') &&
+  aiToolsResearchData.includes('CHATGPT_GEMINI_RESEARCH_GUIDE') &&
+  chatGeminiResearchPage.includes('robots: { index: true, follow: true }') &&
+  chatGeminiResearchPage.includes('canonical: PAGE_URL') &&
+  chatGeminiResearchPage.includes('AiComparisonEvaluation') &&
+  chatGeminiResearchPage.includes('reviewedOn: REVIEWED_ON') === false &&
+  chatGeminiResearchPage.includes('No hands-on benchmark claimed') &&
+  chatGeminiResearchPage.includes('https://support.google.com/gemini/answer/15719111?hl=en') &&
+  chatGeminiResearchPage.includes('https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt'),
+  "Fourth original AI Tools guide needs dated evidence, self-canonical, no fabricated ranking and blank user-run tests");
 assert(sitemap.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
   aiToolsGuidesIndex.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
   aiToolsGuidesIndex.includes('index: false') &&
