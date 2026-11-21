@@ -447,6 +447,9 @@ for (const sample of [
           await page.locator('input#contact-article-url').waitFor({ state: "visible", timeout: 15000 });
           await enquiryType.selectOption("General enquiry");
           await page.locator('input#contact-article-url').waitFor({ state: "detached", timeout: 15000 });
+          const hydrationWarnings = pageErrors.filter(error => error.includes("A tree hydrated but some attributes"));
+          assert.equal(hydrationWarnings.length, 0,
+            "Contact form must hydrate without React attribute mismatch warnings");
         }
         // Playwright defaults to hiding the caret for screenshots, which can
         // mutate inline input styles during React hydration in dev previews.
