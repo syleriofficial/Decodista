@@ -16,6 +16,7 @@ on:
       - 'components/site-footer.tsx'
       - 'scripts/check-production-deployment.mjs'
       - 'app/globals.css'
+      - 'app/editorial-redesign.css'
       - 'scripts/test-homepage-visual.mjs'
       - 'scripts/audit-mobile-performance.mjs'
       - 'components/article-card.tsx'
