@@ -147,7 +147,7 @@ export function AiToolsExplorer() {
         <div className="ai-tools-empty" role="status">
           <Search size={26} aria-hidden="true" />
           <h3>No matching tools in this starter directory</h3>
-          <p>Try a broader search or clear the category. We do not list tools we haven't described yet.</p>
+          <p>Try a broader search or clear the category. We do not list tools we haven&apos;t described yet.</p>
           <button type="button" onClick={() => { setSearch(""); setCategory("all"); }}>Show all tools</button>
         </div>
       )}
