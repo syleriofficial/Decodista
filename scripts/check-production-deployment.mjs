@@ -130,7 +130,7 @@ for (const guidePath of ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides
   check(guidePath + " self-canonical and indexable metadata",
     head.includes('rel="canonical"') &&
     head.includes(guidePath) &&
-    !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Original editorial guides are indexable with unique canonical metadata");
 }
 
@@ -163,7 +163,7 @@ if (icloudExperimentHtml) {
     "Description must distinguish syncing from conditional device backup inclusion");
   check("iCloud original guide remains indexable with self-canonical",
     head.includes('href="' + base + icloudExperimentPath + '"') &&
-    !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Metadata-only edit must preserve indexed URL and canonical");
 }
 
