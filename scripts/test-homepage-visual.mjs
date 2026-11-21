@@ -61,8 +61,8 @@ for (const sample of [
     assert.equal(await page.locator('h2#latest-title').innerText(), "Latest Stories", "Latest block name");
     const frontPageSections = await page.locator("main > section").evaluateAll((sections) => sections.map((section) => section.className));
     assert(frontPageSections[0].includes("hero"), "Homepage must lead with the existing editorial hero");
-    assert(frontPageSections[1].includes("latest-home") && frontPageSections[2].includes("reader-paths"),
-      "Latest stories and guided search must precede editorial topic sections");
+    assert(frontPageSections[1].includes("latest-home") && frontPageSections[2].includes("home-weekly-brief") && frontPageSections[3].includes("reader-paths"),
+      "Latest stories, the published weekly digest and guided search must precede editorial topic sections");
     assert.equal(await page.locator(".home-intro").count(), 1, "Homepage must have one editorial introduction");
     assert.equal(await page.locator(".edition-line").count(), 1, "Signal Edition masthead must appear once");
     assert.equal(await page.locator(".footer-manifesto").count(), 1, "Signal Edition footer colophon must appear once");
@@ -90,7 +90,11 @@ for (const sample of [
     const articleHrefs = await page.locator(".lead-story h1 a, .hero-rail h2 a, .latest-feed .article-card h3 a, .home-topic .article-card h3 a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
     assert.equal(new Set(articleHrefs).size, articleHrefs.length, "Homepage headline positions must not repeat article destinations");
-    assert.equal(await page.locator(".weekly-feature").count(), 0, "Weekly Brief should not dominate the homepage");
+    assert.equal(await page.locator("section.home-weekly-brief").count(), 1, "Published Weekly Brief must have one visible homepage feature");
+    assert.equal(await page.locator("#home-weekly-brief-title").innerText(), "Weekly Brief", "Homepage must label the recurring edition");
+    assert.equal(await page.locator('section.home-weekly-brief a[href="/weekly"]').count(), 1, "Weekly homepage feature must link to the archive");
+    assert.equal(await page.locator('section.home-weekly-brief a[href="/weekly/2026-11-16"]').count(), 1,
+      "Weekly homepage feature must link to the newest published issue");
     const leadSrc = await page.locator(".lead-image img").getAttribute("src");
     assert(leadSrc?.startsWith("/images/"), "Homepage hero must fetch the real WebP directly, not redirect through /_next/image");
     const firstFeedSrc = await page.locator(".latest-feed .card-image img").first().getAttribute("src");
@@ -215,7 +219,7 @@ for (const sample of [
       assert.equal(await page.locator(`footer a[href="/${destination}"]`).count(), 1, `Footer must retain ${destination}`);
       assert.equal(await page.locator(`header .nav-scroll > a[href="/${destination}"]`).count(), 0, `Secondary destination ${destination} must not be in the header`);
     }
-    assert.equal(await page.locator('footer a[href="/weekly"]').count(), 0, "Weekly Brief must not be promoted in the footer");
+    assert.equal(await page.locator('footer a[href="/weekly"]').count(), 1, "Weekly Brief must remain discoverable from the footer");
     assert((await page.locator('footer a[href="/review-methodology"]').count()) > 0, "Review Methodology remains discoverable from the footer");
 
     if (sample.width <= 1000) {
