@@ -23,6 +23,12 @@ for (const view of [
   const page = await context.newPage();
   const errors = [];
   const firstPartyFailures = [];
+  const turnstileResources = [];
+  page.on("requestfailed", (request) => {
+    if (request.url().includes("challenges.cloudflare.com/turnstile/")) {
+      turnstileResources.push({ kind: "failed-request", urlPath: new URL(request.url()).pathname, reason: request.failure()?.errorText });
+    }
+  });
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
     if (message.type() === "error") errors.push("console: " + message.text());
@@ -31,6 +37,9 @@ for (const view of [
     const url = new URL(response.url());
     if (url.origin === base && response.status() >= 400) {
       firstPartyFailures.push({ path: url.pathname + url.search, status: response.status() });
+    }
+    if (url.hostname === "challenges.cloudflare.com" && url.pathname.includes("/turnstile/")) {
+      turnstileResources.push({ kind: "response", urlPath: url.pathname, status: response.status() });
     }
   });
   const report = { ...view, url: base + "/contact" };
@@ -67,7 +76,16 @@ for (const view of [
     await page.locator('script[src*="challenges.cloudflare.com/turnstile/v0/api.js"]')
       .waitFor({ state: "attached", timeout: 18000 });
     report.turnstileScriptIncluded = true;
-    report.turnstileIframeRendered = await page.locator(".turnstile-wrap iframe").count() > 0;
+    // Headless browser challenges may use frames outside of the widget; inspect
+    // both DOM mounting and JS API readiness before drawing any conclusion.
+    await page.waitForTimeout(1200);
+    report.turnstileState = await page.evaluate(() => ({
+      apiReady: typeof window.turnstile?.render === "function",
+      widgetIframePresent: !!document.querySelector(".turnstile-wrap iframe"),
+      anyChallengeIframePresent: !!document.querySelector('iframe[src*="challenges.cloudflare.com"]'),
+      responseInputPresent: !!document.querySelector('input[name="cf-turnstile-response"]'),
+      widgetHasChildren: (document.querySelector(".cf-turnstile")?.children.length ?? 0) > 0,
+    }));
 
     const enquirySelect = page.locator("#contact-type");
     await enquirySelect.selectOption("Correction");
@@ -100,6 +118,7 @@ for (const view of [
     await page.screenshot({ path: output + "/" + view.name + "-failure.png" }).catch(() => {});
   } finally {
     report.firstPartyFailures = firstPartyFailures;
+    report.turnstileResources = turnstileResources;
     report.browserErrors = errors.slice(0, 12);
     if (view.name === "desktop" && report.status === "passed") {
       await page.screenshot({ path: output + "/desktop-contact.png" }).catch(() => {});
