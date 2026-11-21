@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "@/components/app-link";
 import { ArrowRight, BookOpen, GitCompareArrows } from "lucide-react";
 import { findAiTool } from "@/lib/ai-tools";
+import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 
 type Task = {
@@ -113,7 +114,11 @@ export function AiTaskFinder() {
             key={item.id}
             className={item.id === activeTask ? "ai-task-option is-active" : "ai-task-option"}
             aria-pressed={item.id === activeTask}
-            onClick={() => setActiveTask(item.id)}
+            onClick={() => {
+              if (item.id === activeTask) return;
+              setActiveTask(item.id);
+              trackAiToolsInteraction({ name: "ai_tools_task_select", task_id: item.id });
+            }}
           >
             {item.label}
           </button>
