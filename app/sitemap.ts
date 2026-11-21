@@ -3,6 +3,7 @@ import { articles, getArticlesByCategory, getArticlesByContentType, getArticlesB
 import { CATEGORY_DEFINITIONS, SITE_URL, TOPIC_HUBS } from "@/lib/site";
 import { weeklyBriefs } from "@/lib/weekly-briefs";
 import { AI_COMPARISON_GUIDES, AI_GUIDES_REVIEWED_ON } from "@/lib/ai-tools-comparison-guides";
+import { AI_TOOLS_RESEARCH_GUIDES } from "@/lib/ai-tools-research-guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const latestArticleDate = (items: typeof articles) => items.reduce(
@@ -64,12 +65,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: .7,
     })),
-    // Only the two original, source-led editorial guides are indexable.
-    // The starter directory, generic compare, pricing, alternatives and tool
-    // profiles intentionally remain noindex and outside the sitemap.
+    // Two original editorial guides, plus separately reviewed AI Tools-only
+    // research. No thin directory, generic comparison, pricing, alternatives,
+    // tool profiles or guides archive should appear in the sitemap.
     ...AI_COMPARISON_GUIDES.map((guide) => ({
       url: `${SITE_URL}/ai-tools/guides/${guide.slug}`,
       lastModified: AI_GUIDES_REVIEWED_ON,
+      changeFrequency: "monthly" as const,
+      priority: .7,
+    })),
+    ...AI_TOOLS_RESEARCH_GUIDES.map((guide) => ({
+      url: `${SITE_URL}/ai-tools/guides/${guide.slug}`,
+      lastModified: guide.reviewedOn,
       changeFrequency: "monthly" as const,
       priority: .7,
     })),
