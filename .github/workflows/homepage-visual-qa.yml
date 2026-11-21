@@ -9,6 +9,7 @@ on:
       - 'components/ai-tools-explorer.tsx'
       - 'lib/ai-tools.ts'
       - 'lib/ai-tools-evidence.ts'
+      - 'lib/ai-tools-comparison-guides.ts'
       - 'lib/ai-tools-pricing.ts'
       - 'components/ai-tools-evidence-status.tsx'
       - 'scripts/test-ai-tools-browser.mjs'
