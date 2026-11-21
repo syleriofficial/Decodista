@@ -650,3 +650,53 @@
   .ai-guide-hero-actions a { width:100%; }
   .ai-guide-context-banner a { white-space:normal; }
 }
+
+/* Reader-run comparison tests. Never site-generated product benchmarks. */
+.ai-guide-self-test { scroll-margin-top: 7.5rem; }
+.ai-guide-self-test > p { max-width:790px; }
+.ai-guide-test-steps { background:var(--edition-panel); border-left:3px solid var(--signal); padding:1rem 1.2rem; margin:1.25rem 0; }
+.ai-guide-test-steps ol { padding-left:1.4rem; display:grid; gap:.55rem; margin:.2rem 0; }
+.ai-guide-test-steps li { font-size:.86rem; line-height:1.7; }
+.ai-guide-test-rubric { padding:.95rem 1.1rem; border:1px solid var(--line); background:var(--surface); border-radius:var(--tools-radius); }
+.ai-guide-test-rubric strong { font-size:.88rem; }
+.ai-guide-test-rubric p { margin:.4rem 0 0; font-size:.82rem; color:var(--muted); line-height:1.75; }
+.ai-guide-test-cases { display:grid; gap:1.2rem; margin-top:1.4rem; }
+.ai-guide-test-case { min-width:0; border:1px solid var(--line); background:var(--surface); border-radius:var(--tools-radius); padding:clamp(1rem,2.5vw,1.5rem); }
+.ai-guide-test-case-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.ai-guide-test-case-head h3 { font-size:clamp(1.05rem,1.7vw,1.4rem); margin:.4rem 0; }
+.ai-guide-test-case-head p { font-size:.85rem; color:var(--muted); margin:.25rem 0; line-height:1.7; }
+.ai-guide-test-copy { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; min-height:38px; padding:.45rem .7rem; color:var(--signal); background:var(--edition-panel); border:1px solid var(--line); border-radius:5px; font-size:.8rem; font-weight:800; cursor:pointer; }
+.ai-guide-test-copy:hover { border-color:var(--signal); }
+.ai-guide-test-prompt { margin-top:1rem; border:1px solid var(--line); border-radius:5px; min-width:0; }
+.ai-guide-test-prompt summary { cursor:pointer; padding:.8rem .9rem; font-size:.84rem; font-weight:800; }
+.ai-guide-test-prompt[open] summary { border-bottom:1px solid var(--line); }
+.ai-guide-test-prompt pre { white-space:pre-wrap; overflow-wrap:anywhere; word-break:normal; padding:1rem; margin:0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.77rem; line-height:1.75; background:var(--edition-panel); max-height:440px; overflow-y:auto; }
+.ai-guide-test-checklist { margin:1.1rem 0; }
+.ai-guide-test-checklist strong { font-size:.85rem; }
+.ai-guide-test-checklist ul { padding-left:1.4rem; margin:.65rem 0 0; display:grid; gap:.3rem; }
+.ai-guide-test-checklist li { font-size:.81rem; line-height:1.6; color:var(--muted); }
+.ai-guide-test-rating { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; padding-top:1rem; border-top:1px solid var(--line); }
+.ai-guide-test-rating label { min-width:0; display:grid; gap:.5rem; font-size:.8rem; font-weight:800; }
+.ai-guide-test-rating select { min-width:0; max-width:100%; padding:.65rem .75rem; min-height:42px; background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:5px; font-size:.83rem; }
+.ai-guide-test-notes { display:grid; gap:.45rem; margin-top:.9rem; font-size:.79rem; font-weight:800; }
+.ai-guide-test-notes textarea { resize:vertical; width:100%; min-height:84px; padding:.75rem; background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:5px; font:inherit; font-weight:450; font-size:.85rem; line-height:1.65; }
+.ai-guide-test-notes textarea::placeholder { color:var(--muted); }
+.ai-guide-test-copy:focus-visible,.ai-guide-test-rating select:focus-visible,.ai-guide-test-notes textarea:focus-visible,.ai-guide-test-buttons button:focus-visible { outline:3px solid var(--signal); outline-offset:2px; }
+.ai-guide-test-actions { display:flex; justify-content:space-between; align-items:center; gap:1.1rem; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:1.2rem; padding-top:1.2rem; }
+.ai-guide-test-progress { display:flex; flex-direction:column; gap:.2rem; font-size:.87rem; }
+.ai-guide-test-progress strong { display:inline; font-size:1.13rem; }
+.ai-guide-test-progress span { font-size:.77rem; color:var(--muted); max-width:430px; line-height:1.5; }
+.ai-guide-test-buttons { display:flex; flex-wrap:wrap; align-items:center; gap:.55rem; }
+.ai-guide-test-buttons button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; min-height:42px; padding:.65rem .85rem; border-radius:5px; border:1px solid #2454e8; background:#2454e8; color:#fff; font-size:.81rem; font-weight:800; cursor:pointer; }
+.ai-guide-test-buttons button:hover:not(:disabled) { background:#183fc4; }
+.ai-guide-test-buttons button:disabled { opacity:.42; cursor:not-allowed; }
+.ai-guide-test-buttons .ai-guide-test-clear { color:var(--ink); background:var(--surface); border-color:var(--line); }
+.ai-guide-test-buttons .ai-guide-test-clear:hover:not(:disabled) { background:var(--edition-panel); }
+.ai-guide-self-test > p.ai-guide-test-privacy { margin:1.15rem 0 .5rem; font-size:.8rem; color:var(--muted); line-height:1.75; }
+.ai-guide-test-copy-status { font-size:.77rem; color:var(--signal); min-height:1.2rem; }
+@media (max-width:650px) {
+  .ai-guide-test-rating { grid-template-columns:1fr; }
+  .ai-guide-test-buttons { width:100%; }
+  .ai-guide-test-buttons button:first-child { flex:1; }
+  .ai-guide-test-prompt pre { font-size:.72rem; }
+}
