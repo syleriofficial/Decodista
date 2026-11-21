@@ -80,6 +80,11 @@ export default function AIToolsPage() {
           <strong>Alternatives</strong>
           <span>Other tools for related workflows, without rankings <ArrowRight size={16} aria-hidden="true" /></span>
         </Link>
+        <Link href="/ai-tools/guides" className="ai-tools-decision-link">
+          <span className="ai-tools-eyebrow">Go deeper</span>
+          <strong>Comparison Guides</strong>
+          <span>Source-backed analysis, real-world scenarios and questions to test <ArrowRight size={16} aria-hidden="true" /></span>
+        </Link>
       </nav>
 
       <AiToolsExplorer />
