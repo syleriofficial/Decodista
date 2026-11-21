@@ -135,6 +135,8 @@ const aiToolsDiscovery = read("components/ai-comparison-discovery.tsx");
 const categoryPage = read("app/[section]/page.tsx");
 const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
+const aiToolsResearchData = read("lib/ai-tools-research-guides.ts");
+const aiToolsResearchPage = read("app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx");
 const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
 const aiToolsEvaluationData = read("lib/ai-tools-evaluation.ts");
 const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
@@ -254,6 +256,18 @@ assert(sitemap.includes('AI_COMPARISON_GUIDES.map(') &&
   aiToolsPage.includes('href="/ai-tools/guides"') &&
   aiToolsCompare.includes('findGuideForTools(first.slug, second.slug)'),
   "Original guides must be present in sitemap and reachable from directory and exact pair comparisons");
+assert(aiToolsResearchData.includes('slug: "perplexity-vs-gemini-notebook"') &&
+  aiToolsResearchData.includes('reviewedOn: "2026-11-22"') &&
+  aiToolsResearchPage.includes('robots: { index: true, follow: true }') &&
+  aiToolsResearchPage.includes('canonical: PAGE_URL') &&
+  aiToolsResearchPage.includes('AiComparisonEvaluation') &&
+  aiToolsResearchPage.includes('create a separate pasted-text source'),
+  "Perplexity vs Gemini Notebook must be individually source-reviewed, canonical and independently testable");
+assert(sitemap.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
+  aiToolsGuidesIndex.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
+  aiToolsGuidesIndex.includes('index: false') &&
+  !aiToolsDiscovery.includes('AI_TOOLS_RESEARCH_GUIDES'),
+  "Only individually reviewed AI Tools guide should be indexed and discoverable within AI Tools without appearing in global news");
 assert(aiToolsFreshnessAudit.includes('AI_GUIDES_REVIEWED_ON'),
   "Weekly manual-source review must include editorial guides' review date");
 assert(aiToolsCss.includes('.ai-guide-layout') &&
