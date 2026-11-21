@@ -207,24 +207,23 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
   (topic) => topic.showInNavigation,
 );
 
-// Six editorial pillars share one source of truth across desktop and mobile.
+// Three focused editorial destinations share one source of truth across desktop and mobile.
 // Empty editorial sections remain noindex and excluded from the sitemap until
 // original reporting is published. Do not invent placeholder content.
 export const NAV_ITEMS = [
   { href: "/tech-news", label: "Tech News" },
-  { href: "/ai", label: "AI" },
   { href: "/reviews", label: "Reviews" },
-  { href: "/how-to", label: "How-To" },
-  { href: "/security", label: "Security" },
   { href: "/science", label: "Science" },
 ] as const;
 
-// Keep useful secondary destinations accessible without restoring More.
-// Previously published Entertainment content and URLs stay intact.
+// Keep real published destinations accessible in the footer without restoring More.
+// Weekly Brief and Entertainment archives keep their URLs but are not promoted.
 export const FOOTER_SECONDARY_ITEMS = [
-  { href: "/latest", label: "Latest" },
+  { href: "/ai", label: "AI" },
+  { href: "/how-to", label: "How-To" },
+  { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
-  { href: "/weekly", label: "Weekly Brief" },
+  { href: "/latest", label: "Latest" },
 ] as const;
 
 export const TRUST_LINKS = [

@@ -34,7 +34,7 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
-const primaryNavigation = ["/tech-news", "/ai", "/reviews", "/how-to", "/security", "/science"];
+const primaryNavigation = ["/tech-news", "/reviews", "/science"];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -53,12 +53,12 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " six-pillar primary nav order",
+  check(path + " focused three-link primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must be Tech News, AI, Reviews, How-To, Security, Science");
+    "Primary navigation must be Tech News, Reviews, Science");
   check(path + " secondary sections excluded from primary navigation",
-    !links.includes("/latest") && !links.includes("/digital-life") && !links.includes("/weekly") && !links.includes("/entertainment"),
-    "Latest, Digital Life and Weekly Brief belong outside the main header; Entertainment is retired");
+    !["/ai", "/how-to", "/security", "/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
+    "AI, How-To, Security, Digital Life and Latest belong in the footer; Weekly Brief and Entertainment are not promoted");
   check(path + " removed More menu stays removed",
     !nav.includes("more-menu") && !nav.includes("more-panel"),
     "The removed More dropdown must not be rendered");
@@ -67,11 +67,11 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
     "Navigation should not duplicate links");
   const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/)?.[0] ?? "";
   check(path + " secondary archive links in footer",
-    ["/latest", "/digital-life", "/weekly"].every((dest) => footer.includes('href="' + dest + '"')),
-    "Secondary and weekly archives must remain discoverable from the footer");
-  check(path + " Entertainment not promoted in footer",
-    !footer.includes('href="/entertainment"'),
-    "Retired Entertainment stays reachable at its existing URL but is not promoted");
+    ["/ai", "/how-to", "/security", "/digital-life", "/latest"].every((dest) => footer.includes('href="' + dest + '"')),
+    "All published secondary sections must remain discoverable from the footer");
+  check(path + " retired sections not promoted in footer",
+    !footer.includes('href="/entertainment"') && !footer.includes('href="/weekly"'),
+    "Entertainment and Weekly Brief retain their existing archive URLs but are not promoted");
 
   // For vinext async generateMetadata, tags in a hidden body outlet can pass
   // simple string checks while failing search/social crawlers and Lighthouse.
