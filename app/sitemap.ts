@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { articles, getArticlesByCategory, getArticlesByContentType, getArticlesByTopic } from "@/lib/content";
 import { CATEGORY_DEFINITIONS, SITE_URL, TOPIC_HUBS } from "@/lib/site";
 import { weeklyBriefs } from "@/lib/weekly-briefs";
+import { AI_COMPARISON_GUIDES, AI_GUIDES_REVIEWED_ON } from "@/lib/ai-tools-comparison-guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const latestArticleDate = (items: typeof articles) => items.reduce(
@@ -61,6 +62,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/topics/${slug}`,
       lastModified: latestArticleDate(getArticlesByTopic(slug)),
       changeFrequency: "weekly" as const,
+      priority: .7,
+    })),
+    // Only the two original, source-led editorial guides are indexable.
+    // The starter directory, generic compare, pricing, alternatives and tool
+    // profiles intentionally remain noindex and outside the sitemap.
+    ...AI_COMPARISON_GUIDES.map((guide) => ({
+      url: `${SITE_URL}/ai-tools/guides/${guide.slug}`,
+      lastModified: AI_GUIDES_REVIEWED_ON,
+      changeFrequency: "monthly" as const,
       priority: .7,
     })),
     ...weeklyBriefs.map((issue) => ({

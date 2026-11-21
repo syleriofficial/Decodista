@@ -35,7 +35,7 @@ const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
-const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude"];
+const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -93,6 +93,22 @@ check("AI Tools pricing includes official-source confirmation",
 check("AI Tools alternatives keeps category matching",
   alternativesHtml.includes("Claude") && alternativesHtml.includes("ChatGPT") && alternativesHtml.includes("Gemini"),
   "Claude should surface other assistant listings without invented rankings");
+
+for (const guidePath of ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"]) {
+  const body = snapshots[guidePath]?.body ?? "";
+  const head = body.split("</head>", 1)[0];
+  check(guidePath + " original guide has source links and decision sections",
+    body.includes("ai-guide-scenarios") &&
+    body.includes("ai-guide-sources") &&
+    body.includes("21 November 2026") &&
+    body.includes('href="https://'),
+    "Researched comparisons should render scenarios, research date and provider references");
+  check(guidePath + " self-canonical and indexable metadata",
+    head.includes('rel="canonical"') &&
+    head.includes(guidePath) &&
+    !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
+    "Original editorial guides are indexable with unique canonical metadata");
+}
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";
