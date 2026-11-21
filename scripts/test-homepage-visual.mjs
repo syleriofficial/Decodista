@@ -442,10 +442,14 @@ for (const sample of [
         if (name === "contact") {
           // Confirm the React form actually hydrates and handles a controlled
           // field change, not just that server-rendered markup is visible.
-          // DOMContentLoaded is not enough for a client component with next/script.
-          // Wait for hydration and pending third-party loads to settle before
-          // judging whether the React-controlled selector responds.
-          await page.waitForLoadState("networkidle", { timeout: 30000 });
+          // DOMContentLoaded is not enough for the React-controlled form.
+          // Turnstile may poll forever on localhost, so never use networkidle.
+          // The pinned React 19 DOM renderer attaches __reactProps$ to hydrated
+          // controls; wait for those listeners before exercising onChange.
+          await page.waitForFunction(() => {
+            const select = document.querySelector("select#contact-type");
+            return Boolean(select && Object.keys(select).some(key => key.startsWith("__reactProps$")));
+          }, null, { timeout: 25000 });
           const enquiryType = page.locator('select#contact-type');
           await enquiryType.selectOption("Correction");
           await page.locator('input#contact-article-url').waitFor({ state: "visible", timeout: 15000 });
