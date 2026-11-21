@@ -32,12 +32,13 @@ function check(name, condition, details) {
   checks.push({ name, status: condition ? "passed" : "failed", details });
 }
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
+const chromeExperimentPath = "/articles/chrome-enhanced-protection-vs-standard-protection";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/science"];
 const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -147,6 +148,22 @@ for (const section of [...editorialSections, "/entertainment"]) {
   check(section + " empty page has noindex",
     /<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
     "Empty editorial sections should not be search-indexable");
+}
+
+const chromeExperimentHtml = snapshots[chromeExperimentPath]?.body ?? "";
+if (chromeExperimentHtml) {
+  const head = chromeExperimentHtml.split("</head>", 1)[0];
+  check("Chrome choice-intent title renders in head",
+    /<title>[^<]*Chrome Enhanced vs Standard Protection: Which Is Better\?/.test(head),
+    "SEO experiment title must match search intent without misleading security guarantees");
+  check("Chrome decision snippet renders in head",
+    /<meta\b[^>]*name="description"[^>]*content="Is Chrome Enhanced Protection better than Standard\?/.test(head),
+    "Meta description should summarize the real protection/privacy trade-off");
+  check("Chrome content remains accessible and self-canonical",
+    head.includes('<link rel="canonical" href="' + base + chromeExperimentPath + '"') &&
+    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head) &&
+    chromeExperimentHtml.includes("Standard vs Enhanced Protection at a glance"),
+    "Original, reviewed content must retain its canonical, indexability and decision table");
 }
 
 const articleHtml = snapshots[articlePath]?.body ?? "";
