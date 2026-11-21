@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
+import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
+import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME } from "@/lib/site";
@@ -36,6 +38,7 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
     : AI_TOOLS.find((tool) => tool.slug !== first.slug && tool.category === first.category)
       ?? AI_TOOLS.find((tool) => tool.slug !== first.slug)!;
 
+  const officialSources = [first, second].map((tool) => ({ tool, evidence: getAiToolEvidence(tool.slug) }));
   const rows = [
     { title: "Made by", a: first.provider, b: second.provider },
     { title: "Primary category", a: getCategoryLabel(first.category), b: getCategoryLabel(second.category) },
@@ -107,6 +110,31 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
             </tbody>
           </table>
         </div>
+        <section className="ai-tools-compare-evidence" aria-labelledby="ai-tools-compare-evidence-heading">
+          <span className="ai-tools-eyebrow">Source trail</span>
+          <h2 id="ai-tools-compare-evidence-heading">Verify the details for each tool</h2>
+          <p>Comparisons here are descriptive, not tests. Where a source has been reviewed, the record below explains what is documented and when it was checked.</p>
+          <div className="ai-tools-compare-evidence-grid">
+            {officialSources.map(({ tool, evidence }) => (
+              <div className="ai-tools-compare-evidence-card" key={tool.slug}>
+                <h3>{tool.name}</h3>
+                {evidence ? (
+                  <>
+                    <AiEvidenceStatus checkedOn={evidence.checkedOn} />
+                    <ul>{evidence.findings.slice(0, 2).map((finding) => <li key={finding}>{finding}</li>)}</ul>
+                    <a href={evidence.sourceUrl} target="_blank" rel="noopener noreferrer">{evidence.sourceLabel} <ArrowUpRight size={16} aria-hidden="true" /></a>
+                  </>
+                ) : (
+                  <>
+                    <p>A dated feature audit is not available for this tool yet. Consult the provider directly.</p>
+                    <a href={tool.officialUrl} target="_blank" rel="noopener noreferrer">Official website <ArrowUpRight size={16} aria-hidden="true" /></a>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="ai-tools-compare-notice">
           <strong>How to use this comparison</strong>
           <p>Decide which features you actually need. Then confirm plan limits, data handling, export options and current prices on both official websites. This page does not imply first-hand testing, a paid recommendation or real-time pricing data.</p>
