@@ -110,8 +110,8 @@ const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
   [...footerSecondary.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life", "Latest"],
-  "Footer must keep useful existing sections reachable without restoring More or Weekly Brief",
+  ["AI", "How-To", "Security", "Digital Life", "Latest", "Weekly Brief"],
+  "Footer must include published secondary sections and Weekly Brief without restoring More",
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
@@ -150,7 +150,7 @@ assert(articles.some((article) => article.contentType === "how-to"), "Primary Ho
 for (const category of ["tech-news", "reviews", "science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
-for (const destination of ["ai", "how-to", "security", "digital-life", "latest"]) {
+for (const destination of ["ai", "how-to", "security", "digital-life", "latest", "weekly"]) {
   assert(footerSecondary.includes(`href: "/${destination}"`), `Footer secondary navigation is missing ${destination}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
@@ -159,7 +159,8 @@ assert.equal(new Set([...primaryHrefs, ...footerHrefs]).size, primaryHrefs.lengt
   "Primary and footer secondary navigation must not duplicate destinations");
 assert(!navigation.includes('href: "/entertainment"') && !navigation.includes('href: "/latest"') && !navigation.includes('href: "/weekly"') && !site.includes("MORE_NAV_ITEMS"),
   "Retired Entertainment and More navigation must not return");
-assert(!footerSecondary.includes('href: "/weekly"'), "Weekly Brief must not be promoted in the footer");
+assert(footerSecondary.includes('href: "/weekly", label: "Weekly Brief"'),
+  "Published Weekly Brief must have a visible footer archive link");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
 assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
@@ -218,7 +219,9 @@ assert(articlePage.indexOf('className="article-discovery"') > articlePage.indexO
 assert(articlePage.includes('className="article-discovery"') && articlePage.includes("topicHubs.slice(0, 2)"),
   "Article readers must find contextual guides and populated topic hubs before finishing the story");
 assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimplemented subscription feature");
-assert(!homepage.includes('className="weekly-feature'), "Weekly Brief must not dominate the homepage");
+assert(homepage.includes('className="home-weekly-brief wrap"') && homepage.includes("weeklyBriefs[0]") &&
+  homepage.includes('href="/weekly"') && homepage.includes('href={`/weekly/${currentWeeklyBrief.slug}`}' ),
+  "Homepage must link both the latest real Weekly Brief edition and the complete archive");
 assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");
 assert(weeklyIssue.includes("getWeeklyBrief(slug)") && weeklyIssue.includes("notFound()"), "Weekly issue route must reject unknown slugs");
 assert(weeklyIssue.includes("Primary source:") && weeklyIssue.includes("rel=\"noopener noreferrer\""), "Weekly issue must attribute and safely link to primary sources");
@@ -226,8 +229,8 @@ assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosti
 assert(sitemap.includes('route: "/weekly"') && sitemap.includes('url: `${SITE_URL}/weekly/${issue.slug}`'), "Weekly archive and issues must appear in the sitemap");
 assert(!/<form|subscribe now|newsletter signup/i.test(weeklyArchive), "Do not publish an unimplemented weekly email signup");
 assert(layout.includes('"application/rss+xml": `${SITE_URL}/rss.xml`'), "RSS must be discoverable through document metadata");
-assert(!navigation.includes('href: "/weekly"') && !footerSecondary.includes('href: "/weekly"'),
-  "Weekly Brief must not appear in visible header or footer navigation, while existing archives remain intact");
+assert(!navigation.includes('href: "/weekly"') && footerSecondary.includes('href: "/weekly"'),
+  "Weekly Brief stays out of primary navigation but remains discoverable in the footer");
 assert(site.includes('href: "/review-methodology", label: "Review Methodology"'), "Review methodology must be discoverable");
 assert(sitemap.includes('"/review-methodology"'), "Review methodology must appear in sitemap");
 assert(!homepage.includes('title="Reviews"'), "Do not promote the empty Reviews pillar in homepage sections");

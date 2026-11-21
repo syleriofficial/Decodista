@@ -157,6 +157,42 @@ body { background: var(--paper); }
 .home-topic-grid--single .article-card--horizontal .card-image { aspect-ratio: 16 / 10; }
 .meta-row { flex-wrap: wrap; }
 
+/* Published weekly editorial digest stays visible, without adding a fourth nav tab. */
+.home-weekly-brief {
+  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr);
+  align-items: center; gap: clamp(1.1rem, 3vw, 3.25rem);
+  padding: clamp(1.4rem, 2.5vw, 2.6rem);
+  margin-bottom: clamp(2.8rem, 4vw, 4.2rem);
+  background: var(--surface); border-top: 3px solid var(--signal);
+}
+.home-weekly-brief h2 {
+  margin: .55rem 0 .4rem; font: 600 clamp(1.9rem, 3vw, 3rem)/1.1 var(--font-editorial);
+  color: var(--ink); letter-spacing: -.035em;
+}
+.home-weekly-brief-heading p { margin: .6rem 0 0; color: var(--muted); line-height: 1.55; }
+.home-weekly-brief-latest {
+  min-width: 0; padding-left: clamp(1rem, 2vw, 2rem); border-left: 1px solid var(--line);
+}
+.home-weekly-brief-latest time {
+  color: var(--muted); font-size: .78rem; font-weight: 650; letter-spacing: .05em;
+}
+.home-weekly-brief-latest h3 {
+  margin: .5rem 0 .85rem; font-size: clamp(1.18rem, 1.7vw, 1.7rem); line-height: 1.2;
+  overflow-wrap: break-word; text-wrap: pretty;
+}
+.home-weekly-brief-latest h3 a:hover, .home-weekly-brief-latest h3 a:focus-visible {
+  color: var(--signal); text-decoration: underline; text-underline-offset: .16em;
+}
+.home-weekly-brief-all {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 44px;
+  color: var(--signal); font-size: .87rem; font-weight: 750;
+}
+.home-weekly-brief-all svg { width: 1rem; height: 1rem; }
+@media (max-width: 600px) {
+  .home-weekly-brief { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .home-weekly-brief-latest { border-left: 0; border-top: 1px solid var(--line); padding: 1rem 0 0; }
+}
+
 /* 5. Make practical discovery look like a distinct guide panel */
 .reader-paths {
   padding: clamp(1.65rem, 3.2vw, 3.25rem);

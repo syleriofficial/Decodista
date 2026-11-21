@@ -65,8 +65,11 @@ for (const view of [
     for (const href of ["/ai", "/how-to", "/security", "/digital-life", "/latest"]) {
       assert(footerHrefs.includes(href), "Live footer should link to " + href);
     }
-    assert(!footerHrefs.includes("/weekly") && !footerHrefs.includes("/entertainment"),
-      "Unpromoted sections must stay out of the live footer");
+    // Live checks can run before or after the Weekly Brief footer rollout.
+    // Report its visibility without failing a pre-deployment production check.
+    report.weeklyBriefFooterVisible = footerHrefs.includes("/weekly");
+    assert(!footerHrefs.includes("/entertainment"),
+      "Paused Entertainment must stay out of the live footer");
 
     for (const field of ["#contact-name", "#contact-email", "#contact-type", "#contact-subject", "#contact-message"]) {
       assert.equal(await page.locator(field).count(), 1, "Missing Contact field " + field);
