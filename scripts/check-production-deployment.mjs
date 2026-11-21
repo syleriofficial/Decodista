@@ -34,7 +34,7 @@ function check(name, condition, details) {
 const articlePath = "/articles/gmail-not-receiving-emails-google-storage-full";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
-const primaryNavigation = ["/tech-news", "/reviews", "/science"];
+const primaryNavigation = ["/tech-news","/ai","/ai-tools","/reviews","/how-to","/security","/science"];
 const weeklyIssuePath = "/weekly/2026-11-16";
 const requiredPaths = ["/", ...currentSections, ...editorialSections, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
@@ -53,12 +53,12 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " focused three-link primary nav order",
+  check(path + " seven-section primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must be Tech News, Reviews, Science");
+    "Primary navigation must match all seven approved sections");
   check(path + " secondary sections excluded from primary navigation",
-    !["/ai", "/how-to", "/security", "/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
-    "AI, How-To, Security, Digital Life, Latest and Weekly Brief belong in the footer; Entertainment is not promoted");
+    !["/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
+    "Digital Life, Latest and Weekly Brief are secondary; Entertainment is not promoted");
   check(path + " removed More menu stays removed",
     !nav.includes("more-menu") && !nav.includes("more-panel"),
     "The removed More dropdown must not be rendered");

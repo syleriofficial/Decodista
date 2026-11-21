@@ -102,16 +102,19 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "Reviews", "Science"],
+  ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science"],
   "Primary navigation must follow the selected editorial menu order",
 );
 
+const aiToolsPage = read("app/ai-tools/page.tsx");
+assert(aiToolsPage.includes('title: "AI Tools"') && aiToolsPage.includes('index: false'),
+  "AI Tools landing page must exist and remain noindex until the comparison directory is published");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
   [...footerSecondary.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["AI", "How-To", "Security", "Digital Life", "Latest", "Weekly Brief"],
-  "Footer must include published secondary sections and Weekly Brief without restoring More",
+  ["Digital Life", "Latest", "Weekly Brief"],
+  "Footer must retain secondary archives and Weekly Brief without restoring More",
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
@@ -147,10 +150,10 @@ assert(howToPage.includes('import { ResponsiveImage } from "@/components/respons
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
 assert(articles.some((article) => article.contentType === "how-to"), "Primary How-To archive must have real guides");
-for (const category of ["tech-news", "reviews", "science"]) {
+for (const category of ["tech-news","ai","ai-tools","reviews","how-to","security","science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
-for (const destination of ["ai", "how-to", "security", "digital-life", "latest", "weekly"]) {
+for (const destination of ["digital-life", "latest", "weekly"]) {
   assert(footerSecondary.includes(`href: "/${destination}"`), `Footer secondary navigation is missing ${destination}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);

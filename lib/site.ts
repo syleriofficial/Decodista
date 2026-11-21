@@ -207,21 +207,21 @@ export const NAV_TOPIC_HUBS = TOPIC_HUBS.filter(
   (topic) => topic.showInNavigation,
 );
 
-// Three focused editorial destinations share one source of truth across desktop and mobile.
-// Empty editorial sections remain noindex and excluded from the sitemap until
-// original reporting is published. Do not invent placeholder content.
+// Shared desktop and mobile navigation. AI (editorial coverage) remains separate
+// from AI Tools (tool discovery and comparisons). Unpopulated archives remain noindex.
 export const NAV_ITEMS = [
   { href: "/tech-news", label: "Tech News" },
+  { href: "/ai", label: "AI" },
+  { href: "/ai-tools", label: "AI Tools" },
   { href: "/reviews", label: "Reviews" },
+  { href: "/how-to", label: "How-To" },
+  { href: "/security", label: "Security" },
   { href: "/science", label: "Science" },
 ] as const;
 
-// Keep published destinations accessible in the footer without restoring More.
-// Weekly Brief is a published recurring edition; Entertainment stays unpromoted.
+// Secondary destinations stay in the footer; no More menu. Weekly Brief stays
+// discoverable here while Entertainment remains unpromoted.
 export const FOOTER_SECONDARY_ITEMS = [
-  { href: "/ai", label: "AI" },
-  { href: "/how-to", label: "How-To" },
-  { href: "/security", label: "Security" },
   { href: "/digital-life", label: "Digital Life" },
   { href: "/latest", label: "Latest" },
   { href: "/weekly", label: "Weekly Brief" },
