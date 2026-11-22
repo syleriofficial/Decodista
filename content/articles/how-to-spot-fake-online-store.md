@@ -184,7 +184,7 @@ A missing review or an unusually low price alone may not prove fraud. But if cri
 
 The UK's Report Fraud service replaced Action Fraud on December 4, 2025, in England, Wales and Northern Ireland. These reporting services do not guarantee repayment. In a payment emergency, contact your financial institution first.
 
-## Frequently asked questions
+## FAQ
 
 ### Are stores in Google ads automatically legitimate?
 
