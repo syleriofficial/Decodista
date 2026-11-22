@@ -29,6 +29,11 @@ for (const sample of [
     const response = await page.goto(base + path, { waitUntil: "domcontentloaded", timeout: 60000 });
     assert.equal(response?.status(), 200, "Article must return HTTP 200");
     await page.locator("article h1").waitFor({ state: "visible", timeout: 25000 });
+    const declineAnalytics = page.getByRole("button", { name: "Decline analytics" });
+    if (await declineAnalytics.isVisible()) {
+      await declineAnalytics.click();
+      await declineAnalytics.waitFor({ state: "hidden", timeout: 10000 });
+    }
     assert.equal(await page.locator("article h1").innerText(), title);
     assert.equal(await page.locator("article h1").count(), 1);
     assert((await page.locator("article header").innerText()).includes("Digital Life"), "Category visible");
