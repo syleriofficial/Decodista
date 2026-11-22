@@ -49,7 +49,7 @@ try {
       // Wait for it to settle before testing React-controlled filter changes.
       await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
       const navLabels = (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map((label) => label.trim());
-      assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"]);
+      assert.deepEqual(navLabels, ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science", "Latest"]);
 
       // Task-first discovery complements filters without fake scores or rankings.
       const taskFinder = page.locator(".ai-task-finder");
