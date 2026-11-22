@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
+import AiPdfEvidenceVisual from "@/components/ai-pdf-evidence-visual";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Download, FileDiff, ShieldCheck } from "lucide-react";
 import { COMPARE_TWO_PDFS_WORKFLOW } from "@/lib/ai-tools-workflows";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -221,6 +222,8 @@ export default function CompareTwoPdfsWorkflowPage() {
             <p><strong>Quick answer:</strong> AI can draft a difference table for two PDF documents, but it cannot replace checking what each original actually says. Upload two clearly labeled versions, ask for a field-by-field comparison with exact quotations, then independently verify every consequential change. This works best when the documents are readable, you know which revision applies and your prompt distinguishes changes from missing facts.</p>
             <p>For this walkthrough we wrote two short <strong>fictional library notices</strong> whose differences can be checked by hand. We publish the two texts and the expected changes so you can try the same task in ChatGPT, Claude or Gemini Notebook without uploading a real client&apos;s files. These are editorially calculated reference answers, <strong>not results measured from any AI system</strong>.</p>
           </section>
+
+          <AiPdfEvidenceVisual />
 
           <section id="download-samples" className="ai-guide-section" aria-labelledby="pdf-samples-title">
             <span className="ai-tools-eyebrow">01 / Reproducible examples</span>
