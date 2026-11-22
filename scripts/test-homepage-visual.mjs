@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
 const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://localhost:5173";
 const previewOrigin = new URL(base).origin;
+const weeklySource = await readFile("lib/weekly-briefs.ts", "utf8");
+const newestWeeklySlug = weeklySource.match(/slug:\\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})"/)?.[1];
+assert(newestWeeklySlug, "Weekly brief source must contain a dated issue");
 const expectedNotFoundPaths = new Set(["/latest?page=1.5", "/security?page=abc"]);
 const out = "artifacts/homepage-qa";
 await mkdir(out, { recursive: true });
@@ -106,7 +109,7 @@ for (const sample of [
     assert.equal(await page.locator("section.home-weekly-brief").count(), 1, "Published Weekly Brief must have one visible homepage feature");
     assert.equal(await page.locator("#home-weekly-brief-title").innerText(), "Weekly Brief", "Homepage must label the recurring edition");
     assert.equal(await page.locator('section.home-weekly-brief a[href="/weekly"]').count(), 1, "Weekly homepage feature must link to the archive");
-    assert.equal(await page.locator('section.home-weekly-brief a[href="/weekly/2026-11-16"]').count(), 1,
+    assert.equal(await page.locator(`section.home-weekly-brief a[href="/weekly/${newestWeeklySlug}"]`).count(), 1,
       "Weekly homepage feature must link to the newest published issue");
     const leadSrc = await page.locator(".lead-image img").getAttribute("src");
     assert(leadSrc?.startsWith("/images/"), "Homepage hero must fetch the real WebP directly, not redirect through /_next/image");
