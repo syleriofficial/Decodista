@@ -36,7 +36,7 @@ const chromeExperimentPath = "/articles/chrome-enhanced-protection-vs-standard-p
 const icloudExperimentPath = "/articles/does-icloud-backup-include-photos";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
-const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/security", "/science"];
+const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/security", "/science", "/latest"];
 const aiToolsResearchGuidePath = "/ai-tools/guides/perplexity-vs-gemini-notebook";
 const chatGeminiResearchGuidePath = "/ai-tools/guides/chatgpt-vs-gemini-for-research";
 const pdfWorkflowPath = "/ai-tools/workflows/compare-two-pdfs-with-ai";
@@ -63,11 +63,11 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
   // Limit the check to the header's nav: the footer may contain repeated links.
   const nav = html.match(/<nav\b[^>]*id="site-navigation"[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? "";
   const links = [...nav.matchAll(/<a\b[^>]*href="(\/[^"]+)"/g)].map((match) => match[1]);
-  check(path + " seven-section primary nav order",
+  check(path + " eight-section primary nav order",
     JSON.stringify(links) === JSON.stringify(primaryNavigation),
-    "Primary navigation must match all seven approved sections");
+    "Primary navigation must match all eight approved sections");
   check(path + " secondary sections excluded from primary navigation",
-    !["/digital-life", "/latest", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
+    !["/digital-life", "/weekly", "/entertainment"].some((dest) => links.includes(dest)),
     "Digital Life, Latest and Weekly Brief are secondary; Entertainment is not promoted");
   check(path + " removed More menu stays removed",
     !nav.includes("more-menu") && !nav.includes("more-panel"),
