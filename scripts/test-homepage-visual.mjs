@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 const base = process.env.HOMEPAGE_PREVIEW_URL ?? "http://localhost:5173";
 const previewOrigin = new URL(base).origin;
 const weeklySource = await readFile("lib/weekly-briefs.ts", "utf8");
-const newestWeeklySlug = weeklySource.match(/slug:\\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})"/)?.[1];
+const newestWeeklySlug = weeklySource.match(/slug:\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})"/)?.[1];
 assert(newestWeeklySlug, "Weekly brief source must contain a dated issue");
 const expectedNotFoundPaths = new Set(["/latest?page=1.5", "/security?page=abc"]);
 const out = "artifacts/homepage-qa";
