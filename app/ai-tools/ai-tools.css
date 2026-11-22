@@ -761,3 +761,23 @@
 .ai-task-compare-link:hover { background:var(--signal-soft); }
 @media(max-width:720px) { .ai-task-matches { grid-template-columns:1fr; } }
 @media(max-width:380px) { .ai-task-options { display:grid; grid-template-columns:1fr 1fr; } .ai-task-option { min-width:0; text-align:left; padding:.6rem; font-size:.75rem; } }
+
+
+/* AI Tools-only document-comparison workflow: purposeful reading, not a catalog clone. */
+.ai-pdf-sample-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:1rem; margin:1.3rem 0; }
+.ai-pdf-sample-card { display:flex; flex-direction:column; align-items:flex-start; gap:.7rem; min-width:0; padding:1.2rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--tools-radius); }
+.ai-pdf-sample-card:hover,.ai-pdf-sample-card:focus-visible { border-color:var(--signal); }
+.ai-pdf-sample-card strong { display:block; line-height:1.35; font-size:1.05rem; }
+.ai-pdf-sample-action { display:inline-flex; align-items:center; gap:.45rem; margin-top:auto; font-size:.82rem; color:var(--signal); font-weight:800; }
+.ai-pdf-prompt { margin:1rem 0; background:var(--edition-panel); border:1px solid var(--line); border-radius:var(--tools-radius); min-width:0; }
+.ai-pdf-prompt pre { margin:0; padding:clamp(.9rem,2vw,1.4rem); white-space:pre-wrap; overflow-wrap:anywhere; overflow-x:auto; max-width:100%; font-size:.81rem; line-height:1.85; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+.ai-pdf-reference-table { min-width:920px; }
+.ai-pdf-checklist { display:grid; gap:0; margin:1.2rem 0; padding:0; list-style:none; }
+.ai-pdf-checklist li { display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 0; border-bottom:1px solid var(--line); font-size:.92rem; line-height:1.75; }
+.ai-pdf-checklist svg { flex:none; margin-top:.17rem; color:var(--signal); }
+.ai-pdf-home-feature { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; padding:1.35rem 1.6rem; margin-top:1.5rem; margin-bottom:1.5rem; background:var(--edition-panel); border-left:3px solid var(--signal); }
+.ai-pdf-home-feature > div { min-width:0; flex:1 1 300px; }
+.ai-pdf-home-feature h2 { font-size:clamp(1.2rem,1.8vw,1.55rem); margin:.35rem 0; }
+.ai-pdf-home-feature p { font-size:.86rem; color:var(--muted); line-height:1.75; margin:.45rem 0 0; max-width:690px; }
+.ai-pdf-home-feature > a { display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.7rem .9rem; background:var(--surface); border:1px solid var(--line); color:var(--signal); font-size:.82rem; font-weight:850; }
+.ai-pdf-home-feature > a:hover { border-color:var(--signal); }
