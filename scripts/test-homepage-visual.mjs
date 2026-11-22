@@ -66,19 +66,8 @@ for (const sample of [
     assert(frontPageSections[0].includes("hero"), "Homepage must lead with the existing editorial hero");
     assert(frontPageSections[1].includes("latest-home") && frontPageSections[2].includes("home-weekly-brief") && frontPageSections[3].includes("reader-paths"),
       "Latest stories, the published weekly digest and guided search must precede editorial topic sections");
-    const researchCards = page.locator("section.editorial-ai-guides--home .editorial-ai-guide");
-    assert.equal(await researchCards.count(), 2, "Homepage AI coverage should surface both original comparison guides");
-    for (const slug of ["chatgpt-vs-claude", "cursor-vs-github-copilot"]) {
-      assert.equal(await page.locator('section.editorial-ai-guides--home a.editorial-ai-guide-action[href="/ai-tools/guides/' + slug + '"]').count(), 1,
-        "Original editorial comparison must have a descriptive homepage link: " + slug);
-    }
-    assert((await page.locator("section.editorial-ai-guides--home").innerText()).includes("No untested winners"),
-      "Editorial guide discovery cannot imply verified performance rankings");
-    const discoveryGeometry = await page.locator("section.editorial-ai-guides--home").evaluate(() => ({
-      width: document.documentElement.scrollWidth,
-      viewport: document.documentElement.clientWidth,
-    }));
-    assert(discoveryGeometry.width <= discoveryGeometry.viewport + 1, "Editorial comparison discovery must not overflow the mobile viewport");
+    assert.equal(await page.locator("section.editorial-ai-guides--home").count(), 0,
+      "Homepage must not promote removed AI Tools editorial articles");
     assert.equal(await page.locator(".home-intro").count(), 1, "Homepage must have one editorial introduction");
     assert.equal(await page.locator(".edition-line").count(), 1, "Signal Edition masthead must appear once");
     assert.equal(await page.locator(".footer-manifesto").count(), 1, "Signal Edition footer colophon must appear once");

@@ -4,7 +4,7 @@ Status: AI Tools consent-gated interaction instrumentation was deployed and prod
 
 ## Exact north star
 
-**10,000,000 calendar-month GA4 page views occurring on the AI Tools product only**, where the page's pathname is exactly `/ai-tools` or begins `/ai-tools/`. Includes guides, directory, profiles and comparison paths; excludes `/ai`, generic articles, news, homepage, `/ai-tools-foo`, and all other Decodista routes.
+**10,000,000 calendar-month GA4 page views occurring on the AI Tools product only**, where the page's pathname is exactly `/ai-tools` or begins `/ai-tools/`. Includes directory, profiles, comparison, pricing and alternatives paths; excludes removed editorial guides, `/ai`, generic articles, news, homepage, `/ai-tools-foo`, and all other Decodista routes.
 
 - This is a long-term **goal**, not current achieved traffic or a forecast.
 - Count actual, consented **GA4 `page_view`** events for the scope, not sessions, unique users, GSC impressions, bot requests, or GA4 custom-event totals.
