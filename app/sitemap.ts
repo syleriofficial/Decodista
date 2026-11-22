@@ -4,6 +4,7 @@ import { CATEGORY_DEFINITIONS, SITE_URL, TOPIC_HUBS } from "@/lib/site";
 import { weeklyBriefs } from "@/lib/weekly-briefs";
 import { AI_COMPARISON_GUIDES, AI_GUIDES_REVIEWED_ON } from "@/lib/ai-tools-comparison-guides";
 import { AI_TOOLS_RESEARCH_GUIDES } from "@/lib/ai-tools-research-guides";
+import { AI_TOOLS_WORKFLOWS } from "@/lib/ai-tools-workflows";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const latestArticleDate = (items: typeof articles) => items.reduce(
@@ -77,6 +78,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...AI_TOOLS_RESEARCH_GUIDES.map((guide) => ({
       url: `${SITE_URL}/ai-tools/guides/${guide.slug}`,
       lastModified: guide.reviewedOn,
+      changeFrequency: "monthly" as const,
+      priority: .7,
+    })),
+    ...AI_TOOLS_WORKFLOWS.map((workflow) => ({
+      url: `${SITE_URL}/ai-tools/workflows/${workflow.slug}`,
+      lastModified: workflow.reviewedOn,
       changeFrequency: "monthly" as const,
       priority: .7,
     })),
