@@ -134,6 +134,7 @@ const aiToolsGuidesIndex = read("app/ai-tools/guides/page.tsx");
 const aiToolsDiscovery = read("components/ai-comparison-discovery.tsx");
 const categoryPage = read("app/[section]/page.tsx");
 const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
+const aiToolsRelatedComparisons = read("components/ai-tools-related-comparisons.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsResearchData = read("lib/ai-tools-research-guides.ts");
 const aiToolsResearchPage = read("app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx");
@@ -272,6 +273,17 @@ assert(aiToolsGuidePage.includes('generateStaticParams()') &&
   aiToolsGuidePage.includes('guide.sources.map(') &&
   aiToolsGuidePage.includes('review-methodology'),
   "Research guides need valid 404s, canonical/indexable metadata, linked sources and methodology");
+assert(aiToolsRelatedComparisons.includes('AI_COMPARISON_GUIDES') &&
+  aiToolsRelatedComparisons.includes('AI_TOOLS_RESEARCH_GUIDES') &&
+  aiToolsRelatedComparisons.includes('chatgpt-vs-claude') &&
+  aiToolsRelatedComparisons.includes('cursor-vs-github-copilot') &&
+  aiToolsRelatedComparisons.includes('perplexity-vs-gemini-notebook') &&
+  aiToolsRelatedComparisons.includes('chatgpt-vs-gemini-for-research') &&
+  aiToolsRelatedComparisons.includes('<Link key={guide!.slug} href=') &&
+  aiToolsGuidePage.includes('<AiToolsRelatedComparisons currentSlug={guide.slug} />') &&
+  aiToolsResearchPage.includes('<AiToolsRelatedComparisons currentSlug="perplexity-vs-gemini-notebook" />') &&
+  chatGeminiResearchPage.includes('<AiToolsRelatedComparisons currentSlug="chatgpt-vs-gemini-for-research" />'),
+  "All four indexable AI Tools guides must have curated, meaningful, crawlable cross-links without touching news routing");
 assert(sitemap.includes('AI_COMPARISON_GUIDES.map(') &&
   sitemap.includes('AI_GUIDES_REVIEWED_ON') &&
   aiToolsPage.includes('href="/ai-tools/guides"') &&
