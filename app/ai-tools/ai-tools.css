@@ -781,3 +781,49 @@
 .ai-pdf-home-feature p { font-size:.86rem; color:var(--muted); line-height:1.75; margin:.45rem 0 0; max-width:690px; }
 .ai-pdf-home-feature > a { display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.7rem .9rem; background:var(--surface); border:1px solid var(--line); color:var(--signal); font-size:.82rem; font-weight:850; }
 .ai-pdf-home-feature > a:hover { border-color:var(--signal); }
+
+
+/* Source-backed PDF comparison diagram: readable HTML rather than AI artwork. */
+.ai-pdf-evidence-visual {
+  overflow:hidden;
+  min-width:0;
+  margin:clamp(1.75rem,4vw,2.6rem) 0;
+  border:1px solid #24384d;
+  border-radius:12px;
+  background:#122233;
+  color:#f1f7fc;
+}
+.ai-pdf-evidence-heading { padding:clamp(1.2rem,3vw,1.9rem) clamp(1rem,3vw,1.75rem) 1rem; }
+.ai-pdf-evidence-kicker { display:flex; gap:.48rem; align-items:center; color:#a4dacc; font-size:.64rem; font-weight:850; letter-spacing:.1em; }
+.ai-pdf-evidence-kicker svg { flex:none; }
+.ai-pdf-evidence-heading h2 { margin:.75rem 0 .45rem; color:#fff; font-size:clamp(1.28rem,2.5vw,1.8rem); line-height:1.25; letter-spacing:-.025em; }
+.ai-pdf-evidence-heading p { margin:0; max-width:620px; color:#c1d0dd; font-size:.85rem; line-height:1.7; }
+.ai-pdf-evidence-papers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; padding:0 clamp(1rem,3vw,1.75rem) 1rem; }
+.ai-pdf-evidence-paper { display:flex; flex-direction:column; min-width:0; padding:clamp(.95rem,2.4vw,1.3rem); border:1px solid #dbe4eb; border-radius:7px; background:#fff; color:#172c3b; box-shadow:0 8px 18px rgba(4,15,30,.12); }
+.ai-pdf-evidence-paper-top { display:flex; align-items:flex-start; gap:.65rem; min-width:0; }
+.ai-pdf-evidence-paper-top > div { min-width:0; flex:1; }
+.ai-pdf-evidence-paper-icon { display:grid; place-items:center; flex:none; width:34px; height:34px; border-radius:6px; background:#e8f3f0; color:#125c50; }
+.ai-pdf-evidence-paper-tag { display:block; color:#526a7a; font-size:.61rem; font-weight:850; letter-spacing:.08em; line-height:1.5; }
+.ai-pdf-evidence-paper h3 { margin:.22rem 0 0; color:#172c3b; font-size:clamp(.88rem,1.7vw,1rem); line-height:1.35; letter-spacing:0; }
+.ai-pdf-evidence-revision { flex:none; font-size:.65rem; font-weight:850; color:#487c70; border:1px solid #b8d2ca; padding:.2rem .35rem; border-radius:4px; }
+.ai-pdf-evidence-issued { margin:.72rem 0 .8rem; color:#587083; font-size:.73rem; line-height:1.5; }
+.ai-pdf-evidence-facts { display:grid; gap:0; margin:0 0 .8rem; border-top:1px solid #e4ebf1; }
+.ai-pdf-evidence-facts > div { display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; padding:.66rem 0; border-bottom:1px solid #e4ebf1; }
+.ai-pdf-evidence-facts dt { color:#506678; font-size:.76rem; line-height:1.5; }
+.ai-pdf-evidence-facts dd { margin:0; color:#182e3f; font-size:.76rem; font-weight:850; line-height:1.5; text-align:right; font-variant-numeric:tabular-nums; }
+.ai-pdf-evidence-source-link { display:inline-flex; align-items:center; gap:.35rem; margin-top:auto; min-height:36px; color:#0d6255; font-size:.75rem; font-weight:850; text-decoration:underline; text-underline-offset:3px; }
+.ai-pdf-evidence-source-link:hover { color:#093c35; }
+.ai-pdf-evidence-source-link:focus-visible { outline:2px solid #0d6255; outline-offset:3px; }
+.ai-pdf-evidence-results { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin:0 clamp(1rem,3vw,1.75rem); border:1px solid #34495c; border-radius:6px; overflow:hidden; background:#34495c; }
+.ai-pdf-evidence-result { display:flex; min-width:0; flex-direction:column; gap:.2rem; padding:.85rem .9rem; background:#1b3042; }
+.ai-pdf-evidence-result span { color:#b5cad8; font-size:.69rem; line-height:1.4; }
+.ai-pdf-evidence-result strong { color:#e0f5ed; font-size:clamp(.81rem,1.5vw,.99rem); line-height:1.35; overflow-wrap:anywhere; }
+.ai-pdf-evidence-result small { color:#bacddd; font-size:.7rem; line-height:1.4; }
+.ai-pdf-evidence-note { display:flex; align-items:flex-start; gap:.56rem; padding:1rem clamp(1rem,3vw,1.75rem) 1.25rem; color:#cedce8; font-size:.76rem; line-height:1.7; }
+.ai-pdf-evidence-note svg { flex:none; margin-top:.13rem; color:#a4dacc; }
+.ai-pdf-evidence-note strong { color:#fff; }
+@media(max-width:640px) {
+  .ai-pdf-evidence-papers { grid-template-columns:minmax(0,1fr); gap:.75rem; }
+  .ai-pdf-evidence-results { grid-template-columns:minmax(0,1fr); }
+  .ai-pdf-evidence-result { padding:.7rem .85rem; }
+}
