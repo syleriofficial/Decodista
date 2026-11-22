@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ArticleBody, RichTextContent } from "@/components/article-body";
 import { ArticleCard } from "@/components/article-card";
+import { FutureAdPlacement } from "@/components/commercial-blocks";
 import { articles, formatDate, getArticle, getArticleTopicHubs, getRelatedArticles } from "@/lib/content";
 import { CATEGORY_MAP, CONTENT_TYPE_MAP, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -177,6 +178,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
           </div>
 
+          <FutureAdPlacement placement="article-after-opening" />
+
           <div className="article-main-grid">
             {toc.length > 1 && <nav className="toc" aria-label="Table of contents">
               <strong>In this article</strong>
@@ -185,6 +188,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <ArticleBody blocks={mainBlocks} />
             <aside className="article-side-note"><span>DECODISTA</span><p>Clear context. Practical choices. No manufactured urgency.</p></aside>
           </div>
+
+          <FutureAdPlacement placement="article-after-body" />
 
           {(related.length > 0 || topicHubs.length > 0) && (
             <nav className="article-discovery" aria-label="Explore related guides and topics">
