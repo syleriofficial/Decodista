@@ -172,17 +172,11 @@ A missing review or an unusually low price alone may not prove fraud. But if cri
 
 **Beware recovery scams.** Fraud victims are sometimes targeted again by people claiming they can retrieve lost money for an upfront fee. For related impersonation tactics, see DECODISTA's [fake tech-support and verification-code scam guide](/articles/fake-tech-support-scams-remote-access-verification-code).
 
-**Report the incident.** Official routes include:
+**Report the incident through the official service where you live.** Look for your country or region's consumer-protection authority, national cybercrime-reporting service, or police fraud-reporting channel. Find its website independently through a verified government or law-enforcement source rather than a link sent by a stranger. Reporting helps authorities identify patterns, but does not guarantee reimbursement.
 
-| Country | Official reporting route |
-|---|---|
-| United States | [FTC ReportFraud.ftc.gov](https://reportfraud.ftc.gov/) |
-| United Kingdom | [Report Fraud](https://www.reportfraud.police.uk/) for England, Wales and Northern Ireland; Police Scotland on 101 for Scotland |
-| Canada | [Canadian Anti-Fraud Centre](https://antifraudcentre-centreantifraude.ca/report-signalez-eng.htm) and local police |
-| Australia | [ACCC Scamwatch](https://www.scamwatch.gov.au/report-a-scam); police may also be appropriate |
-| India | [National Cyber Crime Reporting Portal](https://cybercrime.gov.in/) and 1930 for financial cyber fraud |
+**Report the suspicious listing or advertisement, too.** If you encountered the store through a marketplace, search ad, or social-media platform, use that platform's official reporting tools. Reporting an ad is separate from asking your bank or payment provider to dispute a transaction.
 
-The UK's Report Fraud service replaced Action Fraud on December 4, 2025, in England, Wales and Northern Ireland. These reporting services do not guarantee repayment. In a payment emergency, contact your financial institution first.
+**If the purchase crossed borders,** tell your payment provider and local reporting authority where the seller appears to operate. Consumer protections, available agencies, and recovery options vary by jurisdiction. For an urgent payment problem, contact your financial institution first.
 
 ## FAQ
 
@@ -222,6 +216,6 @@ Check the domain, the seller, the complete offer and the payment arrangement. If
 
 ## Sources & Verification
 
-DECODISTA reviewed official consumer-protection guidance and technical documentation available through **November 22, 2026**, including the FTC's [November 2026 search-ad alert](https://consumer.ftc.gov/consumer-alerts/2026/11/how-avoid-holiday-shopping-scams-your-search-results), [May 2025 JOANN impersonation alert](https://consumer.ftc.gov/consumer-alerts/2025/05/avoid-online-joann-impersonators-their-fake-sales), [August 2026 social-media-ad alert](https://consumer.ftc.gov/consumer-alerts/2026/08/are-ads-social-media-vetted-or-checked-scams-heres-what-know), [online-shopping guide](https://consumer.ftc.gov/articles/online-shopping), [merchandise shipping rule guidance](https://www.ftc.gov/business-guidance/resources/business-guide-ftcs-mail-internet-or-telephone-order-merchandise-rule), and [what-to-do-after-a-scam guide](https://consumer.ftc.gov/articles/what-do-if-you-were-scammed). Official national reporting services are linked above.
+DECODISTA reviewed official consumer-protection guidance and technical documentation available through **November 22, 2026**, including the FTC's [November 2026 search-ad alert](https://consumer.ftc.gov/consumer-alerts/2026/11/how-avoid-holiday-shopping-scams-your-search-results), [May 2025 JOANN impersonation alert](https://consumer.ftc.gov/consumer-alerts/2025/05/avoid-online-joann-impersonators-their-fake-sales), [August 2026 social-media-ad alert](https://consumer.ftc.gov/consumer-alerts/2026/08/are-ads-social-media-vetted-or-checked-scams-heres-what-know), [online-shopping guide](https://consumer.ftc.gov/articles/online-shopping), [merchandise shipping rule guidance](https://www.ftc.gov/business-guidance/resources/business-guide-ftcs-mail-internet-or-telephone-order-merchandise-rule), and [what-to-do-after-a-scam guide](https://consumer.ftc.gov/articles/what-do-if-you-were-scammed). Readers should use independently verified national or regional reporting services applicable to their location.
 
 The introductory headphone offer and illustrative `.example` domains are fictional. No store was directly tested or independently accused of fraud by DECODISTA. This article is general consumer-safety information, not individualized legal or financial advice.
