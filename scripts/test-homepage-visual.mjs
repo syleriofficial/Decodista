@@ -104,8 +104,8 @@ for (const sample of [
       assert(!(await page.locator(".edition-line").isVisible()), "Mobile masthead should avoid extra chrome");
     }
 
-    // On long pages, keep only the editorial navigation row on desktop;
-    // preserve the full compact masthead and its menu button on mobile.
+    // On long pages keep the complete desktop masthead and navigation visible,
+    // and preserve the compact mobile header plus menu and search controls.
     await page.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
       window.scrollTo(0, 1100);
@@ -113,22 +113,37 @@ for (const sample of [
     const stickyHeader = await page.locator(".site-header").evaluate(header => {
       const headerRect = header.getBoundingClientRect();
       const navRect = header.querySelector(".primary-nav").getBoundingClientRect();
+      const brandRect = header.querySelector(".wordmark").getBoundingClientRect();
+      const searchRect = header.querySelector('[aria-label="Search DECODISTA"]').getBoundingClientRect();
+      const editionRect = header.querySelector(".edition-line").getBoundingClientRect();
       return {
         position: getComputedStyle(header).position,
         top: headerRect.top,
         bottom: headerRect.bottom,
         navTop: navRect.top,
         navBottom: navRect.bottom,
+        brandTop: brandRect.top,
+        brandBottom: brandRect.bottom,
+        searchBottom: searchRect.bottom,
+        editionTop: editionRect.top,
+        editionBottom: editionRect.bottom,
       };
     });
     assert.equal(stickyHeader.position, "sticky", "Header must use native sticky positioning");
+    assert(stickyHeader.top >= -2 && stickyHeader.top <= 3,
+      "The whole sticky header must remain fixed at the top after scrolling");
     if (sample.width > 1000) {
-      assert(stickyHeader.top < -50, "Desktop edition and large wordmark should scroll out of view");
-      assert(Math.abs(stickyHeader.navTop) <= 3 && stickyHeader.navBottom >= 35,
-        "Desktop editorial navigation must remain pinned at the top after scrolling");
+      assert(stickyHeader.editionTop >= 0 && stickyHeader.editionBottom > 12,
+        "Desktop edition bar must remain visible while scrolling");
+      assert(stickyHeader.brandTop >= 0 && stickyHeader.brandBottom <= stickyHeader.navTop,
+        "DECODISTA logo/tagline must remain above the nav while scrolling");
+      assert(stickyHeader.searchBottom <= stickyHeader.navTop,
+        "Search control must remain visible above the nav while scrolling");
+      assert(stickyHeader.navTop > 75 && stickyHeader.navBottom >= 120,
+        "Desktop full eight-link menu must remain below the masthead while scrolling");
     } else {
-      assert(stickyHeader.top >= -2 && stickyHeader.top <= 3 && stickyHeader.bottom >= 60,
-        "Mobile header and menu button must remain visible after scrolling");
+      assert(stickyHeader.bottom >= 60 && stickyHeader.brandTop >= 0,
+        "Mobile compact header, logo, search and menu button must remain visible after scrolling");
     }
     await page.evaluate(() => {
       window.scrollTo(0, 0);
