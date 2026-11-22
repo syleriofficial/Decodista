@@ -37,6 +37,110 @@ export interface WeeklyBrief {
 
 export const weeklyBriefs: WeeklyBrief[] = [
   {
+    "slug": "2026-11-22",
+    "issueNumber": 4,
+    "publishedDate": "2026-11-22",
+    "periodStart": "2026-11-16",
+    "periodEnd": "2026-11-22",
+    "title": "Chrome's 204 Fixes, Fake Black Friday Stores and AI Threats",
+    "standfirst": "Chrome 158's 204 security fixes, deceptive Black Friday storefronts, more autonomous AI attacks, a critical PHP flaw and business-payment fraud. Five sourced developments and practical next steps.",
+    "topTakeaways": [
+      "Update Chrome: the November 17 Stable release lists 204 security fixes, including six rated Critical.",
+      "Check who is selling: fake Black Friday shops can imitate familiar brands and demand personal information at checkout.",
+      "Treat AI-assisted intrusion research seriously without assuming every device is directly vulnerable."
+    ],
+    "items": [
+      {
+        "id": "chrome-158-204-security-fixes",
+        "category": "Security",
+        "headline": "Chrome 158 addresses 204 security issues, including six Critical vulnerabilities",
+        "announcedDate": "2026-11-17",
+        "whatChanged": "Google promoted Chrome 158 to the Stable channel for Windows, macOS and Linux on November 17, with 204 security fixes. Six entries are rated Critical, including memory-safety problems involving WebView, GPU, Media, GarbageCollection, ANGLE and WebAudio. Google said the release would roll out over the following days and weeks. The release note does not establish that all these flaws were being exploited.",
+        "whyItMatters": "Browsers routinely process unfamiliar web content while users handle email, shopping and sensitive accounts. Using an outdated build can leave known vulnerabilities unpatched, but an update announcement does not mean every device has received the patch yet.",
+        "whatToDo": "On desktop Chrome, open Settings > About Chrome, install the newest version offered for your system and relaunch. Update other Chromium-based browsers through their own vendors, and use official app-store updates on mobile.",
+        "insight": "A browser is protected by the update it is actually running, not by the release announcement alone.",
+        "source": {
+          "label": "Google Chrome Stable release, November 17",
+          "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01699533288.html"
+        }
+      },
+      {
+        "id": "black-friday-fake-retailer-stores",
+        "category": "Security",
+        "headline": "Fake Black Friday stores mimic familiar brands as shopping season nears",
+        "announcedDate": "2026-11-16",
+        "whatChanged": "Check Point Research reported more than 4,000 newly registered domains associated with seasonal sales, retail brands and delivery companies during October and November 1–8, 2026; nearly one in five was classified as risky by its systems. Researchers documented a Walmart-impersonating Rollbacks storefront advertising steep discounts, including a supposed $49.99 iPad, and seeking shopper details. Separately, Bitdefender reported on November 19 that half of the Black Friday-themed spam emails in its October 30–November 10 sample were classified as scams. Those percentages refer to the researchers' datasets, not all shopping sites or emails.",
+        "whyItMatters": "A polished storefront, brand colors and product reviews can make a fraudulent offer seem real. Scammers may collect personal information or payment details through a checkout page even when the product never existed.",
+        "whatToDo": "Open a retailer's official website or app yourself rather than following unsolicited promotional links. Check the complete hostname and investigate unrealistic discounts or unexpected delivery charges. HTTPS alone does not establish that a store is legitimate.",
+        "insight": "The most important signal is the identity of the seller and payment destination—not the realism of the storefront.",
+        "source": {
+          "label": "Check Point Research, November 16",
+          "url": "https://blog.checkpoint.com/corporate/black-friday-cyber-crime-2026-attacks-on-retailers-surge-28-as-risky-domains-multiply/"
+        },
+        "additionalSources": [
+          {
+            "label": "Bitdefender Black Friday scam research, November 19",
+            "url": "https://www.bitdefender.com/en-us/blog/hotforsecurity/black-friday-scam-report-2026"
+          }
+        ]
+      },
+      {
+        "id": "google-ai-agent-cyber-threat-research",
+        "category": "AI",
+        "headline": "Google documents greater use of autonomous AI frameworks in cyberattacks",
+        "announcedDate": "2026-11-16",
+        "whatChanged": "Google Threat Intelligence Group and Mandiant reported threat actors experimenting with and using multi-agent offensive frameworks including PentAGI, CAIRN and CyberStrikeAI. Their November 16 report describes automated reconnaissance, patch analysis and other intrusion steps. In one documented case, a threat actor customized PentAGI to scan organizations in Asia. These findings concern observed activity and experimentation; they are not evidence that AI can reliably compromise any computer on demand.",
+        "whyItMatters": "Automating repeated reconnaissance and vulnerability work can reduce the time between discovery of a weakness and an exploitation attempt. Organizations may have less time to patch internet-exposed services, while individuals face familiar risks from convincing social engineering.",
+        "whatToDo": "Use unique passwords and passkeys or multifactor authentication for important accounts. Organizations should prioritize timely updates, restricted access and monitoring of unusual activity.",
+        "insight": "Faster offensive workflows make patch management and verification more important, not obsolete.",
+        "source": {
+          "label": "Google Threat Intelligence Group, November 16",
+          "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold"
+        }
+      },
+      {
+        "id": "phpaftershell-php-security",
+        "category": "Security",
+        "headline": "Critical phpAfterShell flaw prompts PHP updates and firewall protections",
+        "announcedDate": "2026-11-19",
+        "whatChanged": "Researchers disclosed phpAfterShell (CVE-2026-126714) on November 19. Under affected conditions, the flaw in PHP's default file-based session handler can contribute to remote code execution. It received a CVSS 4.0 score of 9.2, and the PHP project released fixes. Cloudflare subsequently described web application firewall detections for relevant attack patterns. A critical score does not mean every PHP installation is exploitable or that exploitation is confirmed everywhere.",
+        "whyItMatters": "A server-side vulnerability can be serious for website operators, but exposure depends on versions, deployment conditions and whether relevant patches are installed. Some Linux vendors backport fixes without adopting the latest upstream version number.",
+        "whatToDo": "Administrators should apply the appropriate PHP or distribution-maintained security update, check vendor advisories and restart affected services. Managed-hosting customers can confirm patch status with their provider. Firewall rules are additional protection, not a replacement for patching.",
+        "insight": "Verify the security patch status of the actual deployed package; a version string alone can mislead.",
+        "source": {
+          "label": "Cloudflare analysis, November 20",
+          "url": "https://blog.cloudflare.com/phpaftershell-waf-protection/"
+        }
+      },
+      {
+        "id": "cert-in-business-payment-fraud",
+        "category": "Security",
+        "headline": "CERT-In warns about attackers abusing legitimate business payment processes",
+        "announcedDate": "2026-11-20",
+        "whatChanged": "India's Computer Emergency Response Team published advisory CIAD-2026-0062 on November 20, warning about unauthorized financial transactions involving business payment and disbursement workflows. CERT-In said attackers targeted business records and approval processes, including at technology service providers and vendor-payout platforms, to make unauthorized transactions through legitimate systems. The advisory also discusses AI-driven offensive tooling.",
+        "whyItMatters": "When an attacker changes records or approval rules, a payment can appear authorized to the system processing it. The risk involves business controls as well as phishing and password theft.",
+        "whatToDo": "Verify unexpected payment-detail changes through a previously trusted channel, restrict access to financial records and require additional review for high-risk vendor and payout changes.",
+        "insight": "Payment security depends on protecting the approval process, not just the final payment button.",
+        "source": {
+          "label": "CERT-In advisory CIAD-2026-0062, November 20",
+          "url": "https://www.cert-in.org.in/s2cMainServlet?VLCODE=CIAD-2026-0062&pageid=PUBVLNOTES02"
+        }
+      }
+    ],
+    "relatedArticleSlugs": [
+      "chrome-enhanced-protection-vs-standard-protection",
+      "ai-shopping-agents-scam-fraud-privacy-risks",
+      "what-is-agentic-ai",
+      "recover-hacked-google-account-gmail"
+    ],
+    "checklist": [
+      "Update your browser using its official update screen and relaunch it.",
+      "Before a Black Friday purchase, verify the full retail domain and seller.",
+      "Enable passkeys or strong multifactor authentication on important accounts."
+    ]
+  },
+
+  {
     slug: "2026-11-16",
     issueNumber: 3,
     publishedDate: "2026-11-16",
