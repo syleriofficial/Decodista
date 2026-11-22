@@ -1,29 +1,80 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "@/components/app-link";
-import { ArrowRight, ArrowUpRight, BookOpen, Check, GitCompareArrows, Info, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Bookmark, BookmarkCheck, Check, GitCompareArrows, Info, Search, X } from "lucide-react";
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
 import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { AI_TOOL_EVIDENCE, getAiToolEvidence } from "@/lib/ai-tools-evidence";
 
 type CategoryFilter = (typeof AI_TOOL_CATEGORIES)[number]["slug"];
 
+type SortOrder = "name" | "category";
+const SAVED_STORAGE_KEY = "decodista-ai-tools-saved-v1";
+const SAVED_UPDATED_EVENT = "decodista-ai-tools-saved-updated";
+const EMPTY_SAVED = "[]";
+
+// Stable server snapshot avoids mismatched server/client markup.
+function getServerSavedSnapshot(): string { return EMPTY_SAVED; }
+function getSavedSnapshot(): string {
+  if (typeof window === "undefined") return EMPTY_SAVED;
+  try { return window.localStorage.getItem(SAVED_STORAGE_KEY) ?? EMPTY_SAVED; }
+  catch { return EMPTY_SAVED; }
+}
+function subscribeSaved(onChange: () => void): () => void {
+  window.addEventListener("storage", onChange);
+  window.addEventListener(SAVED_UPDATED_EVENT, onChange);
+  return () => {
+    window.removeEventListener("storage", onChange);
+    window.removeEventListener(SAVED_UPDATED_EVENT, onChange);
+  };
+}
+function parseSaved(raw: string): string[] {
+  try {
+    const values: unknown = JSON.parse(raw);
+    if (!Array.isArray(values)) return [];
+    const slugs = new Set(AI_TOOLS.map((tool) => tool.slug));
+    return [...new Set(values.filter((value): value is string =>
+      typeof value === "string" && slugs.has(value)))].slice(0, AI_TOOLS.length);
+  } catch { return []; }
+}
+
 export function AiToolsExplorer() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [selected, setSelected] = useState<string[]>([]);
   const [sourceCheckedOnly, setSourceCheckedOnly] = useState(false);
+  const [savedOnly, setSavedOnly] = useState(false);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("name");
+  const [saveUnavailable, setSaveUnavailable] = useState(false);
+  const savedSnapshot = useSyncExternalStore(subscribeSaved, getSavedSnapshot, getServerSavedSnapshot);
+  const saved = useMemo(() => parseSaved(savedSnapshot), [savedSnapshot]);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
-    return AI_TOOLS.filter((tool) => {
+    const matching = AI_TOOLS.filter((tool) => {
+      if (savedOnly && !saved.includes(tool.slug)) return false;
       if (category !== "all" && tool.category !== category) return false;
       if (sourceCheckedOnly && !getAiToolEvidence(tool.slug)) return false;
       return !query || [tool.name, tool.provider, tool.description, ...tool.useCases, getCategoryLabel(tool.category)]
         .join(" ").toLocaleLowerCase().includes(query);
     });
-  }, [category, search, sourceCheckedOnly]);
+    return matching.sort((first, second) => sortOrder === "category"
+      ? getCategoryLabel(first.category).localeCompare(getCategoryLabel(second.category), "en")
+        || first.name.localeCompare(second.name, "en")
+      : first.name.localeCompare(second.name, "en"));
+  }, [category, search, sourceCheckedOnly, savedOnly, saved, sortOrder]);
+
+  const toggleSave = (slug: string) => {
+    const next = saved.includes(slug) ? saved.filter((item) => item !== slug) : [...saved, slug];
+    try {
+      window.localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(next));
+      window.dispatchEvent(new Event(SAVED_UPDATED_EVENT));
+      setSaveUnavailable(false);
+    } catch {
+      setSaveUnavailable(true);
+    }
+  };
 
   const toggleCompare = (slug: string) => {
     const wasSelected = selected.includes(slug);
@@ -97,10 +148,26 @@ export function AiToolsExplorer() {
               <small>{AI_TOOL_EVIDENCE.length} of {AI_TOOLS.length} listings have a dated review of official documentation. This is not a hands-on test.</small>
             </span>
           </label>
+          <div className="ai-tools-product-controls">
+            <button type="button" className={savedOnly ? "ai-tools-saved-filter is-selected" : "ai-tools-saved-filter"}
+              aria-pressed={savedOnly} onClick={() => setSavedOnly(!savedOnly)}>
+              <Bookmark size={16} aria-hidden="true" /> Saved tools ({saved.length})
+            </button>
+            <label className="ai-tools-sort-control" htmlFor="ai-tools-sort">
+              <span>Sort by</span>
+              <select id="ai-tools-sort" value={sortOrder}
+                onChange={(event) => setSortOrder(event.target.value as SortOrder)}>
+                <option value="name">Name A–Z</option>
+                <option value="category">Category</option>
+              </select>
+            </label>
+          </div>
+          <p className="ai-tools-saved-note">Bookmarks stay in this browser only; no account or sync.</p>
+          {saveUnavailable && <p className="ai-tools-saved-warning" role="status">Browser storage is unavailable. The tool was not saved.</p>}
           <div className="ai-tools-filter-foot">
             <p aria-live="polite" aria-atomic="true">{filtered.length} {filtered.length === 1 ? "tool" : "tools"} shown</p>
-            {(category !== "all" || search || sourceCheckedOnly) && (
-              <button type="button" className="ai-tools-reset" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); }}>
+            {(category !== "all" || search || sourceCheckedOnly || savedOnly || sortOrder !== "name") && (
+              <button type="button" className="ai-tools-reset" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); setSavedOnly(false); setSortOrder("name"); }}>
                 Clear filters
               </button>
             )}
@@ -135,12 +202,21 @@ export function AiToolsExplorer() {
           {filtered.map((tool) => {
             const evidence = getAiToolEvidence(tool.slug);
             const isSelected = selected.includes(tool.slug);
+            const isSaved = saved.includes(tool.slug);
             const isDisabled = !isSelected && selected.length >= 2;
             return (
               <article className={isSelected ? "ai-tools-card is-selected" : "ai-tools-card"} key={tool.slug}>
                 <div className="ai-tools-card-top">
                   <span className={`ai-tools-monogram ai-tools-monogram--${tool.category}`} aria-hidden="true">{tool.name.slice(0, 2).toUpperCase()}</span>
                   <span className="ai-tools-card-category">{getCategoryLabel(tool.category as AiToolCategory)}</span>
+                  <button type="button"
+                    className={isSaved ? "ai-tools-save-button is-saved" : "ai-tools-save-button"}
+                    aria-label={isSaved ? "Remove " + tool.name + " from saved tools" : "Save " + tool.name + " to this browser"}
+                    aria-pressed={isSaved}
+                    title={isSaved ? "Remove from saved" : "Save on this browser"}
+                    onClick={() => toggleSave(tool.slug)}>
+                    {isSaved ? <BookmarkCheck size={19} aria-hidden="true" /> : <Bookmark size={19} aria-hidden="true" />}
+                  </button>
                 </div>
                 <div className="ai-tools-card-copy">
                   <h3><Link href={`/ai-tools/${tool.slug}`}>{tool.name}</Link></h3>
@@ -194,9 +270,9 @@ export function AiToolsExplorer() {
       ) : (
         <div className="ai-tools-empty" role="status">
           <Search size={26} aria-hidden="true" />
-          <h3>No matching tools in this starter directory</h3>
-          <p>Try a broader search or clear the category. We do not list tools we haven&apos;t described yet.</p>
-          <button type="button" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); }}>Show all tools</button>
+          <h3>{savedOnly && saved.length === 0 ? "No saved tools yet" : "No matching tools in this starter directory"}</h3>
+          <p>{savedOnly && saved.length === 0 ? "Use the bookmark icon on any tool card to save it in this browser." : "Try a broader search or clear the category. We do not list tools we haven&apos;t described yet."}</p>
+          <button type="button" onClick={() => { setSearch(""); setCategory("all"); setSourceCheckedOnly(false); setSavedOnly(false); setSortOrder("name"); }}>Show all tools</button>
         </div>
       )}
       <p className="ai-tools-disclosure">
