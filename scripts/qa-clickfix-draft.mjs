@@ -51,7 +51,7 @@ check("Primary official sources appear", [
   "support.apple.com",
 ].every(s => draft.includes(s)));
 check("No actual executable attack commands", !/(?:^|\n)\s*(?:powershell\s+-|curl\s+https?:\/\/|iwr\s+https?:\/\/|bash\s+-c\s+|osascript\s+-e)/im.test(draft));
-check("No live article content has been staged", !fs.existsSync(articlePath));
+check("Live article staged only with all three image files", !fs.existsSync(articlePath) || expected.every(a => fs.existsSync(path.join(root, "public/images/uploads", a.file))));
 const internal = [...draft.matchAll(/\]\((\/articles\/([a-z0-9-]+))\)/g)].map(m => m[2]);
 for (const slug of internal)
   check("Related article exists: " + slug, fs.existsSync(path.join(root, "content/articles", slug + ".md")));
@@ -88,8 +88,8 @@ const report = {
   imageResults,
   editorialPreparatoryChecksPassed: checks.every(c => c.status === "PASS"),
   assetsComplete: imageResults.every(r => r.status === "PASS"),
-  publicationReady: false,
-  remaining: ["Commit three exact WebP binaries", "Promote article from docs to content/articles with actual date", "Release check on new head", "4-viewport browser and SEO QA", "Explicit approval and matching production deployment"],
+  publicationReady: false, // Full editorial and browser sign-off still required
+  remaining: ["Commit three exact WebP binaries", "Verify article in content/articles with actual date", "Release check on new head", "4-viewport browser and SEO QA", "Explicit approval and matching production deployment"],
 };
 fs.mkdirSync(outputDir, { recursive: true });
 fs.writeFileSync(path.join(outputDir, "report.json"), JSON.stringify(report, null, 2));
