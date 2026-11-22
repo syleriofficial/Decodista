@@ -176,6 +176,58 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
 .home-topic-grid--single .article-card--horizontal .card-image { aspect-ratio: 16 / 10; }
 .meta-row { flex-wrap: wrap; }
 
+/* A focused entry point for the working AI Tools directory, without fake reviews or scores. */
+.home-ai-tools {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(1.35rem, 3vw, 2.5rem);
+  margin-bottom: clamp(2.8rem, 4vw, 4.2rem);
+  border-top: 3px solid var(--signal);
+  background: var(--surface);
+}
+.home-ai-tools-copy { min-width: 0; }
+.home-ai-tools-copy h2 {
+  margin: .5rem 0 .65rem;
+  font: 500 clamp(1.85rem, 3vw, 3rem)/1.12 var(--font-editorial);
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.home-ai-tools-copy p { max-width: 40rem; margin: 0; color: var(--muted); line-height: 1.6; }
+.home-ai-tools-links { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .9rem; }
+.home-ai-tools-link {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: .55rem; min-width: 0; min-height: 190px;
+  padding: 1.2rem; border: 1px solid var(--line);
+  background: var(--paper); transition: border-color .16s ease;
+}
+.home-ai-tools-link:hover, .home-ai-tools-link:focus-visible { border-color: var(--signal); }
+.home-ai-tools-label {
+  color: var(--signal); font-size: .68rem; font-weight: 850;
+  letter-spacing: .09em; text-transform: uppercase;
+}
+.home-ai-tools-link strong {
+  font: 600 clamp(1.25rem, 1.65vw, 1.65rem)/1.18 var(--font-editorial);
+  text-wrap: pretty;
+}
+.home-ai-tools-description { color: var(--muted); font-size: .86rem; line-height: 1.45; }
+.home-ai-tools-link svg { width: 18px; height: 18px; margin-top: auto; align-self: flex-end; color: var(--signal); }
+
+@media (max-width: 1000px) {
+  .home-ai-tools { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 600px) {
+  .home-ai-tools { padding: 1.3rem 1.1rem; }
+  .home-ai-tools-links { grid-template-columns: minmax(0,1fr); gap: .65rem; }
+  .home-ai-tools-link { min-height: 0; padding: 1rem; }
+  /* A publication should show dates in its latest-story list, including on phones. */
+  .latest-feed .article-card--horizontal .meta-row time { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-ai-tools-link { transition: none; }
+}
+
 /* Published weekly editorial digest stays visible, without adding a fourth nav tab. */
 .home-weekly-brief {
   display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr);
