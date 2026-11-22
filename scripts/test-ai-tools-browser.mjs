@@ -63,6 +63,42 @@ try {
       assert.equal(await tasks.locator('a[href^="/ai-tools/guides"]').count(), 0,
         "Task finder must not offer editorial guide links");
 
+      // Product utility: bookmarks are local-only, persistent and filterable.
+      await page.getByRole("button", { name: "Save ChatGPT to this browser" }).click();
+      await page.getByRole("button", { name: "Remove ChatGPT from saved tools" }).waitFor();
+      assert.equal(await page.getByRole("button", { name: "Saved tools (1)" }).count(), 1,
+        "Saving a tool updates the directory count");
+      await page.getByRole("button", { name: "Saved tools (1)" }).click();
+      assert.equal(await page.locator(".ai-tools-card").count(), 1,
+        "Saved-only filter keeps only the bookmarked tool");
+      assert((await page.locator(".ai-tools-card h3").innerText()).includes("ChatGPT"));
+      await noOverflow(page, "saved filter", view.width);
+      await page.screenshot({ path: outputDir + "/" + view.label + "-saved.png", fullPage: true });
+
+      await page.reload({ waitUntil: "domcontentloaded", timeout: 45000 });
+      await page.locator("#ai-tool-query").waitFor();
+      await page.getByRole("button", { name: "Saved tools (1)" }).waitFor();
+      await page.getByRole("button", { name: "Saved tools (1)" }).click();
+      assert.equal(await page.locator(".ai-tools-card").count(), 1,
+        "Bookmarks persist across a reload in the same browser");
+      await page.getByRole("button", { name: "Remove ChatGPT from saved tools" }).click();
+      assert.equal(await page.locator(".ai-tools-card").count(), 0,
+        "Removing the last saved tool clears saved-only results");
+      assert((await page.locator(".ai-tools-empty h3").innerText()).includes("No saved tools yet"),
+        "Empty saved state explains bookmarks");
+      await page.getByRole("button", { name: "Show all tools" }).click();
+      assert.equal(await page.locator(".ai-tools-card").count(), 12);
+      assert.equal(await page.getByRole("button", { name: "Saved tools (0)" }).count(), 1);
+
+      await page.locator("#ai-tools-sort").selectOption("category");
+      assert.equal(await page.locator(".ai-tools-card").count(), 12);
+      assert.equal((await page.locator(".ai-tools-card h3").first().innerText()).trim(), "ChatGPT",
+        "Category sorting groups assistants before other categories");
+      await noOverflow(page, "sorted directory", view.width);
+      await page.getByRole("button", { name: "Clear filters" }).click();
+      assert.equal((await page.locator(".ai-tools-card h3").first().innerText()).trim(), "Adobe Firefly",
+        "Reset restores alphabetical name sorting");
+
       await page.locator("#ai-tool-query").fill("voiceovers");
       assert.equal(await page.locator(".ai-tools-card").count(), 1,
         "Search should find ElevenLabs for voiceovers");

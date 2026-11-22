@@ -207,6 +207,17 @@ assert(aiToolsCompare.includes('title: "Compare AI Tools"') && aiToolsCompare.in
   "AI tools comparison must be honest, functional and noindex until editorial review");
 assert(aiToolsCompare.includes('action="/ai-tools/compare"') && aiToolsCompare.includes('findAiTool('),
   "Comparisons must support shareable form-based tool selection");
+assert(aiToolsExplorer.includes("useSyncExternalStore(") &&
+  aiToolsExplorer.includes('SAVED_STORAGE_KEY = "decodista-ai-tools-saved-v1"') &&
+  aiToolsExplorer.includes('aria-pressed={isSaved}') &&
+  aiToolsExplorer.includes("Saved tools (") &&
+  aiToolsExplorer.includes('value={sortOrder}') &&
+  aiToolsExplorer.includes('onClick={() => toggleSave(tool.slug)}') &&
+  !aiToolsExplorer.includes("fetch(") &&
+  aiToolsCss.includes(".ai-tools-save-button") &&
+  aiToolsCss.includes(".ai-tools-sort-control"),
+  "AI Tools bookmarks and sorting must be private, accessible and entirely local");
+
 assert(aiToolsExplorer.includes('aria-pressed={isSelected}') && aiToolsExplorer.includes('filtered.length') &&
   aiToolsExplorer.includes('getCategoryLabel') && aiToolsExplorer.includes('Compare selected tools'),
   "Directory needs accessible search, filters and two-tool selection");

@@ -613,3 +613,16 @@
 @media(max-width:380px) { .ai-task-options { display:grid; grid-template-columns:1fr 1fr; } .ai-task-option { min-width:0; text-align:left; padding:.6rem; font-size:.75rem; } }
 
 
+
+/* AI Tools product utility: local-only bookmarks and directory sorting. */
+.ai-tools-product-controls { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.7rem; margin-top:1rem; }
+.ai-tools-saved-filter { display:inline-flex; gap:.4rem; align-items:center; justify-content:center; min-height:40px; border:1px solid var(--line); border-radius:5px; background:var(--surface); color:var(--ink); padding:.55rem .75rem; font-size:.8rem; font-weight:800; cursor:pointer; }
+.ai-tools-saved-filter:hover,.ai-tools-saved-filter.is-selected { border-color:var(--signal); color:var(--signal); background:var(--signal-soft); }
+.ai-tools-sort-control { display:inline-flex; gap:.55rem; align-items:center; flex-wrap:wrap; font-size:.78rem; font-weight:760; color:var(--muted); }
+.ai-tools-sort-control select { min-height:40px; max-width:100%; border:1px solid var(--line); border-radius:5px; background:var(--paper); color:var(--ink); padding:.45rem .65rem; font:inherit; }
+.ai-tools-saved-note { margin:.6rem 0 0; font-size:.73rem; line-height:1.55; color:var(--muted); }
+.ai-tools-saved-warning { margin:.4rem 0 0; color:var(--signal); font-size:.78rem; line-height:1.5; }
+.ai-tools-save-button { display:inline-grid; place-items:center; flex:none; width:39px; height:39px; margin-left:auto; border:1px solid var(--line); border-radius:5px; color:var(--muted); background:var(--surface); cursor:pointer; }
+.ai-tools-save-button:hover,.ai-tools-save-button.is-saved { border-color:var(--signal); color:var(--signal); background:var(--signal-soft); }
+.ai-tools-save-button:focus-visible,.ai-tools-saved-filter:focus-visible,.ai-tools-sort-control select:focus-visible { outline:2px solid var(--signal); outline-offset:3px; }
+@media(max-width:400px) { .ai-tools-product-controls { align-items:stretch; } .ai-tools-sort-control { justify-content:space-between; } }
