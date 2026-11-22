@@ -71,6 +71,35 @@ for (const sample of [
     assert.equal(new URL(page.url()).hash, "#chrome-157-security-fixes", "Anchor navigates to issue update");
     await page.screenshot({ path: `${dest}/${sample.name}.png`, fullPage: true });
     results.push({ sample: sample.name, pass: true, ...widths });
+
+    // Check the current weekly edition without replacing coverage of issue 3.
+    const latest = await page.goto(base + "/weekly/2026-11-22", { waitUntil: "domcontentloaded", timeout: 45000 });
+    assert.equal(latest?.status(), 200, "Issue 4 must return 200");
+    await page.waitForLoadState("networkidle", { timeout: 30000 });
+    assert.equal(await page.locator("main h1").count(), 1, "Issue 4: exactly one H1");
+    assert.match(await page.locator("main h1").innerText(), /Chrome.+204 Fixes/);
+    assert(/issue\s+4/i.test(await page.locator(".weekly-issue-header .eyebrow").innerText()), "Issue 4 number must display");
+    assert.equal(await page.locator(".weekly-item").count(), 5, "Issue 4: five verified updates");
+    assert.equal(await page.locator(".weekly-top-takeaways li").count(), 3, "Issue 4: three takeaways");
+    assert.equal(await page.locator(".weekly-item-visual img").count(), 2, "Issue 4: two inline illustrations");
+    assert.equal(await page.locator(".weekly-hero img").count(), 1, "Issue 4: hero illustration");
+    for (const img of await page.locator(".weekly-hero img, .weekly-item-visual img").all()) {
+      assert((await img.getAttribute("alt"))?.length > 20, "Issue 4: image needs meaningful alt text");
+      const url = await img.getAttribute("src");
+      assert(url?.endsWith(".webp"), "Issue 4: image must be WebP");
+      const asset = await page.request.get(base + url);
+      assert.equal(asset.status(), 200, "Issue 4: committed image must load");
+      assert.match(asset.headers()["content-type"] ?? "", /image\/webp/, "Issue 4: image MIME type");
+    }
+    const social = await page.request.get(base + "/images/weekly/2026-11-22-og.webp");
+    assert.equal(social.status(), 200, "Issue 4: social image must load");
+    assert.match(await page.locator('head meta[property="og:image"]').getAttribute("content") ?? "", /2026-11-22-og.webp/);
+    assert.equal(await page.locator('head link[rel="canonical"]').getAttribute("href"), "https://decodista.com/weekly/2026-11-22");
+    const latestWidths = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+    assert(latestWidths.document <= latestWidths.viewport + 1, "Issue 4: unexpected horizontal overflow");
+    assert.equal(errors.length, 0, "Issue 4: browser must not report errors");
+    await page.screenshot({ path: `${dest}/${sample.name}-issue-4.png`, fullPage: true });
+    results.push({ sample: `${sample.name}-issue-4`, pass: true, ...latestWidths });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     issues.push({ sample: sample.name, message, errors });
@@ -84,12 +113,14 @@ const page = await context.newPage();
 try {
   const archive = await page.goto(base + "/weekly", { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.equal(archive?.status(), 200);
-  assert.match(await page.locator(".weekly-spotlight h2").innerText(), /Chrome.+83 Security Fixes/, "Issue 3 must be latest");
+  assert.match(await page.locator(".weekly-spotlight h2").innerText(), /Chrome.+204 Fixes/, "Issue 4 must be latest");
+  assert((await page.locator(".weekly-archive").innerText()).includes("Chrome\u0027s 83 Security Fixes"), "Issue 3 retained");
   assert((await page.locator(".weekly-archive").innerText()).includes("iPhone and Firefox Fixes"), "Older issue retained");
   const sitemap = await page.request.get(base + "/sitemap.xml");
   assert.equal(sitemap.status(), 200);
   const xml = await sitemap.text();
-  assert(xml.includes("https://decodista.com/weekly/2026-11-16"), "Issue 3 in sitemap");
+  assert(xml.includes("https://decodista.com/weekly/2026-11-22"), "Issue 4 in sitemap");
+  assert(xml.includes("https://decodista.com/weekly/2026-11-16"), "Issue 3 retained in sitemap");
   assert(xml.includes("https://decodista.com/weekly/2026-11-11"), "Issue 2 retained in sitemap");
   const unknown = await page.goto(base + "/weekly/not-a-date", { waitUntil: "domcontentloaded" });
   assert.equal(unknown?.status(), 404);
