@@ -4,7 +4,7 @@ Status: AI Tools consent-gated interaction instrumentation was deployed and prod
 
 ## Exact north star
 
-**10,000,000 calendar-month GA4 page views occurring on the AI Tools product only**, where the page's pathname is exactly `/ai-tools` or begins `/ai-tools/`. Includes guides, directory, profiles and comparison paths; excludes `/ai`, generic articles, news, homepage, `/ai-tools-foo`, and all other Decodista routes.
+**10,000,000 calendar-month GA4 page views occurring on the AI Tools product only**, where the page's pathname is exactly `/ai-tools` or begins `/ai-tools/`. Includes directory, profiles, comparison, pricing and alternatives paths; excludes removed editorial guides, `/ai`, generic articles, news, homepage, `/ai-tools-foo`, and all other Decodista routes.
 
 - This is a long-term **goal**, not current achieved traffic or a forecast.
 - Count actual, consented **GA4 `page_view`** events for the scope, not sessions, unique users, GSC impressions, bot requests, or GA4 custom-event totals.
@@ -39,7 +39,7 @@ Google reference: https://support.google.com/analytics/answer/12926732
 1. Open [Google Search Console](https://search.google.com/search-console), choose the verified Decodista property and verify Google can fetch `https://decodista.com/sitemap.xml`. Submission does not ensure indexation.
 2. In **Performance > Search results**, set **Search type: Web** and the last **28 complete/settled days**. Apply a **Page** filter for AI Tools URLs. A domain/URL-prefix property may support an anchored RE2 filter `^https://(www\.)?decodista\.com/ai-tools(/|$)`; validate the actual property URLs and regex before recording numbers. Do not sum exact page query tables to infer hidden search query totals.
 3. Record total AI Tools Google clicks, impressions, CTR, weighted average position and the exact observation dates. Break down by pages, queries and countries as available. Be mindful of anonymized/hidden queries and data processing lags.
-4. Use **URL Inspection** on the four source-led, indexable AI Tools guides; record Google's indexed status, selected canonical, crawl problems, coverage, and whether the page is excluded intentionally. GSC **clicks** are organic search visits, not AI Tools pageviews.
+4. Use **URL Inspection** only for AI Tools product URLs approved for indexing; record indexed status, canonical and crawl problems. Current introductory directory and profiles remain noindex until review. GSC **clicks** are organic search visits, not AI Tools pageviews.
 5. Do not request indexing repeatedly and do not lift `noindex` from thin directory/alternatives/pricing/profiles merely to boost a count.
 
 Google reference: https://support.google.com/webmasters/answer/7576553
@@ -71,7 +71,7 @@ Google reference: https://support.google.com/analytics/answer/1034324?hl=en
 | Google Search clicks / impressions / CTR / position | GSC AI Tools URL filter, Web | **Not available** |
 | Top AI Tools landing pages and returning readers | GA4 filtered reports; note exact attribution dimension | **Not available** |
 | Task/category/compare interaction event counts | GA4 consented events; only after instrumentation release | **Not available** |
-| Indexed canonical guides (Google-selected) | GSC URL Inspection, individually | **Not verified** |
+| Indexed, source-reviewed AI Tools product pages | GSC URL Inspection, individually | **Not verified** |
 
 Record source, exact date range, data maturity, time zone, exclusions, whether analytics consent was enabled and who extracted the number before publishing any metric. Do not use third-party traffic estimates to represent first-party results.
 
@@ -80,5 +80,5 @@ Record source, exact date range, data maturity, time zone, exclusions, whether a
 - Instrumentation lives **only inside the AI Tools interactions**. No changes to site navigation, general news, editorial categories or other products.
 - No manual duplicate page_view instrumentation, no search-query tracking, no test-sheet data leakage or dynamic user IDs.
 - Privacy policy and existing consent banner remain accurate: optional analytics, deny by default; visitors can change preferences.
-- Existing source-reviewed comparison and indexing protections remain unchanged.
+- Removed AI Tools editorial routes are excluded; product pages remain noindex until approved.
 - When GA4/GSC account access is restored, first measure the baseline. Only then decide whether a task or comparison feature should expand.

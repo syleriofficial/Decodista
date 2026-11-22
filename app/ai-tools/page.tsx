@@ -81,25 +81,9 @@ export default function AIToolsPage() {
           <strong>Alternatives</strong>
           <span>Other tools for related workflows, without rankings <ArrowRight size={16} aria-hidden="true" /></span>
         </Link>
-        <Link href="/ai-tools/guides" className="ai-tools-decision-link">
-          <span className="ai-tools-eyebrow">Go deeper</span>
-          <strong>Comparison Guides</strong>
-          <span>Source-backed analysis, real-world scenarios and questions to test <ArrowRight size={16} aria-hidden="true" /></span>
-        </Link>
       </nav>
 
       <AiTaskFinder />
-
-      <section className="ai-pdf-home-feature wrap" aria-labelledby="ai-pdf-home-feature-title">
-        <div>
-          <span className="ai-tools-eyebrow">Try a complete AI workflow</span>
-          <h2 id="ai-pdf-home-feature-title">Compare two PDFs and check every change</h2>
-          <p>Download fictional document versions, use a reproducible prompt, and validate the comparison against an original source-backed answer. No upload or sign-up with DECODISTA.</p>
-        </div>
-        <Link href="/ai-tools/workflows/compare-two-pdfs-with-ai">
-          Read the PDF comparison walkthrough <ArrowRight size={17} aria-hidden="true" />
-        </Link>
-      </section>
 
       <AiToolsExplorer />
 

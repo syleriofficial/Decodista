@@ -130,21 +130,6 @@ const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
-const aiToolsGuidesIndex = read("app/ai-tools/guides/page.tsx");
-const aiToolsDiscovery = read("components/ai-comparison-discovery.tsx");
-const categoryPage = read("app/[section]/page.tsx");
-const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
-const aiToolsRelatedComparisons = read("components/ai-tools-related-comparisons.tsx");
-const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
-const aiToolsResearchData = read("lib/ai-tools-research-guides.ts");
-const aiToolsWorkflows = read("lib/ai-tools-workflows.ts");
-const aiPdfWorkflow = read("app/ai-tools/workflows/compare-two-pdfs-with-ai/page.tsx");
-const pdfSampleA = read("public/ai-tools/samples/library-hours-notice-v1.txt");
-const pdfSampleB = read("public/ai-tools/samples/library-hours-notice-v2.txt");
-const aiToolsResearchPage = read("app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx");
-const chatGeminiResearchPage = read("app/ai-tools/guides/chatgpt-vs-gemini-for-research/page.tsx");
-const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
-const aiToolsEvaluationData = read("lib/ai-tools-evaluation.ts");
 const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
 const aiToolsTrialTests = read("scripts/test-verify-ai-tool-trial.mjs");
 const aiToolsProtocol = read("docs/ai-tools-evaluation-protocol.md");
@@ -160,6 +145,7 @@ const aiToolsTaskFinder = read("components/ai-task-finder.tsx");
 const aiToolsInteractions = read("lib/ai-tools-interactions.ts");
 const aiToolsMeasurementPlaybook = read("docs/ai-tools-measurement-playbook.md");
 const aiToolsData = read("lib/ai-tools.ts");
+const aiToolsProductScope = read("docs/ai-tools-product-scope.md");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
 assert(aiToolsInteractions.includes('CONSENT_STORAGE_KEY = "decodista-analytics-consent"') &&
   aiToolsInteractions.includes('!== "granted"') &&
@@ -189,7 +175,7 @@ const gscScope = new RegExp(gscAiToolsPageFilter);
 for (const url of [
   "https://decodista.com/ai-tools",
   "https://decodista.com/ai-tools/",
-  "https://decodista.com/ai-tools/guides/chatgpt-vs-claude",
+  "https://decodista.com/ai-tools/compare?first=chatgpt&second=claude",
   "https://www.decodista.com/ai-tools/compare",
 ]) {
   assert(gscScope.test(url), "GSC AI Tools scope should include real product paths: " + url);
@@ -205,7 +191,7 @@ for (const url of [
   assert(!gscScope.test(url), "GSC AI Tools scope must exclude unrelated URLs: " + url);
 }
 const ga4Scope = /^\/ai-tools(?:\/|$)/;
-assert(ga4Scope.test("/ai-tools") && ga4Scope.test("/ai-tools/guides/chatgpt-vs-claude") &&
+assert(ga4Scope.test("/ai-tools") && ga4Scope.test("/ai-tools/compare?first=chatgpt&second=claude") &&
   !ga4Scope.test("/ai-tools-other") && !ga4Scope.test("/ai"),
   "GA4 page-path scope must include only the AI Tools product");
 assert(aiToolsMeasurementPlaybook.includes("No paid connector: manual export fallback") &&
@@ -240,17 +226,6 @@ assert(aiToolsProfile.includes('candidate.category === tool.category') &&
 assert(aiToolsExplorer.includes('href={`/ai-tools/${tool.slug}`}') &&
   aiToolsCompare.includes('href={`/ai-tools/${first.slug}`}'),
   "Tool directory and comparison must link to individual tool profiles");
-assert(aiToolsProfile.includes('AI_COMPARISON_GUIDES.filter(') &&
-  aiToolsProfile.includes('AI_TOOLS_RESEARCH_GUIDES.filter(') &&
-  aiToolsProfile.includes('researchedComparisons.length > 0') &&
-  aiToolsProfile.includes('guide.firstToolSlug === tool.slug') &&
-  aiToolsProfile.includes('guide.secondToolSlug === tool.slug') &&
-  aiToolsProfile.includes('guide.firstSlug === tool.slug') &&
-  aiToolsProfile.includes('guide.secondSlug === tool.slug') &&
-  aiToolsProfile.includes('className="ai-tools-profile-guide-links"') &&
-  aiToolsProfile.includes('href={`/ai-tools/guides/${guide.slug}`}') &&
-  aiToolsCss.includes('.ai-tools-profile-guide-links'),
-  "Only source-reviewed, relevant AI Tools guides should surface on product profiles; unrelated products must not receive invented comparisons");
 assert(aiToolsCss.includes('.ai-tools-profile-body') && aiToolsCss.includes('.ai-tools-profile-related'),
   "Individual tool profiles require responsive content and related-tool styles");
 assert(!sitemap.includes('AI_TOOLS.map(') && !sitemap.includes('route: "/ai-tools"'),
@@ -307,145 +282,33 @@ assert(aiToolsReviewWorkflow.includes("cron: '0 9 * * 1'") &&
 assert(aiToolsCss.includes('.ai-tools-evidence-status.is-stale') &&
   aiToolsCss.includes('.ai-tools-compare-evidence-grid'),
   "Source evidence and date warning must be readable on mobile");
-assert(aiToolsGuideData.includes('AI_GUIDES_REVIEWED_ON = "2026-11-21"') &&
-  aiToolsGuideData.includes('chatgpt-vs-claude') &&
-  aiToolsGuideData.includes('cursor-vs-github-copilot') &&
-  aiToolsGuideData.includes('https://cursor.com/docs/agent/overview') &&
-  aiToolsGuideData.includes('https://claude.com/pricing'),
-  "Editorial guides must have dated official sources and two meaningful researched pairings");
-assert(aiToolsGuidesIndex.includes('index: false') &&
-  aiToolsGuidesIndex.includes('AI_COMPARISON_GUIDES.map('),
-  "Thin comparison-guide archive must remain noindex while linking researched guides");
-assert(aiToolsGuidePage.includes('generateStaticParams()') &&
-  aiToolsGuidePage.includes('notFound()') &&
-  aiToolsGuidePage.includes('robots: { index: true, follow: true }') &&
-  aiToolsGuidePage.includes('findAiComparisonGuide(slug)') &&
-  aiToolsGuidePage.includes('guide.sources.map(') &&
-  aiToolsGuidePage.includes('review-methodology'),
-  "Research guides need valid 404s, canonical/indexable metadata, linked sources and methodology");
-assert(aiToolsRelatedComparisons.includes('AI_COMPARISON_GUIDES') &&
-  aiToolsRelatedComparisons.includes('AI_TOOLS_RESEARCH_GUIDES') &&
-  aiToolsRelatedComparisons.includes('chatgpt-vs-claude') &&
-  aiToolsRelatedComparisons.includes('cursor-vs-github-copilot') &&
-  aiToolsRelatedComparisons.includes('perplexity-vs-gemini-notebook') &&
-  aiToolsRelatedComparisons.includes('chatgpt-vs-gemini-for-research') &&
-  aiToolsRelatedComparisons.includes('<Link key={guide!.slug} href=') &&
-  aiToolsGuidePage.includes('<AiToolsRelatedComparisons currentSlug={guide.slug} />') &&
-  aiToolsResearchPage.includes('<AiToolsRelatedComparisons currentSlug="perplexity-vs-gemini-notebook" />') &&
-  chatGeminiResearchPage.includes('<AiToolsRelatedComparisons currentSlug="chatgpt-vs-gemini-for-research" />'),
-  "All four indexable AI Tools guides must have curated, meaningful, crawlable cross-links without touching news routing");
-assert(sitemap.includes('AI_COMPARISON_GUIDES.map(') &&
-  sitemap.includes('AI_GUIDES_REVIEWED_ON') &&
-  aiToolsPage.includes('href="/ai-tools/guides"') &&
-  aiToolsCompare.includes('findGuideForTools(first.slug, second.slug)'),
-  "Original guides must be present in sitemap and reachable from directory and exact pair comparisons");
-assert(aiToolsResearchData.includes('slug: "perplexity-vs-gemini-notebook"') &&
-  aiToolsResearchData.includes('reviewedOn: "2026-11-22"') &&
-  aiToolsResearchPage.includes('robots: { index: true, follow: true }') &&
-  aiToolsResearchPage.includes('canonical: PAGE_URL') &&
-  aiToolsResearchPage.includes('AiComparisonEvaluation') &&
-  aiToolsResearchPage.includes('create a separate pasted-text source'),
-  "Perplexity vs Gemini Notebook must be individually source-reviewed, canonical and independently testable");
-assert(aiToolsWorkflows.includes('slug: "compare-two-pdfs-with-ai"') &&
-  aiToolsWorkflows.includes('reviewedOn: "2026-11-23"') &&
-  aiToolsWorkflows.includes('sampleDocuments: 2') &&
-  aiPdfWorkflow.includes('robots: { index: true, follow: true }') &&
-  aiPdfWorkflow.includes('canonical: PAGE_URL') &&
-  aiPdfWorkflow.includes('datePublished: REVIEWED_ON') &&
-  aiPdfWorkflow.includes('source') &&
-  aiPdfWorkflow.includes('ai-pdf-reference-table') &&
-  aiPdfWorkflow.includes('No AI product was independently benchmarked') &&
-  sitemap.includes('AI_TOOLS_WORKFLOWS.map('),
-  "Only the original, fully sourced AI Tools PDF workflow is indexable with a canonical and real evidence table");
-assert(pdfSampleA.includes("FICTIONAL TEST MATERIAL") && pdfSampleB.includes("FICTIONAL TEST MATERIAL") &&
-  pdfSampleA.includes("2026-10-01") && pdfSampleB.includes("2026-10-15") &&
-  pdfSampleA.includes("No pilot budget") && pdfSampleB.includes("No pilot budget") &&
-  pdfSampleA.includes("Saturday hours: 10:00") && pdfSampleB.includes("Saturday hours: 11:00"),
-  "Fictional exercise source files must be transparent and support every reference-table change");
-assert(aiToolsPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
-  aiToolsTaskFinder.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
-  aiToolsResearchPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
-  chatGeminiResearchPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"'),
-  "New reviewed workflow should be directly discoverable inside AI Tools without news-category promotion");
-assert(aiToolsResearchData.includes('slug: "chatgpt-vs-gemini-for-research"') &&
-  aiToolsResearchData.includes('CHATGPT_GEMINI_RESEARCH_GUIDE') &&
-  chatGeminiResearchPage.includes('robots: { index: true, follow: true }') &&
-  chatGeminiResearchPage.includes('canonical: PAGE_URL') &&
-  chatGeminiResearchPage.includes('AiComparisonEvaluation') &&
-  chatGeminiResearchPage.includes('reviewedOn: REVIEWED_ON') &&
-  chatGeminiResearchPage.includes('No hands-on benchmark claimed') &&
-  chatGeminiResearchPage.includes('https://support.google.com/gemini/answer/15719111?hl=en') &&
-  chatGeminiResearchPage.includes('https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt'),
-  "Fourth original AI Tools guide needs dated evidence, self-canonical, no fabricated ranking and blank user-run tests");
-assert(aiToolsResearchData.includes('firstToolSlug: "perplexity"') &&
-  aiToolsResearchData.includes('secondToolSlug: "notebooklm"') &&
-  aiToolsResearchData.includes('firstToolSlug: "chatgpt"') &&
-  aiToolsResearchData.includes('secondToolSlug: "gemini"') &&
-  aiToolsResearchData.includes('findAiToolsResearchGuideForTools') &&
-  aiToolsCompare.includes('findGuideForTools(first.slug, second.slug)') &&
-  aiToolsCompare.includes('findAiToolsResearchGuideForTools(first.slug, second.slug)') &&
-  aiToolsCompare.includes('Read {first.name} vs {second.name} guide') &&
-  aiToolsCompare.includes('index: false'),
-  "AI Tools compare must show exact researched guides in either pair order while remaining noindex and avoiding invented recommendations");
-assert(sitemap.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
-  aiToolsGuidesIndex.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
-  aiToolsGuidesIndex.includes('index: false') &&
-  !aiToolsDiscovery.includes('AI_TOOLS_RESEARCH_GUIDES'),
-  "Only individually reviewed AI Tools guide should be indexed and discoverable within AI Tools without appearing in global news");
-assert(aiToolsFreshnessAudit.includes('AI_GUIDES_REVIEWED_ON'),
-  "Weekly manual-source review must include editorial guides' review date");
-assert(aiToolsCss.includes('.ai-guide-layout') &&
-  aiToolsCss.includes('.ai-guide-scenarios') &&
-  aiToolsCss.includes('.ai-guide-sources'),
-  "Editorial guides require responsive sections and source-led layout");
-assert(aiToolsGuidePage.includes('AiComparisonEvaluation') &&
-  aiToolsGuidePage.includes('href="#test-it-yourself"') &&
-  aiToolsGuidePage.includes('getAiEvaluationTasks(guide.slug)'),
-  "Both editorial comparison guides should include the same-tasks reader evaluation");
-assert(aiToolsEvaluationData.includes('chatgpt-vs-claude') &&
-  aiToolsEvaluationData.includes('cursor-vs-github-copilot') &&
-  aiToolsEvaluationData.includes('source-accuracy') &&
-  aiToolsEvaluationData.includes('typed-function') &&
-  aiToolsEvaluationData.includes('checklist'),
-  "Comparisons must provide concrete synthetic tasks and checkable expected outcomes");
-assert(aiToolsEvaluationComponent.includes('setResults(') &&
-  aiToolsEvaluationComponent.includes('navigator.clipboard.writeText') &&
-  aiToolsEvaluationComponent.includes('safeCsvCell') &&
-  aiToolsEvaluationComponent.includes('Export my results (CSV)') &&
-  aiToolsEvaluationComponent.includes('No winner or provider ranking is inferred'),
-  "Visitor-only results must be entered locally, safely exported and never described as DECODISTA ratings");
-assert(!aiToolsEvaluationComponent.includes('localStorage') &&
-  !aiToolsEvaluationComponent.includes('fetch(') &&
-  !aiToolsEvaluationComponent.includes('sendBeacon('),
-  "Evaluation inputs must never be persisted or submitted without reader consent");
-assert(aiToolsCss.includes('.ai-guide-test-cases') &&
-  aiToolsCss.includes('.ai-guide-test-rating') &&
-  aiToolsCss.includes('.ai-guide-test-prompt pre'),
-  "Fair-test worksheet needs accessible, compact and responsive styling");
-assert(aiToolsTrialAudit.includes('auditTrialPacket(') &&
-  aiToolsTrialAudit.includes('trialTemplate(') &&
-  aiToolsTrialAudit.includes('promptSha256') &&
-  aiToolsTrialAudit.includes('independentReview') &&
-  aiToolsTrialAudit.includes('originalOutput'),
-  "Private trial packets must require original responses, the exact prompt and a distinct reviewer");
-assert(aiToolsTrialTests.includes('syntheticPacket(') &&
-  aiToolsTrialTests.includes('Blank templates must not be accepted') &&
-  aiToolsTrialTests.includes('unsupported winner'),
-  "Trial audit must test incomplete and manipulated synthetic packets");
-assert(aiToolsProtocol.includes('not an automated vendor benchmark') &&
-  aiToolsProtocol.includes('never contacts either vendor') &&
-  gitignore.includes('/local-ai-trials/'),
-  "Local AI trials must remain private and explicitly unverified");
-assert(aiToolsDiscovery.includes('AI_COMPARISON_GUIDES.map(') &&
-  aiToolsDiscovery.includes('href={`/ai-tools/guides/${guide.slug}`}') &&
-  aiToolsDiscovery.includes("No untested winners"),
-  "Contextual cards should link only the two documented editorial guides without synthetic rankings");
-assert(homepage.includes('<AiComparisonDiscovery placement="home" />') &&
-  categoryPage.includes('section === "ai" && page === 1 && featured && <AiComparisonDiscovery placement="category" />'),
-  "Original AI comparison guides must be linked from indexable homepage and published AI editorial category");
-assert(redesignedCss.includes('.editorial-ai-guides-grid') &&
-  redesignedCss.includes('.editorial-ai-guide-action'),
-  "Editorial guide discovery cards need layout styling and descriptive anchors");
+assert(aiToolsProductScope.includes("No editorial guides") && aiToolsProductScope.includes("global English-first discovery") && aiToolsProductScope.includes("/ai-tools/compare"), "AI Tools must remain a product-only discovery and comparison application");
+// Product-only contract: legacy editorial AI Tools pages, files and links must stay removed.
+for (const deleted of [
+  "app/ai-tools/guides/page.tsx",
+  "app/ai-tools/guides/[slug]/page.tsx",
+  "app/ai-tools/guides/chatgpt-vs-gemini-for-research/page.tsx",
+  "app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx",
+  "app/ai-tools/workflows/compare-two-pdfs-with-ai/page.tsx",
+  "public/ai-tools/samples/library-hours-notice-v1.txt",
+  "public/ai-tools/samples/library-hours-notice-v2.txt",
+  "lib/ai-tools-comparison-guides.ts",
+  "lib/ai-tools-research-guides.ts",
+  "lib/ai-tools-workflows.ts",
+]) {
+  assert(!fs.existsSync(new URL("../" + deleted, import.meta.url)), "Obsolete editorial file must remain removed: " + deleted);
+}
+for (const artifact of [homepage, aiToolsPage, aiToolsProfile, aiToolsCompare, aiToolsTaskFinder, sitemap]) {
+  assert(!artifact.includes("/ai-tools/guides") && !artifact.includes("/ai-tools/workflows"),
+    "User-facing AI Tools navigation must not point at removed editorial pages");
+}
+assert(!sitemap.includes("AI_COMPARISON_GUIDES") && !sitemap.includes("AI_TOOLS_RESEARCH_GUIDES") && !sitemap.includes("AI_TOOLS_WORKFLOWS"),
+  "Removed editorial URLs must not be reintroduced through the sitemap");
+assert(aiToolsTrialAudit.includes("auditTrialPacket(") &&
+  aiToolsTrialTests.includes("syntheticPacket(") &&
+  aiToolsProtocol.includes("not an automated vendor benchmark") &&
+  gitignore.includes("/local-ai-trials/"),
+  "Independent evidence-audit tooling remains private and functional");
 const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s\S]*?)\] as const;/)?.[1];
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(

@@ -4,7 +4,6 @@ import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { AiComparisonDiscovery } from "@/components/ai-comparison-discovery";
 import { articles, getArticlesByCategory, getArticlesByContentType } from "@/lib/content";
 import { parsePageNumber } from "@/lib/pagination";
 import { CATEGORY_DEFINITIONS, CATEGORY_MAP, CONTENT_TYPE_MAP, SITE_NAME, SITE_URL, type CategorySlug } from "@/lib/site";
@@ -113,7 +112,6 @@ export default async function CategoryPage({ params, searchParams }: { params: P
           </div>
         </section>
       )}
-      {section === "ai" && page === 1 && featured && <AiComparisonDiscovery placement="category" />}
       {listing.length > 0 && <section className="section-block wrap" aria-labelledby="category-latest-title">
         <div className="section-heading"><div><span className="eyebrow">Page {page} of {pages}</span><h2 id="category-latest-title">More in {category.shortName}</h2></div></div>
         <div className="article-grid">{visible.map((article) => <ArticleCard key={article.slug} article={article} />)}</div>

@@ -124,7 +124,7 @@ export function AiToolsExplorer() {
             className={selected.length === 2 ? "ai-tools-compare-link" : "ai-tools-compare-link is-idle"}
             href={compareHref}
           >
-            {selected.length === 2 ? "Compare selected tools" : "Open comparison guide"}
+            {selected.length === 2 ? "Compare selected tools" : "Open comparison"}
             <ArrowRight size={17} aria-hidden="true" />
           </a>
         </aside>

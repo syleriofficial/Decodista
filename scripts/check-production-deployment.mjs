@@ -37,16 +37,18 @@ const icloudExperimentPath = "/articles/does-icloud-backup-include-photos";
 const currentSections = ["/ai", "/how-to", "/security", "/digital-life"];
 const editorialSections = ["/tech-news", "/reviews", "/science"];
 const primaryNavigation = ["/tech-news", "/ai", "/ai-tools", "/reviews", "/how-to", "/security", "/science", "/latest"];
-const aiToolsResearchGuidePath = "/ai-tools/guides/perplexity-vs-gemini-notebook";
-const chatGeminiResearchGuidePath = "/ai-tools/guides/chatgpt-vs-gemini-for-research";
-const pdfWorkflowPath = "/ai-tools/workflows/compare-two-pdfs-with-ai";
-const pdfSamples = [
+const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude"];
+const removedEditorialRoutes = [
+  "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude",
+  "/ai-tools/guides/cursor-vs-github-copilot",
+  "/ai-tools/guides/perplexity-vs-gemini-notebook",
+  "/ai-tools/guides/chatgpt-vs-gemini-for-research",
+  "/ai-tools/workflows/compare-two-pdfs-with-ai",
   "/ai-tools/samples/library-hours-notice-v1.txt",
   "/ai-tools/samples/library-hours-notice-v2.txt",
 ];
-const aiToolsDiscoveryRoutes = ["/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/alternatives?tool=claude", "/ai-tools/guides", "/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot", aiToolsResearchGuidePath, chatGeminiResearchGuidePath];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, pdfWorkflowPath, ...pdfSamples, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -95,19 +97,22 @@ for (const path of ["/", "/how-to", "/latest", "/search", "/about", "/review-met
 }
 
 
-const researchedGuidePaths = ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"];
-for (const route of ["/", "/ai"]) {
-  const html = snapshots[route]?.body ?? "";
-  const head = html.split("</head>", 1)[0];
-  const placement = route === "/" ? "home" : "category";
-  const match = html.match(new RegExp('<section[^>]+editorial-ai-guides--' + placement + '[\\s\\S]*?<\\/section>'));
-  const block = match?.[0] ?? "";
-  check(route + " indexable editorial page links directly to reviewed comparisons",
-    researchedGuidePaths.every((path) => block.includes('href="' + path + '"')) &&
-    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
-    "Contextual guide links should be accessible from indexable editorial pages");
+for (const route of removedEditorialRoutes) {
+  try {
+    const result = await inspect(route);
+    check("Removed AI Tools editorial route " + route, result.status === 404 || result.status === 410,
+      "Expected 404 or 410 after deliberate removal; HTTP " + result.status);
+  } catch (error) {
+    check("Removed AI Tools editorial route " + route, false, String(error));
+  }
 }
-for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/guides"]) {
+for (const route of ["/", "/ai", "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt"]) {
+  const html = snapshots[route]?.body ?? "";
+  check("No obsolete AI Tools editorial links on " + route,
+    !html.includes('href="/ai-tools/guides') && !html.includes('href="/ai-tools/workflows'),
+    "Navigation must point to interactive product features, not removed articles");
+}
+for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/pricing", "/ai-tools/alternatives"]) {
   const html = snapshots[path]?.body ?? "";
   if (!html) continue;
   const head = html.split("</head>", 1)[0];
@@ -124,88 +129,6 @@ check("AI Tools pricing includes official-source confirmation",
 check("AI Tools alternatives keeps category matching",
   alternativesHtml.includes("Claude") && alternativesHtml.includes("ChatGPT") && alternativesHtml.includes("Gemini"),
   "Claude should surface other assistant listings without invented rankings");
-
-for (const guidePath of ["/ai-tools/guides/chatgpt-vs-claude", "/ai-tools/guides/cursor-vs-github-copilot"]) {
-  const body = snapshots[guidePath]?.body ?? "";
-  const head = body.split("</head>", 1)[0];
-  check(guidePath + " original guide has source links and decision sections",
-    body.includes("ai-guide-scenarios") &&
-    body.includes("ai-guide-sources") &&
-    body.includes("21 November 2026") &&
-    body.includes('href="https://'),
-    "Researched comparisons should render scenarios, research date and provider references");
-  check(guidePath + " self-canonical and indexable metadata",
-    head.includes('rel="canonical"') &&
-    head.includes(guidePath) &&
-    !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(head),
-    "Original editorial guides are indexable with unique canonical metadata");
-}
-
-const researchBody = snapshots[aiToolsResearchGuidePath]?.body ?? "";
-const researchHead = researchBody.split("</head>", 1)[0];
-check("AI Tools-only Perplexity vs Gemini Notebook guide has original evidence and tests",
-  researchBody.includes("Five decisions that matter") &&
-  researchBody.includes("ai-guide-sources") &&
-  researchBody.includes("22 November 2026") &&
-  researchBody.includes("create a separate pasted-text source") &&
-  researchBody.includes('href="https://support.google.com/gemininotebook/answer/16215270?hl=en"'),
-  "Research guide must provide dated sources and honest source-import test instructions");
-check("AI Tools-only research guide self-canonical and indexable",
-  researchHead.includes('rel="canonical"') &&
-  researchHead.includes(aiToolsResearchGuidePath) &&
-  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(researchHead),
-  "Individually reviewed AI Tools guide may be indexed without indexing thin directory pages");
-const aiToolsGuideArchive = snapshots["/ai-tools/guides"]?.body ?? "";
-check("AI Tools-only guide archive discovers the new research comparison",
-  aiToolsGuideArchive.includes('href="' + aiToolsResearchGuidePath + '"'),
-  "New guide must be reachable from AI Tools guide archive");
-
-const chatGeminiBody = snapshots[chatGeminiResearchGuidePath]?.body ?? "";
-const chatGeminiHead = chatGeminiBody.split("</head>", 1)[0];
-check("AI Tools-only ChatGPT vs Gemini research guide renders source-led scenarios and test worksheet",
-  chatGeminiBody.includes("Six questions to ask before choosing") &&
-  chatGeminiBody.includes("ai-guide-scenarios") &&
-  chatGeminiBody.includes("ai-guide-sources") &&
-  chatGeminiBody.includes("22 November 2026") &&
-  chatGeminiBody.includes("No hands-on benchmark claimed") &&
-  chatGeminiBody.includes('href="https://support.google.com/gemini/answer/15719111?hl=en"') &&
-  chatGeminiBody.includes('href="https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt"'),
-  "Guide must render documented workflows, factual limitations and official citations");
-check("AI Tools-only ChatGPT vs Gemini research guide self-canonical and indexable",
-  chatGeminiHead.includes('rel="canonical"') &&
-  chatGeminiHead.includes(chatGeminiResearchGuidePath) &&
-  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(chatGeminiHead),
-  "New individually reviewed guide must have a self-canonical and indexable metadata");
-check("AI Tools guide archive discovers ChatGPT vs Gemini",
-  aiToolsGuideArchive.includes('href="' + chatGeminiResearchGuidePath + '"'),
-  "Fourth guide must be visible in AI Tools-only archive");
-
-const pdfWorkflowBody = snapshots[pdfWorkflowPath]?.body ?? "";
-const pdfWorkflowHead = pdfWorkflowBody.split("</head>", 1)[0];
-check("AI Tools original PDF workflow has dated source-led guidance and human verifiable samples",
-  pdfWorkflowBody.includes("Six steps from documents to a defensible change log") &&
-  pdfWorkflowBody.includes("ai-pdf-reference-table") &&
-  pdfWorkflowBody.includes("23 November 2026") &&
-  pdfWorkflowBody.includes("not results measured from any AI system") &&
-  pdfWorkflowBody.includes('href="https://support.google.com/gemininotebook/answer/16215270?hl=en"') &&
-  pdfWorkflowBody.includes('href="https://help.openai.com/en/articles/8555545-uploading-files-and-audio-to-chatgpt"'),
-  "Published AI Tools-only workflow needs primary sources and true editorial limitations");
-check("AI Tools original PDF workflow canonical and indexable",
-  pdfWorkflowHead.includes('rel="canonical"') &&
-  pdfWorkflowHead.includes(pdfWorkflowPath) &&
-  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(pdfWorkflowHead),
-  "The one source-reviewed document workflow should be indexable, unlike thin directory pages");
-check("Original PDF workflow is discoverable from other AI Tools pages",
-  (snapshots["/ai-tools"]?.body ?? "").includes('href="' + pdfWorkflowPath + '"') &&
-  researchBody.includes('href="' + pdfWorkflowPath + '"') &&
-  chatGeminiBody.includes('href="' + pdfWorkflowPath + '"'),
-  "Relevant AI Tools comparisons and task homepage should link the document workflow");
-for (const samplePath of pdfSamples) {
-  const doc = snapshots[samplePath]?.body ?? "";
-  check("Fictional document demo file is available " + samplePath,
-    doc.includes("FICTIONAL TEST MATERIAL") && doc.includes("No pilot budget"),
-    "No sample is presented as a real bulletin or an unsupported financial claim");
-}
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";
@@ -353,12 +276,7 @@ if (sitemap) {
   check("Sitemap contains Latest", sitemap.includes("https://decodista.com/latest"), "Latest archive must be discoverable");
   check("Sitemap contains review methodology", sitemap.includes("https://decodista.com/review-methodology"), "Trust page discoverability");
   check("Sitemap contains Weekly Issue 3", sitemap.includes("https://decodista.com/weekly/2026-11-16"), "New weekly issue discoverability");
-  for (const guidePath of [...researchedGuidePaths, aiToolsResearchGuidePath, chatGeminiResearchGuidePath, pdfWorkflowPath]) {
-    check("Sitemap contains reviewed guide " + guidePath,
-      sitemap.includes("<loc>" + base + guidePath + "</loc>"),
-      "The XML sitemap should contain the full preferred URL of each indexable guide");
-  }
-  for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/guides", "/ai-tools/chatgpt"]) {
+  for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/pricing", "/ai-tools/alternatives", "/ai-tools/chatgpt"]) {
     check("Sitemap excludes noindex path " + path,
       !sitemap.includes("<loc>" + base + path + "</loc>"),
       "Thin or unreviewed directory pages must not appear in XML sitemap");

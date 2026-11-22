@@ -5,7 +5,6 @@ const MAX_AGE_DAYS = 30;
 const sources = [
   { path: "lib/ai-tools-pricing.ts", key: "PRICING_CHECKED_ON" },
   { path: "lib/ai-tools-evidence.ts", key: "AI_EVIDENCE_CHECKED_ON" },
-  { path: "lib/ai-tools-comparison-guides.ts", key: "AI_GUIDES_REVIEWED_ON" },
 ];
 
 const today = new Date();
