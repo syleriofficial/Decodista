@@ -21,6 +21,9 @@ for (const sample of [
     viewport: { width: sample.width, height: sample.height },
     colorScheme: sample.scheme, reducedMotion: "reduce",
   });
+  // Review the article after the visitor has explicitly declined optional analytics.
+  // This is synthetic browser state only; it does not change production consent settings.
+  await context.addInitScript(() => localStorage.setItem("decodista-analytics-consent", "denied"));
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", (err) => errors.push(err.message));
