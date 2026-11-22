@@ -318,8 +318,10 @@ assert.deepEqual(
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
   "Header must expose only the approved primary nav items, without a More dropdown");
-assert(header.includes('aria-current={pathname === item.href ? "page" : undefined}'),
-  "Navigation should identify the active editorial category accessibly");
+assert(header.includes('aria-current={pathname === item.href ||') &&
+  header.includes('pathname.startsWith(`${item.href}/`)') &&
+  header.includes(' ? "page" : undefined}'),
+  "Navigation should identify the active editorial category and nested paths accessibly");
 assert(homepage.includes('className="home-intro wrap"'), "Homepage needs a visible editorial introduction");
 assert(science.includes("!featured && articles.length > 0") &&
   science.includes("Latest published across DECODISTA") &&

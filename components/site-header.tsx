@@ -8,6 +8,7 @@ import { NAV_ITEMS } from "@/lib/site";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -18,6 +19,14 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [open]);
 
+  useEffect(() => {
+    // Passive scroll detection changes only a shadow, never header size or position.
+    const updateScrolled = () => setScrolled(window.scrollY > 12);
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, []);
+
   const toggleTheme = () => {
     const next = document.documentElement.dataset.theme !== "dark";
     document.documentElement.dataset.theme = next ? "dark" : "light";
@@ -27,7 +36,7 @@ export function SiteHeader() {
   const closeNavigation = () => setOpen(false);
 
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <div className="edition-line wrap">
         <span>DECODISTA / INDEPENDENT TECHNOLOGY COVERAGE</span>
@@ -54,7 +63,7 @@ export function SiteHeader() {
         <nav id="site-navigation" className={`primary-nav ${open ? "is-open" : ""}`} aria-label="Main navigation">
           <div className="nav-scroll">
             {NAV_ITEMS.map((item) => (
-              <Link key={item.href} href={item.href} onClick={closeNavigation} aria-current={pathname === item.href ? "page" : undefined}>
+              <Link key={item.href} href={item.href} onClick={closeNavigation} aria-current={pathname === item.href || (item.href !== "/latest" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined}>
                 {item.label}
               </Link>
             ))}
