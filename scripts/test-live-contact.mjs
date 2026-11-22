@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 // Read-only check against the real public site. Never submit the contact form.
 const base = new URL(process.env.DECODISTA_PRODUCTION_URL ?? "https://decodista.com").origin;
 const output = "artifacts/live-contact-qa";
-const expectedMenu = ["Tech News", "Reviews", "Science"];
+const expectedMenu = ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science", "Latest"];
 await mkdir(output, { recursive: true });
 
 const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -57,7 +57,7 @@ for (const view of [
     assert.equal(await page.locator("main h1").innerText(), "Contact");
     assert.deepEqual(
       (await page.locator("#site-navigation .nav-scroll > a").allTextContents()).map((item) => item.trim()),
-      expectedMenu, "Live Contact header must show the approved three primary sections",
+      expectedMenu, "Live Contact header must show all eight approved primary sections",
     );
     const footerHrefs = await page.locator("footer a[href]").evaluateAll(
       (elements) => elements.map((element) => element.getAttribute("href")),
