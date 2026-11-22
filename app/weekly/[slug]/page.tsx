@@ -99,6 +99,12 @@ export default async function WeeklyIssuePage({ params }: { params: Promise<{ sl
             <div className="weekly-item-content">
               <div className="weekly-item-kicker"><span>{item.category}</span><time dateTime={item.announcedDate}>{formatDate(item.announcedDate)}</time></div>
               <h2 id={`${item.id}-heading`}>{item.headline}</h2>
+              {item.image && (
+                <figure className="weekly-item-visual">
+                  <Image src={item.image.src} alt={item.image.alt} width={item.image.width} height={item.image.height} unoptimized loading="lazy" />
+                  <figcaption>DECODISTA editorial illustration</figcaption>
+                </figure>
+              )}
               <div className="weekly-item-details">
                 <section><h3>What changed</h3><p>{item.whatChanged}</p></section>
                 <section><h3>Why it matters</h3><p>{item.whyItMatters}</p></section>
