@@ -273,6 +273,69 @@ try {
         "Research guide must not overflow at " + view.width + "px");
       await page.screenshot({ path: `${outputDir}/${view.label}-chatgpt-gemini-research.png`, fullPage: true });
 
+      // Original, independently reviewed practical workflow with reproducible
+      // fictional inputs and a manually verifiable answer (NOT an AI benchmark).
+      const pdfWorkflowPath = "/ai-tools/workflows/compare-two-pdfs-with-ai";
+      const pdfWorkflowResponse = await page.goto(base + pdfWorkflowPath,
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(pdfWorkflowResponse?.status(), 200, "PDF evidence-check workflow must render");
+      assert.equal(await page.locator("main h1").count(), 1, "Workflow must have one clear H1");
+      assert((await page.locator("main h1").innerText()).includes("Compare Two PDFs with AI"));
+      const pdfRobots = await page.locator('head meta[name="robots"]').count()
+        ? await page.locator('head meta[name="robots"]').getAttribute("content") : "index,follow";
+      assert(!pdfRobots?.includes("noindex"), "Original source-checked workflow may be indexed");
+      assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith(pdfWorkflowPath),
+        "One unique self-canonical for document comparison workflow");
+      assert.equal(await page.locator(".ai-guide-scenario").count(), 6, "Six practical workflow steps required");
+      assert.equal(await page.locator(".ai-pdf-reference-table tbody tr").count(), 6,
+        "Six manually inspectable change and unknown rows required");
+      assert.equal(await page.locator(".ai-pdf-checklist li").count(), 6,
+        "Six independent human verification checks required");
+      assert.equal(await page.locator(".ai-guide-sources ol li").count(), 5,
+        "Documented workflow needs five official provider references");
+      assert.equal(await page.locator("a.ai-pdf-sample-card").count(), 2,
+        "Both fictional source documents must be downloadable");
+      const pdfBody = await page.locator("main.ai-pdf-workflow-page").innerText();
+      assert(pdfBody.includes("not results measured from any AI system") &&
+        pdfBody.includes("14 days later") && pdfBody.includes("not stated"),
+        "Disclosure, correct worked differences and missing-fact handling are necessary");
+      assert((await page.locator(".ai-guide-byline").innerText()).includes("23 November 2026"),
+        "Visible original source check date required");
+      assert((await page.locator(".ai-pdf-prompt pre").innerText()).includes("If you cannot access both files"),
+        "Reusable prompt must enforce true document access rather than invented citations");
+      const pdfSchemas = (await page.locator('script[type="application/ld+json"]').allTextContents())
+        .flatMap((item) => { try { const value = JSON.parse(item); return Array.isArray(value) ? value : [value]; }
+          catch { return []; } });
+      assert(pdfSchemas.some((item) => item?.["@type"] === "Article" &&
+        item.mainEntityOfPage?.endsWith(pdfWorkflowPath) && item.datePublished === "2026-11-23"),
+        "Workflow must expose original dated Article schema");
+      assert(pdfSchemas.some((item) => item?.["@type"] === "BreadcrumbList" &&
+        item.itemListElement?.some((element) => element?.item?.endsWith(pdfWorkflowPath))),
+        "Workflow must expose own navigable breadcrumb");
+      const pdfGeometry = await page.evaluate(() => ({
+        body: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
+      }));
+      assert(pdfGeometry.body <= pdfGeometry.viewport + 1,
+        "Original workflow must not horizontally overflow at " + view.width + "px");
+      await page.screenshot({ path: `${outputDir}/${view.label}-compare-two-pdfs.png`, fullPage: true });
+      if (view.label === "desktop") {
+        for (const name of ["library-hours-notice-v1.txt", "library-hours-notice-v2.txt"]) {
+          const res = await page.request.get(base + "/ai-tools/samples/" + name);
+          assert.equal(res.status(), 200, "Fictional sample source must be downloadable: " + name);
+          const sample = await res.text();
+          assert(sample.includes("FICTIONAL TEST MATERIAL") && sample.includes("No pilot budget"),
+            "Every reference document must label itself fictional and reject invented budgets");
+        }
+        const homeHtml = await (await page.request.get(base + "/ai-tools")).text();
+        assert(homeHtml.includes('href="' + pdfWorkflowPath + '"'),
+          "Noindex AI Tools task homepage should link the substantive workflow");
+        for (const path of [chatGeminiPath, "/ai-tools/guides/perplexity-vs-gemini-notebook"]) {
+          const html = await (await page.request.get(base + path)).text();
+          assert(html.includes('href="' + pdfWorkflowPath + '"'),
+            "Existing indexed research guide must link directly to the task walkthrough: " + path);
+        }
+      }
+
       // Profile discovery is fully browsable and remains descriptive / noindex.
       const profileResponse = await page.goto(base + "/ai-tools/chatgpt", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(profileResponse?.status(), 200, "A real profile should load");
@@ -485,6 +548,8 @@ try {
           "Fourth original AI Tools research guide must appear once in sitemap");
         assert(!sitemapXml.includes("<loc>https://decodista.com/ai-tools</loc>"),
           "Noindex AI Tools directory should not be accidentally submitted in sitemap");
+        assert.equal(sitemapXml.split("<loc>https://decodista.com/ai-tools/workflows/compare-two-pdfs-with-ai</loc>").length - 1, 1,
+          "One reviewed PDF workflow URL must appear exactly once in XML sitemap");
         const invalid = await page.request.get(base + "/ai-tools/guides/not-a-guide");
         assert.equal(invalid.status(), 404, "Unknown editorial guide must return 404");
 

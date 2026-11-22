@@ -380,6 +380,7 @@ export default function ChatgptGeminiResearchGuide() {
           </nav>
           <div className="ai-guide-side-links">
             <span className="ai-tools-eyebrow">Continue with AI Tools</span>
+            <Link href="/ai-tools/workflows/compare-two-pdfs-with-ai">Compare two PDFs with an evidence checklist <ArrowRight size={16} aria-hidden="true" /></Link>
             <Link href="/ai-tools/compare?first=chatgpt&second=gemini">Open interactive comparison <ArrowRight size={16} aria-hidden="true" /></Link>
             <Link href="/ai-tools/guides">All AI comparison guides <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>

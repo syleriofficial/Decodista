@@ -137,6 +137,10 @@ const aiToolsGuidePage = read("app/ai-tools/guides/[slug]/page.tsx");
 const aiToolsRelatedComparisons = read("components/ai-tools-related-comparisons.tsx");
 const aiToolsGuideData = read("lib/ai-tools-comparison-guides.ts");
 const aiToolsResearchData = read("lib/ai-tools-research-guides.ts");
+const aiToolsWorkflows = read("lib/ai-tools-workflows.ts");
+const aiPdfWorkflow = read("app/ai-tools/workflows/compare-two-pdfs-with-ai/page.tsx");
+const pdfSampleA = read("public/ai-tools/samples/library-hours-notice-v1.txt");
+const pdfSampleB = read("public/ai-tools/samples/library-hours-notice-v2.txt");
 const aiToolsResearchPage = read("app/ai-tools/guides/perplexity-vs-gemini-notebook/page.tsx");
 const chatGeminiResearchPage = read("app/ai-tools/guides/chatgpt-vs-gemini-for-research/page.tsx");
 const aiToolsEvaluationComponent = read("components/ai-comparison-evaluation.tsx");
@@ -342,6 +346,27 @@ assert(aiToolsResearchData.includes('slug: "perplexity-vs-gemini-notebook"') &&
   aiToolsResearchPage.includes('AiComparisonEvaluation') &&
   aiToolsResearchPage.includes('create a separate pasted-text source'),
   "Perplexity vs Gemini Notebook must be individually source-reviewed, canonical and independently testable");
+assert(aiToolsWorkflows.includes('slug: "compare-two-pdfs-with-ai"') &&
+  aiToolsWorkflows.includes('reviewedOn: "2026-11-23"') &&
+  aiToolsWorkflows.includes('sampleDocuments: 2') &&
+  aiPdfWorkflow.includes('robots: { index: true, follow: true }') &&
+  aiPdfWorkflow.includes('canonical: PAGE_URL') &&
+  aiPdfWorkflow.includes('datePublished: REVIEWED_ON') &&
+  aiPdfWorkflow.includes('source') &&
+  aiPdfWorkflow.includes('ai-pdf-reference-table') &&
+  aiPdfWorkflow.includes('No AI product was independently benchmarked') &&
+  sitemap.includes('AI_TOOLS_WORKFLOWS.map('),
+  "Only the original, fully sourced AI Tools PDF workflow is indexable with a canonical and real evidence table");
+assert(pdfSampleA.includes("FICTIONAL TEST MATERIAL") && pdfSampleB.includes("FICTIONAL TEST MATERIAL") &&
+  pdfSampleA.includes("2026-10-01") && pdfSampleB.includes("2026-10-15") &&
+  pdfSampleA.includes("No pilot budget") && pdfSampleB.includes("No pilot budget") &&
+  pdfSampleA.includes("Saturday hours: 10:00") && pdfSampleB.includes("Saturday hours: 11:00"),
+  "Fictional exercise source files must be transparent and support every reference-table change");
+assert(aiToolsPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
+  aiToolsTaskFinder.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
+  aiToolsResearchPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"') &&
+  chatGeminiResearchPage.includes('href="/ai-tools/workflows/compare-two-pdfs-with-ai"'),
+  "New reviewed workflow should be directly discoverable inside AI Tools without news-category promotion");
 assert(aiToolsResearchData.includes('slug: "chatgpt-vs-gemini-for-research"') &&
   aiToolsResearchData.includes('CHATGPT_GEMINI_RESEARCH_GUIDE') &&
   chatGeminiResearchPage.includes('robots: { index: true, follow: true }') &&
