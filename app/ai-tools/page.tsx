@@ -90,6 +90,17 @@ export default function AIToolsPage() {
 
       <AiTaskFinder />
 
+      <section className="ai-pdf-home-feature wrap" aria-labelledby="ai-pdf-home-feature-title">
+        <div>
+          <span className="ai-tools-eyebrow">Try a complete AI workflow</span>
+          <h2 id="ai-pdf-home-feature-title">Compare two PDFs and check every change</h2>
+          <p>Download fictional document versions, use a reproducible prompt, and validate the comparison against an original source-backed answer. No upload or sign-up with DECODISTA.</p>
+        </div>
+        <Link href="/ai-tools/workflows/compare-two-pdfs-with-ai">
+          Read the PDF comparison walkthrough <ArrowRight size={17} aria-hidden="true" />
+        </Link>
+      </section>
+
       <AiToolsExplorer />
 
       <section className="ai-tools-method wrap" aria-labelledby="ai-tools-method-title">
