@@ -217,13 +217,13 @@ export const NAV_ITEMS = [
   { href: "/how-to", label: "How-To" },
   { href: "/security", label: "Security" },
   { href: "/science", label: "Science" },
+  { href: "/latest", label: "Latest" },
 ] as const;
 
 // Digital Life and other secondary destinations stay in the footer; no More menu.
 // Weekly Brief stays discoverable here while Entertainment remains unpromoted.
 export const FOOTER_SECONDARY_ITEMS = [
   { href: "/digital-life", label: "Digital Life" },
-  { href: "/latest", label: "Latest" },
   { href: "/weekly", label: "Weekly Brief" },
 ] as const;
 
