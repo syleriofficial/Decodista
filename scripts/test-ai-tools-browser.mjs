@@ -137,6 +137,8 @@ try {
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("ChatGPT"));
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Claude"));
       assert.equal(await page.getByText("invented rating", { exact: false }).count(), 0);
+      assert((await page.locator(".ai-guide-context-banner a").getAttribute("href")) === "/ai-tools/guides/chatgpt-vs-claude",
+        "Existing source-led ChatGPT vs Claude comparison must keep its guide link");
 
       assert.equal(await page.locator(".ai-tools-compare-evidence-card").count(), 2, "Comparison should show two source status cards");
       await page.locator("#compare-first").selectOption("perplexity");
@@ -145,6 +147,29 @@ try {
       await page.locator(".ai-tools-compare-table").waitFor();
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Perplexity"));
       assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Gemini Notebook"));
+      assert((await page.locator(".ai-guide-context-banner a").getAttribute("href")) ===
+        "/ai-tools/guides/perplexity-vs-gemini-notebook",
+        "Exact research pair must link its own source-led guide");
+      if (view.label === "desktop") {
+        const pairGuides = [
+          ["perplexity", "notebooklm", "perplexity-vs-gemini-notebook"],
+          ["notebooklm", "perplexity", "perplexity-vs-gemini-notebook"],
+          ["chatgpt", "gemini", "chatgpt-vs-gemini-for-research"],
+          ["gemini", "chatgpt", "chatgpt-vs-gemini-for-research"],
+          ["cursor", "github-copilot", "cursor-vs-github-copilot"],
+        ];
+        for (const [a, b, guideSlug] of pairGuides) {
+          const response = await page.request.get(base + `/ai-tools/compare?first=${a}&second=${b}`);
+          assert.equal(response.status(), 200, "Comparable tools must produce a valid page");
+          const html = await response.text();
+          assert(html.includes('href="/ai-tools/guides/' + guideSlug + '"'),
+            "Requested ordered or reversed pair must link its exact researched guide: " + a + "/" + b);
+        }
+        const unrelated = await page.request.get(base + "/ai-tools/compare?first=chatgpt&second=cursor");
+        assert.equal(unrelated.status(), 200);
+        assert(!(await unrelated.text()).includes('class="ai-guide-context-banner"'),
+          "No unrelated guide should be presented as an exact match");
+      }
 
       const dimensions = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth,
