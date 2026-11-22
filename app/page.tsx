@@ -2,6 +2,7 @@ import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { ArrowRight, Search } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
+import { FutureAdPlacement } from "@/components/commercial-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import {
   articles,
@@ -148,6 +149,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <FutureAdPlacement placement="home-after-latest" />
 
       <section className="home-weekly-brief wrap" aria-labelledby="home-weekly-brief-title">
         <div className="home-weekly-brief-heading">
