@@ -1,0 +1,32 @@
+name: Fake store production HTTP smoke QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/fake-store-production-http-qa.yml'
+      - 'scripts/verify-fake-store-production-http.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-article:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check actual live article, images and SEO over public HTTP
+        run: node scripts/verify-fake-store-production-http.mjs
+      - name: Upload external HTTP smoke report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fake-store-production-http-qa
+          path: artifacts/fake-store-live-http-qa/
+          if-no-files-found: warn
+          retention-days: 7
