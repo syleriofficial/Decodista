@@ -149,6 +149,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="home-ai-tools wrap" aria-labelledby="home-ai-tools-title">
+        <div className="home-ai-tools-copy">
+          <span className="eyebrow">Explore with confidence</span>
+          <h2 id="home-ai-tools-title">Find an AI tool that fits the job.</h2>
+          <p>Browse tools by use case, then compare two options side by side. Clear descriptions, without invented scores or untested rankings.</p>
+        </div>
+        <div className="home-ai-tools-links">
+          <Link className="home-ai-tools-link" href="/ai-tools">
+            <span className="home-ai-tools-label">01 / Discover</span>
+            <strong>Explore AI Tools</strong>
+            <span className="home-ai-tools-description">Start with the task you want to complete.</span>
+            <ArrowRight aria-hidden="true" />
+          </Link>
+          <Link className="home-ai-tools-link" href="/ai-tools/compare">
+            <span className="home-ai-tools-label">02 / Compare</span>
+            <strong>Compare two tools</strong>
+            <span className="home-ai-tools-description">See how their purposes and uses differ.</span>
+            <ArrowRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
       <section className="home-weekly-brief wrap" aria-labelledby="home-weekly-brief-title">
         <div className="home-weekly-brief-heading">
           <span className="eyebrow">Independent weekly edition · No. {currentWeeklyBrief.issueNumber}</span>
