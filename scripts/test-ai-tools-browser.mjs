@@ -286,6 +286,25 @@ try {
       assert(!pdfRobots?.includes("noindex"), "Original source-checked workflow may be indexed");
       assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith(pdfWorkflowPath),
         "One unique self-canonical for document comparison workflow");
+      const sourceVisual = page.locator("figure.ai-pdf-evidence-visual");
+      assert.equal(await sourceVisual.count(), 1,
+        "PDF workflow needs one explanatory, source-backed editorial diagram");
+      assert.equal(await sourceVisual.locator(".ai-pdf-evidence-paper").count(), 2,
+        "Show the original and the revised fictional source side by side");
+      assert.equal(await sourceVisual.locator(".ai-pdf-evidence-result").count(), 3,
+        "Three numeric differences should be legible without using AI output");
+      assert.equal(await sourceVisual.locator(".ai-pdf-evidence-source-link").count(), 2,
+        "Each visual document must link to its own original downloadable TXT source");
+      const visualCopy = await sourceVisual.innerText();
+      for (const expected of ["14 days later", "2 hours shorter", "3 hours added", "not stated in either source", "no AI model was benchmarked"]) {
+        assert(visualCopy.includes(expected), "Diagram must disclose accurate source evidence: " + expected);
+      }
+      const visualSize = await sourceVisual.evaluate((element) => ({
+        contentWidth: element.scrollWidth,
+        visibleWidth: element.clientWidth,
+      }));
+      assert(visualSize.contentWidth <= visualSize.visibleWidth + 1,
+        "Document comparison diagram must not overflow at " + view.width + "px");
       assert.equal(await page.locator(".ai-guide-scenario").count(), 6, "Six practical workflow steps required");
       assert.equal(await page.locator(".ai-pdf-reference-table tbody tr").count(), 6,
         "Six manually inspectable change and unknown rows required");
