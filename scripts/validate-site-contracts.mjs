@@ -306,6 +306,16 @@ assert(aiToolsResearchData.includes('slug: "chatgpt-vs-gemini-for-research"') &&
   chatGeminiResearchPage.includes('https://support.google.com/gemini/answer/15719111?hl=en') &&
   chatGeminiResearchPage.includes('https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt'),
   "Fourth original AI Tools guide needs dated evidence, self-canonical, no fabricated ranking and blank user-run tests");
+assert(aiToolsResearchData.includes('firstToolSlug: "perplexity"') &&
+  aiToolsResearchData.includes('secondToolSlug: "notebooklm"') &&
+  aiToolsResearchData.includes('firstToolSlug: "chatgpt"') &&
+  aiToolsResearchData.includes('secondToolSlug: "gemini"') &&
+  aiToolsResearchData.includes('findAiToolsResearchGuideForTools') &&
+  aiToolsCompare.includes('findGuideForTools(first.slug, second.slug)') &&
+  aiToolsCompare.includes('findAiToolsResearchGuideForTools(first.slug, second.slug)') &&
+  aiToolsCompare.includes('Read {first.name} vs {second.name} guide') &&
+  aiToolsCompare.includes('index: false'),
+  "AI Tools compare must show exact researched guides in either pair order while remaining noindex and avoiding invented recommendations");
 assert(sitemap.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
   aiToolsGuidesIndex.includes('AI_TOOLS_RESEARCH_GUIDES.map(') &&
   aiToolsGuidesIndex.includes('index: false') &&
