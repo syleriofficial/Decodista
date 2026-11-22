@@ -84,12 +84,14 @@ const page = await context.newPage();
 try {
   const archive = await page.goto(base + "/weekly", { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.equal(archive?.status(), 200);
-  assert.match(await page.locator(".weekly-spotlight h2").innerText(), /Chrome.+83 Security Fixes/, "Issue 3 must be latest");
+  assert.match(await page.locator(".weekly-spotlight h2").innerText(), /Chrome.+204 Fixes/, "Issue 4 must be latest");
+  assert((await page.locator(".weekly-archive").innerText()).includes("Chrome\u0027s 83 Security Fixes"), "Issue 3 retained");
   assert((await page.locator(".weekly-archive").innerText()).includes("iPhone and Firefox Fixes"), "Older issue retained");
   const sitemap = await page.request.get(base + "/sitemap.xml");
   assert.equal(sitemap.status(), 200);
   const xml = await sitemap.text();
-  assert(xml.includes("https://decodista.com/weekly/2026-11-16"), "Issue 3 in sitemap");
+  assert(xml.includes("https://decodista.com/weekly/2026-11-22"), "Issue 4 in sitemap");
+  assert(xml.includes("https://decodista.com/weekly/2026-11-16"), "Issue 3 retained in sitemap");
   assert(xml.includes("https://decodista.com/weekly/2026-11-11"), "Issue 2 retained in sitemap");
   const unknown = await page.goto(base + "/weekly/not-a-date", { waitUntil: "domcontentloaded" });
   assert.equal(unknown?.status(), 404);
