@@ -19,7 +19,7 @@
   --hero-ink: #f5f8ff;
   --edition-panel: #e8effb;
   --max: 1360px;
-  --sticky-nav-height: 40px;
+  --sticky-nav-height: 125px; /* Full desktop publication header, including borders. */
 }
 html[data-theme="dark"] {
   --paper: #0b1423;
@@ -41,18 +41,15 @@ body { background: var(--paper); }
 .category-label, .eyebrow { font-weight: 850; }
 
 /* 2. A two-tier magazine masthead instead of a generic app toolbar */
-/* The publication masthead scrolls away, but its 38px navigation row remains pinned.
- * 86px = 4px top rule + 22px edition line + 60px title/action row.
- * CSS-only sticky avoids resizing the page or causing scroll layout shifts. */
+/* Keep the whole publication masthead visible while scrolling:
+ * edition line, DECODISTA logo/tagline, search/theme controls and all nav links. */
 .site-header {
   position: sticky;
-  top: -86px;
+  top: 0;
   z-index: 40;
   border-top: 4px solid #2454e8;
   background: var(--surface);
 }
-/* Keyboard focus on the logo, search, or theme controls must restore the full header. */
-.site-header:focus-within { top: 0; }
 html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
 .edition-line {
   min-height: 22px; display: flex; align-items: center;
@@ -343,9 +340,8 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .lead-copy h1 { font-size: clamp(2.3rem, 4.3vw, 3.75rem); }
 }
 @media (max-width: 1000px) {
-  :root { --sticky-nav-height: 70px; }
+  :root { --sticky-nav-height: 75px; }
   /* Keep the mobile menu button, search and logo visible together. */
-  .site-header, .site-header:focus-within { top: 0; }
   .edition-line { display: none; }
   .masthead {
     min-height: 70px; grid-template-columns: 44px minmax(0,1fr) auto;
@@ -381,7 +377,7 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .category-header { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  :root { --sticky-nav-height: 64px; }
+  :root { --sticky-nav-height: 69px; }
   .masthead { min-height: 64px; }
   .masthead .primary-nav.is-open { top: 64px; max-height: calc(100dvh - 64px); }
   .masthead .wordmark small, .masthead .theme-button, .home-intro-note { display: none; }
