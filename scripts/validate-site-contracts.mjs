@@ -122,7 +122,7 @@ const navigation = site.match(/export const NAV_ITEMS = \[([\s\S]*?)\] as const;
 assert(navigation, "Primary navigation definition is missing");
 assert.deepEqual(
   [...navigation.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Science"],
+  ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science"],
   "Primary navigation must follow the selected editorial menu order",
 );
 
@@ -450,7 +450,7 @@ const footerSecondary = site.match(/export const FOOTER_SECONDARY_ITEMS = \[([\s
 assert(footerSecondary, "Footer secondary navigation definition is missing");
 assert.deepEqual(
   [...footerSecondary.matchAll(/label: "([^"]+)"/g)].map((match) => match[1]),
-  ["Security", "Digital Life", "Latest", "Weekly Brief"],
+  ["Digital Life", "Latest", "Weekly Brief"],
   "Footer must retain secondary archives and Weekly Brief without restoring More",
 );
 assert(header.includes("NAV_ITEMS.map") && !header.includes("MORE_NAV_ITEMS") && !header.includes("more-menu"),
@@ -497,8 +497,8 @@ const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) =>
 const footerHrefs = [...footerSecondary.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
 assert.equal(new Set([...primaryHrefs, ...footerHrefs]).size, primaryHrefs.length + footerHrefs.length,
   "Primary and footer secondary navigation must not duplicate destinations");
-assert(!navigation.includes('href: "/security"') && !navigation.includes('href: "/entertainment"') && !navigation.includes('href: "/latest"') && !navigation.includes('href: "/weekly"') && !site.includes("MORE_NAV_ITEMS"),
-  "Security belongs in the footer; retired Entertainment and More navigation must not return");
+assert(navigation.includes('href: "/security"') && !navigation.includes('href: "/entertainment"') && !navigation.includes('href: "/latest"') && !navigation.includes('href: "/weekly"') && !site.includes("MORE_NAV_ITEMS"),
+  "Security belongs in the primary navigation; retired Entertainment and More navigation must not return");
 assert(footerSecondary.includes('href: "/weekly", label: "Weekly Brief"'),
   "Published Weekly Brief must have a visible footer archive link");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
