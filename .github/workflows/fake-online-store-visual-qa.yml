@@ -1,0 +1,58 @@
+name: Fake online store article visual QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'content/articles/how-to-spot-fake-online-store.md'
+      - 'public/images/uploads/how-to-spot-fake-online-store.webp'
+      - 'public/images/uploads/fake-online-store-domain-comparison.webp'
+      - 'public/images/uploads/fake-online-store-checklist.webp'
+      - 'scripts/test-fake-online-store-browser.mjs'
+      - '.github/workflows/fake-online-store-visual-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  article-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install project dependencies
+        run: npm ci --include=dev
+      - name: Install Playwright test runner
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Launch local article preview
+        run: |
+          npm run dev > /tmp/decodista-fake-store-preview.log 2>&1 &
+          for i in $(seq 1 35); do
+            if curl --connect-timeout 2 --max-time 4 -fsS http://localhost:5173/articles/how-to-spot-fake-online-store -o /dev/null; then
+              echo "Article preview ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/decodista-fake-store-preview.log
+          exit 1
+      - name: Browser QA across four viewports
+        run: node scripts/test-fake-online-store-browser.mjs
+      - name: Save preview log
+        if: always()
+        run: |
+          mkdir -p artifacts/fake-store-article-qa
+          cp /tmp/decodista-fake-store-preview.log artifacts/fake-store-article-qa/server.log 2>/dev/null || true
+      - name: Upload screenshots and QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fake-store-article-visual-qa
+          path: artifacts/fake-store-article-qa/
+          if-no-files-found: ignore
+          retention-days: 7
