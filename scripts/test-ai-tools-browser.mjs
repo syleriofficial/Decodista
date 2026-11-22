@@ -331,6 +331,29 @@ try {
       assert.equal(await page.locator('.ai-guide-index-card a[href="/ai-tools/guides/perplexity-vs-gemini-notebook"]').count(), 2,
         "AI Tools guide archive must link the new research guide from its title and read action");
 
+      // Indexable guides should link directly to two genuinely related reviewed
+      // comparisons in server-rendered HTML, not only to the noindex archive.
+      // These links must be meaningful anchors and never point to the same guide.
+      const relatedGuideExpectations = {
+        "chatgpt-vs-claude": ["chatgpt-vs-gemini-for-research", "perplexity-vs-gemini-notebook"],
+        "cursor-vs-github-copilot": ["chatgpt-vs-claude", "chatgpt-vs-gemini-for-research"],
+        "perplexity-vs-gemini-notebook": ["chatgpt-vs-gemini-for-research", "chatgpt-vs-claude"],
+        "chatgpt-vs-gemini-for-research": ["perplexity-vs-gemini-notebook", "chatgpt-vs-claude"],
+      };
+      for (const [route, targets] of Object.entries(relatedGuideExpectations)) {
+        const path = "/ai-tools/guides/" + route;
+        const res = await page.request.get(base + path);
+        assert.equal(res.status(), 200, "Curated guide must load: " + path);
+        const rendered = await res.text();
+        for (const target of targets) {
+          assert(rendered.includes('href="/ai-tools/guides/' + target + '"'),
+            "Guide " + route + " needs an HTML anchor to the related " + target);
+        }
+        assert(!rendered.includes('href="' + path + '"') ||
+          (rendered.match(new RegExp('href="' + path + '"', "g")) ?? []).length < 2,
+          "Related links should never add a self-referential card for " + route);
+      }
+
       for (const route of ["chatgpt-vs-claude", "cursor-vs-github-copilot"]) {
         const guideResponse = await page.goto(base + "/ai-tools/guides/" + route, { waitUntil: "domcontentloaded", timeout: 45000 });
         assert.equal(guideResponse?.status(), 200, "Researched comparison must render: " + route);
