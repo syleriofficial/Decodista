@@ -500,6 +500,9 @@ html[data-theme="dark"] .theme-sun { display: block; }
 .weekly-bottom-nav svg { width: 17px; height: 17px; }
 .weekly-hero { margin: 2rem 0 0; overflow: hidden; background: #101a2a; }
 .weekly-hero img { display: block; width: 100%; height: auto; }
+.weekly-item-visual { max-width: 790px; margin: 0 0 1.75rem; overflow: hidden; background: #101a2a; }
+.weekly-item-visual img { display: block; width: 100%; height: auto; }
+.weekly-item-visual figcaption { padding: .55rem .75rem; color: #d0d9e5; background: #101a2a; font-size: .76rem; }
 .weekly-top-takeaways { max-width: 940px; padding: 2rem 0 0; }
 .weekly-top-takeaways h2, .weekly-checklist h2, .weekly-earlier-alerts h2 { margin: 0 0 1rem; font: 500 clamp(1.65rem, 2.7vw, 2.3rem)/1.15 var(--font-editorial); }
 .weekly-top-takeaways ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; list-style: none; padding: 0; margin: 0; counter-reset: takeaway; }
