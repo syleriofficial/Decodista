@@ -174,6 +174,38 @@ assert(aiToolsMeasurementPlaybook.includes('^/ai-tools(?:/|$)') &&
   aiToolsMeasurementPlaybook.includes('GSC Wizard connection returned') &&
   aiToolsMeasurementPlaybook.includes('Not available'),
   "AI Tools scorecard must isolate path-only pageviews, distinguish search clicks and disclose missing data");
+
+const gscAiToolsPageFilter = aiToolsMeasurementPlaybook.match(/anchored RE2 filter \`([^\`]+)\`/)?.[1];
+assert.equal(gscAiToolsPageFilter, String.raw`^https://(www\\.)?decodista\\.com/ai-tools(/|$)`,
+  "The copy-paste GSC filter must use ONE regex escape before every literal domain dot");
+const gscScope = new RegExp(gscAiToolsPageFilter);
+for (const url of [
+  "https://decodista.com/ai-tools",
+  "https://decodista.com/ai-tools/",
+  "https://decodista.com/ai-tools/guides/chatgpt-vs-claude",
+  "https://www.decodista.com/ai-tools/compare",
+]) {
+  assert(gscScope.test(url), "GSC AI Tools scope should include real product paths: " + url);
+}
+for (const url of [
+  "https://decodista.com/ai",
+  "https://decodista.com/ai-tools-other",
+  "https://decodistaXcom/ai-tools",
+  "https://evil.decodista.com/ai-tools",
+  "https://decodista.com/",
+  "https://example.com/ai-tools",
+]) {
+  assert(!gscScope.test(url), "GSC AI Tools scope must exclude unrelated URLs: " + url);
+}
+const ga4Scope = /^\\/ai-tools(?:\\/|$)/;
+assert(ga4Scope.test("/ai-tools") && ga4Scope.test("/ai-tools/guides/chatgpt-vs-claude") &&
+  !ga4Scope.test("/ai-tools-other") && !ga4Scope.test("/ai"),
+  "GA4 page-path scope must include only the AI Tools product");
+assert(aiToolsMeasurementPlaybook.includes("No paid connector: manual export fallback") &&
+  aiToolsMeasurementPlaybook.includes("page-level") &&
+  aiToolsMeasurementPlaybook.includes("chart summary totals"),
+  "The AI Tools measurement fallback must preserve source aggregates and avoid requiring a paid connector");
+
 assert(aiToolsPage.includes('title: "AI Tools Directory & Comparison"') && aiToolsPage.includes('index: false'),
   "AI Tools starter directory must stay noindex until its editorial verification is complete");
 assert(aiToolsPage.includes("<AiToolsExplorer />") && aiToolsPage.includes('href="/ai-tools/compare"'),
