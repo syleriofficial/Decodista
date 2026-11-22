@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "@/components/app-link";
 import { AiComparisonEvaluation } from "@/components/ai-comparison-evaluation";
+import { AiToolsRelatedComparisons } from "@/components/ai-tools-related-comparisons";
 import { getAiEvaluationTasks } from "@/lib/ai-tools-evaluation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CircleHelp, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS } from "@/lib/ai-tools";
@@ -45,7 +46,6 @@ export default async function AiComparisonGuidePage({ params }: PageProps) {
   const first = AI_TOOLS.find((tool) => tool.slug === guide.firstSlug)!;
   const second = AI_TOOLS.find((tool) => tool.slug === guide.secondSlug)!;
   const compareUrl = `/ai-tools/compare?first=${first.slug}&second=${second.slug}`;
-  const otherGuides = AI_COMPARISON_GUIDES.filter((item) => item.slug !== guide.slug);
   const structured = [
     {
       "@context": "https://schema.org",
@@ -211,17 +211,7 @@ export default async function AiComparisonGuidePage({ params }: PageProps) {
         </aside>
       </div>
 
-      {otherGuides.length > 0 && (
-        <section className="ai-guide-more wrap" aria-labelledby="ai-guide-more-heading">
-          <span className="ai-tools-eyebrow">Continue exploring</span>
-          <h2 id="ai-guide-more-heading">More workflow comparisons</h2>
-          <div className="ai-guide-more-grid">
-            {otherGuides.map((item) => <Link key={item.slug} href={`/ai-tools/guides/${item.slug}`}>
-              <strong>{item.title}</strong><span>{item.subtitle}</span><ArrowRight size={18} aria-hidden="true" />
-            </Link>)}
-          </div>
-        </section>
-      )}
+      <AiToolsRelatedComparisons currentSlug={guide.slug} />
     </main>
   );
 }
