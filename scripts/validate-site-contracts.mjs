@@ -178,6 +178,9 @@ assert(aiToolsMeasurementPlaybook.includes('^/ai-tools(?:/|$)') &&
 const gscAiToolsPageFilter = aiToolsMeasurementPlaybook.split("anchored RE2 filter `")[1]?.split("`")[0];
 assert.equal(gscAiToolsPageFilter, String.raw`^https://(www\.)?decodista\.com/ai-tools(/|$)`,
   "The copy-paste GSC filter must use ONE regex escape before every literal domain dot");
+const copyPasteGscRegex = aiToolsMeasurementPlaybook.split("   \`\`\`regex\n   ")[1]?.split("\n   \`\`\`")[0];
+assert.equal(copyPasteGscRegex, gscAiToolsPageFilter,
+  "The visible GSC regex code block must match the inline tested filter exactly");
 const gscScope = new RegExp(gscAiToolsPageFilter);
 for (const url of [
   "https://decodista.com/ai-tools",
