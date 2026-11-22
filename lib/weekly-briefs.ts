@@ -44,6 +44,13 @@ export const weeklyBriefs: WeeklyBrief[] = [
     "periodStart": "2026-11-16",
     "periodEnd": "2026-11-22",
     "title": "Chrome's 204 Fixes, Fake Black Friday Stores and AI Threats",
+    "cover": {
+      "src": "/images/weekly/2026-11-22-cover.webp",
+      "socialSrc": "/images/weekly/2026-11-22-og.webp",
+      "alt": "Editorial illustration of browser security, online shopping scam warnings and connected AI threat indicators",
+      "width": 1600,
+      "height": 900
+    },
     "standfirst": "Chrome 158's 204 security fixes, deceptive Black Friday storefronts, more autonomous AI attacks, a critical PHP flaw and business-payment fraud. Five sourced developments and practical next steps.",
     "topTakeaways": [
       "Update Chrome: the November 17 Stable release lists 204 security fixes, including six rated Critical.",
@@ -67,6 +74,12 @@ export const weeklyBriefs: WeeklyBrief[] = [
       },
       {
         "id": "black-friday-fake-retailer-stores",
+        "image": {
+          "src": "/images/weekly/2026-11-22-shopping-scams.webp",
+          "alt": "Editorial illustration of an online shopping storefront with suspicious sale and checkout warnings",
+          "width": 1200,
+          "height": 675
+        },
         "category": "Security",
         "headline": "Fake Black Friday stores mimic familiar brands as shopping season nears",
         "announcedDate": "2026-11-16",
@@ -87,6 +100,12 @@ export const weeklyBriefs: WeeklyBrief[] = [
       },
       {
         "id": "google-ai-agent-cyber-threat-research",
+        "image": {
+          "src": "/images/weekly/2026-11-22-ai-cyber-threats.webp",
+          "alt": "Editorial illustration of automated AI attack paths approaching a protected network of devices and servers",
+          "width": 1200,
+          "height": 675
+        },
         "category": "AI",
         "headline": "Google documents greater use of autonomous AI frameworks in cyberattacks",
         "announcedDate": "2026-11-16",
