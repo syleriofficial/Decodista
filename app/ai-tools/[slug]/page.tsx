@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
+import { AI_COMPARISON_GUIDES } from "@/lib/ai-tools-comparison-guides";
+import { AI_TOOLS_RESEARCH_GUIDES } from "@/lib/ai-tools-research-guides";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Info, ShieldCheck } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -50,6 +52,14 @@ export default async function AiToolProfilePage({ params }: PageProps) {
     ? `/ai-tools/compare?first=${encodeURIComponent(tool.slug)}&second=${encodeURIComponent(compareWith.slug)}`
     : `/ai-tools/compare?first=${encodeURIComponent(tool.slug)}`;
   const category = getCategoryLabel(tool.category);
+  // Every destination is drawn from the four published, source-reviewed guides.
+  // Do not manufacture a guide for an unresearched tool or category.
+  const researchedComparisons = [
+    ...AI_COMPARISON_GUIDES.filter((guide) =>
+      guide.firstSlug === tool.slug || guide.secondSlug === tool.slug),
+    ...AI_TOOLS_RESEARCH_GUIDES.filter((guide) =>
+      guide.firstToolSlug === tool.slug || guide.secondToolSlug === tool.slug),
+  ];
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -138,6 +148,23 @@ export default async function AiToolProfilePage({ params }: PageProps) {
               <a className="ai-tools-evidence-source" href={source.sourceUrl} target="_blank" rel="noopener noreferrer">
                 {source.sourceLabel} <ArrowUpRight size={16} aria-hidden="true" />
               </a>
+            </section>
+          )}
+          {researchedComparisons.length > 0 && (
+            <section className="ai-tools-profile-panel" aria-labelledby="profile-researched-guides-title">
+              <span className="ai-tools-eyebrow">Read beyond the directory</span>
+              <h2 id="profile-researched-guides-title">Research-backed comparisons featuring {tool.name}</h2>
+              <p>Original decision frameworks based on linked provider documentation, with practical scenarios and reader-run exercises. These are not independent model-quality rankings.</p>
+              <ul className="ai-tools-profile-guide-links">
+                {researchedComparisons.map((guide) => (
+                  <li key={guide.slug}>
+                    <Link href={`/ai-tools/guides/${guide.slug}`}>
+                      <span><strong>{guide.title}</strong><small>{guide.subtitle}</small></span>
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
           <section className="ai-tools-profile-panel" aria-labelledby="profile-method-title">
