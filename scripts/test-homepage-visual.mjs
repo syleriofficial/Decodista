@@ -110,6 +110,7 @@ for (const sample of [
       document.documentElement.style.scrollBehavior = "auto";
       window.scrollTo(0, 1100);
     });
+    await page.waitForFunction(() => document.querySelector(".site-header")?.classList.contains("is-scrolled"));
     const stickyHeader = await page.locator(".site-header").evaluate(header => {
       const headerRect = header.getBoundingClientRect();
       const navRect = header.querySelector(".primary-nav").getBoundingClientRect();
@@ -118,6 +119,7 @@ for (const sample of [
       const editionRect = header.querySelector(".edition-line").getBoundingClientRect();
       return {
         position: getComputedStyle(header).position,
+        shadow: getComputedStyle(header).boxShadow,
         top: headerRect.top,
         bottom: headerRect.bottom,
         navTop: navRect.top,
@@ -130,6 +132,7 @@ for (const sample of [
       };
     });
     assert.equal(stickyHeader.position, "sticky", "Header must use native sticky positioning");
+    assert(stickyHeader.shadow !== "none", "Scrolled header must gain a subtle separator shadow");
     assert(stickyHeader.top >= -2 && stickyHeader.top <= 3,
       "The whole sticky header must remain fixed at the top after scrolling");
     if (sample.width > 1000) {
@@ -139,8 +142,8 @@ for (const sample of [
         "DECODISTA logo/tagline must remain above the nav while scrolling");
       assert(stickyHeader.searchBottom <= stickyHeader.navTop,
         "Search control must remain visible above the nav while scrolling");
-      assert(stickyHeader.navTop > 75 && stickyHeader.navBottom >= 120,
-        "Desktop full eight-link menu must remain below the masthead while scrolling");
+      assert(stickyHeader.navTop > 70 && stickyHeader.navBottom >= 112,
+        "Desktop full eight-link menu must remain below the compact masthead while scrolling");
     } else {
       assert(stickyHeader.bottom >= 60 && stickyHeader.brandTop >= 0,
         "Mobile compact header, logo, search and menu button must remain visible after scrolling");
@@ -149,6 +152,7 @@ for (const sample of [
       window.scrollTo(0, 0);
       document.documentElement.style.scrollBehavior = "";
     });
+    await page.waitForFunction(() => !document.querySelector(".site-header")?.classList.contains("is-scrolled"));
     const articleHrefs = await page.locator(".lead-story h1 a, .hero-rail h2 a, .latest-feed .article-card h3 a, .home-topic .article-card h3 a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
     assert.equal(new Set(articleHrefs).size, articleHrefs.length, "Homepage headline positions must not repeat article destinations");
