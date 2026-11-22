@@ -153,7 +153,7 @@ check("AI Tools-only Perplexity vs Gemini Notebook guide has original evidence a
 check("AI Tools-only research guide self-canonical and indexable",
   researchHead.includes('rel="canonical"') &&
   researchHead.includes(aiToolsResearchGuidePath) &&
-  !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(researchHead),
+  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(researchHead),
   "Individually reviewed AI Tools guide may be indexed without indexing thin directory pages");
 const aiToolsGuideArchive = snapshots["/ai-tools/guides"]?.body ?? "";
 check("AI Tools-only guide archive discovers the new research comparison",
@@ -174,7 +174,7 @@ check("AI Tools-only ChatGPT vs Gemini research guide renders source-led scenari
 check("AI Tools-only ChatGPT vs Gemini research guide self-canonical and indexable",
   chatGeminiHead.includes('rel="canonical"') &&
   chatGeminiHead.includes(chatGeminiResearchGuidePath) &&
-  !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(chatGeminiHead),
+  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(chatGeminiHead),
   "New individually reviewed guide must have a self-canonical and indexable metadata");
 check("AI Tools guide archive discovers ChatGPT vs Gemini",
   aiToolsGuideArchive.includes('href="' + chatGeminiResearchGuidePath + '"'),
@@ -193,7 +193,7 @@ check("AI Tools original PDF workflow has dated source-led guidance and human ve
 check("AI Tools original PDF workflow canonical and indexable",
   pdfWorkflowHead.includes('rel="canonical"') &&
   pdfWorkflowHead.includes(pdfWorkflowPath) &&
-  !/<meta\\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(pdfWorkflowHead),
+  !/<meta\b[^>]*name="robots"[^>]*content="[^"]*noindex/.test(pdfWorkflowHead),
   "The one source-reviewed document workflow should be indexable, unlike thin directory pages");
 check("Original PDF workflow is discoverable from other AI Tools pages",
   (snapshots["/ai-tools"]?.body ?? "").includes('href="' + pdfWorkflowPath + '"') &&
