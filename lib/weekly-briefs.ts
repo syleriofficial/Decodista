@@ -17,6 +17,7 @@ export interface BriefItem {
   source: BriefSource;
   additionalSources?: BriefSource[];
   insight?: string;
+  image?: { src: string; alt: string; width: number; height: number };
 }
 
 export interface WeeklyBrief {
