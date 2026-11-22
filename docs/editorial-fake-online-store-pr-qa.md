@@ -39,3 +39,12 @@ A subsequent documentation-only change should also pass the configured checks be
 - The article's proposed public slug is not available on production, as expected for an unmerged draft.
 - **Not performed:** responsive visual inspection of the actual built site in desktop and mobile browsers; rendered canonical/structured-data inspection. No dedicated PR preview URL was found in the available workflow results. Browser integration was unavailable in this chat context.
 - Keep the PR Draft until responsive staging preview and final publication-date checks have been completed and approved. Do not treat CI success alone as a passing visual review.
+
+## Global-first editorial update — November 23, 2026
+
+- Updated the article's scam-reporting guidance for an international audience. Removed the five-country reporting table, which was disproportionately detailed for a global consumer guide.
+- Readers are now directed to independently verified **national or regional** consumer-protection, cybercrime or law-enforcement reporting channels in their own location, and to report suspicious listings on the originating marketplace or ad platform.
+- Added explicit guidance for cross-border purchases and kept the first priority on contacting the payment provider promptly.
+- US-specific FTC findings and shipping-rule information are retained **with clear US attribution** as documented examples; no US legal protections are presented as universal.
+- The prior UK/India manual-link-check notes above are historic: those country-specific portal links have been removed from the updated article and are no longer release blockers.
+- Previously passed synthetic desktop/mobile Chrome visual QA and Release checks apply to the earlier article version. Re-run checks for this new content commit. Final publication date and editorial approval remain pending.
