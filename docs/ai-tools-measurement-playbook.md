@@ -1,6 +1,6 @@
 # Decodista AI Tools — first-party measurement playbook
 
-Status: instrumentation proposal. **No verified GA4/GSC numbers are available in this repository.** The GSC Wizard connection returned `payment_required` on 22 November 2026; this is a connector/subscription limitation, not evidence that traffic or indexing is zero.
+Status: AI Tools consent-gated interaction instrumentation was deployed and production-verified via PR #113. **Collection of live events and GA4/GSC traffic totals has not been independently verified.** The GSC Wizard connection returned `payment_required` on 22 November 2026; this is a connector/subscription limitation, not evidence that traffic or indexing is zero.
 
 ## Exact north star
 
@@ -37,12 +37,30 @@ Google reference: https://support.google.com/analytics/answer/12926732
 ## Google Search Console: AI Tools search discovery, NOT pageviews
 
 1. Open [Google Search Console](https://search.google.com/search-console), choose the verified Decodista property and verify Google can fetch `https://decodista.com/sitemap.xml`. Submission does not ensure indexation.
-2. In **Performance > Search results**, set **Search type: Web** and the last **28 complete/settled days**. Apply a **Page** filter for AI Tools URLs. A domain/URL-prefix property may support an anchored RE2 filter `^https://(www\\.)?decodista\\.com/ai-tools(/|$)`; validate the actual property URLs and regex before recording numbers. Do not sum exact page query tables to infer hidden search query totals.
+2. In **Performance > Search results**, set **Search type: Web** and the last **28 complete/settled days**. Apply a **Page** filter for AI Tools URLs. A domain/URL-prefix property may support an anchored RE2 filter `^https://(www\.)?decodista\.com/ai-tools(/|$)`; validate the actual property URLs and regex before recording numbers. Do not sum exact page query tables to infer hidden search query totals.
 3. Record total AI Tools Google clicks, impressions, CTR, weighted average position and the exact observation dates. Break down by pages, queries and countries as available. Be mindful of anonymized/hidden queries and data processing lags.
 4. Use **URL Inspection** on the four source-led, indexable AI Tools guides; record Google's indexed status, selected canonical, crawl problems, coverage, and whether the page is excluded intentionally. GSC **clicks** are organic search visits, not AI Tools pageviews.
 5. Do not request indexing repeatedly and do not lift `noindex` from thin directory/alternatives/pricing/profiles merely to boost a count.
 
 Google reference: https://support.google.com/webmasters/answer/7576553
+
+### No paid connector: manual export fallback
+
+A GSC Wizard subscription or a third-party analytics connector is **not required** to collect a first-party baseline. The verified Decodista owner can use the official Google interfaces directly, then upload the exported **page-level** CSV files for analysis. Do not share credentials or API keys.
+
+1. **Search Console:** Open **Performance > Search results** for the verified Decodista property. Set **Web** search type, the last 28 complete/settled days, and add **+ Add filter > Pages > Custom (regex) > Matches regex**. Paste this exact expression, with **one** backslash before each period:
+   ```regex
+   ^https://(www\.)?decodista\.com/ai-tools(/|$)
+   ```
+   Confirm a guide URL is included but `https://decodista.com/ai-tools-other` is not. Record the filtered report's **chart summary totals** (clicks, impressions, CTR and average position) and date range separately, then export its **Pages table** as CSV. The exported table can be truncated or otherwise differ from graph totals, so never claim the row sum is necessarily the full organic-search total.
+2. **Google Analytics 4:** In the Decodista GA4 property, open **Explore > Free form**, use the same settled 28-day period and add **Page path and screen class** plus **Views**. Apply the path-scope filter `^/ai-tools(?:/|$)`. Review that root `/ai-tools` and guide subpaths match but `/ai` and `/ai-tools-other` do not. Export the page-level results as CSV, record the property time zone and consent limitation, and avoid accidentally summing `ai_tools_*` interaction events as pageviews.
+3. **Share only the two relevant exports and the recorded filtered GSC summary totals**, with report date ranges and time zone. Do not export private search terms, user identifiers or audience segments. With these exports, an AI Tools-only baseline and page opportunity analysis can be computed without paying for another plugin.
+
+Both filters are documented for the **Google-owned reporting UI**; they do not grant access to the accounts, do not overcome analytics consent gaps and do not verify Google indexation.
+
+Google reference: https://support.google.com/webmasters/answer/17011165?hl=en
+Google reference: https://support.google.com/analytics/answer/1034324?hl=en
+
 
 ## Weekly scorecard fields — fill with actual observed values only
 
