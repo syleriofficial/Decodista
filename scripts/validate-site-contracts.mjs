@@ -487,10 +487,10 @@ assert(howToPage.includes('import { ResponsiveImage } from "@/components/respons
 assert(howToPage.includes('<ResponsiveImage src={featured.featuredImage}') && howToPage.includes("fill priority sizes="), "How-To Hero must advertise real variants and retain high priority");
 assert(!howToPage.includes('next/image'), "How-To must not revert to redirecting Next.js image URLs");
 assert(articles.some((article) => article.contentType === "how-to"), "Primary How-To archive must have real guides");
-for (const category of ["tech-news","ai","ai-tools","reviews","how-to","science"]) {
+for (const category of ["tech-news","ai","ai-tools","reviews","how-to","security","science"]) {
   assert(navigation.includes(`href: "/${category}"`), `Editorial primary navigation is missing ${category}`);
 }
-for (const destination of ["security", "digital-life", "latest", "weekly"]) {
+for (const destination of ["digital-life", "latest", "weekly"]) {
   assert(footerSecondary.includes(`href: "/${destination}"`), `Footer secondary navigation is missing ${destination}`);
 }
 const primaryHrefs = [...navigation.matchAll(/href: "([^"]+)"/g)].map((match) => match[1]);
