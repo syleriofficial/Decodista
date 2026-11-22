@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CircleHelp, GitCompareArrows } from "lucide-react";
 import { AiComparisonEvaluation } from "@/components/ai-comparison-evaluation";
+import { AiToolsRelatedComparisons } from "@/components/ai-tools-related-comparisons";
 import type { EvaluationTask } from "@/lib/ai-tools-evaluation";
 import { CHATGPT_GEMINI_RESEARCH_GUIDE } from "@/lib/ai-tools-research-guides";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -384,6 +385,7 @@ export default function ChatgptGeminiResearchGuide() {
           </div>
         </aside>
       </div>
+      <AiToolsRelatedComparisons currentSlug="chatgpt-vs-gemini-for-research" />
     </main>
   );
 }
