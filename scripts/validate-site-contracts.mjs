@@ -145,6 +145,7 @@ const aiToolsTaskFinder = read("components/ai-task-finder.tsx");
 const aiToolsInteractions = read("lib/ai-tools-interactions.ts");
 const aiToolsMeasurementPlaybook = read("docs/ai-tools-measurement-playbook.md");
 const aiToolsData = read("lib/ai-tools.ts");
+const aiToolsProductScope = read("docs/ai-tools-product-scope.md");
 const aiToolsCss = read("app/ai-tools/ai-tools.css");
 assert(aiToolsInteractions.includes('CONSENT_STORAGE_KEY = "decodista-analytics-consent"') &&
   aiToolsInteractions.includes('!== "granted"') &&
@@ -281,6 +282,7 @@ assert(aiToolsReviewWorkflow.includes("cron: '0 9 * * 1'") &&
 assert(aiToolsCss.includes('.ai-tools-evidence-status.is-stale') &&
   aiToolsCss.includes('.ai-tools-compare-evidence-grid'),
   "Source evidence and date warning must be readable on mobile");
+assert(aiToolsProductScope.includes("No editorial guides") && aiToolsProductScope.includes("global English-first discovery") && aiToolsProductScope.includes("/ai-tools/compare"), "AI Tools must remain a product-only discovery and comparison application");
 // Product-only contract: legacy editorial AI Tools pages, files and links must stay removed.
 for (const deleted of [
   "app/ai-tools/guides/page.tsx",
