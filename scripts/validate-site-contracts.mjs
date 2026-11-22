@@ -175,8 +175,8 @@ assert(aiToolsMeasurementPlaybook.includes('^/ai-tools(?:/|$)') &&
   aiToolsMeasurementPlaybook.includes('Not available'),
   "AI Tools scorecard must isolate path-only pageviews, distinguish search clicks and disclose missing data");
 
-const gscAiToolsPageFilter = aiToolsMeasurementPlaybook.match(/anchored RE2 filter \`([^\`]+)\`/)?.[1];
-assert.equal(gscAiToolsPageFilter, String.raw`^https://(www\\.)?decodista\\.com/ai-tools(/|$)`,
+const gscAiToolsPageFilter = aiToolsMeasurementPlaybook.split("anchored RE2 filter `")[1]?.split("`")[0];
+assert.equal(gscAiToolsPageFilter, String.raw`^https://(www\.)?decodista\.com/ai-tools(/|$)`,
   "The copy-paste GSC filter must use ONE regex escape before every literal domain dot");
 const gscScope = new RegExp(gscAiToolsPageFilter);
 for (const url of [
@@ -197,7 +197,7 @@ for (const url of [
 ]) {
   assert(!gscScope.test(url), "GSC AI Tools scope must exclude unrelated URLs: " + url);
 }
-const ga4Scope = /^\\/ai-tools(?:\\/|$)/;
+const ga4Scope = /^\/ai-tools(?:\/|$)/;
 assert(ga4Scope.test("/ai-tools") && ga4Scope.test("/ai-tools/guides/chatgpt-vs-claude") &&
   !ga4Scope.test("/ai-tools-other") && !ga4Scope.test("/ai"),
   "GA4 page-path scope must include only the AI Tools product");
