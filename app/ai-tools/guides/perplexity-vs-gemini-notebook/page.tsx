@@ -364,6 +364,7 @@ export default function PerplexityGeminiNotebookGuide() {
           </nav>
           <div className="ai-guide-side-links">
             <span className="ai-tools-eyebrow">Keep exploring AI tools</span>
+            <Link href="/ai-tools/workflows/compare-two-pdfs-with-ai">Compare two PDFs with an evidence checklist <ArrowRight size={16} aria-hidden="true" /></Link>
             <Link href="/ai-tools/compare?first=perplexity&second=notebooklm">Compare products <ArrowRight size={16} aria-hidden="true" /></Link>
             <Link href="/ai-tools">AI Tools directory <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
