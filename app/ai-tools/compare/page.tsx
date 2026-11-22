@@ -3,6 +3,7 @@ import Link from "@/components/app-link";
 import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { findGuideForTools } from "@/lib/ai-tools-comparison-guides";
+import { findAiToolsResearchGuideForTools } from "@/lib/ai-tools-research-guides";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME } from "@/lib/site";
@@ -39,7 +40,10 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
     : AI_TOOLS.find((tool) => tool.slug !== first.slug && tool.category === first.category)
       ?? AI_TOOLS.find((tool) => tool.slug !== first.slug)!;
 
-  const editorialGuide = findGuideForTools(first.slug, second.slug);
+  // Both the older editorial and the newer source-reviewed research pairs
+  // deserve the same contextual doorway; never link on a partial name match.
+  const editorialGuide = findGuideForTools(first.slug, second.slug)
+    ?? findAiToolsResearchGuideForTools(first.slug, second.slug);
   const officialSources = [first, second].map((tool) => ({ tool, evidence: getAiToolEvidence(tool.slug) }));
   const rows = [
     { title: "Made by", a: first.provider, b: second.provider },
@@ -89,7 +93,7 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
         {editorialGuide && (
           <div className="ai-guide-context-banner">
             <div><strong>Looking for more than a feature table?</strong><p>Our editorial guide examines the workflows, limits and official sources for this exact pair.</p></div>
-            <Link href={`/ai-tools/guides/${editorialGuide.slug}`}>Read researched guide <ArrowRight size={17} aria-hidden="true" /></Link>
+            <Link href={`/ai-tools/guides/${editorialGuide.slug}`}>Read {first.name} vs {second.name} guide <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
         )}
         <div className="ai-tools-table-scroll" role="region" aria-label={`${first.name} and ${second.name} comparison table`} tabIndex={0}>
