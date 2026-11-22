@@ -25,7 +25,7 @@ keyTakeaways:
   - HTTPS encrypts the connection but does not certify that a business is honest.
   - Beware requests for hard-to-reverse payments or unrelated passwords and verification codes.
   - Contact your payment provider promptly and preserve evidence if you've already paid a suspicious seller.
-publishedAt: 2026-11-22
+publishedAt: 2026-11-23
 informationCheckedAt: 2026-11-22
 author: DECODISTA Editorial
 readingTime: 11
