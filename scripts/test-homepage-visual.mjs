@@ -103,6 +103,37 @@ for (const sample of [
     } else {
       assert(!(await page.locator(".edition-line").isVisible()), "Mobile masthead should avoid extra chrome");
     }
+
+    // On long pages, keep only the editorial navigation row on desktop;
+    // preserve the full compact masthead and its menu button on mobile.
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, 1100);
+    });
+    const stickyHeader = await page.locator(".site-header").evaluate(header => {
+      const headerRect = header.getBoundingClientRect();
+      const navRect = header.querySelector(".primary-nav").getBoundingClientRect();
+      return {
+        position: getComputedStyle(header).position,
+        top: headerRect.top,
+        bottom: headerRect.bottom,
+        navTop: navRect.top,
+        navBottom: navRect.bottom,
+      };
+    });
+    assert.equal(stickyHeader.position, "sticky", "Header must use native sticky positioning");
+    if (sample.width > 1000) {
+      assert(stickyHeader.top < -50, "Desktop edition and large wordmark should scroll out of view");
+      assert(Math.abs(stickyHeader.navTop) <= 3 && stickyHeader.navBottom >= 35,
+        "Desktop editorial navigation must remain pinned at the top after scrolling");
+    } else {
+      assert(stickyHeader.top >= -2 && stickyHeader.top <= 3 && stickyHeader.bottom >= 60,
+        "Mobile header and menu button must remain visible after scrolling");
+    }
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.style.scrollBehavior = "";
+    });
     const articleHrefs = await page.locator(".lead-story h1 a, .hero-rail h2 a, .latest-feed .article-card h3 a, .home-topic .article-card h3 a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
     assert.equal(new Set(articleHrefs).size, articleHrefs.length, "Homepage headline positions must not repeat article destinations");
