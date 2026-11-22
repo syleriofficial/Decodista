@@ -78,7 +78,7 @@ for (const sample of [
     await page.waitForLoadState("networkidle", { timeout: 30000 });
     assert.equal(await page.locator("main h1").count(), 1, "Issue 4: exactly one H1");
     assert.match(await page.locator("main h1").innerText(), /Chrome.+204 Fixes/);
-    assert(/issue\\s+4/i.test(await page.locator(".weekly-issue-header .eyebrow").innerText()), "Issue 4 number must display");
+    assert(/issue\s+4/i.test(await page.locator(".weekly-issue-header .eyebrow").innerText()), "Issue 4 number must display");
     assert.equal(await page.locator(".weekly-item").count(), 5, "Issue 4: five verified updates");
     assert.equal(await page.locator(".weekly-top-takeaways li").count(), 3, "Issue 4: three takeaways");
     assert.equal(await page.locator(".weekly-item-visual img").count(), 2, "Issue 4: two inline illustrations");
@@ -89,7 +89,7 @@ for (const sample of [
       assert(url?.endsWith(".webp"), "Issue 4: image must be WebP");
       const asset = await page.request.get(base + url);
       assert.equal(asset.status(), 200, "Issue 4: committed image must load");
-      assert.match(asset.headers()["content-type"] ?? "", /image\\/webp/, "Issue 4: image MIME type");
+      assert.match(asset.headers()["content-type"] ?? "", /image\/webp/, "Issue 4: image MIME type");
     }
     const social = await page.request.get(base + "/images/weekly/2026-11-22-og.webp");
     assert.equal(social.status(), 200, "Issue 4: social image must load");
