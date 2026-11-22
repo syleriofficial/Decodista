@@ -201,6 +201,17 @@ assert(aiToolsProfile.includes('candidate.category === tool.category') &&
 assert(aiToolsExplorer.includes('href={`/ai-tools/${tool.slug}`}') &&
   aiToolsCompare.includes('href={`/ai-tools/${first.slug}`}'),
   "Tool directory and comparison must link to individual tool profiles");
+assert(aiToolsProfile.includes('AI_COMPARISON_GUIDES.filter(') &&
+  aiToolsProfile.includes('AI_TOOLS_RESEARCH_GUIDES.filter(') &&
+  aiToolsProfile.includes('researchedComparisons.length > 0') &&
+  aiToolsProfile.includes('guide.firstToolSlug === tool.slug') &&
+  aiToolsProfile.includes('guide.secondToolSlug === tool.slug') &&
+  aiToolsProfile.includes('guide.firstSlug === tool.slug') &&
+  aiToolsProfile.includes('guide.secondSlug === tool.slug') &&
+  aiToolsProfile.includes('className="ai-tools-profile-guide-links"') &&
+  aiToolsProfile.includes('href={`/ai-tools/guides/${guide.slug}`}') &&
+  aiToolsCss.includes('.ai-tools-profile-guide-links'),
+  "Only source-reviewed, relevant AI Tools guides should surface on product profiles; unrelated products must not receive invented comparisons");
 assert(aiToolsCss.includes('.ai-tools-profile-body') && aiToolsCss.includes('.ai-tools-profile-related'),
   "Individual tool profiles require responsive content and related-tool styles");
 assert(!sitemap.includes('AI_TOOLS.map(') && !sitemap.includes('route: "/ai-tools"'),
