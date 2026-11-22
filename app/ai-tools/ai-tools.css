@@ -351,6 +351,13 @@
 .ai-tools-profile-note p { margin: 0; line-height: 1.7; font-size: .94rem; }
 .ai-tools-profile-text-link { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .5rem; min-height: 40px; color: var(--signal); font-size: .87rem; font-weight: 800; }
 .ai-tools-profile-text-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ai-tools-profile-guide-links { display: grid; gap: .75rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+.ai-tools-profile-guide-links a { display: flex; align-items: center; justify-content: space-between; gap: .85rem; min-width: 0; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.ai-tools-profile-guide-links a:hover, .ai-tools-profile-guide-links a:focus-visible { border-color: var(--signal); }
+.ai-tools-profile-guide-links a span { min-width: 0; }
+.ai-tools-profile-guide-links strong { display: block; font-size: .92rem; line-height: 1.4; }
+.ai-tools-profile-guide-links small { display: block; margin-top: .35rem; font-size: .78rem; font-weight: 400; line-height: 1.55; color: var(--muted); }
+.ai-tools-profile-guide-links svg { flex: none; color: var(--signal); }
 .ai-tools-profile-related { min-width: 0; }
 .ai-tools-profile-related-card { padding: 1.4rem; border: 1px solid var(--line); border-radius: var(--tools-radius); background: var(--surface); }
 .ai-tools-profile-related-card h2 { margin: .5rem 0; font-size: 1.4rem; }

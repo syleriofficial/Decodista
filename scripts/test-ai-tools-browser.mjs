@@ -289,6 +289,12 @@ try {
       assert((await page.locator(".ai-tools-evidence-status").first().innerText()).includes("2026-11-21"), "Last checked date must be visible");
       assert.equal(await page.locator(".ai-tools-profile-actions a").count(), 2,
         "Profile should provide official-site and comparison actions");
+      assert.equal(await page.locator(".ai-tools-profile-guide-links a").count(), 2,
+        "ChatGPT profile must link to both its researched AI Tools guides");
+      assert.equal(await page.locator('.ai-tools-profile-guide-links a[href="/ai-tools/guides/chatgpt-vs-claude"]').count(), 1);
+      assert.equal(await page.locator('.ai-tools-profile-guide-links a[href="/ai-tools/guides/chatgpt-vs-gemini-for-research"]').count(), 1);
+      assert((await page.locator(".ai-tools-profile-guide-links").innerText()).includes("not independent model-quality rankings") === false,
+        "Profile cards should use descriptive guide titles instead of artificial ratings");
 
       const profileDimensions = await page.evaluate(() => ({
         body: document.documentElement.scrollWidth,
@@ -304,8 +310,33 @@ try {
       assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 0,
         "Single-entry video category must not fabricate alternatives");
       assert((await page.locator(".ai-tools-profile-related-card").innerText()).includes("no other video"));
+      assert.equal(await page.locator(".ai-tools-profile-guide-links").count(), 0,
+        "Runway must not show a fabricated researched comparison");
 
       if (view.label === "desktop") {
+        const sourceLedProfiles = {
+          chatgpt: ["chatgpt-vs-claude", "chatgpt-vs-gemini-for-research"],
+          claude: ["chatgpt-vs-claude"],
+          gemini: ["chatgpt-vs-gemini-for-research"],
+          cursor: ["cursor-vs-github-copilot"],
+          "github-copilot": ["cursor-vs-github-copilot"],
+          perplexity: ["perplexity-vs-gemini-notebook"],
+          notebooklm: ["perplexity-vs-gemini-notebook"],
+        };
+        for (const [tool, expectedGuides] of Object.entries(sourceLedProfiles)) {
+          const res = await page.request.get(base + "/ai-tools/" + tool);
+          assert.equal(res.status(), 200, "Published tool profile should load: " + tool);
+          const html = await res.text();
+          for (const guide of expectedGuides) {
+            assert(html.includes('href="/ai-tools/guides/' + guide + '"'),
+              "Profile " + tool + " needs crawlable link to reviewed guide " + guide);
+          }
+          assert.equal((html.match(/class="ai-tools-profile-guide-links"/g) ?? []).length, 1,
+            "A profile with researched coverage should show one targeted guide section: " + tool);
+        }
+        const runwayRes = await page.request.get(base + "/ai-tools/runway");
+        assert(!(await runwayRes.text()).includes('class="ai-tools-profile-guide-links"'),
+          "Unreviewed product pairs should not receive a guide module");
         const missing = await page.request.get(base + "/ai-tools/not-an-actual-listed-tool");
         assert.equal(missing.status(), 404, "Unknown tool profiles must return 404");
       }
