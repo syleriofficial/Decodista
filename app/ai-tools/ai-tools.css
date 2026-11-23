@@ -1069,3 +1069,242 @@
 @media (prefers-reduced-motion: reduce) {
   .ai-tools-page .ai-tools-compare-form button { transition: none; }
 }
+
+
+/* AI Tools pricing and alternatives / unified visual polish only.
+   Scoped to product subpages; does not alter catalog, sources or behavior. */
+.ai-tools-pricing-page .ai-tools-feature-hero,
+.ai-tools-alternatives-page .ai-tools-feature-hero {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1.35rem, 2.6vw, 2rem);
+}
+.ai-tools-pricing-page .ai-tools-feature-hero .ai-tools-back,
+.ai-tools-alternatives-page .ai-tools-feature-hero .ai-tools-back {
+  margin-bottom: clamp(.9rem, 1.5vw, 1.4rem);
+}
+.ai-tools-pricing-page .ai-tools-feature-hero h1,
+.ai-tools-alternatives-page .ai-tools-feature-hero h1 {
+  max-width: 850px;
+  font-size: clamp(2.2rem, 4vw, 4.1rem);
+  line-height: 1.09;
+  letter-spacing: -.052em;
+}
+.ai-tools-pricing-page .ai-tools-feature-hero > p,
+.ai-tools-alternatives-page .ai-tools-feature-hero > p {
+  max-width: 740px;
+  font-size: clamp(.92rem, 1.12vw, 1.04rem);
+  line-height: 1.65;
+}
+.ai-tools-pricing-page .ai-tools-price-section,
+.ai-tools-alternatives-page .ai-tools-alternatives-section {
+  padding-top: clamp(1.7rem, 3vw, 2.7rem);
+}
+.ai-tools-pricing-page .ai-tools-count-label,
+.ai-tools-alternatives-page .ai-tools-count-label {
+  padding: .35rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--edition-panel);
+  line-height: 1.45;
+}
+/* Pricing: clearer plans and sources without fabricated ranking or price tier. */
+.ai-tools-pricing-page .ai-tools-price-grid {
+  gap: clamp(.85rem, 1.5vw, 1.3rem);
+  align-items: stretch;
+}
+.ai-tools-pricing-page .ai-tools-price-card {
+  border-radius: 15px;
+  padding: clamp(1.1rem, 2.2vw, 1.65rem);
+  box-shadow: 0 3px 16px #0011300a;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.ai-tools-pricing-page .ai-tools-price-card:hover {
+  border-color: color-mix(in srgb, var(--signal) 35%, var(--line));
+  box-shadow: 0 14px 34px #00113012;
+}
+.ai-tools-pricing-page .ai-tools-price-brand { min-width: 0; }
+.ai-tools-pricing-page .ai-tools-price-brand > div { min-width: 0; }
+.ai-tools-pricing-page .ai-tools-price-brand h3 {
+  font-size: clamp(1.16rem, 1.6vw, 1.38rem);
+  overflow-wrap: anywhere;
+}
+.ai-tools-pricing-page .ai-tools-price-status {
+  border-radius: 999px;
+  padding: .35rem .6rem;
+  line-height: 1.4;
+}
+.ai-tools-pricing-page .ai-tools-price-reviewed {
+  margin: .9rem 0 .45rem;
+}
+.ai-tools-pricing-page .ai-tools-price-body { margin-top: 1.05rem; }
+.ai-tools-pricing-page .ai-tools-plan-pills { gap: .45rem; }
+.ai-tools-pricing-page .ai-tools-plan-pills li {
+  border-radius: 999px;
+  padding: .35rem .68rem;
+  line-height: 1.45;
+}
+.ai-tools-pricing-page .ai-tools-price-summary {
+  margin: .95rem 0;
+  font-size: clamp(.96rem, 1.15vw, 1.05rem);
+  line-height: 1.55;
+}
+.ai-tools-pricing-page .ai-tools-verified-amount {
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+.ai-tools-pricing-page .ai-tools-price-actions {
+  gap: .6rem;
+  align-items: center;
+}
+.ai-tools-pricing-page .ai-tools-price-actions a {
+  min-height: 42px;
+  padding: .55rem .72rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  line-height: 1.35;
+}
+.ai-tools-pricing-page .ai-tools-price-actions a:hover {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+}
+.ai-tools-pricing-page .ai-tools-pricing-checklist {
+  border-radius: 15px;
+  gap: clamp(1rem, 2.5vw, 2.3rem);
+}
+/* Alternatives: task selector and result cards have a clear visual hierarchy. */
+.ai-tools-alternatives-page .ai-tools-alternatives-form {
+  max-width: none;
+  padding: clamp(1rem, 2.4vw, 1.65rem);
+  border-radius: 15px;
+  box-shadow: 0 7px 24px #0011300b;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) auto;
+  gap: clamp(.65rem, 1vw, 1.05rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields label {
+  min-width: 0;
+  font-size: .84rem;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields select {
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: .92rem;
+  cursor: pointer;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+  min-height: 52px;
+  border-radius: 10px;
+  padding-inline: 1.15rem;
+  white-space: nowrap;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields select:focus-visible,
+.ai-tools-alternatives-page .ai-tools-alternatives-fields button:focus-visible,
+.ai-tools-pricing-page .ai-tools-price-actions a:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context {
+  margin: clamp(1rem, 2.3vw, 1.5rem) 0 clamp(1.7rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context .ai-tools-monogram {
+  border-radius: 13px;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context > p {
+  max-width: 790px;
+  margin: .85rem 0;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-grid {
+  gap: clamp(.85rem, 1.5vw, 1.2rem);
+  align-items: stretch;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card {
+  border-radius: 15px;
+  padding: clamp(1.15rem, 2vw, 1.55rem);
+  box-shadow: 0 3px 16px #0011300a;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card:hover {
+  border-color: color-mix(in srgb, var(--signal) 40%, var(--line));
+  box-shadow: 0 14px 34px #00113012;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card h3 {
+  font-size: clamp(1.2rem, 1.8vw, 1.42rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card li {
+  border-radius: 999px;
+  padding: .35rem .65rem;
+  line-height: 1.4;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions {
+  gap: .55rem;
+  align-items: stretch;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions a {
+  display: inline-flex;
+  min-height: 40px;
+  padding: .5rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  line-height: 1.35;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions a:hover {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-empty,
+.ai-tools-alternatives-page .ai-tools-alternatives-note {
+  border-radius: 14px;
+}
+@media (max-width: 950px) {
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 700px) {
+  .ai-tools-pricing-page .ai-tools-price-grid,
+  .ai-tools-alternatives-page .ai-tools-alternatives-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ai-tools-pricing-page .ai-tools-pricing-checklist {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .ai-tools-pricing-page .ai-tools-feature-hero h1,
+  .ai-tools-alternatives-page .ai-tools-feature-hero h1 {
+    font-size: clamp(2.1rem, 8.8vw, 2.8rem);
+  }
+  .ai-tools-pricing-page .ai-tools-price-card,
+  .ai-tools-alternatives-page .ai-tools-alternative-card {
+    padding: 1.1rem;
+  }
+  .ai-tools-pricing-page .ai-tools-price-card-top { gap: .65rem; }
+  .ai-tools-pricing-page .ai-tools-price-actions a {
+    flex: 1 1 150px;
+    justify-content: center;
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+    grid-column: 1;
+    width: 100%;
+  }
+  .ai-tools-alternatives-page .ai-tools-alternative-actions a {
+    flex: 1 1 150px;
+    justify-content: center;
+  }
+  .ai-tools-pricing-page .ai-tools-count-label,
+  .ai-tools-alternatives-page .ai-tools-count-label { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-tools-pricing-page .ai-tools-price-card,
+  .ai-tools-alternatives-page .ai-tools-alternative-card { transition: none; }
+}
