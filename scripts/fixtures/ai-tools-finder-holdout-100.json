@@ -1,0 +1,781 @@
+{
+  "kind": "unseen-hand-authored-synthetic-evaluation",
+  "version": 1,
+  "basis": "New hand-labeled synthetic examples. Labels remain frozen after an initial evaluation against Smart Finder 2.3; no matcher changes in this PR. Not a sampled set of real requests or an independently administered study.",
+  "cases": [
+    {
+      "id": "research-01",
+      "group": "research",
+      "request": "Could you investigate the causes of the 2008 financial crisis?",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-02",
+      "group": "research",
+      "request": "Find trustworthy sources on ocean plastics",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-03",
+      "group": "research",
+      "request": "I have a research PDF to understand",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-04",
+      "group": "research",
+      "request": "Summarize these journal articles for me",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-05",
+      "group": "research",
+      "request": "Check whether these citations are authentic",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-06",
+      "group": "research",
+      "request": "Compare findings across academic studies",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-07",
+      "group": "research",
+      "request": "Help me verify a medical claim with sources",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-08",
+      "group": "research",
+      "request": "Analyze published research about solar panels",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-09",
+      "group": "research",
+      "request": "What evidence supports this claim?",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "writing-01",
+      "group": "writing",
+      "request": "Help me draft a customer support email",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-02",
+      "group": "writing",
+      "request": "Polish my cover letter",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-03",
+      "group": "writing",
+      "request": "Can you rewrite this newsletter intro?",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-04",
+      "group": "writing",
+      "request": "Create a product description for a ceramic mug",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-05",
+      "group": "writing",
+      "request": "Help with the wording of my bio",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-06",
+      "group": "writing",
+      "request": "Write a short bedtime story",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-07",
+      "group": "writing",
+      "request": "Correct grammar in this paragraph",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-08",
+      "group": "writing",
+      "request": "Prepare a press statement for my team",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-09",
+      "group": "writing",
+      "request": "Improve the tone of this blog article",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "coding-01",
+      "group": "coding",
+      "request": "Investigate a Python traceback",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-02",
+      "group": "coding",
+      "request": "Help fix a failing unit test",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-03",
+      "group": "coding",
+      "request": "I want a code review for a pull request",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-04",
+      "group": "coding",
+      "request": "Create a TypeScript helper function",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-05",
+      "group": "coding",
+      "request": "Refactor the checkout module",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-06",
+      "group": "coding",
+      "request": "Why does my JavaScript crash?",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-07",
+      "group": "coding",
+      "request": "Explain what this GitHub repository does",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-08",
+      "group": "coding",
+      "request": "Suggest a fix for my API bug",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-09",
+      "group": "coding",
+      "request": "Pair program with me on a CLI app",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "app-building-01",
+      "group": "app-building",
+      "request": "Help me launch a booking platform",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-02",
+      "group": "app-building",
+      "request": "I need a no-code portfolio site",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-03",
+      "group": "app-building",
+      "request": "Make an online store for handmade gifts",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-04",
+      "group": "app-building",
+      "request": "Create a dashboard web app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-05",
+      "group": "app-building",
+      "request": "Build a SaaS product",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-06",
+      "group": "app-building",
+      "request": "Prototype a mobile application",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-07",
+      "group": "app-building",
+      "request": "Turn this idea into a functional website",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-08",
+      "group": "app-building",
+      "request": "Ship a simple landing page",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-09",
+      "group": "app-building",
+      "request": "Develop a restaurant ordering app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "visuals-01",
+      "group": "visuals",
+      "request": "Create a mascot illustration for my brand",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-02",
+      "group": "visuals",
+      "request": "I need to remove the background from a photo",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-03",
+      "group": "visuals",
+      "request": "Design thumbnails for YouTube",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-04",
+      "group": "visuals",
+      "request": "Generate an illustrated map",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-05",
+      "group": "visuals",
+      "request": "Make an app splash screen",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-06",
+      "group": "visuals",
+      "request": "Retouch a portrait image",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-07",
+      "group": "visuals",
+      "request": "Produce a product mockup image",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-08",
+      "group": "visuals",
+      "request": "Create diagrams for a blog",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-09",
+      "group": "visuals",
+      "request": "Make a banner for a mobile app",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "video-01",
+      "group": "video",
+      "request": "Turn a product photo into a promo clip",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-02",
+      "group": "video",
+      "request": "I need an AI-generated cinematic trailer",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-03",
+      "group": "video",
+      "request": "Create a 10-second reel for social media",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-04",
+      "group": "video",
+      "request": "Animate my still drawing",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-05",
+      "group": "video",
+      "request": "Make a short ad video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-06",
+      "group": "video",
+      "request": "Edit footage from my holiday",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-07",
+      "group": "video",
+      "request": "Generate a product demo video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-08",
+      "group": "video",
+      "request": "Produce a looping background animation",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-09",
+      "group": "video",
+      "request": "Convert a storyboard into video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "voice-01",
+      "group": "voice",
+      "request": "Make my blog audible as narration",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-02",
+      "group": "voice",
+      "request": "I need a Hindi text-to-speech tool",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-03",
+      "group": "voice",
+      "request": "Dub an existing clip into French",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-04",
+      "group": "voice",
+      "request": "Clone my voice with consent",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-05",
+      "group": "voice",
+      "request": "Generate a documentary voiceover",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-06",
+      "group": "voice",
+      "request": "Turn this script into spoken audio",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-07",
+      "group": "voice",
+      "request": "Produce synthetic speech for a tutorial",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-08",
+      "group": "voice",
+      "request": "Create a podcast intro voice",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-09",
+      "group": "voice",
+      "request": "Make a natural-sounding voice message",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "presentations-01",
+      "group": "presentations",
+      "request": "Help me put together a keynote deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-02",
+      "group": "presentations",
+      "request": "Create a slideshow from bullet points",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-03",
+      "group": "presentations",
+      "request": "Design an investor pitch presentation",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-04",
+      "group": "presentations",
+      "request": "Make a PowerPoint from an outline",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-05",
+      "group": "presentations",
+      "request": "Produce slides for a lecture",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-06",
+      "group": "presentations",
+      "request": "Draft a boardroom slide deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-07",
+      "group": "presentations",
+      "request": "Prepare visuals for my TED talk",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-08",
+      "group": "presentations",
+      "request": "Build a presentation to explain Q3 results",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-09",
+      "group": "presentations",
+      "request": "Improve the layout of my PPT",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "abstain-01",
+      "group": "abstain",
+      "request": "Where can I buy discounted headphones?",
+      "expected": []
+    },
+    {
+      "id": "abstain-02",
+      "group": "abstain",
+      "request": "Help me book a table for 4 tonight",
+      "expected": []
+    },
+    {
+      "id": "abstain-03",
+      "group": "abstain",
+      "request": "Find a tailor near me",
+      "expected": []
+    },
+    {
+      "id": "abstain-04",
+      "group": "abstain",
+      "request": "Could you translate a legal contract from Spanish to English?",
+      "expected": []
+    },
+    {
+      "id": "abstain-05",
+      "group": "abstain",
+      "request": "Join two PDF files into one",
+      "expected": []
+    },
+    {
+      "id": "abstain-06",
+      "group": "abstain",
+      "request": "Remove a PDF password",
+      "expected": []
+    },
+    {
+      "id": "abstain-07",
+      "group": "abstain",
+      "request": "Create a spreadsheet formula to calculate VAT",
+      "expected": []
+    },
+    {
+      "id": "abstain-08",
+      "group": "abstain",
+      "request": "Identify a song playing in a cafe",
+      "expected": []
+    },
+    {
+      "id": "abstain-09",
+      "group": "abstain",
+      "request": "Please set a reminder for tomorrow",
+      "expected": []
+    },
+    {
+      "id": "abstain-10",
+      "group": "abstain",
+      "request": "Check if my parcel has shipped",
+      "expected": []
+    },
+    {
+      "id": "abstain-11",
+      "group": "abstain",
+      "request": "Convert a DOCX into PDF",
+      "expected": []
+    },
+    {
+      "id": "abstain-12",
+      "group": "abstain",
+      "request": "Find my lost Android phone",
+      "expected": []
+    },
+    {
+      "id": "abstain-13",
+      "group": "abstain",
+      "request": "Give me a refund from the airline",
+      "expected": []
+    },
+    {
+      "id": "abstain-14",
+      "group": "abstain",
+      "request": "What's my current location?",
+      "expected": []
+    },
+    {
+      "id": "abstain-15",
+      "group": "abstain",
+      "request": "Tell me the score in today's match",
+      "expected": []
+    },
+    {
+      "id": "abstain-16",
+      "group": "abstain",
+      "request": "Can you diagnose this rash?",
+      "expected": []
+    },
+    {
+      "id": "abstain-17",
+      "group": "abstain",
+      "request": "Generate a QR code for my shop",
+      "expected": []
+    },
+    {
+      "id": "abstain-18",
+      "group": "abstain",
+      "request": "Track my train live",
+      "expected": []
+    },
+    {
+      "id": "mixed-01",
+      "group": "mixed",
+      "request": "Make a slide presentation and narrate it",
+      "expected": [
+        "presentations",
+        "voice"
+      ]
+    },
+    {
+      "id": "mixed-02",
+      "group": "mixed",
+      "request": "Write a script and generate a video",
+      "expected": [
+        "writing",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-03",
+      "group": "mixed",
+      "request": "Design a logo and build a website",
+      "expected": [
+        "visuals",
+        "app-building"
+      ]
+    },
+    {
+      "id": "mixed-04",
+      "group": "mixed",
+      "request": "Research a topic and draft an article",
+      "expected": [
+        "research",
+        "writing"
+      ]
+    },
+    {
+      "id": "mixed-05",
+      "group": "mixed",
+      "request": "Create an image and animate it into a clip",
+      "expected": [
+        "visuals",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-06",
+      "group": "mixed",
+      "request": "Review code and make a pitch deck",
+      "expected": [
+        "coding",
+        "presentations"
+      ]
+    },
+    {
+      "id": "mixed-07",
+      "group": "mixed",
+      "request": "Make voiceovers and video ads",
+      "expected": [
+        "voice",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-08",
+      "group": "mixed",
+      "request": "Build a web app and create its logo",
+      "expected": [
+        "app-building",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-09",
+      "group": "mixed",
+      "request": "Write captions and design social graphics",
+      "expected": [
+        "writing",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-10",
+      "group": "mixed",
+      "request": "Analyze research documents and make a slideshow",
+      "expected": [
+        "research",
+        "presentations"
+      ]
+    }
+  ]
+}
