@@ -47,5 +47,6 @@ jobs:
           path: |
             artifacts/ai-tools-qa/finder-precision.json
             artifacts/ai-tools-qa/finder-holdout.json
+            artifacts/ai-tools-qa/finder-challenge-48.json
           if-no-files-found: ignore
           retention-days: 14
