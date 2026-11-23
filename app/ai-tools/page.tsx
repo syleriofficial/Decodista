@@ -48,7 +48,7 @@ export default function AIToolsPage() {
             then compare their focus and everyday uses side by side.
           </p>
           <div className="ai-tools-hero-actions">
-            <a href="#ai-tools-directory-heading" className="ai-tools-primary-action"><Search size={17} aria-hidden="true" /> Explore tools <ArrowRight size={17} aria-hidden="true" /></a>
+            <a href="#ai-task-finder" className="ai-tools-primary-action"><Search size={17} aria-hidden="true" /> Find tools for your task <ArrowRight size={17} aria-hidden="true" /></a>
             <Link href="/ai-tools/compare" className="ai-tools-secondary-action"><GitCompareArrows size={17} aria-hidden="true" /> Compare tools</Link>
           </div>
           <div className="ai-tools-hero-stats">

@@ -55,6 +55,48 @@ try {
       assert.equal(await page.locator(".ai-tools-decision-link").count(), 2,
         "Keep only Pricing and Alternatives product navigation cards");
 
+      // Finder 2.0 must interpret intent locally without rankings, API calls or raw URL parameters.
+      const smartFinder = page.locator(".ai-task-finder");
+      const smartInput = smartFinder.locator("#ai-smart-finder-input");
+      assert.equal(await smartInput.getAttribute("maxLength"), "220");
+      assert.equal(await smartFinder.locator(".ai-task-smart-examples button").count(), 4);
+      await smartInput.fill("Build a website without coding");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Build an app"));
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(),
+        ["Bolt", "Lovable", "Replit"], "A no-code website request needs source-linked app builders");
+      assert(!page.url().includes("Build") && !page.url().includes("coding"),
+        "Private free-text requests must not be written into URL parameters");
+      await noOverflow(page, "smart website intent", view.width);
+
+      await smartInput.fill("Summarize research PDFs");
+      await smartInput.press("Enter");
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Research a topic"));
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(),
+        ["Gemini Notebook", "Perplexity"], "Document research must remain a disclosed research shortlist");
+
+      await smartFinder.getByRole("button", { name: "Make presentation slides" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Make presentations"));
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(), ["Canva", "Gamma"]);
+
+      await smartFinder.getByRole("button", { name: "Generate a voiceover" }).click();
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()), ["ElevenLabs"]);
+
+      await smartInput.fill("Make a video with a voiceover");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"));
+      assert.equal(await smartFinder.locator(".ai-task-smart-choices button").count(), 2,
+        "Ambiguous voice and video intent must prompt a choice, not invent a winning tool");
+      await smartFinder.locator(".ai-task-smart-choices").getByRole("button", { name: "Generate video" }).click();
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(), ["Adobe Firefly", "Runway"]);
+
+      await smartInput.fill("I need a local restaurant for dinner");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("No confident task match yet."),
+        "Unsupported intent must fail transparently without fake AI recommendations");
+      await noOverflow(page, "smart no-match state", view.width);
+      await page.screenshot({path: outputDir + "/" + view.label + "-smart-finder.png", fullPage: true});
+
       const tasks = page.locator(".ai-task-finder");
       await tasks.getByRole("button", { name: "Build software" }).click();
       assert.deepEqual(
