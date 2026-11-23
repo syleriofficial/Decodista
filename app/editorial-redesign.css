@@ -522,3 +522,20 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
 
 .cross-section-note { margin: 0 0 1.25rem; color: var(--muted); font-size: .92rem; }
 
+/* Reading polish — calm captions and accessible comparisons without assets or JS. */
+.article-main-grid--no-toc { grid-template-columns: minmax(0, 720px) 145px; }
+.article-hero figcaption,
+.prose-image figcaption,
+.table-figure figcaption { font-size: .8rem; line-height: 1.55; overflow-wrap: anywhere; }
+.article-prose a { overflow-wrap: anywhere; }
+.table-scroll-hint { display: none; }
+.table-scroll:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+@media (max-width: 1000px) {
+  .article-main-grid--no-toc { grid-template-columns: minmax(0, 720px); }
+}
+@media (max-width: 800px) {
+  .table-scroll-hint {
+    display: block; margin-bottom: .5rem;
+    color: var(--muted); font: 700 .75rem/1.5 var(--font-ui);
+  }
+}
