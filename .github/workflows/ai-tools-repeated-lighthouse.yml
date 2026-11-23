@@ -1,0 +1,67 @@
+name: AI Tools repeated mobile Lighthouse lab
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'app/ai-tools/**'
+      - 'components/ai-task-finder.tsx'
+      - 'components/ai-tools-explorer.tsx'
+      - 'lib/ai-tools-smart-finder.ts'
+      - 'scripts/audit-ai-tools-repeated-lighthouse.mjs'
+      - 'scripts/lib/ai-tools-lighthouse-stats.mjs'
+      - '.github/workflows/ai-tools-repeated-lighthouse.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audit-ai-tools-repeated-lighthouse.mjs'
+      - 'scripts/lib/ai-tools-lighthouse-stats.mjs'
+      - 'scripts/test-ai-tools-lighthouse-stats.mjs'
+      - '.github/workflows/ai-tools-repeated-lighthouse.yml'
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: ai-tools-repeated-lab-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-tools-repeated-mobile:
+    name: AI Tools median-of-three simulated mobile audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify repeated lab statistics
+        run: node --test scripts/test-ai-tools-lighthouse-stats.mjs
+      - name: Wait for same-commit successful Cloudflare Workers build
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/wait-for-cloudflare-build.mjs
+      - name: Verify installed Chrome
+        if: github.event_name != 'pull_request'
+        run: google-chrome --version
+      - name: Install pinned Lighthouse CLI
+        if: github.event_name != 'pull_request'
+        run: npm install --global lighthouse@13.6.0
+      - name: Audit Finder and Compare 3 times each (live production only)
+        if: github.event_name != 'pull_request'
+        env:
+          AI_TOOLS_LAB_REPEATS: '3'
+          AI_TOOLS_LAB_OUTPUT_DIR: artifacts/ai-tools-performance
+        run: node scripts/audit-ai-tools-repeated-lighthouse.mjs
+      - name: Upload raw rounds and summary
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-tools-repeated-mobile-lighthouse
+          path: artifacts/ai-tools-performance/
+          if-no-files-found: ignore
+          retention-days: 14
