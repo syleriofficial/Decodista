@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
+import { getAiToolPricing } from "@/lib/ai-tools-pricing";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Info, ShieldCheck } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -42,6 +43,7 @@ export default async function AiToolProfilePage({ params }: PageProps) {
   if (!tool) notFound();
 
   const source = getAiToolEvidence(tool.slug);
+  const pricing = getAiToolPricing(tool.slug);
   const alternatives = AI_TOOLS.filter((candidate) =>
     candidate.category === tool.category && candidate.slug !== tool.slug
   );
@@ -93,7 +95,14 @@ export default async function AiToolProfilePage({ params }: PageProps) {
               <div><dt>Provider</dt><dd>{tool.provider}</dd></div>
               <div><dt>Category</dt><dd>{category}</dd></div>
               <div><dt>Directory status</dt><dd>Introductory listing</dd></div>
-              <div><dt>Plans & pricing</dt><dd>Confirm with provider</dd></div>
+              <div><dt>Plans & pricing</dt><dd>
+                {pricing ? (
+                  <>
+                    <span>{pricing.planNames.slice(0, 3).join(" · ")}{pricing.planNames.length > 3 ? " · …" : ""}</span>
+                    <Link href={`/ai-tools/pricing#plan-${tool.slug}`}> Dated plan sources</Link>
+                  </>
+                ) : "Confirm with provider"}
+              </dd></div>
             </dl>
             <p>Not a hands-on review or a verified live pricing record.</p>
           </aside>
