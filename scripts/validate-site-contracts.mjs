@@ -177,6 +177,26 @@ assert(
   !aiToolsInteractions.includes('search_term:') &&
   !aiToolsInteractions.includes('email:'),
   "Measure opt-in product intent without transmitting search text, personal IDs or unapproved tool IDs");
+assert(
+  aiToolsTaskFinder.includes('id="ai-smart-finder-input"') &&
+  aiToolsTaskFinder.includes("matchSmartFinderTask(value)") &&
+  aiToolsTaskFinder.includes("No confident task match yet.") &&
+  aiToolsTaskFinder.includes("More than one type of work could fit.") &&
+  aiToolsTaskFinder.includes('role="status"') &&
+  aiToolsTaskFinder.includes('maxLength={220}') &&
+  aiToolsSmartFinder.includes("export function matchSmartFinderTask(input: string)") &&
+  aiToolsSmartFinder.includes('id: "app-building"') &&
+  aiToolsSmartFinder.includes('id: "presentations"') &&
+  aiToolsSmartFinder.includes("codingText") &&
+  aiToolsSmartFinder.includes("matchedTasks: []") &&
+  !aiToolsSmartFinder.includes("fetch(") &&
+  !aiToolsSmartFinder.includes("localStorage") &&
+  !aiToolsSmartFinder.includes("window.gtag") &&
+  !aiToolsTaskFinder.includes("window.gtag") &&
+  aiToolsCss.includes(".ai-task-smart-input-row") &&
+  aiToolsPage.includes('href="#ai-task-finder"'),
+  "Smart Finder 2.0 must offer private, responsive, on-device task matching with transparent uncertainty and no AI API or raw-query telemetry");
+
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_compare_select"'),
