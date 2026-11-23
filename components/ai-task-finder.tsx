@@ -183,7 +183,7 @@ export function AiTaskFinder() {
           {finderResult.matchedTasks.length === 0 ? (
             <>
               <strong>No confident task match yet.</strong>
-              <p>Try describing the output you need (app, slides, image, research, code, video, voice or writing), or choose a task below. We won't invent a recommendation.</p>
+              <p>Try describing the output you need (app, slides, image, research, code, video, voice or writing), or choose a task below. We won&apos;t invent a recommendation.</p>
             </>
           ) : finderResult.ambiguous ? (
             <>
