@@ -132,7 +132,10 @@ export function AiToolsExplorer() {
               placeholder="Try writing, coding, research…"
               value={search}
               maxLength={120}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => {
+                if (!event.target.value.trim()) lastRecordedSearchRef.current = "";
+                setSearch(event.target.value);
+              }}
               onBlur={recordCompletedSearch}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -142,7 +145,7 @@ export function AiToolsExplorer() {
               }}
               autoComplete="off"
             />
-            {search && <button className="ai-tools-clear" type="button" aria-label="Clear tool search" onClick={() => setSearch("")}><X size={17} aria-hidden="true" /></button>}
+            {search && <button className="ai-tools-clear" type="button" aria-label="Clear tool search" onClick={() => { lastRecordedSearchRef.current = ""; setSearch(""); }}><X size={17} aria-hidden="true" /></button>}
           </div>
           <div className="ai-tools-filter-row" role="group" aria-label="Filter by category">
             {AI_TOOL_CATEGORIES.map((item) => (
