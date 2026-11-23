@@ -51,6 +51,7 @@ export default function AIToolsPage() {
             <a href="#ai-tools-directory" className="ai-tools-primary-action"><Search size={17} aria-hidden="true" /> Browse AI tools <ArrowRight size={17} aria-hidden="true" /></a>
             <Link href="/ai-tools/compare" className="ai-tools-secondary-action"><GitCompareArrows size={17} aria-hidden="true" /> Compare tools</Link>
           </div>
+          <a href="#ai-task-finder" className="ai-tools-task-shortcut">Not sure where to start? Find tools by task <ArrowRight size={15} aria-hidden="true" /></a>
           <div className="ai-tools-hero-stats">
             <div><strong>{AI_TOOLS.length}</strong><span>starting listings</span></div>
             <div><strong>6</strong><span>use-case categories</span></div>
