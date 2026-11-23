@@ -539,3 +539,74 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
     color: var(--muted); font: 700 .75rem/1.5 var(--font-ui);
   }
 }
+
+/* 13. Editorial density pass: more stories visible at 100% browser zoom.
+ * Preserve a comfortable article reading measure and touch targets.
+ * No content, menu, image, or AI Tools behavior changes. */
+:root { --max: 1320px; }
+
+@media (min-width: 1001px) {
+  :root { --sticky-nav-height: 103px; }
+  .edition-line { min-height: 20px; }
+  .masthead { min-height: 78px; grid-template-rows: 46px 32px; }
+  .masthead .wordmark { font-size: clamp(1.5rem, 2.1vw, 1.95rem); }
+  .masthead .nav-scroll { gap: clamp(.9rem, 1.65vw, 1.65rem); }
+  .masthead .nav-scroll > a { min-height: 32px; }
+  .home-intro { padding-top: clamp(.7rem, 1.3vw, 1.15rem); }
+  .hero { gap: clamp(1rem, 1.6vw, 1.45rem); padding-top: .5rem; padding-bottom: clamp(2.2rem, 3.2vw, 3.2rem); }
+  .lead-story, .lead-story .lead-image { min-height: 365px; }
+  .lead-story .lead-copy { padding: clamp(1.35rem, 2vw, 2.1rem); }
+  .lead-copy .card-labels { margin-bottom: .7rem; }
+  .lead-copy h1 { font-size: clamp(1.95rem, 2.65vw, 2.95rem); line-height: 1.11; }
+  .lead-copy > p { margin-top: .65rem; font-size: .96rem; line-height: 1.55; }
+  .lead-meta { margin-top: 1rem; }
+  .hero-rail article { padding-block: .8rem; }
+  .hero-rail h2 { font-size: clamp(1.07rem, 1.3vw, 1.3rem); }
+}
+
+@media (min-width: 601px) {
+  .latest-home { padding-bottom: clamp(2.25rem, 3.6vw, 3.75rem); }
+  .section-heading h2 { font-size: clamp(1.95rem, 2.75vw, 2.75rem); }
+  .latest-feed { gap: 1rem; }
+  .latest-feed .article-card--horizontal .card-copy { padding: .95rem .95rem 1rem; }
+  .latest-feed .article-card--horizontal .card-copy h3 { font-size: clamp(1.22rem, 1.55vw, 1.5rem); }
+  .home-topic { padding-bottom: clamp(2.4rem, 3.75vw, 3.75rem); }
+  .home-topic-grid { gap: clamp(.85rem, 1.4vw, 1.15rem); }
+  .home-topic-grid .article-card--compact .card-copy { padding-top: .7rem; }
+  .home-topic-grid .article-card--compact .card-copy h3 { font-size: clamp(1.2rem, 1.6vw, 1.55rem); }
+  .home-ai-tools { padding: clamp(1.25rem, 2.2vw, 1.9rem); margin-bottom: clamp(2.2rem, 3.3vw, 3.3rem); }
+  .home-ai-tools-copy h2 { font-size: clamp(1.7rem, 2.4vw, 2.4rem); }
+  .home-ai-tools-link { min-height: 160px; padding: 1rem; }
+  .home-ai-tools-link strong { font-size: clamp(1.2rem, 1.45vw, 1.45rem); }
+  .home-weekly-brief { padding: clamp(1.25rem, 2.1vw, 2rem); margin-bottom: clamp(2.2rem, 3.3vw, 3.3rem); }
+  .home-weekly-brief h2 { font-size: clamp(1.7rem, 2.4vw, 2.45rem); }
+  .reader-paths { padding: clamp(1.45rem, 2.4vw, 2.4rem); margin-bottom: clamp(2.5rem, 3.5vw, 3.5rem); }
+  .reader-paths-heading h2 { font-size: clamp(1.9rem, 3vw, 2.9rem); }
+  .reader-path { min-height: 150px; padding: 1rem 0 .4rem; }
+  .reader-path strong { font-size: clamp(1.2rem, 1.55vw, 1.5rem); }
+  .category-header { padding: clamp(1.55rem, 2.8vw, 2.8rem) clamp(1.25rem, 3vw, 3rem); margin-top: clamp(.8rem, 1.6vw, 1.5rem); }
+  .category-header h1 { font-size: clamp(2.6rem, 4.5vw, 4.5rem); }
+  .category-lead { margin-top: clamp(1.1rem, 2.3vw, 2rem); }
+  .category-lead > div { padding: clamp(1.4rem, 2.6vw, 2.6rem); }
+  .category-lead h2 { font-size: clamp(1.75rem, 2.7vw, 2.8rem); }
+  .article-header { padding-top: clamp(2rem, 3.5vw, 3.5rem); }
+  .article-header h1 { font-size: clamp(2.35rem, 4vw, 3.9rem); }
+  .article-reading { padding-block: clamp(2.3rem, 4.5vw, 4.5rem); }
+  .page-intro { padding: clamp(1.6rem, 2.6vw, 2.6rem); }
+  .page-intro h1 { font-size: clamp(2.6rem, 4.2vw, 4.3rem); }
+  .weekly-page .page-intro h1 { font-size: clamp(2.35rem, 4.2vw, 4.2rem); }
+  .weekly-issue-header h1 { font-size: clamp(2.25rem, 4.1vw, 4.1rem); }
+  .footer-manifesto strong { font-size: clamp(1.4rem, 2.25vw, 2.3rem); }
+}
+
+@media (max-width: 1000px) and (min-width: 601px) {
+  .lead-copy h1 { font-size: clamp(2rem, 3.8vw, 3.2rem); }
+}
+
+@media (max-width: 600px) {
+  .lead-copy h1 { font-size: clamp(1.85rem, 7.5vw, 2.45rem); }
+  .section-heading h2 { font-size: clamp(1.7rem, 6vw, 2.1rem); }
+  .reader-paths-heading h2 { font-size: clamp(1.8rem, 6.5vw, 2.3rem); }
+  .category-header h1, .page-intro h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+  .article-header h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+}
