@@ -1308,3 +1308,11 @@
   .ai-tools-pricing-page .ai-tools-price-card,
   .ai-tools-alternatives-page .ai-tools-alternative-card { transition: none; }
 }
+
+
+/* AI Tools feature-hero eyebrow spacing fix:
+   keep the back navigation and section kicker on distinct rows. */
+.ai-tools-page .ai-tools-feature-hero > .ai-tools-eyebrow {
+  display: block;
+  margin-bottom: .15rem;
+}
