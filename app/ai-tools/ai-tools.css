@@ -720,3 +720,29 @@
   .ai-tools-app-cost-card { padding:1rem; }
   .ai-tools-app-cost-link { flex-direction:column; align-items:flex-start; }
 }
+
+
+/* Smart Finder 2.0: private, no-network task discovery. */
+.ai-task-smart { margin:1.25rem 0 1rem; padding:clamp(1rem,2.5vw,1.35rem); border:1px solid var(--line); border-radius:var(--tools-radius); background:var(--surface); }
+.ai-task-smart-form label { display:block; margin-bottom:.55rem; font-size:.82rem; font-weight:850; }
+.ai-task-smart-input-row { display:flex; align-items:stretch; gap:.65rem; }
+.ai-task-smart-input-row input { min-width:0; flex:1; min-height:48px; padding:.7rem .85rem; border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); font:inherit; font-size:.91rem; }
+.ai-task-smart-input-row button { display:inline-flex; gap:.45rem; align-items:center; justify-content:center; flex:none; padding:.65rem 1.15rem; min-height:48px; border:0; border-radius:6px; background:#2454e8; color:#fff; cursor:pointer; font-size:.84rem; font-weight:850; }
+.ai-task-smart-input-row button:hover:not(:disabled) { background:#183fc4; }
+.ai-task-smart-input-row button:disabled { opacity:.55; cursor:not-allowed; }
+.ai-task-smart-examples { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.8rem 0; }
+.ai-task-smart-examples span { color:var(--muted); margin-right:.25rem; font-size:.74rem; font-weight:800; }
+.ai-task-smart-examples button,.ai-task-smart-choices button { min-height:36px; border:1px solid var(--line); border-radius:5px; padding:.45rem .65rem; background:var(--edition-panel); color:var(--ink); cursor:pointer; font-size:.75rem; font-weight:750; }
+.ai-task-smart-examples button:hover,.ai-task-smart-choices button:hover { border-color:var(--signal); color:var(--signal); }
+.ai-task-smart-privacy { display:flex; gap:.4rem; align-items:flex-start; color:var(--muted); font-size:.71rem; line-height:1.6; margin:.8rem 0 0; }
+.ai-task-smart-privacy svg { flex:none; margin-top:.06rem; color:var(--signal); }
+.ai-task-smart-result { margin:1rem 0; padding:1rem 1.15rem; border-left:3px solid var(--signal); background:var(--edition-panel); border-radius:0 6px 6px 0; }
+.ai-task-smart-result strong { display:block; font-size:.88rem; }
+.ai-task-smart-result p { margin:.35rem 0 0; font-size:.8rem; line-height:1.65; color:var(--muted); }
+.ai-task-smart-choices { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:.7rem; }
+.ai-task-smart-form input:focus-visible,.ai-task-smart-input-row button:focus-visible,.ai-task-smart-examples button:focus-visible,.ai-task-smart-choices button:focus-visible { outline:2px solid var(--signal); outline-offset:2px; }
+@media(max-width:540px) {
+  .ai-task-smart-input-row { flex-direction:column; }
+  .ai-task-smart-input-row input { width:100%; }
+  .ai-task-smart-input-row button { width:100%; }
+}
