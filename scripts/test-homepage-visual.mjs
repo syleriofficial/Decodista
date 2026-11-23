@@ -413,6 +413,47 @@ for (const sample of [
     const articleDocumentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
     assert(articleDocumentWidth <= sample.width + 1, "Article discovery must not cause mobile overflow");
 
+    // Simulate a short guide without a TOC: the reading column must stay wide
+    // rather than landing in the former narrow sidebar grid track.
+    const noTocProseWidth = await page.locator(".article-main-grid").evaluate((grid) => {
+      const toc = grid.querySelector(".toc");
+      const nextSibling = toc?.nextSibling;
+      toc?.remove();
+      grid.classList.add("article-main-grid--no-toc");
+      const width = grid.querySelector(".article-prose")?.getBoundingClientRect().width ?? 0;
+      grid.classList.remove("article-main-grid--no-toc");
+      if (toc) grid.insertBefore(toc, nextSibling ?? null);
+      return width;
+    });
+    assert(noTocProseWidth >= Math.min(600, sample.width - 48),
+      "Short articles without a table of contents must retain a readable main column");
+
+    if (sample.name === "desktop-light" || sample.name === "mobile-light") {
+      const comparisonResponse = await page.goto(base + "/articles/how-to-spot-fake-online-store",
+        { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(comparisonResponse?.status(), 200, "Published comparison guide must load");
+      const comparisonTable = page.locator("figure.table-figure").first();
+      assert.equal(await comparisonTable.count(), 1, "Comparison guide must retain its published table");
+      const scrollRegion = comparisonTable.locator(".table-scroll");
+      assert.equal(await scrollRegion.getAttribute("role"), "region", "Scrollable comparison needs a named region");
+      assert.equal(await scrollRegion.getAttribute("tabindex"), "0", "Comparison must be keyboard-scrollable");
+      const hint = comparisonTable.locator(".table-scroll-hint");
+      assert.equal(await hint.isVisible(), sample.width <= 800,
+        "Compact layouts must explain that comparison tables scroll horizontally");
+      if (sample.width <= 600) {
+        const dimensions = await scrollRegion.evaluate(node => ({
+          scrollWidth: node.scrollWidth,
+          clientWidth: node.clientWidth,
+          documentWidth: document.documentElement.scrollWidth,
+        }));
+        assert(dimensions.scrollWidth > dimensions.clientWidth, "Comparison columns should scroll inside the table region");
+        assert(dimensions.documentWidth <= sample.width + 1, "Comparison must not overflow the mobile viewport");
+      }
+      const captionSize = await page.locator("figure.article-hero figcaption").evaluate(
+        el => parseFloat(getComputedStyle(el).fontSize));
+      assert(captionSize >= 12.7, "Editorial image captions should be legible on mobile and desktop");
+    }
+
     const aboutResponse = await page.goto(base + "/about", { waitUntil: "domcontentloaded", timeout: 45000 });
     assert.equal(aboutResponse?.status(), 200, "About must load");
     assert((await page.locator("main").innerText()).includes("Our current published coverage focuses on AI tools"), "About must accurately describe currently published coverage");
