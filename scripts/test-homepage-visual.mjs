@@ -553,6 +553,24 @@ for (const sample of [
         await page.screenshot({ path: out + "/how-to-mobile-first-screen.png" });
         await page.locator(".how-to-guide-list").screenshot({ path: out + "/how-to-mobile-guide-list.png" });
       }
+      const mobileSecurity = await page.goto(base + "/security", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(mobileSecurity?.status(), 200, "Security category should load on mobile");
+      const securityRows = page.locator(".security-page .editorial-vertical-list .article-card--horizontal");
+      assert((await securityRows.count()) > 0, "Security needs real articles in a vertical list");
+      const metrics = await securityRows.first().evaluate((article) => {
+        const row = article.getBoundingClientRect();
+        const image = article.querySelector(".card-image").getBoundingClientRect();
+        const copy = article.querySelector(".card-copy").getBoundingClientRect();
+        return { horizontal: image.left < copy.left && image.right <= copy.left,
+          thumbnailRatio: image.width / row.width,
+          scrollWidth: document.documentElement.scrollWidth, viewportWidth: window.innerWidth };
+      });
+      assert(metrics.horizontal && metrics.thumbnailRatio <= .37, "Security mobile thumbnails should stay compact beside the text");
+      assert(metrics.scrollWidth <= metrics.viewportWidth + 1, "Security mobile should have no horizontal overflow");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/security-mobile-first-screen.png" });
+        await page.locator(".security-page .editorial-vertical-list").screenshot({ path: out + "/security-mobile-archive.png" });
+      }
       const mobileDigitalLife = await page.goto(base + "/digital-life", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileDigitalLife?.status(), 200, "Digital Life should load on mobile");
       const mobileDigitalRows = page.locator(".digital-life-page .editorial-vertical-list .article-card--horizontal");
@@ -613,6 +631,24 @@ for (const sample of [
           await page.screenshot({ path: out + "/how-to-desktop-first-screen.png" });
           await list.screenshot({ path: out + "/how-to-desktop-guide-list.png" });
         }
+        if (category === "security") {
+          const securityList = page.locator(".security-page .editorial-vertical-list");
+          assert.equal(await securityList.count(), 1, "Security must have a single editorial archive list");
+          assert.equal(await page.locator(".security-page .article-grid").count(), 0, "Security must not use the old two-column grid");
+          const rows = securityList.locator(".article-card--horizontal");
+          assert((await rows.count()) > 0, "Security must have published rows");
+          const positions = await securityList.evaluate((el) => ({
+            columns: getComputedStyle(el).gridTemplateColumns.split(" ").length,
+            tops: Array.from(el.querySelectorAll(":scope > article")).slice(0, 3)
+              .map(article => article.getBoundingClientRect().top),
+          }));
+          assert.equal(positions.columns, 1, "Security archive should use one column");
+          assert(positions.tops.every((y, i, arr) => i === 0 || y > arr[i - 1]), "Security rows must stack vertically");
+          assert((await rows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+            "Security archive should use appropriately sized responsive thumbnails");
+          await page.screenshot({ path: out + "/security-desktop-first-screen.png" });
+          await securityList.screenshot({ path: out + "/security-desktop-archive.png" });
+        }
         if (category === "digital-life") {
           const list = page.locator(".digital-life-page .editorial-vertical-list");
           assert.equal(await list.count(), 1, "Digital Life should have a single editorial archive list");
@@ -671,6 +707,10 @@ for (const sample of [
       const secondPage = await page.goto(base + "/security?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(secondPage?.status(), 200, "Second Security archive page must work");
       assert.equal(await page.locator(".category-lead").count(), 0, "Featured article must not repeat on category page 2");
+      assert.equal(await page.locator(".security-page .editorial-vertical-list").count(), 1,
+        "Security page 2 should also use a vertical archive");
+      assert((await page.locator(".security-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+        "Security page 2 should list published articles");
       for (const [url, name] of [
         ["/weekly", "weekly-archive"],
         ["/topics/photos-backup", "topic-hub"],
