@@ -284,13 +284,16 @@ const reviewHtml = snapshots["/review-methodology"]?.body ?? "";
 if (reviewHtml) check("Review Methodology content", reviewHtml.includes("Research versus hands-on testing"), "Policy page should be rendered");
 const weeklyArchiveHtml = snapshots["/weekly"]?.body ?? "";
 if (weeklyArchiveHtml) {
-  const spotlight = weeklyArchiveHtml.split('class="weekly-spotlight"', 2)[1] ?? "";
-  check("Weekly archive features Issue 3",
-    spotlight.includes("Chrome") && spotlight.includes("83 Security Fixes"),
-    "Weekly archive should display Issue 3 as the latest");
-  check("Weekly archive links Issue 3",
-    spotlight.includes('href="/weekly/2026-11-16"'),
-    "The issue must be linked in the public weekly archive");
+  const magazine = weeklyArchiveHtml.split('class="weekly-magazine"', 2)[1] ?? "";
+  check("Weekly archive features current Issue 4",
+    magazine.includes("Chrome") && magazine.includes("204 Fixes"),
+    "Weekly archive should feature the latest published issue");
+  check("Weekly archive links current Issue 4",
+    magazine.includes('href="/weekly/2026-11-22"'),
+    "Latest weekly issue must link to its real published URL");
+  check("Weekly archive keeps previous Issue 3",
+    weeklyArchiveHtml.includes('href="/weekly/2026-11-16"'),
+    "Published previous editions must remain discoverable");
 }
 const weeklyIssueHtml = snapshots[weeklyIssuePath]?.body ?? "";
 if (weeklyIssueHtml) {

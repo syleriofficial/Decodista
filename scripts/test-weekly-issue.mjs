@@ -113,7 +113,7 @@ const page = await context.newPage();
 try {
   const archive = await page.goto(base + "/weekly", { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.equal(archive?.status(), 200);
-  assert.match(await page.locator(".weekly-spotlight h2").innerText(), /Chrome.+204 Fixes/, "Issue 4 must be latest");
+  assert.match(await page.locator(".weekly-magazine-feature h2").innerText(), /Chrome.+204 Fixes/, "Issue 4 must be latest");
   assert((await page.locator(".weekly-archive").innerText()).includes("Chrome\u0027s 83 Security Fixes"), "Issue 3 retained");
   assert((await page.locator(".weekly-archive").innerText()).includes("iPhone and Firefox Fixes"), "Older issue retained");
   const sitemap = await page.request.get(base + "/sitemap.xml");
