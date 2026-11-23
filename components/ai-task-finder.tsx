@@ -146,7 +146,7 @@ export function AiTaskFinder() {
   return (
     <section className="ai-task-finder wrap" aria-labelledby="ai-task-finder-heading" id="ai-task-finder">
       <div className="ai-task-finder-heading">
-        <span className="ai-tools-eyebrow">Smart Finder 2.2 / Start with your job</span>
+        <span className="ai-tools-eyebrow">Smart Finder 2.3 / Start with your job</span>
         <h2 id="ai-task-finder-heading">What do you want AI to help you do?</h2>
         <p>Describe your goal or choose a task. We map it to documented uses among 16 tools—without sending your words to an AI service.</p>
       </div>

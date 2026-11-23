@@ -1,0 +1,888 @@
+{
+  "description": "Hand-authored synthetic English task-intent regression examples. Not user logs or population-representative accuracy data.",
+  "version": 1,
+  "cases": [
+    {
+      "id": "research-1",
+      "group": "research",
+      "request": "Summarize research PDFs",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-2",
+      "group": "research",
+      "request": "Check citations",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-3",
+      "group": "research",
+      "request": "Fact check this claim",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-4",
+      "group": "research",
+      "request": "Analyze my documents",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-5",
+      "group": "research",
+      "request": "Research climate change",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-6",
+      "group": "research",
+      "request": "Find credible sources",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-7",
+      "group": "research",
+      "request": "Summarize academic papers",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-8",
+      "group": "research",
+      "request": "Compare two research studies",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-9",
+      "group": "research",
+      "request": "Read an uploaded PDF and explain it",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-10",
+      "group": "research",
+      "request": "Find information about vaccines",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-11",
+      "group": "research",
+      "request": "Study a topic using web sources",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-12",
+      "group": "research",
+      "request": "Evaluate scientific papers",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "writing-1",
+      "group": "writing",
+      "request": "Write an email to a client",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-2",
+      "group": "writing",
+      "request": "Draft a blog post",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-3",
+      "group": "writing",
+      "request": "Rewrite an essay",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-4",
+      "group": "writing",
+      "request": "Proofread a resume",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-5",
+      "group": "writing",
+      "request": "Write a LinkedIn post",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-6",
+      "group": "writing",
+      "request": "Generate social media captions",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-7",
+      "group": "writing",
+      "request": "Create product descriptions",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-8",
+      "group": "writing",
+      "request": "Draft a press release",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-9",
+      "group": "writing",
+      "request": "Help write my CV",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-10",
+      "group": "writing",
+      "request": "Edit my story",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-11",
+      "group": "writing",
+      "request": "Write marketing copy",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-12",
+      "group": "writing",
+      "request": "Fix grammar in text",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "coding-1",
+      "group": "coding",
+      "request": "Debug JavaScript",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-2",
+      "group": "coding",
+      "request": "Fix my code",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-3",
+      "group": "coding",
+      "request": "Review source code",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-4",
+      "group": "coding",
+      "request": "Refactor my Python code",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-5",
+      "group": "coding",
+      "request": "Write Python code",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-6",
+      "group": "coding",
+      "request": "Fix TypeScript errors",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-7",
+      "group": "coding",
+      "request": "Review a GitHub pull request",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-8",
+      "group": "coding",
+      "request": "Help with programming",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-9",
+      "group": "coding",
+      "request": "Explain a codebase",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-10",
+      "group": "coding",
+      "request": "Automate coding tasks",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "app-building-1",
+      "group": "app-building",
+      "request": "Build a website without coding",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-2",
+      "group": "app-building",
+      "request": "Create a mobile app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-3",
+      "group": "app-building",
+      "request": "Make a landing page",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-4",
+      "group": "app-building",
+      "request": "Develop a SaaS app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-5",
+      "group": "app-building",
+      "request": "Prototype a web app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-6",
+      "group": "app-building",
+      "request": "Create a website",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-7",
+      "group": "app-building",
+      "request": "Launch an online store",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-8",
+      "group": "app-building",
+      "request": "Build an ecommerce website",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-9",
+      "group": "app-building",
+      "request": "Create a full stack app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-10",
+      "group": "app-building",
+      "request": "Build an app without coding",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "visuals-1",
+      "group": "visuals",
+      "request": "Create an app logo",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-2",
+      "group": "visuals",
+      "request": "Generate an app icon",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-3",
+      "group": "visuals",
+      "request": "Make a photo without coding",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-4",
+      "group": "visuals",
+      "request": "Edit my photo",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-5",
+      "group": "visuals",
+      "request": "Design a poster",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-6",
+      "group": "visuals",
+      "request": "Generate images",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-7",
+      "group": "visuals",
+      "request": "Create a thumbnail",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-8",
+      "group": "visuals",
+      "request": "Design a website banner",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-9",
+      "group": "visuals",
+      "request": "Draw illustrations",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-10",
+      "group": "visuals",
+      "request": "Generate a logo for my startup",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "video-1",
+      "group": "video",
+      "request": "Generate a video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-2",
+      "group": "video",
+      "request": "Edit my videos",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-3",
+      "group": "video",
+      "request": "Make short films",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-4",
+      "group": "video",
+      "request": "Turn images into video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-5",
+      "group": "video",
+      "request": "Create a YouTube video",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-6",
+      "group": "video",
+      "request": "Produce an animation",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-7",
+      "group": "video",
+      "request": "Make video clips",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-8",
+      "group": "video",
+      "request": "Create a reel",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-9",
+      "group": "video",
+      "request": "Text to video generation",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-10",
+      "group": "video",
+      "request": "Create animated explainer videos",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "voice-1",
+      "group": "voice",
+      "request": "Generate a voiceover",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-2",
+      "group": "voice",
+      "request": "Create a voice",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-3",
+      "group": "voice",
+      "request": "Text to speech",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-4",
+      "group": "voice",
+      "request": "Dub a video in Spanish",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-5",
+      "group": "voice",
+      "request": "Record narration with AI",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-6",
+      "group": "voice",
+      "request": "Make Hindi voiceovers",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-7",
+      "group": "voice",
+      "request": "Synthesize spoken audio",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-8",
+      "group": "voice",
+      "request": "Voice cloning with consent",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-9",
+      "group": "voice",
+      "request": "Generate audio narration",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-10",
+      "group": "voice",
+      "request": "Translate and dub speech",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "presentations-1",
+      "group": "presentations",
+      "request": "Make presentation slides",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-2",
+      "group": "presentations",
+      "request": "Generate a PowerPoint",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-3",
+      "group": "presentations",
+      "request": "Create a pitch deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-4",
+      "group": "presentations",
+      "request": "Design slide decks",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-5",
+      "group": "presentations",
+      "request": "Make a slideshow",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-6",
+      "group": "presentations",
+      "request": "Build a presentation for investors",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-7",
+      "group": "presentations",
+      "request": "Edit a PPTX",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-8",
+      "group": "presentations",
+      "request": "Create a business presentation",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-9",
+      "group": "presentations",
+      "request": "Add speaker notes to my slides",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-10",
+      "group": "presentations",
+      "request": "Create investor slides",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "abstain-1",
+      "group": "abstain",
+      "request": "Convert PDF to Word",
+      "expected": []
+    },
+    {
+      "id": "abstain-2",
+      "group": "abstain",
+      "request": "Recover my email password",
+      "expected": []
+    },
+    {
+      "id": "abstain-3",
+      "group": "abstain",
+      "request": "I need a local restaurant for dinner",
+      "expected": []
+    },
+    {
+      "id": "abstain-4",
+      "group": "abstain",
+      "request": "Compress a PDF",
+      "expected": []
+    },
+    {
+      "id": "abstain-5",
+      "group": "abstain",
+      "request": "Merge PDF files",
+      "expected": []
+    },
+    {
+      "id": "abstain-6",
+      "group": "abstain",
+      "request": "Reset my account password",
+      "expected": []
+    },
+    {
+      "id": "abstain-7",
+      "group": "abstain",
+      "request": "Check train status",
+      "expected": []
+    },
+    {
+      "id": "abstain-8",
+      "group": "abstain",
+      "request": "Book an airline ticket",
+      "expected": []
+    },
+    {
+      "id": "abstain-9",
+      "group": "abstain",
+      "request": "Buy a used laptop",
+      "expected": []
+    },
+    {
+      "id": "abstain-10",
+      "group": "abstain",
+      "request": "What's the weather tomorrow",
+      "expected": []
+    },
+    {
+      "id": "abstain-11",
+      "group": "abstain",
+      "request": "Search for a hotel in Mumbai",
+      "expected": []
+    },
+    {
+      "id": "abstain-12",
+      "group": "abstain",
+      "request": "Without coding",
+      "expected": []
+    },
+    {
+      "id": "abstain-13",
+      "group": "abstain",
+      "request": "Help me get a refund",
+      "expected": []
+    },
+    {
+      "id": "abstain-14",
+      "group": "abstain",
+      "request": "Generate a bank statement",
+      "expected": []
+    },
+    {
+      "id": "abstain-15",
+      "group": "abstain",
+      "request": "I need help with taxes",
+      "expected": []
+    },
+    {
+      "id": "abstain-16",
+      "group": "abstain",
+      "request": "Make my internet faster",
+      "expected": []
+    },
+    {
+      "id": "abstain-17",
+      "group": "abstain",
+      "request": "Order groceries",
+      "expected": []
+    },
+    {
+      "id": "abstain-18",
+      "group": "abstain",
+      "request": "How to cure a fever",
+      "expected": []
+    },
+    {
+      "id": "abstain-19",
+      "group": "abstain",
+      "request": "Find the nearest hospital",
+      "expected": []
+    },
+    {
+      "id": "abstain-20",
+      "group": "abstain",
+      "request": "File a legal complaint",
+      "expected": []
+    },
+    {
+      "id": "ambiguous-1",
+      "group": "ambiguous",
+      "request": "Make a video with a voiceover",
+      "expected": [
+        "video",
+        "voice"
+      ]
+    },
+    {
+      "id": "ambiguous-2",
+      "group": "ambiguous",
+      "request": "Create presentation slides with voiceover",
+      "expected": [
+        "presentations",
+        "voice"
+      ]
+    },
+    {
+      "id": "ambiguous-3",
+      "group": "ambiguous",
+      "request": "Write and produce a video",
+      "expected": [
+        "writing",
+        "video"
+      ]
+    },
+    {
+      "id": "ambiguous-4",
+      "group": "ambiguous",
+      "request": "Create a website logo and a website",
+      "expected": [
+        "visuals",
+        "app-building"
+      ]
+    },
+    {
+      "id": "ambiguous-5",
+      "group": "ambiguous",
+      "request": "Generate images and videos",
+      "expected": [
+        "visuals",
+        "video"
+      ]
+    },
+    {
+      "id": "ambiguous-6",
+      "group": "ambiguous",
+      "request": "Research and write a report",
+      "expected": [
+        "research",
+        "writing"
+      ]
+    },
+    {
+      "id": "ambiguous-7",
+      "group": "ambiguous",
+      "request": "Build an app and write code",
+      "expected": [
+        "app-building",
+        "coding"
+      ]
+    },
+    {
+      "id": "ambiguous-8",
+      "group": "ambiguous",
+      "request": "Create a video and presentation",
+      "expected": [
+        "video",
+        "presentations"
+      ]
+    },
+    {
+      "id": "ambiguous-9",
+      "group": "ambiguous",
+      "request": "Write a speech and make slide deck",
+      "expected": [
+        "writing",
+        "presentations"
+      ]
+    },
+    {
+      "id": "ambiguous-10",
+      "group": "ambiguous",
+      "request": "Make a poster and video",
+      "expected": [
+        "visuals",
+        "video"
+      ]
+    }
+  ]
+}
