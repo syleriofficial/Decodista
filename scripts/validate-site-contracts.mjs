@@ -569,7 +569,8 @@ assert(!/newsletter|subscribe now/i.test(homepage), "Do not advertise an unimple
 assert(homepage.includes('className="home-weekly-brief wrap"') && homepage.includes("weeklyBriefs[0]") &&
   homepage.includes('href="/weekly"') && homepage.includes('href={`/weekly/${currentWeeklyBrief.slug}`}' ),
   "Homepage must link both the latest real Weekly Brief edition and the complete archive");
-assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest published issue"), "Weekly archive must render a real published edition");
+assert(weeklyArchive.includes("weeklyBriefs") && weeklyArchive.includes("Latest edition") && weeklyArchive.includes("latest.items.map") && weeklyArchive.includes("latest.cover"),
+  "Weekly archive must render the actual latest published edition, cover and item headlines");
 assert(weeklyIssue.includes("getWeeklyBrief(slug)") && weeklyIssue.includes("notFound()"), "Weekly issue route must reject unknown slugs");
 assert(weeklyIssue.includes("Primary source:") && weeklyIssue.includes("rel=\"noopener noreferrer\""), "Weekly issue must attribute and safely link to primary sources");
 assert(weeklyIssue.includes("BreadcrumbList") && weeklyIssue.includes("BlogPosting"), "Weekly issues need discoverable structured data");
