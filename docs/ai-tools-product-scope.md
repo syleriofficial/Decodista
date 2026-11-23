@@ -8,7 +8,7 @@ AI Tools is a **global English-first discovery and comparison application**, not
 - `/ai-tools/[slug]` — structured tool profiles with provider and evidence links.
 - `/ai-tools/compare?first=...&second=...` — side-by-side, factually sourced comparison.
 - `/ai-tools/pricing` — sourced and dated pricing records; never invent regional costs.
-- `/ai-tools/alternatives?tool=...` — related alternatives without unsupported rankings.
+- `/ai-tools/alternatives?tool=...&job=...` — conservative matching by shared listed workflows, plus clearly labeled same-category options without direct overlap; no unsupported rankings.
 
 ### Excluded from this product
 - **No editorial guides, tutorial articles, How-To blog posts, PDF walkthroughs or blog archives under `/ai-tools`.**

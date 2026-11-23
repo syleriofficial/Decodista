@@ -140,6 +140,7 @@ const aiToolsEvidenceClient = read("components/ai-tools-evidence-status.tsx");
 const aiToolsFreshnessAudit = read("scripts/check-ai-tools-source-freshness.mjs");
 const aiToolsReviewWorkflow = read(".github/workflows/ai-tools-source-review.yml");
 const aiToolsAlternatives = read("app/ai-tools/alternatives/page.tsx");
+const aiToolsAlternativeJobs = read("lib/ai-tools-alternatives.ts");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
 const aiToolsTaskFinder = read("components/ai-task-finder.tsx");
 const aiToolsInteractions = read("lib/ai-tools-interactions.ts");
@@ -255,15 +256,25 @@ assert(aiToolsPricingData.includes('PRICING_CHECKED_ON = "2026-11-21"') &&
   "Dated pricing claims must point to official provider sources with billing context");
 assert(aiToolsAlternatives.includes('title: "AI Tool Alternatives"') &&
   aiToolsAlternatives.includes('index: false') &&
-  aiToolsAlternatives.includes('tool.category === selected.category') &&
-  aiToolsAlternatives.includes('action="/ai-tools/alternatives"'),
-  "Alternative discovery must remain noindex and use same-category matching");
+  aiToolsAlternatives.includes('action="/ai-tools/alternatives"') &&
+  aiToolsAlternatives.includes('getAlternativeGroups(selected, firstString(query.job))') &&
+  aiToolsAlternatives.includes('ai-tools-alternative-match-card') &&
+  aiToolsAlternatives.includes('ai-tools-alternative-secondary-card') &&
+  aiToolsAlternatives.includes('evidence.sourceUrl') &&
+  aiToolsAlternativeJobs.includes('tool.category === selected.category') &&
+  aiToolsAlternativeJobs.includes('selectedJobs.includes(job)') &&
+  aiToolsAlternativeJobs.includes('related.push({ tool, sharedJobs: common })') &&
+  aiToolsAlternativeJobs.includes('AI_ALTERNATIVE_JOBS') &&
+  !aiToolsAlternativeJobs.includes('score:'),
+  "Alternative matching must distinguish actual listed workflow overlap from broader category discovery, with official sources and no scores");
 assert(aiToolsPage.includes('href="/ai-tools/pricing"') &&
   aiToolsPage.includes('href="/ai-tools/alternatives"') &&
   aiToolsProfile.includes('/ai-tools/alternatives?tool='),
   "Directory and tool profiles must link to Pricing and Alternatives");
 assert(aiToolsCss.includes('.ai-tools-price-grid') &&
   aiToolsCss.includes('.ai-tools-alternatives-grid') &&
+  aiToolsCss.includes('.ai-tools-alternatives-secondary') &&
+  aiToolsCss.includes('.ai-tools-alternative-overlap') &&
   aiToolsCss.includes('.ai-tools-decision-links'),
   "Pricing and alternative pages need responsive scoped styles");
 assert(!sitemap.includes('route: "/ai-tools/pricing"') && !sitemap.includes('route: "/ai-tools/alternatives"'),

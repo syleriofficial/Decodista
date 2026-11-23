@@ -141,10 +141,51 @@ try {
 
       await navigate(page, "/ai-tools/alternatives?tool=claude");
       assert.equal((await page.locator(".ai-tools-alternatives-context h2").innerText()).trim(), "Claude");
-      assert.equal(await page.locator(".ai-tools-alternative-card").count(), 2,
-        "Claude should keep two broad category alternatives");
+      assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 2,
+        "ChatGPT and Gemini share stated assistant use cases with Claude");
+      assert.equal(await page.locator(".ai-tools-alternative-secondary-card").count(), 0,
+        "No fabricated separate category for Claude's valid shared-use matches");
+      assert.equal(await page.locator(".ai-tools-alternative-evidence a").count(), 2,
+        "Every matched alternative must link its own official evidence");
       await noOverflow(page, "alternatives", view.width);
       await page.screenshot({ path: outputDir + "/" + view.label + "-alternatives.png", fullPage: true });
+
+      await navigate(page, "/ai-tools/alternatives?tool=claude&job=coding-assistance");
+      assert.equal(await page.locator("#ai-alternative-job").inputValue(), "coding-assistance",
+        "Task selection must remain shareable in the address bar");
+      assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 1);
+      assert.equal((await page.locator(".ai-tools-alternative-match-card h3").innerText()).trim(), "ChatGPT",
+        "Only a matching coding assistant should appear as a stated-use overlap");
+      assert.equal((await page.locator(".ai-tools-alternative-secondary-card h3").innerText()).trim(), "Gemini",
+        "Writing overlap must not be mislabeled as a coding-assistance match");
+      const taskCopy = await page.locator(".ai-tools-alternative-match-card").innerText();
+      assert(taskCopy.includes("Coding assistance") && !taskCopy.includes("universal winner"),
+        "Displayed match should explain the shared job, not infer a winner");
+      await noOverflow(page, "task-specific alternatives", view.width);
+
+      await navigate(page, "/ai-tools/alternatives?tool=perplexity");
+      assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 0,
+        "Web research and document-based research are different jobs");
+      assert.equal(await page.locator(".ai-tools-alternative-secondary-card").count(), 1,
+        "Gemini Notebook may appear as related research, not an interchangeable match");
+      assert((await page.locator(".ai-tools-alternatives-empty").innerText()).includes("No documented task overlap"));
+
+      await navigate(page, "/ai-tools/alternatives?tool=adobe-firefly");
+      assert.equal((await page.locator(".ai-tools-alternative-match-card h3").innerText()).trim(), "Midjourney",
+        "Image generation is a genuine listed common use");
+      assert.equal((await page.locator(".ai-tools-alternative-secondary-card h3").innerText()).trim(), "Canva",
+        "Presentations and social design are not claimed as direct substitutes");
+
+      await navigate(page, "/ai-tools/alternatives?tool=runway");
+      assert.equal(await page.locator(".ai-tools-alternative-card").count(), 0,
+        "The single video listing must not invent an alternative");
+      assert.equal(await page.locator(".ai-tools-alternatives-empty").count(), 1);
+      await noOverflow(page, "zero-match alternatives", view.width);
+
+      await navigate(page, "/ai-tools/alternatives?tool=claude&job=not-a-real-job");
+      assert.equal(await page.locator("#ai-alternative-job").inputValue(), "",
+        "Unknown job query parameters must safely revert to all stated workflows");
+      assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 2);
 
       if (view.label === "desktop") {
         const oldRoutes = [
