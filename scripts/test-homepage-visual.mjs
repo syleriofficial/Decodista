@@ -523,6 +523,31 @@ for (const sample of [
       assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"), "Search results must be noindex");
       assert((await page.locator(".search-results article").count()) > 0, "Deep-linked search should render relevant published articles");
     }
+    if (sample.name === "mobile-light" || sample.name === "small-mobile-dark") {
+      const mobileHowTo = await page.goto(base + "/how-to", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(mobileHowTo?.status(), 200, "Mobile How-To archive should load");
+      const mobileGuides = page.locator(".how-to-guide-list .article-card--horizontal");
+      assert((await mobileGuides.count()) > 0, "Mobile How-To needs published guides");
+      const mobileGuideLayout = await mobileGuides.first().evaluate((article) => {
+        const outer = article.getBoundingClientRect();
+        const image = article.querySelector(".card-image").getBoundingClientRect();
+        const copy = article.querySelector(".card-copy").getBoundingClientRect();
+        return {
+          horizontal: image.left < copy.left && image.right <= copy.left,
+          thumbnailFraction: image.width / outer.width,
+          pageWidth: document.documentElement.scrollWidth,
+          viewport: window.innerWidth,
+        };
+      });
+      assert(mobileGuideLayout.horizontal && mobileGuideLayout.thumbnailFraction <= .37,
+        "Mobile guide rows should keep a compact thumbnail left of their text");
+      assert(mobileGuideLayout.pageWidth <= mobileGuideLayout.viewport + 1,
+        "How-To must not introduce horizontal overflow on mobile");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/how-to-mobile-first-screen.png" });
+        await page.locator(".how-to-guide-list").screenshot({ path: out + "/how-to-mobile-guide-list.png" });
+      }
+    }
     if (sample.name === "desktop-light") {
       for (const category of ["ai", "how-to", "security", "digital-life"]) {
         const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
@@ -538,9 +563,26 @@ for (const sample of [
           assert.equal(await image.getAttribute("fetchpriority"), "high", "How-To lead must retain high fetch priority");
           assert((await image.getAttribute("src"))?.startsWith("/images/"), "How-To lead must avoid /_next/image redirects");
           assert((await image.getAttribute("srcset"))?.includes("/images/responsive/"), "How-To lead should serve generated responsive WebP variants");
-          const twoColumnCard = page.locator(".article-grid .article-card .card-image img").first();
-          assert((await twoColumnCard.getAttribute("sizes"))?.includes("48vw"),
-            "Two-column archive cards must request appropriately detailed artwork");
+          const list = page.locator(".how-to-guide-list");
+          assert.equal(await list.count(), 1, "How-To needs a dedicated vertical guide list");
+          const guideCards = list.locator(".article-card--horizontal");
+          assert((await guideCards.count()) > 0, "How-To must display published guides after the featured story");
+          assert.equal(await page.locator(".how-to-page .article-grid").count(), 0,
+            "How-To must not use the old two-column article grid");
+          const listLayout = await list.evaluate((element) => ({
+            columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+            positions: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+              .map((article) => article.getBoundingClientRect().top),
+            width: element.getBoundingClientRect().width,
+          }));
+          assert.equal(listLayout.columns, 1, "How-To guides should be one column on desktop");
+          assert(listLayout.positions.every((top, idx, all) => idx === 0 || top > all[idx - 1]),
+            "How-To guide rows must be vertically stacked");
+          const guideImage = guideCards.locator(".card-image img").first();
+          assert((await guideImage.getAttribute("sizes"))?.includes("260px"),
+            "How-To list images should request thumbnail-sized responsive artwork");
+          await page.screenshot({ path: out + "/how-to-desktop-first-screen.png" });
+          await list.screenshot({ path: out + "/how-to-desktop-guide-list.png" });
         }
       }
       const emptyScience = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
