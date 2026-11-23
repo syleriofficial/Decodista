@@ -35,14 +35,14 @@ try {
     try {
       await navigate(page, "/ai-tools");
       await page.locator("#ai-tool-query").waitFor();
-      assert.equal(await page.locator(".ai-tools-card").count(), 12,
-        "Starter directory should retain twelve real product listings");
-      assert.equal(await page.locator(".ai-tools-card-plans a").count(), 12,
+      assert.equal(await page.locator(".ai-tools-card").count(), 16,
+        "Expanded directory should retain sixteen fully sourced product listings");
+      assert.equal(await page.locator(".ai-tools-card-plans a").count(), 16,
         "Every directory listing must link to its official-source plan record");
       assert.equal(await page.locator(".ai-task-finder").count(), 1,
         "Task-first AI Tools discovery must remain functional");
-      assert.equal(await page.locator(".ai-task-option").count(), 7,
-        "Task Finder should preserve seven curated tasks");
+      assert.equal(await page.locator(".ai-task-option").count(), 8,
+        "Task Finder should preserve eight curated tasks");
       assert.deepEqual(
         (await page.locator(".primary-nav .nav-scroll > a").allTextContents()).map(x => x.trim()),
         ["Tech News", "AI", "AI Tools", "Reviews", "How-To", "Security", "Science", "Latest"]);
@@ -61,6 +61,14 @@ try {
         (await tasks.locator(".ai-task-match h4").allInnerTexts()).map(x => x.trim()).sort(),
         ["Cursor", "GitHub Copilot"]);
       assert((await tasks.getByRole("link", { name: "Compare two starting points" }).getAttribute("href"))?.includes("first=cursor&second=github-copilot"));
+      await tasks.getByRole("button", { name: "Build an app" }).click();
+      assert.deepEqual(
+        (await tasks.locator(".ai-task-match h4").allInnerTexts()).map(x => x.trim()).sort(),
+        ["Bolt", "Lovable", "Replit"], "App-building task shows the three source-reviewed builders");
+      assert((await tasks.getByRole("link", { name: "Compare two starting points" }).getAttribute("href"))?.includes("first=lovable&second=bolt"));
+      await tasks.getByRole("button", { name: "Make presentations" }).click();
+      assert.deepEqual((await tasks.locator(".ai-task-match h4").allInnerTexts()).map(x => x.trim()).sort(),
+        ["Canva", "Gamma"], "Presentation task includes Gamma alongside Canva");
       await tasks.getByRole("button", { name: "Research a topic" }).click();
       assert.equal(await tasks.locator('a[href^="/ai-tools/guides"]').count(), 0,
         "Task finder must not offer editorial guide links");
@@ -89,11 +97,11 @@ try {
       assert((await page.locator(".ai-tools-empty h3").innerText()).includes("No saved tools yet"),
         "Empty saved state explains bookmarks");
       await page.getByRole("button", { name: "Show all tools" }).click();
-      assert.equal(await page.locator(".ai-tools-card").count(), 12);
+      assert.equal(await page.locator(".ai-tools-card").count(), 16);
       assert.equal(await page.getByRole("button", { name: "Saved tools (0)" }).count(), 1);
 
       await page.locator("#ai-tools-sort").selectOption("category");
-      assert.equal(await page.locator(".ai-tools-card").count(), 12);
+      assert.equal(await page.locator(".ai-tools-card").count(), 16);
       assert.equal((await page.locator(".ai-tools-card h3").first().innerText()).trim(), "ChatGPT",
         "Category sorting groups assistants before other categories");
       await noOverflow(page, "sorted directory", view.width);
@@ -107,9 +115,10 @@ try {
       assert((await page.locator(".ai-tools-card h3").first().innerText()).includes("ElevenLabs"));
       await page.getByRole("button", { name: "Clear tool search" }).click();
       await page.getByRole("button", { name: "Coding", exact: true }).click();
-      assert.equal(await page.locator(".ai-tools-card").count(), 2);
+      assert.equal(await page.locator(".ai-tools-card").count(), 5,
+        "Coding category includes both editing assistants and three app builders");
       await page.getByRole("button", { name: "Clear filters" }).click();
-      assert.equal(await page.locator(".ai-tools-card").count(), 12);
+      assert.equal(await page.locator(".ai-tools-card").count(), 16);
 
       await page.locator(".ai-tools-card").filter({ has: page.locator("h3", { hasText: "ChatGPT" }) })
         .getByRole("button", { name: "Compare" }).click();
@@ -172,15 +181,15 @@ try {
       await page.screenshot({ path: outputDir + "/" + view.label + "-profile.png", fullPage: true });
 
       await navigate(page, "/ai-tools/pricing");
-      assert.equal(await page.locator(".ai-tools-price-card").count(), 12,
-        "Show all twelve official-source pricing snapshots");
-      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-reviewed time").count(), 12,
+      assert.equal(await page.locator(".ai-tools-price-card").count(), 16,
+        "Show all sixteen official-source pricing snapshots");
+      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-reviewed time").count(), 16,
         "Each plan source must show its own last-reviewed date");
-      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-capabilities").count(), 12,
+      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-capabilities").count(), 16,
         "Every plan card must show official-document product details");
-      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-actions a[target="_blank"]').count(), 12,
+      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-actions a[target="_blank"]').count(), 16,
         "Each provider should link to its own official pricing or plan source");
-      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-capabilities a[target="_blank"]').count(), 12,
+      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-capabilities a[target="_blank"]').count(), 16,
         "Each provider needs a separate source for documented capabilities");
       const cursorCard = page.locator("#plan-cursor");
       assert((await cursorCard.innerText()).includes("Premium"),
@@ -192,6 +201,13 @@ try {
         "Gemini Notebook plan labels must be identified as Google subscription access levels");
       assert((await page.locator("#plan-runway").innerText()).includes("legacy Unlimited"),
         "Runway transitions should not mislead existing subscribers");
+      for (const slug of ["bolt", "gamma", "lovable", "replit"]) {
+        const card = page.locator("#plan-" + slug);
+        assert.equal(await card.count(), 1, "Plan card missing: " + slug);
+        assert((await card.innerText()).includes("23 November 2026"));
+        assert.equal(await card.locator("a[target='_blank']").count(), 2,
+          "New plan cards must link both pricing and product documentation");
+      }
       await noOverflow(page, "pricing", view.width);
       await page.screenshot({ path: outputDir + "/" + view.label + "-pricing.png", fullPage: true });
 
@@ -229,8 +245,33 @@ try {
       await navigate(page, "/ai-tools/alternatives?tool=adobe-firefly");
       assert.equal((await page.locator(".ai-tools-alternative-match-card h3").innerText()).trim(), "Midjourney",
         "Image generation is a genuine listed common use");
-      assert.equal((await page.locator(".ai-tools-alternative-secondary-card h3").innerText()).trim(), "Canva",
-        "Presentations and social design are not claimed as direct substitutes");
+      assert.deepEqual(
+        (await page.locator(".ai-tools-alternative-secondary-card h3").allInnerTexts()).map(x => x.trim()),
+        ["Canva", "Gamma"],
+        "Design and presentation products must remain related, not image-generation substitutes");
+
+      await navigate(page, "/ai-tools/alternatives?tool=bolt&job=app-building");
+      assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 2,
+        "Bolt app building should match Lovable and Replit in the documented job");
+      assert.deepEqual(
+        (await page.locator(".ai-tools-alternative-match-card h3").allInnerTexts()).map(x => x.trim()),
+        ["Lovable", "Replit"]);
+      assert.equal(await page.locator(".ai-tools-alternative-secondary-card").count(), 2,
+        "Code editors should not be misrepresented as equivalent app builders");
+      await noOverflow(page, "app alternatives", view.width);
+
+      await navigate(page, "/ai-tools/compare?first=bolt&second=lovable");
+      const appWorkflow = page.locator(".ai-tools-workflow-comparison");
+      assert.equal(await appWorkflow.locator(".ai-tools-workflow-table tbody tr").count(), 3,
+        "App builders share three explicitly listed tasks");
+      assert.equal(await appWorkflow.locator(".ai-tools-workflow-listed").count(), 6);
+      await noOverflow(page, "app comparison", view.width);
+
+      await navigate(page, "/ai-tools/lovable");
+      assert.equal(await page.locator("h1").first().innerText(), "Lovable");
+      assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 1);
+      assert.equal(await page.locator('.ai-tools-profile-summary a[href="/ai-tools/pricing#plan-lovable"]').count(), 1);
+      await noOverflow(page, "new tool profile", view.width);
 
       await navigate(page, "/ai-tools/alternatives?tool=runway");
       assert.equal(await page.locator(".ai-tools-alternative-card").count(), 0,

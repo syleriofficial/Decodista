@@ -48,7 +48,7 @@ const removedEditorialRoutes = [
   "/ai-tools/samples/library-hours-notice-v2.txt",
 ];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/lovable", "/ai-tools/bolt", "/ai-tools/replit", "/ai-tools/gamma", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -133,7 +133,7 @@ check("AI Tools comparison renders conservative task overlap",
 
 const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
 const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?? "";
-check("AI Tools pricing includes twelve dated provider sources",
+check("AI Tools pricing includes sixteen dated provider sources",
   pricingHtml.includes("US$20") &&
   pricingHtml.includes("https://claude.com/pricing") &&
   pricingHtml.includes("21 November 2026") &&
@@ -142,8 +142,9 @@ check("AI Tools pricing includes twelve dated provider sources",
   pricingHtml.includes("id=\"plan-elevenlabs\"") &&
   pricingHtml.includes("id=\"plan-notebooklm\"") &&
   pricingHtml.includes("id=\"plan-runway\"") &&
-  (pricingHtml.match(/class="ai-tools-price-card"/g) || []).length === 12,
-  "All twelve sourced records must render without falsely resetting historical review dates");
+  (pricingHtml.match(/class="ai-tools-price-card"/g) || []).length === 16 &&
+  ["bolt","gamma","lovable","replit"].every((slug) => pricingHtml.includes('id="plan-' + slug + '"')),
+  "All sixteen sourced records must render without falsely resetting historical review dates");
 check("AI Tools alternatives explains task overlap with dated evidence",
   alternativesHtml.includes("Options with shared stated uses") &&
   alternativesHtml.includes("ChatGPT") &&
