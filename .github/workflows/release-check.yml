@@ -49,5 +49,6 @@ jobs:
             artifacts/ai-tools-qa/finder-holdout.json
             artifacts/ai-tools-qa/finder-challenge-48.json
             artifacts/ai-tools-qa/finder-challenge-40.json
+            artifacts/ai-tools-qa/finder-challenge-40-v2.json
           if-no-files-found: ignore
           retention-days: 14
