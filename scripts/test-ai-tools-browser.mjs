@@ -126,6 +126,9 @@ try {
       await page.screenshot({path: outputDir + "/" + view.label + "-smart-finder.png", fullPage: true});
 
       const tasks = page.locator(".ai-task-finder");
+      await tasks.getByRole("button", { name: "Write and edit" }).click();
+      assert.equal(await tasks.locator(".ai-task-panel").count(), 1,
+        "Clicking the previously chosen task must also recover from no-match");
       await tasks.getByRole("button", { name: "Build software" }).click();
       assert.equal(await tasks.locator(".ai-task-panel").count(), 1,
         "An explicit task choice must restore its documented shortlist");
