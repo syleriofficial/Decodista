@@ -746,3 +746,114 @@
   .ai-task-smart-input-row input { width:100%; }
   .ai-task-smart-input-row button { width:100%; }
 }
+
+
+/* AI Tools / discovery UI visual refresh: presentation and reading order only.
+   No new tools, claims, rankings or API behavior. */
+.ai-tools-page {
+  --tools-radius: 14px;
+}
+.ai-tools-page .ai-tools-hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(245px, .85fr);
+  min-height: 345px;
+  margin-top: 1.3rem;
+  background: radial-gradient(circle at 94% 0%, #34599b 0%, transparent 37%),
+    linear-gradient(120deg, #0b1934 0%, #122d60 75%, #173e78 100%);
+  box-shadow: 0 18px 46px #061a3720;
+}
+.ai-tools-page .ai-tools-hero-copy { padding: clamp(1.65rem, 3.6vw, 3.1rem); }
+.ai-tools-page .ai-tools-hero h1 {
+  margin: .9rem 0 .8rem;
+  max-width: 690px;
+  font-size: clamp(2.3rem, 4.3vw, 4.45rem);
+  line-height: 1.07;
+  letter-spacing: -.055em;
+}
+.ai-tools-page .ai-tools-hero-lede {
+  max-width: 580px;
+  line-height: 1.6;
+}
+.ai-tools-page .ai-tools-hero-actions { margin: 1.3rem 0 1.4rem; }
+.ai-tools-page .ai-tools-hero-actions a {
+  min-height: 46px;
+  border-radius: 9px;
+}
+.ai-tools-page .ai-tools-hero-art {
+  gap: 1rem;
+  padding: 1.6rem 2rem 1.6rem .4rem;
+}
+.ai-tools-page .ai-tools-art-card {
+  min-height: 70px;
+  padding: .75rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px #061b3840;
+}
+.ai-tools-page .ai-tools-art-card-two { margin-left: 1rem; }
+.ai-tools-page .ai-tools-art-symbol { border-radius: 10px; }
+.ai-tools-page .ai-tools-directory {
+  padding-top: clamp(1.9rem, 3vw, 2.8rem);
+  scroll-margin-top: calc(var(--sticky-nav-height, 76px) + 1rem);
+}
+.ai-tools-page .ai-tools-section-heading { margin-bottom: 1.1rem; }
+.ai-tools-page .ai-tools-section-heading h2 { font-size: clamp(1.7rem, 2.5vw, 2.4rem); }
+.ai-tools-page .ai-tools-workbench {
+  align-items: stretch;
+  gap: .9rem;
+}
+.ai-tools-page .ai-tools-filters,
+.ai-tools-page .ai-tools-compare-dock {
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+.ai-tools-page .ai-tools-search-field {
+  min-height: 56px;
+  border-radius: 11px;
+  border-color: color-mix(in srgb, var(--line) 66%, var(--ink));
+  background: var(--surface);
+}
+.ai-tools-page .ai-tools-search-field:focus-within {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+.ai-tools-page .ai-tools-chip { border-radius: 999px; padding-inline: .95rem; }
+.ai-tools-page .ai-tools-card {
+  border-radius: 14px;
+  padding: clamp(1rem, 1.65vw, 1.4rem);
+  gap: .85rem;
+  box-shadow: 0 2px 9px #00113008;
+}
+.ai-tools-page .ai-tools-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px #00113016;
+}
+.ai-tools-page .ai-tools-card h3 { font-size: 1.22rem; }
+.ai-tools-page .ai-tools-summary { color: var(--muted); }
+.ai-tools-page .ai-tools-monogram { border-radius: 13px; }
+.ai-tools-page .ai-tools-card-category { border-radius: 999px; }
+.ai-tools-page .ai-tools-select { border-radius: 8px; }
+.ai-tools-page .ai-tools-compare-link { border-radius: 9px; }
+.ai-tools-page .ai-tools-decision-links { margin-top: clamp(2rem, 3vw, 3rem); }
+.ai-tools-page .ai-task-finder { padding-top: clamp(2rem, 4vw, 3.5rem); }
+.ai-tools-page .ai-tools-utility-strip { margin-top: clamp(2rem, 4vw, 3.5rem); }
+.ai-tools-page a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+@media (max-width: 850px) {
+  .ai-tools-page .ai-tools-hero { grid-template-columns: 1fr; }
+  .ai-tools-page .ai-tools-hero-art { display: none; }
+}
+@media (max-width: 600px) {
+  .ai-tools-page .ai-tools-hero { min-height: 0; margin-top: .8rem; }
+  .ai-tools-page .ai-tools-hero-copy { padding: 1.8rem 1.3rem; }
+  .ai-tools-page .ai-tools-hero h1 { font-size: clamp(2.1rem, 9vw, 3.05rem); }
+  .ai-tools-page .ai-tools-hero-actions { margin-bottom: 1rem; }
+  .ai-tools-page .ai-tools-hero-actions a { flex: 1 1 165px; }
+  .ai-tools-page .ai-tools-grid { grid-template-columns: 1fr; }
+  .ai-tools-page .ai-tools-card { padding: 1.15rem; }
+  .ai-tools-page .ai-tools-filters,
+  .ai-tools-page .ai-tools-compare-dock { padding: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-tools-page .ai-tools-card,
+  .ai-tools-page .ai-tools-hero-actions a { transition: none; }
+  .ai-tools-page .ai-tools-card:hover,
+  .ai-tools-page .ai-tools-hero-actions a:hover { transform: none; }
+}
