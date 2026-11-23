@@ -121,6 +121,16 @@ for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-
     "Unreviewed or introductory AI Tools pages must remain noindex");
 }
 
+const comparisonHtml = snapshots["/ai-tools/compare"]?.body ?? "";
+check("AI Tools comparison renders conservative task overlap",
+  comparisonHtml.includes("Where the listed workflows overlap") &&
+  comparisonHtml.includes("Shared listed tasks") &&
+  comparisonHtml.includes("Not listed here") &&
+  comparisonHtml.includes("not mean a missing feature") &&
+  comparisonHtml.includes("ai-tools-workflow-table") &&
+  !comparisonHtml.includes("Overall winner"),
+  "Task overlap must stay descriptive rather than ranking or claiming absent features");
+
 const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
 const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?? "";
 check("AI Tools pricing includes twelve dated provider sources",

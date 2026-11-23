@@ -124,6 +124,37 @@ try {
         "Comparison must show the two dated provider plan summaries");
       assert.equal(await page.locator(".ai-tools-compare-table a[href*='/pricing']").count(), 2,
         "Comparison must link to both providers' primary plan sources");
+      const workflow = page.locator(".ai-tools-workflow-comparison");
+      assert.equal(await workflow.locator(".ai-tools-workflow-table tbody tr").count(), 4,
+        "ChatGPT versus Claude must show the union of four curated tasks");
+      assert.equal((await workflow.locator(".ai-tools-workflow-summary").innerText()).includes("Shared listed tasks"), true);
+      const codingCells = await workflow.locator('[data-workflow="coding-assistance"] td').allInnerTexts();
+      assert.deepEqual(codingCells.map((value) => value.trim()), ["Listed use", "Listed use"],
+        "Coding assistance should appear as a shared listed task");
+      const docCells = await workflow.locator('[data-workflow="document-analysis"] td').allInnerTexts();
+      assert.deepEqual(docCells.map((value) => value.trim()), ["Not listed here", "Listed use"],
+        "Not-listed tasks must never be labeled unavailable");
+      assert((await workflow.locator(".ai-tools-workflow-disclaimer").innerText()).includes("not mean a missing feature"));
+      await noOverflow(page, "workflow comparison", view.width);
+      await page.screenshot({ path: outputDir + "/" + view.label + "-workflow-comparison.png", fullPage: true });
+
+      await navigate(page, "/ai-tools/compare?first=perplexity&second=notebooklm");
+      const noShared = page.locator(".ai-tools-workflow-comparison");
+      assert.equal(await noShared.locator(".ai-tools-workflow-zero").count(), 1,
+        "Research tools with different curated jobs must not be falsely called equivalent");
+      assert.equal(await noShared.locator(".ai-tools-workflow-table tbody tr").count(), 4);
+      assert.equal(await noShared.locator(".ai-tools-workflow-listed").count(), 4,
+        "Each curated task is listed for one research tool, without false cross-tool matching");
+      await noOverflow(page, "zero-overlap workflow", view.width);
+      await navigate(page, "/ai-tools/compare?first=adobe-firefly&second=midjourney");
+      const imageRows = page.locator(".ai-tools-workflow-comparison");
+      assert.equal(await imageRows.locator(".ai-tools-workflow-table tbody tr").count(), 3);
+      assert.deepEqual(
+        (await imageRows.locator('[data-workflow="image-generation"] td').allInnerTexts()).map((value) => value.trim()),
+        ["Listed use", "Listed use"],
+        "Image generation should correctly appear as a common documented use");
+      await noOverflow(page, "image workflow comparison", view.width);
+      await navigate(page, "/ai-tools/compare?first=chatgpt&second=claude");
       assert.equal(await page.locator(".ai-guide-context-banner").count(), 0,
         "Comparison must focus on structured product data, not removed guides");
       await noOverflow(page, "comparison", view.width);
