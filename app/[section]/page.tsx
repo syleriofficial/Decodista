@@ -55,7 +55,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const { page: pageParam } = await searchParams;
   if (!isCategory(section)) notFound();
   const category = CATEGORY_MAP[section];
-  const isDigitalLife = section === "digital-life";
+  const isVerticalCategory = section === "digital-life" || section === "security";
   const all = getArticlesByCategory(section);
   const page = parsePageNumber(pageParam);
   if (page === null) notFound();
@@ -73,7 +73,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: category.name, item: `${SITE_URL}/${section}` }] };
 
   return (
-    <main id="main-content" className={isDigitalLife ? "category-page digital-life-page editorial-vertical-page" : "category-page"}>
+    <main id="main-content" className={isVerticalCategory ? `category-page ${section}-page editorial-vertical-page` : "category-page"}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <header className="category-header wrap">
         <div><span className="eyebrow">Section / {category.mark}</span><h1>{category.name}</h1><span className="category-count">{all.length > 0 ? `${all.length} published ${all.length === 1 ? "story" : "stories"}` : "Coverage coming when reporting is ready"}</span></div>
@@ -113,9 +113,9 @@ export default async function CategoryPage({ params, searchParams }: { params: P
           </div>
         </section>
       )}
-      {listing.length > 0 && <section className={isDigitalLife ? "section-block wrap editorial-vertical-section" : "section-block wrap"} aria-labelledby="category-latest-title">
+      {listing.length > 0 && <section className={isVerticalCategory ? "section-block wrap editorial-vertical-section" : "section-block wrap"} aria-labelledby="category-latest-title">
         <div className="section-heading"><div><span className="eyebrow">Page {page} of {pages}</span><h2 id="category-latest-title">More in {category.shortName}</h2></div></div>
-        <div className={isDigitalLife ? "editorial-vertical-list" : "article-grid"}>{visible.map((article) => <ArticleCard key={article.slug} article={article} variant={isDigitalLife ? "horizontal" : "standard"} imageSizes={isDigitalLife ? "(max-width: 600px) 38vw, (max-width: 1000px) 32vw, 260px" : undefined} />)}</div>
+        <div className={isVerticalCategory ? "editorial-vertical-list" : "article-grid"}>{visible.map((article) => <ArticleCard key={article.slug} article={article} variant={isVerticalCategory ? "horizontal" : "standard"} imageSizes={isVerticalCategory ? "(max-width: 600px) 38vw, (max-width: 1000px) 32vw, 260px" : undefined} />)}</div>
         {pages > 1 && <nav className="pagination" aria-label="Category pagination">{page > 1 && <Link href={`/${section}?page=${page - 1}`}>Previous</Link>}<span>Page {page} of {pages}</span>{page < pages && <Link href={`/${section}?page=${page + 1}`}>Next</Link>}</nav>}
       </section>}
     </main>
