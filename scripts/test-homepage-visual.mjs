@@ -543,6 +543,12 @@ for (const sample of [
         "Mobile guide rows should keep a compact thumbnail left of their text");
       assert(mobileGuideLayout.pageWidth <= mobileGuideLayout.viewport + 1,
         "How-To must not introduce horizontal overflow on mobile");
+      const featuredImageLayout = await page.locator(".how-to-page .category-lead-image").evaluate((element) => ({
+        height: element.getBoundingClientRect().height,
+        viewportWidth: window.innerWidth,
+      }));
+      assert(featuredImageLayout.height <= featuredImageLayout.viewportWidth * .55,
+        "How-To mobile featured image should leave room for the guide list");
       if (sample.name === "mobile-light") {
         await page.screenshot({ path: out + "/how-to-mobile-first-screen.png" });
         await page.locator(".how-to-guide-list").screenshot({ path: out + "/how-to-mobile-guide-list.png" });
