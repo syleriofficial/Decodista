@@ -503,6 +503,16 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .consent-actions { grid-template-columns: 1fr 1fr; gap: .4rem; }
   .consent-actions button { min-height: 44px; padding: .55rem .35rem; font-size: .7rem; }
 }
+/* Compact mobile rhythm: keep the cover close to the masthead and the
+   following story lists easy to scan without changing article content. */
+@media (max-width: 600px) {
+  .home-intro { padding-top: .7rem; padding-bottom: .45rem; }
+  .hero { padding-top: .35rem; }
+  .latest-home .section-heading, .home-topic .section-heading { margin-bottom: 1rem; }
+  .home-topic { padding-bottom: 2.75rem; }
+  .home-topic-grid .article-card--compact { column-gap: .95rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lead-image img, .card-image img, .category-lead-image img, .search-result-image img {
     transition: none !important; transform: none !important;
