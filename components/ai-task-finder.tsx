@@ -220,7 +220,7 @@ export function AiTaskFinder() {
             className={canShowTaskPanel && item.id === activeTask ? "ai-task-option is-active" : "ai-task-option"}
             aria-pressed={canShowTaskPanel && item.id === activeTask}
             onClick={() => {
-              if (item.id === activeTask) return;
+              // Even the previously selected task must recover from no-match.
               setFinderResult(null);
               chooseTask(item.id);
             }}
