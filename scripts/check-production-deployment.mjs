@@ -121,6 +121,14 @@ for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-
     "Unreviewed or introductory AI Tools pages must remain noindex");
 }
 
+const smartFinderHtml = snapshots["/ai-tools"]?.body ?? "";
+check("Smart Finder 2.0 source-linked, private task input is deployed",
+  smartFinderHtml.includes("Smart Finder 2.0") &&
+  smartFinderHtml.includes('id="ai-smart-finder-input"') &&
+  smartFinderHtml.includes("Build a website without coding") &&
+  smartFinderHtml.includes("no API call") &&
+  smartFinderHtml.includes("No sign-up, paid placement") === false,
+  "Smart Finder must render the local-only input and honest disclosure without publishing articles");
 const comparisonHtml = snapshots["/ai-tools/compare"]?.body ?? "";
 check("AI Tools comparison renders conservative task overlap",
   comparisonHtml.includes("Where the listed workflows overlap") &&
