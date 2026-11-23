@@ -123,9 +123,17 @@ for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-
 
 const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
 const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?? "";
-check("AI Tools pricing includes official-source confirmation",
-  pricingHtml.includes("US$20") && pricingHtml.includes("https://claude.com/pricing") && pricingHtml.includes("21 November 2026"),
-  "Dated Claude USD list price and official pricing source must render");
+check("AI Tools pricing includes twelve dated provider sources",
+  pricingHtml.includes("US$20") &&
+  pricingHtml.includes("https://claude.com/pricing") &&
+  pricingHtml.includes("21 November 2026") &&
+  pricingHtml.includes("23 November 2026") &&
+  pricingHtml.includes("id=\"plan-cursor\"") &&
+  pricingHtml.includes("id=\"plan-elevenlabs\"") &&
+  pricingHtml.includes("id=\"plan-notebooklm\"") &&
+  pricingHtml.includes("id=\"plan-runway\"") &&
+  (pricingHtml.match(/class="ai-tools-price-card"/g) || []).length === 12,
+  "All twelve sourced records must render without falsely resetting historical review dates");
 check("AI Tools alternatives explains task overlap with dated evidence",
   alternativesHtml.includes("Options with shared stated uses") &&
   alternativesHtml.includes("ChatGPT") &&

@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight, BookOpen, Bookmark, BookmarkCheck, Check, Git
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
 import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { AI_TOOL_EVIDENCE, getAiToolEvidence } from "@/lib/ai-tools-evidence";
+import { getAiToolPricing } from "@/lib/ai-tools-pricing";
 
 type CategoryFilter = (typeof AI_TOOL_CATEGORIES)[number]["slug"];
 
@@ -201,6 +202,7 @@ export function AiToolsExplorer() {
         <div className="ai-tools-grid">
           {filtered.map((tool) => {
             const evidence = getAiToolEvidence(tool.slug);
+            const pricing = getAiToolPricing(tool.slug);
             const isSelected = selected.includes(tool.slug);
             const isSaved = saved.includes(tool.slug);
             const isDisabled = !isSelected && selected.length >= 2;
@@ -239,6 +241,12 @@ export function AiToolsExplorer() {
                     </>
                   )}
                 </div>
+                {pricing && (
+                  <div className="ai-tools-card-plans">
+                    <span>Documented plans: {pricing.planNames.slice(0, 2).join(" · ")}{pricing.planNames.length > 2 ? " · …" : ""}</span>
+                    <Link href={`/ai-tools/pricing#plan-${tool.slug}`}>Plan sources <ArrowRight size={13} aria-hidden="true" /></Link>
+                  </div>
+                )}
                 <ul className="ai-tools-use-tags" aria-label={`${tool.name} common use cases`}>
                   {tool.useCases.map((use) => <li key={use}>{use}</li>)}
                 </ul>

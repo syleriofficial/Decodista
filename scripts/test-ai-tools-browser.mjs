@@ -37,6 +37,8 @@ try {
       await page.locator("#ai-tool-query").waitFor();
       assert.equal(await page.locator(".ai-tools-card").count(), 12,
         "Starter directory should retain twelve real product listings");
+      assert.equal(await page.locator(".ai-tools-card-plans a").count(), 12,
+        "Every directory listing must link to its official-source plan record");
       assert.equal(await page.locator(".ai-task-finder").count(), 1,
         "Task-first AI Tools discovery must remain functional");
       assert.equal(await page.locator(".ai-task-option").count(), 7,
@@ -118,6 +120,10 @@ try {
       await compareLink.click();
       await page.locator(".ai-tools-compare-table").waitFor();
       assert.equal(await page.locator(".ai-tools-compare-table thead th").count(), 3);
+      assert((await page.locator(".ai-tools-compare-table").innerText()).includes("Plan names in dated provider sources"),
+        "Comparison must show the two dated provider plan summaries");
+      assert.equal(await page.locator(".ai-tools-compare-table a[href*='/pricing']").count(), 2,
+        "Comparison must link to both providers' primary plan sources");
       assert.equal(await page.locator(".ai-guide-context-banner").count(), 0,
         "Comparison must focus on structured product data, not removed guides");
       await noOverflow(page, "comparison", view.width);
@@ -126,6 +132,8 @@ try {
       await navigate(page, "/ai-tools/chatgpt");
       assert((await page.locator("main h1").innerText()).includes("ChatGPT"));
       assert.equal(await page.locator(".ai-tools-profile-evidence-panel").count(), 1);
+      assert.equal(await page.locator('.ai-tools-profile-summary a[href="/ai-tools/pricing#plan-chatgpt"]').count(), 1,
+        "Individual tool profile must link to its own dated plan record");
       assert.equal(await page.locator(".ai-tools-profile-guide-links").count(), 0,
         "Product profiles must not link to editorial comparison guides");
       assert.equal(await page.locator(".ai-tools-profile-related-card li").count(), 2);
@@ -133,9 +141,26 @@ try {
       await page.screenshot({ path: outputDir + "/" + view.label + "-profile.png", fullPage: true });
 
       await navigate(page, "/ai-tools/pricing");
-      assert.equal(await page.locator(".ai-tools-price-card").count(), 4,
-        "Retain four official-source pricing snapshots");
-      assert.equal(await page.locator('.ai-tools-price-card a[target="_blank"]').count(), 4);
+      assert.equal(await page.locator(".ai-tools-price-card").count(), 12,
+        "Show all twelve official-source pricing snapshots");
+      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-reviewed time").count(), 12,
+        "Each plan source must show its own last-reviewed date");
+      assert.equal(await page.locator(".ai-tools-price-card .ai-tools-price-capabilities").count(), 12,
+        "Every plan card must show official-document product details");
+      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-actions a[target="_blank"]').count(), 12,
+        "Each provider should link to its own official pricing or plan source");
+      assert.equal(await page.locator('.ai-tools-price-card .ai-tools-price-capabilities a[target="_blank"]').count(), 12,
+        "Each provider needs a separate source for documented capabilities");
+      const cursorCard = page.locator("#plan-cursor");
+      assert((await cursorCard.innerText()).includes("Premium"),
+        "New Cursor X Subscription tiers must not reuse legacy Pro-only data");
+      assert((await cursorCard.innerText()).includes("23 November 2026"));
+      assert((await page.locator("#plan-claude").innerText()).includes("21 November 2026"),
+        "Old provider review dates must not be silently reset when new providers are added");
+      assert((await page.locator("#plan-notebooklm").innerText()).includes("not four separate Notebook checkouts"),
+        "Gemini Notebook plan labels must be identified as Google subscription access levels");
+      assert((await page.locator("#plan-runway").innerText()).includes("legacy Unlimited"),
+        "Runway transitions should not mislead existing subscribers");
       await noOverflow(page, "pricing", view.width);
       await page.screenshot({ path: outputDir + "/" + view.label + "-pricing.png", fullPage: true });
 
