@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/app-link";
-import { ArrowRight, ArrowUpRight, BookOpen, Search } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, GitCompareArrows, Search } from "lucide-react";
 import { AiToolsExplorer } from "@/components/ai-tools-explorer";
 import { AiTaskFinder } from "@/components/ai-task-finder";
 import { AI_TOOLS } from "@/lib/ai-tools";
@@ -49,7 +49,7 @@ export default function AIToolsPage() {
           </p>
           <div className="ai-tools-hero-actions">
             <a href="#ai-tools-directory" className="ai-tools-primary-action"><Search size={17} aria-hidden="true" /> Browse AI tools <ArrowRight size={17} aria-hidden="true" /></a>
-            <a href="#ai-task-finder" className="ai-tools-secondary-action"><BookOpen size={17} aria-hidden="true" /> Find by task</a>
+            <Link href="/ai-tools/compare" className="ai-tools-secondary-action"><GitCompareArrows size={17} aria-hidden="true" /> Compare tools</Link>
           </div>
           <div className="ai-tools-hero-stats">
             <div><strong>{AI_TOOLS.length}</strong><span>starting listings</span></div>
