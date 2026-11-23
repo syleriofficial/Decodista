@@ -614,7 +614,7 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .article-header h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
 }
 
-/* Shared vertical archive: compact image-left rows for How-To and Digital Life.
+/* Shared vertical archive: compact image-left rows for How-To, Digital Life and Security.
  * Only these opt-in sections are affected; other category and article pages retain their layout. */
 .editorial-vertical-page .category-header {
   padding-bottom: clamp(1.4rem, 2.5vw, 2.25rem);
