@@ -69,3 +69,20 @@ Finder 2.4 broadens browser-local keyword matching for ordinary requests such as
 An **additional 48-case synthetic challenge** was independently drafted *before first testing 2.4 against it*. The candidate matched 27/48 (56.3%) exactly, with 21 documented misses, including 3 unsupported requests incorrectly classified as supported. The distinct 48-case fixture is fixed at `scripts/fixtures/ai-tools-finder-challenge-48.json`. Run `npm run ai:finder:challenge` to capture the full measured result, and do not enforce a passing accuracy threshold. It demonstrates meaningful gaps remaining despite perfect results on the reused datasets.
 
 These are hand-authored examples, not a statistically sampled population or an externally blinded comparison; even the additional challenge score cannot establish real-user accuracy. Do not silently change labels or omit difficult examples. The next iteration should fix broad patterns, especially natural writing, website-building phrasing and unsupported document operations, while retaining all prior fixtures and publishing their scores separately. No raw user-entered Finder text is collected or sent to analytics.
+
+## Smart Finder 2.5 — explicit separate evaluation
+
+Finder 2.5 expands verb-and-output patterns to recognize citation verification, academic research summaries, customer writing tasks, HTTP errors and test debugging, membership portals, visual-design outputs, video editing, and narration in mixed requests. Unsupported document operations such as extracting images from PDFs, removing document signatures or rotating scans explicitly return no matching tool. All matching remains local to the user's browser.
+
+### Comparable diagnostic scores
+
+| Fixed synthetic set | Smart Finder 2.4 | Candidate 2.5 |
+| --- | ---: | ---: |
+| Established regression (114) | 114/114 | 114/114 |
+| Reused 100-case diagnostic | 100/100 | 100/100 |
+| **Reused 48-case development challenge** | 27/48 | 48/48 |
+| **Separate 40-case new challenge** | 25/40 | 29/40 |
+
+The **48-case challenge has been used to design the 2.5 fixes** and is no longer an untouched holdout. The 40-case challenge was written and labeled before implementing the 2.5 matcher; it was first scored after code changes and intentionally **was not used for additional code tuning within this release**. Even 29/40 (72.5%) is only a result on 40 hand-written, non-representative English requests—not a percentage of real users served correctly.
+
+The 40-case score and each mismatch are recorded by `npm run ai:finder:challenge40` in `artifacts/ai-tools-qa/finder-challenge-40.json`. The test must remain reporting-only, not a release-quality pass threshold. Current known weaknesses include vague research tasks, writing paraphrases, software troubleshooting and combined user requests. Preserve frozen labels and report all failures. For future generalization estimates, commission a separately labeled consented real-world evaluation with proper privacy controls; never log raw Finder inputs into analytics by default.
