@@ -39,3 +39,11 @@ jobs:
 
       - name: Run release checks
         run: npm run release:check
+      - name: Upload synthetic Finder precision results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finder-synthetic-precision
+          path: artifacts/ai-tools-qa/finder-precision.json
+          if-no-files-found: ignore
+          retention-days: 14
