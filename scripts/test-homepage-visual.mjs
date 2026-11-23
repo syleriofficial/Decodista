@@ -722,6 +722,31 @@ for (const sample of [
         assert.equal(await page.locator("main h1").count(), 1, `Redesigned ${name} requires one main headline`);
         const width = await page.evaluate(() => document.documentElement.scrollWidth);
         assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
+        if (name === "weekly-archive") {
+          assert.equal(await page.locator(".weekly-magazine").count(), 1, "Weekly archive must show exactly one latest issue");
+          assert.equal(await page.locator(`.weekly-magazine-feature a[href="/weekly/${newestWeeklySlug}"]`).count(), 1,
+            "Featured Weekly edition must open the latest published issue");
+          const cover = page.locator(".weekly-magazine-cover img");
+          assert.equal(await cover.count(), 1, "Weekly archive should display the published edition cover");
+          assert((await cover.getAttribute("src"))?.startsWith("/images/weekly/"),
+            "Weekly archive should use an actual editorial cover image");
+          assert((await cover.getAttribute("alt"))?.length > 20, "Cover image must have meaningful alt text");
+          const coverMetrics = await page.locator(".weekly-magazine-cover").evaluate(el => ({
+            ratio: el.getBoundingClientRect().width / el.getBoundingClientRect().height,
+          }));
+          assert(coverMetrics.ratio > 2 && coverMetrics.ratio < 2.5,
+            "Desktop magazine cover should have a 16:7-style wide format");
+          assert((await page.locator(".weekly-magazine-index li").count()) >= 1,
+            "Latest Weekly contents should be sourced from the published issue");
+          assert((await page.locator(".weekly-magazine-archive li").count()) >= 1,
+            "Previous Weekly editions must remain discoverable");
+          assert.equal(await page.locator('.weekly-archive-page a[href="/rss.xml"]').count(), 1,
+            "Weekly archive should retain its working RSS link");
+          assert.equal(await page.locator(".weekly-archive-page .weekly-magazine-method").count(), 1,
+            "Weekly archive should retain its editorial methodology");
+          await page.screenshot({ path: out + "/weekly-magazine-desktop-first-screen.png" });
+          await page.screenshot({ path: out + "/weekly-magazine-desktop-full.png", fullPage: true });
+        }
         if (name === "contact") {
           // Unlike the server-rendered form, React onChange handlers only
           // exist after client hydration. Test the hydrated UI, not a DOM-only
@@ -749,6 +774,28 @@ for (const sample of [
         // Playwright defaults to hiding the caret for screenshots, which can
         // mutate inline input styles during React hydration in dev previews.
         await page.screenshot({ path: out + "/" + name + "-desktop.png", caret: "initial" });
+      }
+    }
+    if (sample.name === "mobile-light" || sample.name === "small-mobile-dark") {
+      const weeklyResponse = await page.goto(base + "/weekly", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(weeklyResponse?.status(), 200, "Weekly magazine should load on mobile");
+      assert.equal(await page.locator(".weekly-magazine").count(), 1, "Weekly mobile needs a featured issue");
+      assert((await page.locator(".weekly-magazine-index li").count()) >= 1, "Weekly mobile should keep the issue topics");
+      assert((await page.locator(".weekly-magazine-archive li").count()) >= 1, "Earlier Weekly editions must be visible on mobile");
+      const weeklyMobile = await page.locator(".weekly-magazine-cover").evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return {
+          ratio: bounds.width / bounds.height,
+          scrollWidth: document.documentElement.scrollWidth,
+          viewport: window.innerWidth,
+        };
+      });
+      assert(weeklyMobile.ratio > 1.7 && weeklyMobile.ratio < 1.9,
+        "Weekly mobile cover should retain a compact 16:9 ratio");
+      assert(weeklyMobile.scrollWidth <= weeklyMobile.viewport + 1, "Weekly mobile must not overflow horizontally");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/weekly-magazine-mobile-first-screen.png" });
+        await page.screenshot({ path: out + "/weekly-magazine-mobile-full.png", fullPage: true });
       }
     }
     if (sample.name === "small-mobile-dark") {
