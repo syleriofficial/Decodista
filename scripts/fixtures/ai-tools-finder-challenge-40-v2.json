@@ -1,0 +1,319 @@
+{
+  "kind": "untouched-additional-synthetic-challenge",
+  "version": 1,
+  "description": "40 new, hand-authored English prompts labeled BEFORE Finder 2.6 matching changes. Independent from the old development fixtures, but not a representative sample of actual users. Freeze labels.",
+  "cases": [
+    {
+      "id": "research-1",
+      "group": "research",
+      "request": "Check the bibliography and evidence in these scientific papers",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-2",
+      "group": "research",
+      "request": "Find reputable studies about battery recycling",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-3",
+      "group": "research",
+      "request": "Explain conflicting findings across peer reviewed publications",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "writing-1",
+      "group": "writing",
+      "request": "Compose a friendly follow up email for a customer",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-2",
+      "group": "writing",
+      "request": "Rewrite a policy announcement in plain English",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-3",
+      "group": "writing",
+      "request": "Help phrase a congratulations note for my colleague",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "coding-1",
+      "group": "coding",
+      "request": "Troubleshoot a React build failing in CI",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-2",
+      "group": "coding",
+      "request": "Inspect this SQL statement for performance bottlenecks",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-3",
+      "group": "coding",
+      "request": "Investigate why my Node app throws a runtime exception",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "app-building-1",
+      "group": "app-building",
+      "request": "Create a password protected customer portal",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-2",
+      "group": "app-building",
+      "request": "Build a web based inventory dashboard",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-3",
+      "group": "app-building",
+      "request": "Launch a no code online booking platform",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "visuals-1",
+      "group": "visuals",
+      "request": "Design an ecommerce product banner",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-2",
+      "group": "visuals",
+      "request": "Illustrate a children's activity sheet",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-3",
+      "group": "visuals",
+      "request": "Generate a clean vector logo for a fitness brand",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "video-1",
+      "group": "video",
+      "request": "Animate my character sketch into a video clip",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-2",
+      "group": "video",
+      "request": "Edit a short promotional video from raw footage",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-3",
+      "group": "video",
+      "request": "Create a product trailer for social media",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "voice-1",
+      "group": "voice",
+      "request": "Produce speech from text for a Hindi lesson",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-2",
+      "group": "voice",
+      "request": "Dub a tutorial video into French",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-3",
+      "group": "voice",
+      "request": "Narrate the opening chapter of my book",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "presentations-1",
+      "group": "presentations",
+      "request": "Prepare a board meeting pitch deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-2",
+      "group": "presentations",
+      "request": "Create keynote slides from bullet points",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-3",
+      "group": "presentations",
+      "request": "Design a presentation about climate trends",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "abstain-1",
+      "group": "abstain",
+      "request": "Convert a scanned receipt into Excel",
+      "expected": []
+    },
+    {
+      "id": "abstain-2",
+      "group": "abstain",
+      "request": "Remove a watermark from a PDF page",
+      "expected": []
+    },
+    {
+      "id": "abstain-3",
+      "group": "abstain",
+      "request": "Reset my Gmail password",
+      "expected": []
+    },
+    {
+      "id": "abstain-4",
+      "group": "abstain",
+      "request": "Show movie tickets for tonight",
+      "expected": []
+    },
+    {
+      "id": "abstain-5",
+      "group": "abstain",
+      "request": "Merge multiple Word files into one document",
+      "expected": []
+    },
+    {
+      "id": "abstain-6",
+      "group": "abstain",
+      "request": "Track a local bus in real time",
+      "expected": []
+    },
+    {
+      "id": "abstain-7",
+      "group": "abstain",
+      "request": "Calculate my income tax return",
+      "expected": []
+    },
+    {
+      "id": "abstain-8",
+      "group": "abstain",
+      "request": "Find apartments near the railway station",
+      "expected": []
+    },
+    {
+      "id": "mixed-1",
+      "group": "mixed",
+      "request": "Check academic citations and prepare a PowerPoint presentation",
+      "expected": [
+        "research",
+        "presentations"
+      ]
+    },
+    {
+      "id": "mixed-2",
+      "group": "mixed",
+      "request": "Build a booking website and design its logo",
+      "expected": [
+        "app-building",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-3",
+      "group": "mixed",
+      "request": "Debug a Python API and draft a customer release note",
+      "expected": [
+        "coding",
+        "writing"
+      ]
+    },
+    {
+      "id": "mixed-4",
+      "group": "mixed",
+      "request": "Write a documentary script and create narration",
+      "expected": [
+        "writing",
+        "voice"
+      ]
+    },
+    {
+      "id": "mixed-5",
+      "group": "mixed",
+      "request": "Produce a podcast voiceover and edit a promo video",
+      "expected": [
+        "voice",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-6",
+      "group": "mixed",
+      "request": "Generate a character illustration and animate it into a clip",
+      "expected": [
+        "visuals",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-7",
+      "group": "mixed",
+      "request": "Create a product description and a slide deck",
+      "expected": [
+        "writing",
+        "presentations"
+      ]
+    },
+    {
+      "id": "mixed-8",
+      "group": "mixed",
+      "request": "Investigate a scientific paper and narrate the findings",
+      "expected": [
+        "research",
+        "voice"
+      ]
+    }
+  ]
+}
