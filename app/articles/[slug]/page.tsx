@@ -177,7 +177,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
           </div>
 
-          <div className="article-main-grid">
+          <div className={`article-main-grid${toc.length > 1 ? "" : " article-main-grid--no-toc"}`}>
             {toc.length > 1 && <nav className="toc" aria-label="Table of contents">
               <strong>In this article</strong>
               <ol>{toc.map((item) => item.type === "heading" && <li key={item.id}><a href={`#${item.id}`}>{item.text}</a></li>)}</ol>
