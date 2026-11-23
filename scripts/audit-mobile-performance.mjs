@@ -15,6 +15,9 @@ const routes = [
   { path: "/", label: "mobile-homepage", width: 390, theme: "light" },
   { path: "/latest", label: "mobile-latest", width: 390, theme: "light" },
   { path: "/how-to", label: "mobile-how-to", width: 390, theme: "light" },
+  // Observe AI Tools hydration and script weight at the same phone sizes as Finder browser QA.
+  { path: "/ai-tools", label: "mobile-ai-tools", width: 390, theme: "light" },
+  { path: "/ai-tools", label: "small-mobile-ai-tools", width: 320, theme: "dark" },
   { path: "/articles/gmail-not-receiving-emails-google-storage-full", label: "mobile-article", width: 390, theme: "light" },
   { path: "/", label: "small-mobile-homepage", width: 320, theme: "dark" },
   { path: "/search", label: "small-mobile-search", width: 320, theme: "dark" },

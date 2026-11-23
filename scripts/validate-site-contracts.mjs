@@ -189,6 +189,7 @@ assert(
   aiToolsSmartFinder.includes('id: "presentations"') &&
   aiToolsSmartFinder.includes("codingText") &&
   aiToolsSmartFinder.includes("UNSUPPORTED_REQUESTS") &&
+  aiToolsSmartFinder.includes("appBuildingText") &&
   aiToolsTaskFinder.includes("canShowTaskPanel") &&
   aiToolsSmartFinder.includes("matchedTasks: []") &&
   !aiToolsSmartFinder.includes("fetch(") &&
@@ -197,7 +198,7 @@ assert(
   !aiToolsTaskFinder.includes("window.gtag") &&
   aiToolsCss.includes(".ai-task-smart-input-row") &&
   aiToolsPage.includes('href="#ai-task-finder"'),
-  "Smart Finder 2.1 must suppress stale matches, stay private and handle uncertain intent without AI API or raw-query telemetry");
+  "Smart Finder 2.2 must avoid false app-building matches, suppress stale results and keep local-only task interpretation");
 
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
