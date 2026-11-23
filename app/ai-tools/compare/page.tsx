@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/app-link";
 import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
+import { getAiToolPricing } from "@/lib/ai-tools-pricing";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME } from "@/lib/site";
@@ -39,6 +40,8 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
       ?? AI_TOOLS.find((tool) => tool.slug !== first.slug)!;
 
   const officialSources = [first, second].map((tool) => ({ tool, evidence: getAiToolEvidence(tool.slug) }));
+  const firstPlans = getAiToolPricing(first.slug);
+  const secondPlans = getAiToolPricing(second.slug);
   const rows = [
     { title: "Made by", a: first.provider, b: second.provider },
     { title: "Primary category", a: getCategoryLabel(first.category), b: getCategoryLabel(second.category) },
@@ -46,9 +49,9 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
     { title: "Common use cases", a: first.useCases.join(" · "), b: second.useCases.join(" · ") },
     { title: "Practical consideration", a: first.practicalNote, b: second.practicalNote },
     {
-      title: "Current plans & pricing",
-      a: "Check the official website; this directory does not provide live price verification.",
-      b: "Check the official website; this directory does not provide live price verification.",
+      title: "Plan names in dated provider sources",
+      a: firstPlans ? firstPlans.planNames.join(" · ") : "Confirm on provider website",
+      b: secondPlans ? secondPlans.planNames.join(" · ") : "Confirm on provider website",
     },
   ];
 
@@ -102,6 +105,11 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
                   <td>{row.b}</td>
                 </tr>
               ))}
+              <tr>
+                <th scope="row">Official plan source</th>
+                <td>{firstPlans ? <a href={firstPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {firstPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
+                <td>{secondPlans ? <a href={secondPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {secondPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
+              </tr>
               <tr>
                 <th scope="row">Verify with provider</th>
                 <td><a href={first.officialUrl} target="_blank" rel="noopener noreferrer">Official {first.name} website <ArrowUpRight size={15} aria-hidden="true" /></a></td>
