@@ -55,7 +55,7 @@ try {
       assert.equal(await page.locator(".ai-tools-decision-link").count(), 2,
         "Keep only Pricing and Alternatives product navigation cards");
 
-      // Finder 2.2 must interpret intent locally without rankings, API calls or raw URL parameters.
+      // Finder 2.3 must interpret intent locally without rankings, API calls or raw URL parameters.
       const smartFinder = page.locator(".ai-task-finder");
       const smartInput = smartFinder.locator("#ai-smart-finder-input");
       assert.equal(await smartInput.getAttribute("maxLength"), "220");
@@ -106,6 +106,33 @@ try {
         "No unrelated task should look selected while intent is ambiguous");
       await smartFinder.locator(".ai-task-smart-choices").getByRole("button", { name: "Generate video" }).click();
       assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(), ["Adobe Firefly", "Runway"]);
+
+      // 2.3: multi-output intent must request a choice; focused utility must not drift.
+      for (const [query, first, second] of [
+        ["Research and write a report", "Research a topic", "Write and edit"],
+        ["Generate images and videos", "Create visuals", "Generate video"],
+        ["Create a website logo and a website", "Create visuals", "Build an app"],
+        ["Build an app and write code", "Build an app", "Build software"],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"),
+          "Mixed workflow must prompt for an explicit task: " + query);
+        const labels = (await smartFinder.locator(".ai-task-smart-choices button").allInnerTexts()).sort();
+        assert.deepEqual(labels, [first, second].sort());
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0);
+      }
+      for (const [query, taskName] of [
+        ["Review source code", "Build software"],
+        ["Dub a video in Spanish", "Narration and dubbing"],
+        ["Turn images into video", "Generate video"],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + taskName),
+          "Single-output workflow must avoid irrelevant second category: " + query);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
+      }
 
       await smartInput.fill("Draft a LinkedIn post");
       await smartFinder.getByRole("button", { name: "Find tools" }).click();
