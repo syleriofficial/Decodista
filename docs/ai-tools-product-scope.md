@@ -4,7 +4,7 @@
 AI Tools is a **global English-first discovery and comparison application**, not a blog or editorial article category.
 
 ### Product routes allowed
-- `/ai-tools` — searchable Tools directory, category filters and Smart Finder 2.2: on-device English-language task interpretation with curated, source-linked results, explicit ambiguities and no stale suggestions for unsupported requests; no external AI API.
+- `/ai-tools` — searchable Tools directory, category filters and Smart Finder 2.3: on-device English-language task interpretation with curated, source-linked results, explicit ambiguities and no stale suggestions for unsupported requests; no external AI API.
 - `/ai-tools/[slug]` — structured tool profiles with provider and evidence links.
 - `/ai-tools/compare?first=...&second=...` — side-by-side, factually sourced comparison with a task-overlap matrix. “Not listed” explicitly means unknown in the current directory, not unavailable. For pairs of app builders, compare official billing meters and overage risks without inventing comparable credit-to-token exchange rates.
 - `/ai-tools/pricing` — sourced and dated pricing records; never invent regional costs.
