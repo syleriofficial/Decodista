@@ -553,6 +553,29 @@ for (const sample of [
         await page.screenshot({ path: out + "/how-to-mobile-first-screen.png" });
         await page.locator(".how-to-guide-list").screenshot({ path: out + "/how-to-mobile-guide-list.png" });
       }
+      const mobileDigitalLife = await page.goto(base + "/digital-life", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(mobileDigitalLife?.status(), 200, "Digital Life should load on mobile");
+      const mobileDigitalRows = page.locator(".digital-life-page .editorial-vertical-list .article-card--horizontal");
+      assert((await mobileDigitalRows.count()) > 0, "Digital Life mobile needs published vertical story rows");
+      const digitalMobileMetrics = await mobileDigitalRows.first().evaluate((article) => {
+        const row = article.getBoundingClientRect();
+        const thumbnail = article.querySelector(".card-image").getBoundingClientRect();
+        const heading = article.querySelector(".card-copy").getBoundingClientRect();
+        return {
+          sideBySide: thumbnail.left < heading.left && thumbnail.right <= heading.left,
+          fraction: thumbnail.width / row.width,
+          scrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+      assert(digitalMobileMetrics.sideBySide && digitalMobileMetrics.fraction <= .37,
+        "Digital Life mobile rows must preserve small thumbnails beside headlines");
+      assert(digitalMobileMetrics.scrollWidth <= digitalMobileMetrics.viewportWidth + 1,
+        "Digital Life should not introduce horizontal overflow");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/digital-life-mobile-first-screen.png" });
+        await page.locator(".digital-life-page .editorial-vertical-list").screenshot({ path: out + "/digital-life-mobile-archive.png" });
+      }
     }
     if (sample.name === "desktop-light") {
       for (const category of ["ai", "how-to", "security", "digital-life"]) {
@@ -589,6 +612,34 @@ for (const sample of [
             "How-To list images should request thumbnail-sized responsive artwork");
           await page.screenshot({ path: out + "/how-to-desktop-first-screen.png" });
           await list.screenshot({ path: out + "/how-to-desktop-guide-list.png" });
+        }
+        if (category === "digital-life") {
+          const list = page.locator(".digital-life-page .editorial-vertical-list");
+          assert.equal(await list.count(), 1, "Digital Life should have a single editorial archive list");
+          assert.equal(await page.locator(".digital-life-page .article-grid").count(), 0,
+            "Digital Life should not use the old two-column article grid");
+          const rows = list.locator(".article-card--horizontal");
+          assert((await rows.count()) > 0, "Digital Life needs real published story rows");
+          const grid = await list.evaluate((element) => ({
+            columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+            positions: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+              .map((article) => article.getBoundingClientRect().top),
+          }));
+          assert.equal(grid.columns, 1, "Digital Life archive must be one column on desktop");
+          assert(grid.positions.every((top, index, arr) => index === 0 || top > arr[index - 1]),
+            "Digital Life article rows must stack vertically");
+          assert((await rows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+            "Digital Life archive should request correctly sized thumbnail images");
+          await page.screenshot({ path: out + "/digital-life-desktop-first-screen.png" });
+          await list.screenshot({ path: out + "/digital-life-desktop-archive.png" });
+          if (await page.locator('.digital-life-page .pagination a[href="/digital-life?page=2"]').count()) {
+            const nextPage = await page.goto(base + "/digital-life?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+            assert.equal(nextPage?.status(), 200, "Digital Life page 2 should remain valid");
+            assert.equal(await page.locator(".digital-life-page .category-lead").count(), 0,
+              "Digital Life must not repeat the featured story on page 2");
+            assert((await page.locator(".digital-life-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+              "Digital Life pagination must continue in the vertical archive layout");
+          }
         }
       }
       const emptyScience = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });

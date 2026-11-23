@@ -614,37 +614,37 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .article-header h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
 }
 
-/* How-To archive: one calm editorial row per guide, not a tiled magazine grid.
- * Scoped to /how-to so the homepage, topic pages and article bodies stay unchanged. */
-.how-to-page .category-header {
+/* Shared vertical archive: compact image-left rows for How-To and Digital Life.
+ * Only these opt-in sections are affected; other category and article pages retain their layout. */
+.editorial-vertical-page .category-header {
   padding-bottom: clamp(1.4rem, 2.5vw, 2.25rem);
 }
-.how-to-page .category-lead {
+.editorial-vertical-page .category-lead {
   max-width: 1100px;
   grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
   margin-top: clamp(1rem, 2vw, 1.75rem);
 }
-.how-to-page .category-lead-image { aspect-ratio: 16 / 10; }
-.how-to-page .category-lead > div { padding: clamp(1.2rem, 2.5vw, 2.35rem); }
-.how-to-page .category-lead h2 {
+.editorial-vertical-page .category-lead-image { aspect-ratio: 16 / 10; }
+.editorial-vertical-page .category-lead > div { padding: clamp(1.2rem, 2.5vw, 2.35rem); }
+.editorial-vertical-page .category-lead h2 {
   margin: .6rem 0;
   font-size: clamp(1.7rem, 2.45vw, 2.65rem);
   line-height: 1.17;
 }
-.how-to-page .category-lead p { margin-bottom: 1.1rem; }
-.how-to-page .how-to-guides-section {
+.editorial-vertical-page .category-lead p { margin-bottom: 1.1rem; }
+.editorial-vertical-page .editorial-vertical-section {
   padding-top: clamp(2.2rem, 3.8vw, 3.6rem);
   padding-bottom: clamp(3rem, 5vw, 5rem);
 }
-.how-to-page .how-to-guides-section .section-heading { margin-bottom: .6rem; }
-.how-to-page .how-to-guide-list {
+.editorial-vertical-page .editorial-vertical-section .section-heading { margin-bottom: .6rem; }
+.editorial-vertical-page .editorial-vertical-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   max-width: 1100px;
   gap: 0;
   border-top: 1px solid var(--line);
 }
-.how-to-page .how-to-guide-list > .article-card--horizontal {
+.editorial-vertical-page .editorial-vertical-list > .article-card--horizontal {
   display: grid;
   grid-template-columns: minmax(190px, 250px) minmax(0, 1fr);
   align-items: start;
@@ -652,69 +652,69 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   padding: 1.25rem 0;
   border-bottom: 1px solid var(--line);
 }
-.how-to-page .how-to-guide-list .card-image {
+.editorial-vertical-page .editorial-vertical-list .card-image {
   width: 100%;
   aspect-ratio: 16 / 10;
 }
-.how-to-page .how-to-guide-list .card-copy { min-width: 0; padding: 0; }
-.how-to-page .how-to-guide-list .card-copy h3 {
+.editorial-vertical-page .editorial-vertical-list .card-copy { min-width: 0; padding: 0; }
+.editorial-vertical-page .editorial-vertical-list .card-copy h3 {
   margin: .28rem 0 .55rem;
   max-width: 780px;
   font-size: clamp(1.4rem, 1.85vw, 1.65rem);
   line-height: 1.23;
 }
-.how-to-page .how-to-guide-list .card-copy > p {
+.editorial-vertical-page .editorial-vertical-list .card-copy > p {
   max-width: 65ch;
   margin-bottom: .65rem;
   font-size: .95rem;
   line-height: 1.52;
 }
-.how-to-page .how-to-guide-list .meta-row {
+.editorial-vertical-page .editorial-vertical-list .meta-row {
   margin-top: .25rem;
   padding-top: .3rem;
   border-top: 0;
 }
 @media (max-width: 800px) {
-  .how-to-page .category-lead { grid-template-columns: minmax(0, 1fr); }
-  .how-to-page .category-lead-image { aspect-ratio: 16 / 9; }
-  .how-to-page .category-lead > div { padding: 1.4rem; }
+  .editorial-vertical-page .category-lead { grid-template-columns: minmax(0, 1fr); }
+  .editorial-vertical-page .category-lead-image { aspect-ratio: 16 / 9; }
+  .editorial-vertical-page .category-lead > div { padding: 1.4rem; }
 }
 @media (max-width: 600px) {
-  .how-to-page .how-to-guides-section { padding-top: 2rem; }
-  .how-to-page .how-to-guide-list > .article-card--horizontal {
+  .editorial-vertical-page .editorial-vertical-section { padding-top: 2rem; }
+  .editorial-vertical-page .editorial-vertical-list > .article-card--horizontal {
     grid-template-columns: minmax(0, min(34%, 145px)) minmax(0, 1fr);
     gap: .85rem;
     padding: 1rem 0;
   }
-  .how-to-page .how-to-guide-list .card-copy h3 {
+  .editorial-vertical-page .editorial-vertical-list .card-copy h3 {
     margin: .3rem 0 .4rem;
     font-size: clamp(1rem, 4.35vw, 1.2rem);
     line-height: 1.24;
   }
-  .how-to-page .how-to-guide-list .card-copy > p { display: none; }
-  .how-to-page .how-to-guide-list .content-type-label { display: none; }
-  .how-to-page .how-to-guide-list .meta-row {
+  .editorial-vertical-page .editorial-vertical-list .card-copy > p { display: none; }
+  .editorial-vertical-page .editorial-vertical-list .content-type-label { display: none; }
+  .editorial-vertical-page .editorial-vertical-list .meta-row {
     gap: .4rem;
     border: 0;
     padding-top: .1rem;
     font-size: .7rem;
   }
-  .how-to-page .how-to-guide-list .meta-row time { display: inline; }
-  .how-to-page .how-to-guide-list .meta-row svg { display: none; }
-  .how-to-page .category-header {
+  .editorial-vertical-page .editorial-vertical-list .meta-row time { display: inline; }
+  .editorial-vertical-page .editorial-vertical-list .meta-row svg { display: none; }
+  .editorial-vertical-page .category-header {
     padding: 1.25rem 1rem;
     gap: .65rem;
   }
-  .how-to-page .category-header h1 { font-size: clamp(2.1rem, 8vw, 2.6rem); }
-  .how-to-page .category-header > p { font-size: .95rem; line-height: 1.5; }
-  .how-to-page .category-lead-image { aspect-ratio: 16 / 8; }
-  .how-to-page .category-lead > div { padding: 1rem 1.15rem 1.25rem; }
-  .how-to-page .category-lead h2 {
+  .editorial-vertical-page .category-header h1 { font-size: clamp(2.1rem, 8vw, 2.6rem); }
+  .editorial-vertical-page .category-header > p { font-size: .95rem; line-height: 1.5; }
+  .editorial-vertical-page .category-lead-image { aspect-ratio: 16 / 8; }
+  .editorial-vertical-page .category-lead > div { padding: 1rem 1.15rem 1.25rem; }
+  .editorial-vertical-page .category-lead h2 {
     font-size: clamp(1.5rem, 6vw, 1.85rem);
     line-height: 1.2;
     margin: .4rem 0 .6rem;
   }
-  .how-to-page .category-lead p {
+  .editorial-vertical-page .category-lead p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
