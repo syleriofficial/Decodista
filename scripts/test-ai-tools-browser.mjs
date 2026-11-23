@@ -311,6 +311,73 @@ try {
       assert.equal(await page.locator(".ai-tools-alternative-match-card").count(), 2);
 
       if (view.label === "desktop") {
+        // Exercise consent-gated custom events locally; intercept gtag before
+        // any external request and never send QA events to real GA4.
+        const telemetryPage = await browser.newPage({ viewport: { width: 1280, height: 850 } });
+        try {
+          await navigate(telemetryPage, "/ai-tools");
+          await telemetryPage.evaluate(() => {
+            localStorage.setItem("decodista-analytics-consent", "denied");
+            sessionStorage.removeItem("__qaAiEvents");
+            window.gtag = (...args) => {
+              if (args[0] !== "event") return;
+              const events = JSON.parse(sessionStorage.getItem("__qaAiEvents") || "[]");
+              events.push(args);
+              sessionStorage.setItem("__qaAiEvents", JSON.stringify(events));
+            };
+          });
+          await telemetryPage.getByRole("button", { name: "Build an app" }).click();
+          await telemetryPage.locator("#ai-tool-query").fill("private-phrase-do-not-send");
+          await telemetryPage.locator("#ai-tool-query").press("Enter");
+          await telemetryPage.locator("#ai-tool-query").fill("");
+          await telemetryPage.getByRole("button", { name: "Save ChatGPT to this browser" }).click();
+          assert.deepEqual(await telemetryPage.evaluate(
+            () => JSON.parse(sessionStorage.getItem("__qaAiEvents") || "[]")), [],
+            "No analytics event may fire without opt-in");
+
+          await telemetryPage.evaluate(() =>
+            localStorage.setItem("decodista-analytics-consent", "granted"));
+          await telemetryPage.getByRole("button", { name: "Research a topic" }).click();
+          await telemetryPage.getByRole("button", { name: "Build an app" }).click();
+          await telemetryPage.locator("#ai-tool-query").fill("private-phrase-do-not-send");
+          await telemetryPage.locator("#ai-tool-query").press("Enter");
+          await telemetryPage.locator("#ai-tool-query").fill("voiceovers");
+          await telemetryPage.locator("#ai-tool-query").press("Enter");
+          await telemetryPage.locator("#ai-tool-query").fill("");
+          await telemetryPage.getByRole("button", { name: "Remove ChatGPT from saved tools" }).click();
+          await telemetryPage.getByRole("button", { name: "Save ChatGPT to this browser" }).click();
+          await telemetryPage.locator(".ai-tools-card").filter({
+            has: telemetryPage.locator("h3", { hasText: "ChatGPT" }),
+          }).getByRole("button", { name: "Compare" }).click();
+          await telemetryPage.locator(".ai-tools-card").filter({
+            has: telemetryPage.locator("h3", { hasText: "Claude" }),
+          }).getByRole("button", { name: "Compare" }).click();
+          await telemetryPage.getByRole("link", { name: "Compare selected tools" }).click();
+          const recorded = await telemetryPage.evaluate(
+            () => JSON.parse(sessionStorage.getItem("__qaAiEvents") || "[]"));
+          const eventNames = recorded.map((item) => item[1]);
+          for (const expected of [
+            "ai_tools_task_select", "ai_tools_search_complete",
+            "ai_tools_save_toggle", "ai_tools_compare_select", "ai_tools_compare_open",
+          ]) {
+            assert(eventNames.includes(expected), "Missing opt-in intent event: " + expected);
+          }
+          assert(recorded.some((item) => item[1] === "ai_tools_task_select" && item[2]?.task_id === "app-building"),
+            "New app-building task must be measurable");
+          assert(recorded.some((item) => item[1] === "ai_tools_search_complete" && item[2]?.result_bucket === "none"),
+            "No-result search must be measurable without collecting the query");
+          assert(recorded.some((item) => item[1] === "ai_tools_search_complete" && item[2]?.result_bucket === "one"),
+            "Single-result search must be measurable without collecting the query");
+          assert(recorded.some((item) => item[1] === "ai_tools_compare_open" &&
+            item[2]?.first_tool === "chatgpt" && item[2]?.second_tool === "claude"),
+            "Opened comparison needs a validated pair, not just a selection");
+          assert(!JSON.stringify(recorded).includes("private-phrase-do-not-send"),
+            "Raw user searches must never reach the analytics payload");
+          assert(!eventNames.includes("page_view"), "Custom events must not duplicate native page views");
+        } finally {
+          await telemetryPage.close();
+        }
+
         const oldRoutes = [
           "/ai-tools/guides",
           "/ai-tools/guides/chatgpt-vs-claude",

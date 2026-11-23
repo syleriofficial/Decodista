@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "@/components/app-link";
 import { ArrowRight, ArrowUpRight, BookOpen, Bookmark, BookmarkCheck, Check, GitCompareArrows, Info, Search, X } from "lucide-react";
 import { AI_TOOL_CATEGORIES, AI_TOOLS, getCategoryLabel, type AiToolCategory } from "@/lib/ai-tools";
-import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
+import { getAiToolsResultBucket, trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { AI_TOOL_EVIDENCE, getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { getAiToolPricing } from "@/lib/ai-tools-pricing";
 
@@ -42,6 +42,7 @@ function parseSaved(raw: string): string[] {
 
 export function AiToolsExplorer() {
   const [search, setSearch] = useState("");
+  const lastRecordedSearchRef = useRef("");
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [selected, setSelected] = useState<string[]>([]);
   const [sourceCheckedOnly, setSourceCheckedOnly] = useState(false);
@@ -66,12 +67,28 @@ export function AiToolsExplorer() {
       : first.name.localeCompare(second.name, "en"));
   }, [category, search, sourceCheckedOnly, savedOnly, saved, sortOrder]);
 
+  const recordCompletedSearch = () => {
+    // The typed phrase is NEVER sent; this ref only suppresses duplicate blur/Enter events.
+    const query = search.trim();
+    if (query.length < 2 || query === lastRecordedSearchRef.current) return;
+    lastRecordedSearchRef.current = query;
+    trackAiToolsInteraction({
+      name: "ai_tools_search_complete",
+      result_bucket: getAiToolsResultBucket(filtered.length),
+    });
+  };
+
   const toggleSave = (slug: string) => {
     const next = saved.includes(slug) ? saved.filter((item) => item !== slug) : [...saved, slug];
     try {
       window.localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(next));
       window.dispatchEvent(new Event(SAVED_UPDATED_EVENT));
       setSaveUnavailable(false);
+      trackAiToolsInteraction({
+        name: "ai_tools_save_toggle",
+        tool_slug: slug,
+        selection: saved.includes(slug) ? "remove" : "add",
+      });
     } catch {
       setSaveUnavailable(true);
     }
@@ -115,10 +132,20 @@ export function AiToolsExplorer() {
               placeholder="Try writing, coding, research…"
               value={search}
               maxLength={120}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => {
+                if (!event.target.value.trim()) lastRecordedSearchRef.current = "";
+                setSearch(event.target.value);
+              }}
+              onBlur={recordCompletedSearch}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  recordCompletedSearch();
+                }
+              }}
               autoComplete="off"
             />
-            {search && <button className="ai-tools-clear" type="button" aria-label="Clear tool search" onClick={() => setSearch("")}><X size={17} aria-hidden="true" /></button>}
+            {search && <button className="ai-tools-clear" type="button" aria-label="Clear tool search" onClick={() => { lastRecordedSearchRef.current = ""; setSearch(""); }}><X size={17} aria-hidden="true" /></button>}
           </div>
           <div className="ai-tools-filter-row" role="group" aria-label="Filter by category">
             {AI_TOOL_CATEGORIES.map((item) => (
@@ -191,6 +218,14 @@ export function AiToolsExplorer() {
           <a
             className={selected.length === 2 ? "ai-tools-compare-link" : "ai-tools-compare-link is-idle"}
             href={compareHref}
+            onClick={() => {
+              if (selected.length !== 2) return;
+              trackAiToolsInteraction({
+                name: "ai_tools_compare_open",
+                first_tool: selected[0],
+                second_tool: selected[1],
+              });
+            }}
           >
             {selected.length === 2 ? "Compare selected tools" : "Open comparison"}
             <ArrowRight size={17} aria-hidden="true" />
