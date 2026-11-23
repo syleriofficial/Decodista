@@ -134,7 +134,7 @@ try {
         assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
       }
 
-      // Smart Finder 2.4: natural phrasings, multi-output requests and safe refusals.
+      // Smart Finder 2.5: natural phrasings, multi-output requests and safe refusals.
       for (const [query, expectedTask] of [
         ["Polish my cover letter", "Write and edit"],
         ["Investigate the causes of this financial crisis", "Research a topic"],
@@ -155,6 +155,37 @@ try {
           "PDF utility must not be invented as a research task: " + utility);
         assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0);
       }
+
+      // New 2.5 coverage: source-review paraphrases, creator work and unsupported PDF utilities.
+      for (const [query, expectedTask] of [
+        ["Check the references in my academic manuscript", "Research a topic"],
+        ["Prepare an apology letter for a client", "Write and edit"],
+        ["Write descriptions for my online shop", "Write and edit"],
+        ["Help diagnose an HTTP 500 in my Node server", "Build software"],
+        ["Design an infographic for a lesson", "Create visuals"],
+        ["Edit a 30-second social clip", "Generate video"],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + expectedTask),
+          "Finder 2.5 should recognize a clear single task: " + query);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
+      }
+      for (const utility of [
+        "Remove a signature from a document",
+        "Extract images from a PDF",
+        "Rotate a scanned document",
+      ]) {
+        await smartInput.fill(utility);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("No confident task match yet."),
+          "Finder 2.5 must not invent a tool for an unsupported utility: " + utility);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0);
+      }
+      await smartInput.fill("Write a blog post and narrate it");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"),
+        "Mixed writing and narration should ask the user to choose");
 
       await smartInput.fill("Draft a LinkedIn post");
       await smartFinder.getByRole("button", { name: "Find tools" }).click();
