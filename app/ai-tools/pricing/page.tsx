@@ -60,6 +60,7 @@ export default function AiToolsPricingPage() {
                   <span className="ai-tools-price-status"><ShieldCheck size={14} aria-hidden="true" /> Official source</span>
                 </div>
                 <p className="ai-tools-price-reviewed">Source checked <time dateTime={record.checkedOn}>{formatReviewDate(record.checkedOn)}</time></p>
+                <AiEvidenceStatus checkedOn={record.checkedOn} />
                 <div className="ai-tools-price-body">
                   <span className="ai-tools-price-label">Identified plans</span>
                   <ul className="ai-tools-plan-pills">{record.planNames.map((plan) => <li key={plan}>{plan}</li>)}</ul>
