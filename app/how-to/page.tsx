@@ -30,7 +30,7 @@ export default function HowToPage() {
   };
 
   return (
-    <main id="main-content" className="category-page">
+    <main id="main-content" className="category-page how-to-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <header className="category-header wrap">
         <div><span className="eyebrow">Content type / Fix</span><h1>{howTo.name}</h1></div>
@@ -47,9 +47,9 @@ export default function HowToPage() {
           <Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the guide <ArrowRight aria-hidden="true" /></Link>
         </div>
       </section>}
-      {rest.length > 0 && <section className="section-block wrap" aria-labelledby="more-how-to-title">
+      {rest.length > 0 && <section className="section-block wrap how-to-guides-section" aria-labelledby="more-how-to-title">
         <div className="section-heading"><div><span className="eyebrow">Across DECODISTA</span><h2 id="more-how-to-title">More practical guides</h2></div></div>
-        <div className="article-grid">{rest.map((article) => <ArticleCard key={article.slug} article={article} />)}</div>
+        <div className="how-to-guide-list">{rest.map((article) => <ArticleCard key={article.slug} article={article} variant="horizontal" imageSizes="(max-width: 600px) 38vw, (max-width: 1000px) 32vw, 260px" />)}</div>
       </section>}
     </main>
   );
