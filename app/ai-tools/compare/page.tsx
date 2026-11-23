@@ -90,6 +90,46 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
         </form>
         <p className="ai-tools-form-hint">Selecting the same tool twice will use a different second tool. This is a descriptive overview, not an evaluation of model quality.</p>
 
+        <section className="ai-tools-quick-compare" aria-labelledby="ai-tools-quick-heading">
+          <div className="ai-tools-quick-heading">
+            <span className="ai-tools-eyebrow">Quick comparison</span>
+            <h2 id="ai-tools-quick-heading">{first.name} vs {second.name}</h2>
+          </div>
+          <p className="ai-tools-swipe-hint">Scroll sideways to compare both tools.</p>
+        <div className="ai-tools-table-scroll" role="region" aria-label={`${first.name} and ${second.name} comparison table`} tabIndex={0}>
+          <table className="ai-tools-compare-table">
+            <caption className="sr-only">Side-by-side descriptive comparison of {first.name} and {second.name}</caption>
+            <thead>
+              <tr>
+                <th scope="col">At a glance</th>
+                <th scope="col"><Link href={`/ai-tools/${first.slug}`} className="ai-tools-compare-tool-name">{first.name}</Link><small>{first.provider}</small></th>
+                <th scope="col"><Link href={`/ai-tools/${second.slug}`} className="ai-tools-compare-tool-name">{second.name}</Link><small>{second.provider}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.title}>
+                  <th scope="row">{row.title}</th>
+                  <td>{row.a}</td>
+                  <td>{row.b}</td>
+                </tr>
+              ))}
+              <tr>
+                <th scope="row">Official plan source</th>
+                <td>{firstPlans ? <a href={firstPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {firstPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
+                <td>{secondPlans ? <a href={secondPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {secondPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
+              </tr>
+              <tr>
+                <th scope="row">Verify with provider</th>
+                <td><a href={first.officialUrl} target="_blank" rel="noopener noreferrer">Official {first.name} website <ArrowUpRight size={15} aria-hidden="true" /></a></td>
+                <td><a href={second.officialUrl} target="_blank" rel="noopener noreferrer">Official {second.name} website <ArrowUpRight size={15} aria-hidden="true" /></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </section>
+
+
         <AiAppBuilderCostComparison firstSlug={first.slug} secondSlug={second.slug} />
 
         <section className="ai-tools-workflow-comparison" aria-labelledby="ai-tools-workflow-heading">
@@ -135,37 +175,6 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
           </p>
         </section>
 
-        <div className="ai-tools-table-scroll" role="region" aria-label={`${first.name} and ${second.name} comparison table`} tabIndex={0}>
-          <table className="ai-tools-compare-table">
-            <caption className="sr-only">Side-by-side descriptive comparison of {first.name} and {second.name}</caption>
-            <thead>
-              <tr>
-                <th scope="col">At a glance</th>
-                <th scope="col"><Link href={`/ai-tools/${first.slug}`} className="ai-tools-compare-tool-name">{first.name}</Link><small>{first.provider}</small></th>
-                <th scope="col"><Link href={`/ai-tools/${second.slug}`} className="ai-tools-compare-tool-name">{second.name}</Link><small>{second.provider}</small></th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.title}>
-                  <th scope="row">{row.title}</th>
-                  <td>{row.a}</td>
-                  <td>{row.b}</td>
-                </tr>
-              ))}
-              <tr>
-                <th scope="row">Official plan source</th>
-                <td>{firstPlans ? <a href={firstPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {firstPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
-                <td>{secondPlans ? <a href={secondPlans.pricingUrl} target="_blank" rel="noopener noreferrer">Plans checked {secondPlans.checkedOn} <ArrowUpRight size={15} aria-hidden="true" /></a> : "Not reviewed"}</td>
-              </tr>
-              <tr>
-                <th scope="row">Verify with provider</th>
-                <td><a href={first.officialUrl} target="_blank" rel="noopener noreferrer">Official {first.name} website <ArrowUpRight size={15} aria-hidden="true" /></a></td>
-                <td><a href={second.officialUrl} target="_blank" rel="noopener noreferrer">Official {second.name} website <ArrowUpRight size={15} aria-hidden="true" /></a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
         <section className="ai-tools-compare-evidence" aria-labelledby="ai-tools-compare-evidence-heading">
           <span className="ai-tools-eyebrow">Source trail</span>
           <h2 id="ai-tools-compare-evidence-heading">Verify the details for each tool</h2>

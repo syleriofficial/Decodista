@@ -746,3 +746,565 @@
   .ai-task-smart-input-row input { width:100%; }
   .ai-task-smart-input-row button { width:100%; }
 }
+
+
+/* AI Tools / discovery UI visual refresh: presentation and reading order only.
+   No new tools, claims, rankings or API behavior. */
+.ai-tools-page {
+  --tools-radius: 14px;
+}
+.ai-tools-page .ai-tools-hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(245px, .85fr);
+  min-height: 345px;
+  margin-top: 1.3rem;
+  background: radial-gradient(circle at 94% 0%, #34599b 0%, transparent 37%),
+    linear-gradient(120deg, #0b1934 0%, #122d60 75%, #173e78 100%);
+  box-shadow: 0 18px 46px #061a3720;
+}
+.ai-tools-page .ai-tools-hero-copy { padding: clamp(1.65rem, 3.6vw, 3.1rem); }
+.ai-tools-page .ai-tools-hero h1 {
+  margin: .9rem 0 .8rem;
+  max-width: 690px;
+  font-size: clamp(2.3rem, 4.3vw, 4.45rem);
+  line-height: 1.07;
+  letter-spacing: -.055em;
+}
+.ai-tools-page .ai-tools-hero-lede {
+  max-width: 580px;
+  line-height: 1.6;
+}
+.ai-tools-page .ai-tools-hero-actions { margin: 1.3rem 0 1.4rem; }
+.ai-tools-page .ai-tools-hero-actions a {
+  min-height: 46px;
+  border-radius: 9px;
+}
+.ai-tools-page .ai-tools-task-shortcut {
+  display: inline-flex;
+  gap: .45rem;
+  align-items: center;
+  margin: -.3rem 0 1.25rem;
+  font-size: .8rem;
+  font-weight: 750;
+  color: #d4e3ff;
+  text-underline-offset: 3px;
+}
+.ai-tools-page .ai-tools-task-shortcut:hover { color: #fff; text-decoration: underline; }
+.ai-tools-page .ai-tools-hero-art {
+  gap: 1rem;
+  padding: 1.6rem 2rem 1.6rem .4rem;
+}
+.ai-tools-page .ai-tools-art-card {
+  min-height: 70px;
+  padding: .75rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px #061b3840;
+}
+.ai-tools-page .ai-tools-art-card-two { margin-left: 1rem; }
+.ai-tools-page .ai-tools-art-symbol { border-radius: 10px; }
+.ai-tools-page .ai-tools-directory {
+  padding-top: clamp(1.9rem, 3vw, 2.8rem);
+  scroll-margin-top: calc(var(--sticky-nav-height, 76px) + 1rem);
+}
+.ai-tools-page .ai-tools-section-heading { margin-bottom: 1.1rem; }
+.ai-tools-page .ai-tools-section-heading h2 { font-size: clamp(1.7rem, 2.5vw, 2.4rem); }
+.ai-tools-page .ai-tools-workbench {
+  align-items: start;
+  gap: .9rem;
+}
+.ai-tools-page .ai-tools-filters,
+.ai-tools-page .ai-tools-compare-dock {
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+.ai-tools-page .ai-tools-search-field {
+  min-height: 56px;
+  border-radius: 11px;
+  border-color: color-mix(in srgb, var(--line) 66%, var(--ink));
+  background: var(--surface);
+}
+.ai-tools-page .ai-tools-search-field:focus-within {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+.ai-tools-page .ai-tools-chip { border-radius: 999px; padding-inline: .95rem; }
+.ai-tools-page .ai-tools-card {
+  border-radius: 14px;
+  padding: clamp(1rem, 1.65vw, 1.4rem);
+  gap: .85rem;
+  box-shadow: 0 2px 9px #00113008;
+}
+.ai-tools-page .ai-tools-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px #00113016;
+}
+.ai-tools-page .ai-tools-card h3 { font-size: 1.22rem; }
+.ai-tools-page .ai-tools-summary { color: var(--muted); }
+.ai-tools-page .ai-tools-monogram { border-radius: 13px; }
+.ai-tools-page .ai-tools-card-category { border-radius: 999px; }
+.ai-tools-page .ai-tools-select { border-radius: 8px; }
+.ai-tools-page .ai-tools-compare-link { border-radius: 9px; }
+.ai-tools-page .ai-tools-decision-links { margin-top: clamp(2rem, 3vw, 3rem); }
+.ai-tools-page .ai-task-finder { padding-top: clamp(2rem, 4vw, 3.5rem); }
+.ai-tools-page .ai-tools-utility-strip { margin-top: clamp(2rem, 4vw, 3.5rem); }
+.ai-tools-page a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+@media (max-width: 850px) {
+  .ai-tools-page .ai-tools-hero { grid-template-columns: 1fr; }
+  .ai-tools-page .ai-tools-hero-art { display: none; }
+}
+@media (max-width: 600px) {
+  .ai-tools-page .ai-tools-hero { min-height: 0; margin-top: .8rem; }
+  .ai-tools-page .ai-tools-hero-copy { padding: 1.8rem 1.3rem; }
+  .ai-tools-page .ai-tools-hero h1 { font-size: clamp(2.1rem, 9vw, 3.05rem); }
+  .ai-tools-page .ai-tools-hero-actions { margin-bottom: 1rem; }
+  .ai-tools-page .ai-tools-hero-actions a { flex: 1 1 165px; }
+  .ai-tools-page .ai-tools-grid { grid-template-columns: 1fr; }
+  .ai-tools-page .ai-tools-card { padding: 1.15rem; }
+  .ai-tools-page .ai-tools-filters,
+  .ai-tools-page .ai-tools-compare-dock { padding: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-tools-page .ai-tools-card,
+  .ai-tools-page .ai-tools-hero-actions a { transition: none; }
+  .ai-tools-page .ai-tools-card:hover,
+  .ai-tools-page .ai-tools-hero-actions a:hover { transform: none; }
+}
+
+
+
+/* AI Tools comparison / visual polish only.
+   Preserve factual content, source evidence and selection behaviour. */
+.ai-tools-page .ai-tools-compare-hero {
+  padding-top: clamp(1.5rem, 3vw, 2.7rem);
+  padding-bottom: clamp(1.3rem, 2.5vw, 2rem);
+}
+.ai-tools-page .ai-tools-compare-hero .ai-tools-back {
+  margin-bottom: clamp(.9rem, 1.5vw, 1.4rem);
+}
+.ai-tools-page .ai-tools-compare-hero h1 {
+  max-width: 880px;
+  font-size: clamp(2.25rem, 4.2vw, 4.4rem);
+  letter-spacing: -.055em;
+  line-height: 1.08;
+}
+.ai-tools-page .ai-tools-compare-hero p {
+  max-width: 780px;
+  font-size: clamp(.91rem, 1.1vw, 1.03rem);
+  line-height: 1.65;
+}
+.ai-tools-page .ai-tools-compare-main {
+  padding-top: clamp(1.3rem, 2.6vw, 2.3rem);
+}
+.ai-tools-page .ai-tools-compare-main > .ai-tools-section-heading {
+  margin-bottom: 1rem;
+}
+.ai-tools-page .ai-tools-compare-form {
+  grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr) auto;
+  gap: clamp(.65rem, 1.1vw, 1.1rem);
+  padding: clamp(1rem, 2.1vw, 1.65rem);
+  border-radius: 16px;
+  border-color: color-mix(in srgb, var(--line) 82%, var(--signal));
+  box-shadow: 0 8px 34px #0011300d;
+}
+.ai-tools-page .ai-tools-compare-form label {
+  font-size: .84rem;
+  color: var(--ink);
+}
+.ai-tools-page .ai-tools-compare-form select {
+  min-height: 52px;
+  margin-top: .55rem;
+  border-radius: 10px;
+  font-size: .96rem;
+  font-weight: 650;
+  padding-inline: .85rem;
+  cursor: pointer;
+}
+.ai-tools-page .ai-tools-compare-form select:focus-visible,
+.ai-tools-page .ai-tools-compare-form button:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
+.ai-tools-page .ai-tools-compare-switch {
+  color: var(--signal);
+  margin-bottom: 1rem;
+  justify-self: center;
+}
+.ai-tools-page .ai-tools-compare-form button {
+  min-height: 52px;
+  border-radius: 10px;
+  padding-inline: clamp(.9rem, 1.5vw, 1.4rem);
+  font-size: .9rem;
+}
+.ai-tools-page .ai-tools-form-hint {
+  max-width: 880px;
+  margin: .75rem 0 1.75rem;
+  font-size: .78rem;
+  line-height: 1.65;
+}
+.ai-tools-page .ai-tools-quick-compare {
+  margin: clamp(1.8rem, 3.4vw, 2.9rem) 0 clamp(2.3rem, 4vw, 3.5rem);
+}
+.ai-tools-page .ai-tools-quick-heading {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  margin-bottom: 1.15rem;
+}
+.ai-tools-page .ai-tools-quick-heading h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.ai-tools-page .ai-tools-swipe-hint { display: none; }
+.ai-tools-page .ai-tools-compare-main .ai-tools-table-scroll {
+  border-radius: 14px;
+  scrollbar-color: var(--line) transparent;
+  box-shadow: 0 6px 22px #0011300b;
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table th,
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table td {
+  padding: 1.05rem 1.15rem;
+  overflow-wrap: anywhere;
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table th:first-child {
+  width: 26%;
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table thead {
+  background: var(--edition-panel);
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table thead th {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-tool-name {
+  font-size: clamp(1.08rem, 1.8vw, 1.35rem);
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table tbody tr:nth-child(even) {
+  background: var(--edition-panel);
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table tbody tr:hover {
+  background: var(--signal-soft);
+}
+.ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table a {
+  gap: .3rem;
+  text-underline-offset: 3px;
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-workflow-comparison {
+  margin-block: clamp(2rem, 3.5vw, 3rem);
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-workflow-summary > div {
+  border-radius: 12px;
+  padding: 1.2rem;
+  align-items: center;
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-workflow-summary dd {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  color: var(--ink);
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-workflow-listed,
+.ai-tools-page .ai-tools-compare-main .ai-tools-workflow-unknown {
+  border-radius: 999px;
+  padding: .35rem .65rem;
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-compare-evidence-card,
+.ai-tools-page .ai-tools-compare-main .ai-tools-app-cost-card {
+  border-radius: 14px;
+}
+.ai-tools-page .ai-tools-compare-main .ai-tools-compare-notice {
+  border-radius: 0 10px 10px 0;
+  line-height: 1.65;
+}
+@media (max-width: 850px) {
+  .ai-tools-page .ai-tools-compare-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ai-tools-page .ai-tools-compare-form .ai-tools-compare-switch { display: none; }
+  .ai-tools-page .ai-tools-compare-form button { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .ai-tools-page .ai-tools-compare-hero h1 { font-size: clamp(2.1rem, 9vw, 2.8rem); }
+  .ai-tools-page .ai-tools-compare-main { padding-top: 1.25rem; }
+  .ai-tools-page .ai-tools-compare-form {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 13px;
+    gap: .9rem;
+    padding: 1.1rem;
+  }
+  .ai-tools-page .ai-tools-compare-form button {
+    grid-column: 1;
+    width: 100%;
+  }
+  .ai-tools-page .ai-tools-quick-heading { margin-bottom: .55rem; }
+  .ai-tools-page .ai-tools-swipe-hint {
+    display: block;
+    margin: 0 0 .65rem;
+    color: var(--muted);
+    font-size: .76rem;
+  }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table { min-width: 660px; }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 28%;
+    background: var(--surface);
+    box-shadow: 7px 0 9px -10px #00113088;
+  }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table thead th:first-child {
+    z-index: 2;
+    background: var(--edition-panel);
+  }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table tbody tr:nth-child(even) th:first-child {
+    background: var(--edition-panel);
+  }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table tbody tr:hover th:first-child {
+    background: var(--signal-soft);
+  }
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table th,
+  .ai-tools-page .ai-tools-quick-compare .ai-tools-compare-table td {
+    padding: .85rem .75rem;
+    font-size: .79rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-tools-page .ai-tools-compare-form button { transition: none; }
+}
+
+
+/* AI Tools pricing and alternatives / unified visual polish only.
+   Scoped to product subpages; does not alter catalog, sources or behavior. */
+.ai-tools-pricing-page .ai-tools-feature-hero,
+.ai-tools-alternatives-page .ai-tools-feature-hero {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1.35rem, 2.6vw, 2rem);
+}
+.ai-tools-pricing-page .ai-tools-feature-hero .ai-tools-back,
+.ai-tools-alternatives-page .ai-tools-feature-hero .ai-tools-back {
+  margin-bottom: clamp(.9rem, 1.5vw, 1.4rem);
+}
+.ai-tools-pricing-page .ai-tools-feature-hero h1,
+.ai-tools-alternatives-page .ai-tools-feature-hero h1 {
+  max-width: 850px;
+  font-size: clamp(2.2rem, 4vw, 4.1rem);
+  line-height: 1.09;
+  letter-spacing: -.052em;
+}
+.ai-tools-pricing-page .ai-tools-feature-hero > p,
+.ai-tools-alternatives-page .ai-tools-feature-hero > p {
+  max-width: 740px;
+  font-size: clamp(.92rem, 1.12vw, 1.04rem);
+  line-height: 1.65;
+}
+.ai-tools-pricing-page .ai-tools-price-section,
+.ai-tools-alternatives-page .ai-tools-alternatives-section {
+  padding-top: clamp(1.7rem, 3vw, 2.7rem);
+}
+.ai-tools-pricing-page .ai-tools-count-label,
+.ai-tools-alternatives-page .ai-tools-count-label {
+  padding: .35rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--edition-panel);
+  line-height: 1.45;
+}
+/* Pricing: clearer plans and sources without fabricated ranking or price tier. */
+.ai-tools-pricing-page .ai-tools-price-grid {
+  gap: clamp(.85rem, 1.5vw, 1.3rem);
+  align-items: stretch;
+}
+.ai-tools-pricing-page .ai-tools-price-card {
+  border-radius: 15px;
+  padding: clamp(1.1rem, 2.2vw, 1.65rem);
+  box-shadow: 0 3px 16px #0011300a;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.ai-tools-pricing-page .ai-tools-price-card:hover {
+  border-color: color-mix(in srgb, var(--signal) 35%, var(--line));
+  box-shadow: 0 14px 34px #00113012;
+}
+.ai-tools-pricing-page .ai-tools-price-brand { min-width: 0; }
+.ai-tools-pricing-page .ai-tools-price-brand > div { min-width: 0; }
+.ai-tools-pricing-page .ai-tools-price-brand h3 {
+  font-size: clamp(1.16rem, 1.6vw, 1.38rem);
+  overflow-wrap: anywhere;
+}
+.ai-tools-pricing-page .ai-tools-price-status {
+  border-radius: 999px;
+  padding: .35rem .6rem;
+  line-height: 1.4;
+}
+.ai-tools-pricing-page .ai-tools-price-reviewed {
+  margin: .9rem 0 .45rem;
+}
+.ai-tools-pricing-page .ai-tools-price-body { margin-top: 1.05rem; }
+.ai-tools-pricing-page .ai-tools-plan-pills { gap: .45rem; }
+.ai-tools-pricing-page .ai-tools-plan-pills li {
+  border-radius: 999px;
+  padding: .35rem .68rem;
+  line-height: 1.45;
+}
+.ai-tools-pricing-page .ai-tools-price-summary {
+  margin: .95rem 0;
+  font-size: clamp(.96rem, 1.15vw, 1.05rem);
+  line-height: 1.55;
+}
+.ai-tools-pricing-page .ai-tools-verified-amount {
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+.ai-tools-pricing-page .ai-tools-price-actions {
+  gap: .6rem;
+  align-items: center;
+}
+.ai-tools-pricing-page .ai-tools-price-actions a {
+  min-height: 42px;
+  padding: .55rem .72rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  line-height: 1.35;
+}
+.ai-tools-pricing-page .ai-tools-price-actions a:hover {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+}
+.ai-tools-pricing-page .ai-tools-pricing-checklist {
+  border-radius: 15px;
+  gap: clamp(1rem, 2.5vw, 2.3rem);
+}
+/* Alternatives: task selector and result cards have a clear visual hierarchy. */
+.ai-tools-alternatives-page .ai-tools-alternatives-form {
+  max-width: none;
+  padding: clamp(1rem, 2.4vw, 1.65rem);
+  border-radius: 15px;
+  box-shadow: 0 7px 24px #0011300b;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) auto;
+  gap: clamp(.65rem, 1vw, 1.05rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields label {
+  min-width: 0;
+  font-size: .84rem;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields select {
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: .92rem;
+  cursor: pointer;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+  min-height: 52px;
+  border-radius: 10px;
+  padding-inline: 1.15rem;
+  white-space: nowrap;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-fields select:focus-visible,
+.ai-tools-alternatives-page .ai-tools-alternatives-fields button:focus-visible,
+.ai-tools-pricing-page .ai-tools-price-actions a:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context {
+  margin: clamp(1rem, 2.3vw, 1.5rem) 0 clamp(1.7rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context .ai-tools-monogram {
+  border-radius: 13px;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-context > p {
+  max-width: 790px;
+  margin: .85rem 0;
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-grid {
+  gap: clamp(.85rem, 1.5vw, 1.2rem);
+  align-items: stretch;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card {
+  border-radius: 15px;
+  padding: clamp(1.15rem, 2vw, 1.55rem);
+  box-shadow: 0 3px 16px #0011300a;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card:hover {
+  border-color: color-mix(in srgb, var(--signal) 40%, var(--line));
+  box-shadow: 0 14px 34px #00113012;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card h3 {
+  font-size: clamp(1.2rem, 1.8vw, 1.42rem);
+}
+.ai-tools-alternatives-page .ai-tools-alternative-card li {
+  border-radius: 999px;
+  padding: .35rem .65rem;
+  line-height: 1.4;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions {
+  gap: .55rem;
+  align-items: stretch;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions a {
+  display: inline-flex;
+  min-height: 40px;
+  padding: .5rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  line-height: 1.35;
+}
+.ai-tools-alternatives-page .ai-tools-alternative-actions a:hover {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+}
+.ai-tools-alternatives-page .ai-tools-alternatives-empty,
+.ai-tools-alternatives-page .ai-tools-alternatives-note {
+  border-radius: 14px;
+}
+@media (max-width: 950px) {
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 700px) {
+  .ai-tools-pricing-page .ai-tools-price-grid,
+  .ai-tools-alternatives-page .ai-tools-alternatives-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ai-tools-pricing-page .ai-tools-pricing-checklist {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .ai-tools-pricing-page .ai-tools-feature-hero h1,
+  .ai-tools-alternatives-page .ai-tools-feature-hero h1 {
+    font-size: clamp(2.1rem, 8.8vw, 2.8rem);
+  }
+  .ai-tools-pricing-page .ai-tools-price-card,
+  .ai-tools-alternatives-page .ai-tools-alternative-card {
+    padding: 1.1rem;
+  }
+  .ai-tools-pricing-page .ai-tools-price-card-top { gap: .65rem; }
+  .ai-tools-pricing-page .ai-tools-price-actions a {
+    flex: 1 1 150px;
+    justify-content: center;
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ai-tools-alternatives-page .ai-tools-alternatives-fields button {
+    grid-column: 1;
+    width: 100%;
+  }
+  .ai-tools-alternatives-page .ai-tools-alternative-actions a {
+    flex: 1 1 150px;
+    justify-content: center;
+  }
+  .ai-tools-pricing-page .ai-tools-count-label,
+  .ai-tools-alternatives-page .ai-tools-count-label { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-tools-pricing-page .ai-tools-price-card,
+  .ai-tools-alternatives-page .ai-tools-alternative-card { transition: none; }
+}

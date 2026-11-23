@@ -31,7 +31,7 @@ function formatReviewDate(date: string): string {
 
 export default function AiToolsPricingPage() {
   return (
-    <main id="main-content" className="ai-tools-page">
+    <main id="main-content" className="ai-tools-page ai-tools-pricing-page">
       <section className="ai-tools-feature-hero wrap">
         <Link className="ai-tools-back" href="/ai-tools"><ArrowLeft size={17} aria-hidden="true" /> Back to AI Tools</Link>
         <span className="ai-tools-eyebrow">Pricing desk / Source-led research</span>
