@@ -640,3 +640,26 @@
 .ai-tools-alternative-evidence a:hover { text-decoration:underline; }
 .ai-tools-alternative-secondary-card { background:var(--edition-panel); }
 .ai-tools-alternative-secondary-card .ai-tools-alternative-evidence { border-color:var(--line); }
+
+
+/* Twelve-source provider-plan directory: compact links and dated evidence. */
+.ai-tools-price-reviewed { margin:.9rem 0 -.65rem; color:var(--muted); font-size:.75rem; line-height:1.5; }
+.ai-tools-price-reviewed time { font-weight:800; color:var(--ink); }
+.ai-tools-price-card { scroll-margin-top:calc(var(--sticky-nav-height, 76px) + 1rem); }
+.ai-tools-price-capabilities { padding:.95rem 0 .85rem; margin:.7rem 0 0; border-top:1px solid var(--line); }
+.ai-tools-price-capabilities strong { font-size:.79rem; }
+.ai-tools-price-capabilities ul { padding-left:1.15rem; margin:.55rem 0 .65rem; display:grid; gap:.35rem; }
+.ai-tools-price-capabilities li { font-size:.79rem; color:var(--muted); line-height:1.6; overflow-wrap:anywhere; }
+.ai-tools-price-capabilities a { display:inline-flex; align-items:center; gap:.3rem; color:var(--signal); font-size:.76rem; font-weight:800; }
+.ai-tools-price-capabilities a:hover { text-decoration:underline; }
+.ai-tools-card-plans { display:flex; align-items:center; justify-content:space-between; gap:.35rem .65rem; flex-wrap:wrap; font-size:.7rem; line-height:1.55; color:var(--muted); }
+.ai-tools-card-plans > span { min-width:0; overflow-wrap:anywhere; }
+.ai-tools-card-plans a { display:inline-flex; flex:none; align-items:center; gap:.2rem; font-weight:800; color:var(--signal); }
+.ai-tools-card-plans a:hover { text-decoration:underline; }
+.ai-tools-profile-summary dd { overflow-wrap:anywhere; }
+.ai-tools-profile-summary dd a { color:var(--signal); font-weight:800; }
+.ai-tools-profile-summary dd a:hover { text-decoration:underline; }
+@media (max-width: 480px) {
+  .ai-tools-price-card { padding:1rem; }
+  .ai-tools-price-capabilities ul { padding-left:1rem; }
+}
