@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "@/components/app-link";
-import { ArrowRight, BookOpen, GitCompareArrows } from "lucide-react";
+import { ArrowRight, BookOpen, GitCompareArrows, Search, Sparkles } from "lucide-react";
 import { findAiTool } from "@/lib/ai-tools";
 import { trackAiToolsInteraction } from "@/lib/ai-tools-interactions";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
+import { matchSmartFinderTask, type SmartFinderResult } from "@/lib/ai-tools-smart-finder";
 
 type Task = {
   id: string;
@@ -105,20 +106,110 @@ const TASKS: readonly Task[] = [
   },
 ] as const;
 
+const SMART_FINDER_EXAMPLES = [
+  "Build a website without coding",
+  "Summarize research PDFs",
+  "Make presentation slides",
+  "Generate a voiceover",
+] as const;
+
 export function AiTaskFinder() {
   const [activeTask, setActiveTask] = useState(TASKS[0].id);
+  const [request, setRequest] = useState("");
+  const [finderResult, setFinderResult] = useState<SmartFinderResult | null>(null);
   const task = TASKS.find((item) => item.id === activeTask) ?? TASKS[0];
   const pair = task.options.length > 1
-    ? `/ai-tools/compare?first=${encodeURIComponent(task.options[0].slug)}&second=${encodeURIComponent(task.options[1].slug)}`
+    ? "/ai-tools/compare?first=" + encodeURIComponent(task.options[0].slug) + "&second=" + encodeURIComponent(task.options[1].slug)
     : null;
+
+  const chooseTask = (id: string) => {
+    if (id === activeTask) return;
+    setActiveTask(id);
+    trackAiToolsInteraction({ name: "ai_tools_task_select", task_id: id });
+  };
+
+  const interpret = (value: string) => {
+    const result = matchSmartFinderTask(value);
+    setRequest(value);
+    setFinderResult(result);
+    if (result.matchedTasks.length === 1) setActiveTask(result.matchedTasks[0]);
+    // Ambiguous or unrecognized text never silently selects an intent.
+  };
+
+  const onFind = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    interpret(request);
+  };
 
   return (
     <section className="ai-task-finder wrap" aria-labelledby="ai-task-finder-heading" id="ai-task-finder">
       <div className="ai-task-finder-heading">
-        <span className="ai-tools-eyebrow">Start with your job</span>
+        <span className="ai-tools-eyebrow">Smart Finder 2.0 / Start with your job</span>
         <h2 id="ai-task-finder-heading">What do you want AI to help you do?</h2>
-        <p>Choose a task to see a small, source-linked shortlist. No sign-up, paid placement or untested winners.</p>
+        <p>Describe your goal or choose a task. We map it to documented uses among 16 tools—without sending your words to an AI service.</p>
       </div>
+
+      <div className="ai-task-smart" aria-label="Describe what you need">
+        <form className="ai-task-smart-form" onSubmit={onFind}>
+          <label htmlFor="ai-smart-finder-input">Describe what you want to accomplish</label>
+          <div className="ai-task-smart-input-row">
+            <input id="ai-smart-finder-input" type="search" maxLength={220}
+              placeholder="e.g. Build a website without coding"
+              value={request}
+              onChange={(event) => {
+                setRequest(event.target.value);
+                setFinderResult(null);
+              }}
+              autoComplete="off"
+            />
+            <button type="submit" disabled={!request.trim()}>
+              <Search size={17} aria-hidden="true" /> Find tools
+            </button>
+          </div>
+        </form>
+        <div className="ai-task-smart-examples" aria-label="Example requests">
+          <span>Try an example</span>
+          {SMART_FINDER_EXAMPLES.map((example) => (
+            <button type="button" key={example} onClick={() => interpret(example)}>{example}</button>
+          ))}
+        </div>
+        <p className="ai-task-smart-privacy">
+          <Sparkles size={15} aria-hidden="true" /> On-device keyword matching. Your request stays in this tab—no API call, account, stored prompt or text sent to analytics.
+        </p>
+      </div>
+
+      {finderResult && (
+        <div className="ai-task-smart-result" role="status" aria-live="polite" aria-atomic="true">
+          {finderResult.matchedTasks.length === 0 ? (
+            <>
+              <strong>No confident task match yet.</strong>
+              <p>Try describing the output you need (app, slides, image, research, code, video, voice or writing), or choose a task below. We won't invent a recommendation.</p>
+            </>
+          ) : finderResult.ambiguous ? (
+            <>
+              <strong>More than one type of work could fit.</strong>
+              <p>Select the closest task below. These are possible interpretations, not tool rankings.</p>
+              <div className="ai-task-smart-choices">
+                {finderResult.matchedTasks.map((id) => (
+                  <button key={id} type="button" onClick={() => {
+                    setActiveTask(id);
+                    setFinderResult({ matchedTasks: [id], ambiguous: false });
+                    trackAiToolsInteraction({ name: "ai_tools_task_select", task_id: id });
+                  }}>
+                    {TASKS.find((item) => item.id === id)?.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <strong>Possible task: {TASKS.find((item) => item.id === finderResult.matchedTasks[0])?.label}</strong>
+              <p>Start with the source-linked options below. This is keyword-based task matching—not a test, quality score, cheapest-price verdict or guaranteed feature match.</p>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="ai-task-options" role="group" aria-label="Choose an AI task">
         {TASKS.map((item) => (
           <button
@@ -128,8 +219,8 @@ export function AiTaskFinder() {
             aria-pressed={item.id === activeTask}
             onClick={() => {
               if (item.id === activeTask) return;
-              setActiveTask(item.id);
-              trackAiToolsInteraction({ name: "ai_tools_task_select", task_id: item.id });
+              setFinderResult(null);
+              chooseTask(item.id);
             }}
           >
             {item.label}
@@ -147,10 +238,10 @@ export function AiTaskFinder() {
             const evidence = getAiToolEvidence(option.slug);
             return (
               <article key={option.slug} className="ai-task-match">
-                <h4><Link href={`/ai-tools/${tool.slug}`}>{tool.name}</Link></h4>
+                <h4><Link href={"/ai-tools/" + tool.slug}>{tool.name}</Link></h4>
                 <p>{option.purpose}</p>
-                <small><BookOpen size={14} aria-hidden="true" /> {evidence ? `Official docs checked ${evidence.checkedOn}` : "Documentation review pending"}</small>
-                <Link href={`/ai-tools/${tool.slug}`} className="ai-task-match-link">
+                <small><BookOpen size={14} aria-hidden="true" /> {evidence ? "Official docs checked " + evidence.checkedOn : "Documentation review pending"}</small>
+                <Link href={"/ai-tools/" + tool.slug} className="ai-task-match-link">
                   Explore profile <ArrowRight size={15} aria-hidden="true" />
                 </Link>
               </article>
