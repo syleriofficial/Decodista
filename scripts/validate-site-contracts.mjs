@@ -146,6 +146,7 @@ const aiToolsAlternatives = read("app/ai-tools/alternatives/page.tsx");
 const aiToolsAlternativeJobs = read("lib/ai-tools-alternatives.ts");
 const aiToolsExplorer = read("components/ai-tools-explorer.tsx");
 const aiToolsTaskFinder = read("components/ai-task-finder.tsx");
+const aiToolsSmartFinder = read("lib/ai-tools-smart-finder.ts");
 const aiToolsInteractions = read("lib/ai-tools-interactions.ts");
 const aiToolsMeasurementPlaybook = read("docs/ai-tools-measurement-playbook.md");
 const aiToolsData = read("lib/ai-tools.ts");
