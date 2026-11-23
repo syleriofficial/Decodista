@@ -1,5 +1,5 @@
 /**
- * Smart Finder 2.3: transparent, on-device task-intent matching.
+ * Smart Finder 2.4: transparent, on-device task-intent matching.
  * This only classifies tasks, NEVER ranks the underlying AI products.
  * Input is not transmitted, stored, logged or included in a URL.
  */
@@ -26,16 +26,22 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "research",
     strong: [
+      /\b(?:investigate|examine|explore) (?:\w+ ){0,5}(?:causes?|findings?|evidence|sources?|issues?|crises?|topics?)\b/,
+      /\b(?:compare findings|what evidence supports|evaluate (?:the )?evidence|find trustworthy sources|find credible sources|verify (?:a |the )?claim)\b/,
+      /\b(?:summari[sz]e|compare|analy[sz]e|interpret) (?:\w+ ){0,5}(?:journal articles?|academic (?:studies|papers)|research (?:documents?|reports?|papers?|studies)|studies)\b/,
       /\b(?:research(?:ing)? (?:a |the |my )?topic|web research|fact check|verify (?:claims|facts|sources)|find (?:credible )?sources|check citations)\b/,
       /\b(?:summari[sz]e|analy[sz]e|study|review) (?:my |some |the |a )?(?:pdfs?|research papers?|documents?|sources?|studies|articles?)\b/,
       /\bresearch and (?:write|draft|prepare|create)\b/,
     ],
-    medium: [/\b(?:research|pdfs?|documents?|citations?|sources?|academic papers?|scientific papers?|find information about|look up facts about)\b/],
+    medium: [/\b(?:research|pdfs?|documents?|citations?|sources?|academic papers?|scientific papers?|find information about|look up facts about|evidence|journal articles?|research publications?)\b/],
     weak: [/\b(?:find information|look up facts)\b/],
   },
   {
     id: "writing",
     strong: [
+      /\b(?:polish|rewrite|improve|draft|prepare|write|edit|proofread|correct|generate|create) (?:\w+ ){0,4}(?:cover letters?|newsletters?|press statements?|press releases?|biographies?|bios?|bedtime stories?|emails?|blog articles?|blog posts?|marketing copy|captions?|speeches?|articles?|paragraphs?|stories|essays?)\b/,
+      /\b(?:wording|phrasing|tone|grammar) (?:\w+ ){0,5}(?:bios?|text|letters?|emails?|articles?|copy)\b/,
+      /\b(?:write|draft|create) (?:\w+ ){0,3}(?:script|captions?) and (?:\w+ ){0,2}(?:videos?|animations?)\b/,
       /\bwrite and (?:produce|create|make) (?:a |the )?video\b/,
       /\b(?:write|draft|rewrite|proofread|edit|create|generate) (?:an? |my |some |the )?(?:emails?|articles?|blogs?|essays?|stories|story|copy|letters?|reports?|text|scripts?|resumes?|cvs?|posts?|captions?|linkedin posts?|social media (?:posts?|captions?)|product descriptions?|press releases?|marketing copy|speech(?:es)?)\b/,
     ],
@@ -46,6 +52,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "coding",
     strong: [
+      /\b(?:unit tests?|failing tests?|tracebacks?|stack traces?|api bugs?|pair programm?(?:ing)?|review code|code review|javascript crashes?|python exceptions?)\b/,
+      /\b(?:fix|debug|troubleshoot|investigate|suggest a fix for|explain|review|refactor) (?:\w+ ){0,5}(?:tests?|bugs?|api bugs?|code|errors?|exceptions?|tracebacks?|modules?|repositories?)\b/,
       /\b(?:write|generate|create) (?:some |the |my )?(?:code|(?:python|javascript|typescript) code)\b/,
       /\b(?:debug(?:ging)?|fix (?:the |my )?(?:bugs?|errors?|code)|refactor(?:ing)?|code review|pull requests?|review source code)\b/,
     ],
@@ -55,6 +63,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "app-building",
     strong: [
+      /\b(?:launch|build|develop|create|ship|prototype|make|turn (?:this )?idea into) (?:\w+ ){0,5}(?:booking platforms?|portfolios? sites?|websites?|web apps?|mobile apps?|applications?|landing pages?|online stores?|dashboards?|saas products?|ordering apps?|platforms?)\b/,
+      /\b(?:no code|nocode|no coding) (?:\w+ ){0,4}(?:portfolio|websites?|web ?sites?|apps?|landing pages?|stores?)\b/,
       /\band (?:a |an |the )?(?:websites?|web apps?|apps?)\b(?! (?:logo|icon|banner|thumbnail))/,
       /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:full stack |mobile |web |saas |simple )?(?:apps?|applications?|websites?|web sites?|web apps?|landing pages?|online stores?)\b/,
     ],
@@ -64,9 +74,11 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "visuals",
     strong: [
+      /\b(?:retouch|illustrat(?:e|ed|ion)|remove (?:the |my )?background|(?:create|design|generate|make|produce) (?:\w+ ){0,5}(?:thumbnails?|splash screens?|diagrams?|mockups?|graphics?|illustrations?|banners?|maps?))\b/,
+      /\b(?:create|design|generate|make|produce) (?:\w+ ){0,5}(?:logos?|icons?|social graphics|brand assets?)\b/,
       /\b(?:generate|create|make|design|draw|edit) (?:an? |my |some |the )?(?:images?|pictures?|photos?|logos?|artwork|illustrations?|graphics?|posters?)\b/,
       /\b(?:image generation|photo editing|image editing|concept art)\b/,
-      /\b(?:create|make|design|generate|draw|edit) (?:an? |my |some |the )?(?:(?:app|website|brand|company|product) )?(?:logos?|icons?|banners?|thumbnails?)\b/,
+      /\b(?:create|make|design|generate|draw|edit) (?:an? |my |some |the |its )?(?:(?:app|website|brand|company|product) )?(?:logos?|icons?|banners?|thumbnails?|splash screens?)\b/,
     ],
     medium: [/\b(?:images?|pictures?|photos?|logos?|artwork|illustrations?|graphics?|posters?|icons?|banners?|thumbnails?)\b/],
     weak: [/\b(?:visual design|design assets)\b/],
@@ -74,6 +86,10 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "video",
     strong: [
+      /\b(?:animate|turn|convert|transform) (?:\w+ ){0,9}(?:photos?|images?|drawings?|storyboards?|illustrations?) (?:\w+ ){0,9}(?:videos?|clips?|reels?|animations?)\b/,
+      /\b(?:animate|turn|convert|transform) (?:\w+ ){0,6}(?:photos?|images?|drawings?|illustrations?|storyboards?)\b/,
+      /\b(?:animate|turn|convert|transform) (?:\w+ ){0,6}(?:videos?|clips?|reels?|trailers?|animations?)\b/,
+      /\b(?:cinematic trailers?|video trailers?|promo clips?|product demo videos?|ad videos?)\b/,
       /\b(?:turn|convert|transform) (?:my |some |the )?(?:images?|photos?|text) (?:in)?to (?:a )?videos?\b/,
       /\b(?:generate|create|make|edit|produce) (?:a |some |my |the )?(?:posters?|images?|photos?|graphics?|logos?) and (?:a |some )?(?:videos?|clips?)\b/,
       /\b(?:generate|create|make|edit|animate|produce) (?:an? |my |some |the |short |youtube )?(?:videos?|clips?|animations?|reels?|short films?)\b/,
@@ -94,6 +110,7 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "presentations",
     strong: [
+      /\b(?:visuals|slides?) for (?:my |the )?(?:ted talks?|keynotes?|talks?|lectures?)\b/,
       /\b(?:slide decks?|pitch decks?|powerpoint|pptx?|presentations?|slideshows?)\b/,
       /\b(?:make|create|generate|design) (?:an? |my |some |the )?(?:slides?|decks?)\b/,
     ],
@@ -107,6 +124,9 @@ const SIGNALS: readonly TaskSignals[] = [
 const UNSUPPORTED_REQUESTS: readonly RegExp[] = [
   /\b(?:convert|compress|merge|split|rotate|unlock|encrypt) (?:an? |the |my |some )?(?:pdfs?|files?)\b/,
   /\b(?:reset|recover|retrieve) (?:an? |my |the )?(?:email|accounts?|passwords?)\b/,
+  /\b(?:join|combine|merge|split|rotate|compress|convert|unlock|encrypt|decrypt|remove (?:a |my |the )?(?:pdf )?password) (?:\w+ ){0,7}(?:pdfs?|docx|word files?|files?|passwords?)\b/,
+  /\b(?:remove|reset|crack) (?:\w+ ){0,6}(?:pdf )?password\b/,
+  /\b(?:turn|convert|export) (?:\w+ ){0,7}(?:docx|word document) (?:\w+ ){0,5}(?:pdfs?)\b/,
 ];
 
 function normalized(text: string): string {
@@ -122,10 +142,10 @@ export function matchSmartFinderTask(input: string): SmartFinderResult {
   // "Without coding" must not be a request for a coding IDE.
   const codingText = text.replace(/\b(?:no|without) (?:any )?(?:coding|code|programming)\b/g, " ");
   // "Review source code" must not be classified as document/source research.
-  const researchText = text.replace(/\b(?:review|check|inspect) source code\b/g, " ");
+  const researchText = text.replace(/\b(?:review|check|inspect) (?:source )?code\b/g, " ");
   // Requests to design an app's logo or icon do not mean building the app itself.
   const appBuildingText = text.replace(
-    /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:mobile |web )?(?:apps?|websites?) (?:logos?|icons?|banners?|thumbnails?)\b/g,
+    /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:mobile |web )?(?:apps?|websites?) (?:logos?|icons?|banners?|thumbnails?|splash screens?)\b/g,
     " ",
   );
   const matches = SIGNALS.map((task) => {
