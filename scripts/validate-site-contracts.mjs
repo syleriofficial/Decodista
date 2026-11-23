@@ -193,6 +193,8 @@ assert(
   aiToolsSmartFinder.includes("researchText") &&
   aiToolsSmartFinder.includes("visualText") &&
   packageScripts["ai:finder:challenge40"] === "node --test scripts/test-ai-tools-finder-challenge-40.mjs" &&
+  packageScripts["ai:finder:challenge40v2"] === "node --test scripts/test-ai-tools-finder-challenge-40-v2.mjs" &&
+  packageScripts["release:check"].includes("npm run ai:finder:challenge40v2") &&
   packageScripts["release:check"].includes("npm run ai:finder:challenge40") &&
   packageScripts["ai:finder:challenge"] === "node --test scripts/test-ai-tools-finder-challenge.mjs" &&
   packageScripts["release:check"].includes("npm run ai:finder:challenge") &&
@@ -206,7 +208,7 @@ assert(
   !aiToolsTaskFinder.includes("window.gtag") &&
   aiToolsCss.includes(".ai-task-smart-input-row") &&
   aiToolsPage.includes('href="#ai-task-finder"'),
-  "Smart Finder 2.5 must improve English task paraphrases and reject unsupported document operations while remaining browser-local");
+  "Smart Finder 2.6 must improve English task paraphrases and reject unsupported document operations while remaining browser-local");
 
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&

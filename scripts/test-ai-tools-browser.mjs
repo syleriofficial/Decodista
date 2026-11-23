@@ -187,6 +187,32 @@ try {
       assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"),
         "Mixed writing and narration should ask the user to choose");
 
+      // Smart Finder 2.6: clear natural phrasings must work without a server request.
+      for (const [query, expectedTask] of [
+        ["Locate reputable studies comparing renewable energy storage", "Research a topic"],
+        ["Help phrase a thank-you note to my landlord", "Write and edit"],
+        ["Inspect a SQL query for performance problems", "Build software"],
+        ["Create a client booking portal with no code", "Build an app"],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + expectedTask),
+          "Finder 2.6 must recognize a distinct clear task: " + query);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
+      }
+      for (const [query, labels] of [
+        ["Generate a podcast intro voice and cut together a video teaser", ["Narration and dubbing", "Generate video"]],
+        ["Debug my web app code and write release notes", ["Build software", "Write and edit"]],
+        ["Summarize a medical PDF and narrate the summary", ["Research a topic", "Narration and dubbing"]],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"),
+          "Mixed output must ask for explicit user choice: " + query);
+        assert.deepEqual((await smartFinder.locator(".ai-task-smart-choices button").allInnerTexts()).sort(), labels.sort());
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0);
+      }
+
       await smartInput.fill("Draft a LinkedIn post");
       await smartFinder.getByRole("button", { name: "Find tools" }).click();
       assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Write and edit"),
