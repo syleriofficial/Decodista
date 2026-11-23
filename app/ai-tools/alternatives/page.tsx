@@ -74,7 +74,7 @@ export default async function AlternativesPage({ searchParams }: { searchParams:
   const categoryLabel = getCategoryLabel(selected.category);
 
   return (
-    <main id="main-content" className="ai-tools-page">
+    <main id="main-content" className="ai-tools-page ai-tools-alternatives-page">
       <section className="ai-tools-feature-hero wrap">
         <Link className="ai-tools-back" href="/ai-tools"><ArrowLeft size={17} aria-hidden="true" /> Back to AI Tools</Link>
         <span className="ai-tools-eyebrow">Explore a common job first</span>
