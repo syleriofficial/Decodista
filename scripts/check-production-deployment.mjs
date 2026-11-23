@@ -122,8 +122,8 @@ for (const path of ["/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-
 }
 
 const smartFinderHtml = snapshots["/ai-tools"]?.body ?? "";
-check("Smart Finder 2.1 source-linked, private task input is deployed",
-  smartFinderHtml.includes("Smart Finder 2.1") &&
+check("Smart Finder 2.2 source-linked, private task input is deployed",
+  smartFinderHtml.includes("Smart Finder 2.2") &&
   smartFinderHtml.includes('id="ai-smart-finder-input"') &&
   smartFinderHtml.includes("Build a website without coding") &&
   smartFinderHtml.includes("no API call") &&
