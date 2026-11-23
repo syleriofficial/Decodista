@@ -55,10 +55,10 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "app-building",
     strong: [
-      /\b(?:logos?|icons?|banners?|thumbnails?) and (?:a |an |the )?(?:websites?|web apps?|apps?)\b(?! (?:logo|icon|banner|thumbnail))/,
+      /\band (?:a |an |the )?(?:websites?|web apps?|apps?)\b(?! (?:logo|icon|banner|thumbnail))/,
       /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:full stack |mobile |web |saas |simple )?(?:apps?|applications?|websites?|web sites?|web apps?|landing pages?|online stores?)\b/,
     ],
-    medium: [/\b(?:websites?|web apps?|mobile apps?|full stack|saas|webpages?|landing pages?|app builders?|deploy an app|publish an app|create a backend)\b/],
+    medium: [/\b(?:websites?|web apps?|mobile apps?|full stack|saas|webpages?|landing pages?|app builders?|deploy an app|publish an app|create a backend|(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?apps?)\b/],
     weak: [/\b(?:hosting|app deployment)\b/],
   },
   {
