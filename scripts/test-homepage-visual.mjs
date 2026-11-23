@@ -236,6 +236,27 @@ for (const sample of [
     assert(measures.searchBounds.height >= 44, "Guide search CTA should meet comfortable touch-target height");
     await search.focus();
     assert(await search.evaluate(el => document.activeElement === el), "Search CTA must accept keyboard focus");
+    // A full-page screenshot does not automatically trigger native lazy-loading.
+    // Scroll each editorial image into view and require a decoded, nonempty
+    // bitmap before capturing the reference screenshots. This detects broken
+    // images and prevents false visual reports with blank thumbnail frames.
+    if (sample.name === "desktop-light" || sample.name === "mobile-light") {
+      const editorialImages = page.locator(
+        "main .lead-image img, main .latest-feed .card-image img, main .home-topic .card-image img"
+      );
+      const totalImages = await editorialImages.count();
+      assert(totalImages >= 4, "Homepage image audit requires a real cover and story thumbnails");
+      for (let index = 0; index < totalImages; index++) {
+        const image = editorialImages.nth(index);
+        await image.scrollIntoViewIfNeeded();
+        const loaded = await image.evaluate(async (element) => {
+          try { await element.decode(); } catch { /* Assert a failed decode below. */ }
+          return { complete: element.complete, width: element.naturalWidth, url: element.currentSrc || element.src };
+        });
+        assert(loaded.complete && loaded.width > 0,
+          `Homepage editorial image ${index + 1}/${totalImages} did not load: ${loaded.url}`);
+      }
+    }
     await page.locator("section.reader-paths").screenshot({ path: out + "/" + sample.name + "-discovery.png" });
     // Keep a first-screen screenshot for human design review; do not rely on a
     // Lighthouse score alone to judge editorial layout.
