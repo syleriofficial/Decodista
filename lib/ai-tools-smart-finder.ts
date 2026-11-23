@@ -39,7 +39,7 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "writing",
     strong: [
-      /\b(?:polish|rewrite|improve|draft|prepare|write|edit|proofread|correct|generate|create) (?:\w+ ){0,4}(?:cover letters?|newsletters?|press statements?|press releases?|biographies?|bios?|bedtime stories?|emails?|blog articles?|blog posts?|marketing copy|captions?|speeches?|articles?|paragraphs?|stories|essays?)\b/,
+      /\b(?:polish|rewrite|improve|draft|prepare|write|edit|proofread|correct|generate|create) (?:\w+ ){0,4}(?:cover letters?|newsletters?|press statements?|press releases?|biographies?|bios?|bedtime (?:stories?|story)|emails?|blog articles?|blog posts?|marketing copy|captions?|speeches?|articles?|paragraphs?|stories|essays?)\b/,
       /\b(?:wording|phrasing|tone|grammar) (?:\w+ ){0,5}(?:bios?|text|letters?|emails?|articles?|copy)\b/,
       /\b(?:write|draft|create) (?:\w+ ){0,3}(?:script|captions?) and (?:\w+ ){0,2}(?:videos?|animations?)\b/,
       /\bwrite and (?:produce|create|make) (?:a |the )?video\b/,
@@ -144,12 +144,14 @@ export function matchSmartFinderTask(input: string): SmartFinderResult {
   // "Review source code" must not be classified as document/source research.
   const researchText = text.replace(/\b(?:review|check|inspect) (?:source )?code\b/g, " ");
   // Requests to design an app's logo or icon do not mean building the app itself.
-  const appBuildingText = text.replace(
-    /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:mobile |web )?(?:apps?|websites?) (?:logos?|icons?|banners?|thumbnails?|splash screens?)\b/g,
-    " ",
-  );
+  const appBuildingText = text
+    .replace(/\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:mobile |web )?(?:apps?|websites?) (?:logos?|icons?|banners?|thumbnails?|splash screens?)\b/g, " ")
+    // Making an asset *for* an app is not the same as making the app.
+    .replace(/\b(?:make|create|design|generate|draw|edit|produce) (?:\w+ ){0,5}(?:logos?|banners?|icons?|thumbnails?|splash screens?) (?:for|of) (?:\w+ ){0,4}(?:apps?|websites?)\b/g, " ");
+  // Converting an existing photo into a clip asks for video, not image generation.
+  const visualText = text.replace(/\b(?:turn|convert|transform) (?:\w+ ){0,7}(?:photos?|images?) (?:\w+ ){0,7}(?:clips?|videos?|reels?)\b/g, " ");
   const matches = SIGNALS.map((task) => {
-    const content = task.id === "coding" ? codingText : task.id === "app-building" ? appBuildingText : task.id === "research" ? researchText : text;
+    const content = task.id === "coding" ? codingText : task.id === "app-building" ? appBuildingText : task.id === "research" ? researchText : task.id === "visuals" ? visualText : text;
     const strong = task.strong.some((signal) => signal.test(content)) ? 4 : 0;
     const medium = task.medium.some((signal) => signal.test(content)) ? 2 : 0;
     const weak = task.weak?.some((signal) => signal.test(content)) ? 1 : 0;
