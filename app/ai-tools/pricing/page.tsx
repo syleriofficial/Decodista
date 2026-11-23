@@ -93,6 +93,12 @@ export default function AiToolsPricingPage() {
           })}
         </div>
       </section>
+      <section className="ai-tools-app-cost-link wrap" aria-labelledby="ai-tools-app-cost-link-title">
+        <div><span className="ai-tools-eyebrow">Building an app?</span>
+        <h2 id="ai-tools-app-cost-link-title">Check credits, tokens and hosting—not just a plan price.</h2>
+        <p>Lovable, Bolt and Replit meter usage differently. Compare official billing mechanics before paying.</p></div>
+        <Link href="/ai-tools/compare?first=lovable&second=bolt">Compare app-builder costs <ArrowRight size={17} aria-hidden="true" /></Link>
+      </section>
       <section className="ai-tools-pricing-checklist wrap" aria-labelledby="ai-tools-pricing-checklist-title">
         <div>
           <span className="ai-tools-eyebrow">Before you subscribe</span>

@@ -691,3 +691,32 @@
   .ai-tools-workflow-summary > div { align-items:center; padding:.75rem 1rem; }
   .ai-tools-workflow-summary dd { font-size:1.25rem; }
 }
+
+/* AI Tools product: source-reviewed app-builder billing decisions, not rankings. */
+.ai-tools-app-cost { margin:1.7rem 0 2rem; border-top:1px solid var(--line); padding-top:1.6rem; }
+.ai-tools-app-cost-intro h2 { font-size:clamp(1.5rem,2.6vw,2.1rem); line-height:1.15; margin:.4rem 0 .6rem; }
+.ai-tools-app-cost-intro > p { color:var(--muted); max-width:790px; font-size:.86rem; line-height:1.65; }
+.ai-tools-app-cost-date { font-size:.74rem !important; }
+.ai-tools-app-cost-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin-top:1.1rem; }
+.ai-tools-app-cost-card { min-width:0; border:1px solid var(--line); border-radius:var(--tools-radius); padding:1.2rem; background:var(--surface); }
+.ai-tools-app-cost-card h3 { font-size:1.25rem; margin:0 0 .6rem; }
+.ai-tools-app-cost-card dl { margin:0; }
+.ai-tools-app-cost-card dl > div { padding:.72rem 0; border-bottom:1px solid var(--line); }
+.ai-tools-app-cost-card dt { font-weight:850; font-size:.77rem; color:var(--ink); margin-bottom:.28rem; }
+.ai-tools-app-cost-card dd { margin:0; font-size:.83rem; line-height:1.65; color:var(--muted); overflow-wrap:anywhere; }
+.ai-tools-app-cost-question { font-size:.82rem; line-height:1.6; background:var(--edition-panel); padding:.85rem; }
+.ai-tools-app-cost-question strong { display:block; color:var(--ink); }
+.ai-tools-app-cost-card > a { display:inline-flex; gap:.35rem; align-items:center; font-size:.8rem; font-weight:850; color:var(--signal); overflow-wrap:anywhere; }
+.ai-tools-app-cost-card > a:hover { text-decoration:underline; }
+.ai-tools-app-cost-limits { font-size:.78rem; line-height:1.65; color:var(--muted); margin:1rem 0 0; max-width:850px; }
+.ai-tools-app-cost-limits strong { color:var(--ink); }
+.ai-tools-app-cost-link { margin-top:1.3rem; padding-top:1.4rem; padding-bottom:1.4rem; display:flex; gap:1rem; align-items:center; justify-content:space-between; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.ai-tools-app-cost-link h2 { margin:.4rem 0 .55rem; font-size:clamp(1.3rem,2vw,1.7rem); }
+.ai-tools-app-cost-link p { font-size:.83rem; line-height:1.6; color:var(--muted); margin:0; }
+.ai-tools-app-cost-link > a { display:inline-flex; align-items:center; gap:.4rem; flex:none; font-size:.83rem; font-weight:850; color:var(--signal); }
+.ai-tools-app-cost-link > a:hover { text-decoration:underline; }
+@media(max-width:650px) {
+  .ai-tools-app-cost-grid { grid-template-columns:1fr; }
+  .ai-tools-app-cost-card { padding:1rem; }
+  .ai-tools-app-cost-link { flex-direction:column; align-items:flex-start; }
+}

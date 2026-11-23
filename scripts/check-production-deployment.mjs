@@ -48,7 +48,7 @@ const removedEditorialRoutes = [
   "/ai-tools/samples/library-hours-notice-v2.txt",
 ];
 const weeklyIssuePath = "/weekly/2026-11-16";
-const requiredPaths = ["/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/lovable", "/ai-tools/bolt", "/ai-tools/replit", "/ai-tools/gamma", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
+const requiredPaths = ["/ai-tools/compare?first=lovable&second=bolt","/", ...currentSections, ...editorialSections, "/ai-tools", "/ai-tools/compare", "/ai-tools/chatgpt", "/ai-tools/lovable", "/ai-tools/bolt", "/ai-tools/replit", "/ai-tools/gamma", ...aiToolsDiscoveryRoutes, "/entertainment", "/latest", "/weekly", weeklyIssuePath, "/search", "/search?q=Google%20Photos&q=ignored", "/about", "/review-methodology", articlePath, chromeExperimentPath, icloudExperimentPath, "/robots.txt", "/sitemap.xml"];
 for (const path of requiredPaths) {
   try {
     const result = await inspect(path);
@@ -131,6 +131,16 @@ check("AI Tools comparison renders conservative task overlap",
   !comparisonHtml.includes("Overall winner"),
   "Task overlap must stay descriptive rather than ranking or claiming absent features");
 
+const appBuilderHtml = snapshots["/ai-tools/compare?first=lovable&second=bolt"]?.body ?? "";
+check("AI Tools app builder comparison shows source-led cost drivers",
+  appBuilderHtml.includes("Compare how you actually pay.") &&
+  appBuilderHtml.includes('data-cost-tool="lovable"') &&
+  appBuilderHtml.includes('data-cost-tool="bolt"') &&
+  appBuilderHtml.includes("https://lovable.dev/pricing") &&
+  appBuilderHtml.includes("https://bolt.new/pricing") &&
+  appBuilderHtml.includes("token is not equivalent to a credit") &&
+  !appBuilderHtml.includes("Overall winner"),
+  "Pair-specific cost comparison must be present and must not claim a winner");
 const pricingHtml = snapshots["/ai-tools/pricing"]?.body ?? "";
 const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?? "";
 check("AI Tools pricing includes sixteen dated provider sources",
