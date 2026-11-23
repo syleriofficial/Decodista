@@ -308,10 +308,11 @@ assert(aiToolsProfile.includes('getAiToolEvidence(tool.slug)') &&
   aiToolsCompare.includes('getAiToolEvidence(tool.slug)') &&
   aiToolsCompare.includes('ai-tools-compare-evidence'),
   "Profiles and comparisons must surface source trail where available");
-assert(aiToolsPricing.includes('<AiEvidenceStatus checkedOn={PRICING_CHECKED_ON} />') &&
+assert(aiToolsPricing.includes('<AiEvidenceStatus checkedOn={PRICING_LAST_EXPANDED_ON} />') &&
+  aiToolsPricing.includes('<AiEvidenceStatus checkedOn={record.checkedOn} />') &&
   aiToolsEvidenceClient.includes('is-stale') &&
   aiToolsEvidenceClient.includes('daysSinceEvidenceCheck'),
-  "Pricing and source pages must visibly warn readers about outdated snapshots");
+  "Every provider card must independently warn when its dated plan snapshot becomes stale");
 assert(aiToolsFreshnessAudit.includes('MAX_AGE_DAYS = 30') &&
   aiToolsFreshnessAudit.includes('PRICING_CHECKED_ON') &&
   aiToolsFreshnessAudit.includes('AI_EVIDENCE_CHECKED_ON'),
