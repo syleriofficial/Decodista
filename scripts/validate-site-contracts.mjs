@@ -129,6 +129,8 @@ assert.deepEqual(
 const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
 const aiToolsWorkflowCompare = read("lib/ai-tools-compare-workflows.ts");
+const aiToolsAppCostData = read("lib/ai-tools-app-builder-costs.ts");
+const aiToolsAppCostPanel = read("components/ai-app-builder-cost-comparison.tsx");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
 const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
@@ -209,6 +211,23 @@ assert(aiToolsCompare.includes('title: "Compare AI Tools"') && aiToolsCompare.in
   "AI tools comparison must be honest, functional and noindex until editorial review");
 assert(aiToolsCompare.includes('action="/ai-tools/compare"') && aiToolsCompare.includes('findAiTool('),
   "Comparisons must support shareable form-based tool selection");
+assert(
+  aiToolsCompare.includes('<AiAppBuilderCostComparison firstSlug={first.slug} secondSlug={second.slug} />') &&
+  aiToolsAppCostData.includes('APP_BUILDER_COSTS_REVIEWED_ON = "2026-11-23"') &&
+  ["lovable", "bolt", "replit"].every((slug) => aiToolsAppCostData.includes('slug: "' + slug + '"')) &&
+  aiToolsAppCostData.includes("https://lovable.dev/pricing") &&
+  aiToolsAppCostData.includes("https://bolt.new/pricing") &&
+  aiToolsAppCostData.includes("https://docs.replit.com/category/billing") &&
+  aiToolsAppCostData.includes("getAppBuilderCost(slug: string)") &&
+  aiToolsAppCostPanel.includes("if (!first || !second) return null") &&
+  aiToolsAppCostPanel.includes("token is not equivalent to a credit") &&
+  aiToolsAppCostPanel.includes('data-cost-tool={item.slug}') &&
+  aiToolsAppCostPanel.includes('href={item.sourceUrl}') &&
+  aiToolsAppCostPanel.includes("not tested cost estimates") &&
+  aiToolsCss.includes(".ai-tools-app-cost-grid") &&
+  aiToolsPricing.includes("Compare app-builder costs"),
+  "App builder billing comparison must be official-sourced, mobile-friendly and never imply comparable credit units"
+);
 assert(aiToolsCompare.includes("compareListedAiWorkflows(first.slug, second.slug)") &&
   aiToolsCompare.includes('className="ai-tools-workflow-comparison"') &&
   aiToolsCompare.includes('data-workflow={item.job}') &&

@@ -4,6 +4,7 @@ import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { getAiToolPricing } from "@/lib/ai-tools-pricing";
 import { compareListedAiWorkflows } from "@/lib/ai-tools-compare-workflows";
+import { AiAppBuilderCostComparison } from "@/components/ai-app-builder-cost-comparison";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME } from "@/lib/site";
@@ -88,6 +89,8 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
           <button type="submit">Compare <ArrowRight size={16} aria-hidden="true" /></button>
         </form>
         <p className="ai-tools-form-hint">Selecting the same tool twice will use a different second tool. This is a descriptive overview, not an evaluation of model quality.</p>
+
+        <AiAppBuilderCostComparison firstSlug={first.slug} secondSlug={second.slug} />
 
         <section className="ai-tools-workflow-comparison" aria-labelledby="ai-tools-workflow-heading">
           <div className="ai-tools-workflow-heading">

@@ -163,7 +163,30 @@ try {
         ["Listed use", "Listed use"],
         "Image generation should correctly appear as a common documented use");
       await noOverflow(page, "image workflow comparison", view.width);
+      await navigate(page, "/ai-tools/compare?first=lovable&second=bolt");
+      const appCost = page.locator(".ai-tools-app-cost");
+      assert.equal(await appCost.locator(".ai-tools-app-cost-card").count(), 2,
+        "App builder comparison must contain both official billing records");
+      assert.equal(await appCost.locator('[data-cost-tool="lovable"]').count(), 1);
+      assert.equal(await appCost.locator('[data-cost-tool="bolt"]').count(), 1);
+      assert((await appCost.innerText()).includes("token is not equivalent to a credit"),
+        "Different billing units must never be called interchangeable");
+      assert((await appCost.innerText()).includes("300,000 daily"),
+        "Bolt free token limits must be clear");
+      assert.equal(await appCost.locator('a[target="_blank"]').count(), 2,
+        "Each billing card needs a direct source");
+      await noOverflow(page, "app builder billing", view.width);
+      await page.screenshot({path: outputDir + "/" + view.label + "-app-builder-billing.png", fullPage: true});
+
+      await navigate(page, "/ai-tools/compare?first=lovable&second=replit");
+      assert.equal(await page.locator(".ai-tools-app-cost-card").count(), 2);
+      assert((await page.locator('[data-cost-tool="replit"]').innerText()).includes("usage beyond"),
+        "Replit metered usage caveat must be visible");
+      await noOverflow(page, "replit billing", view.width);
+
       await navigate(page, "/ai-tools/compare?first=chatgpt&second=claude");
+      assert.equal(await page.locator(".ai-tools-app-cost").count(), 0,
+        "App builder billing comparisons must not appear on unrelated tools");
       assert.equal(await page.locator(".ai-guide-context-banner").count(), 0,
         "Comparison must focus on structured product data, not removed guides");
       await noOverflow(page, "comparison", view.width);
@@ -208,6 +231,9 @@ try {
         assert.equal(await card.locator("a[target='_blank']").count(), 2,
           "New plan cards must link both pricing and product documentation");
       }
+      assert.equal(
+        await page.getByRole("link", {name:"Compare app-builder costs"}).count(), 1,
+        "Pricing page must link to practical app-builder cost comparison");
       await noOverflow(page, "pricing", view.width);
       await page.screenshot({ path: outputDir + "/" + view.label + "-pricing.png", fullPage: true });
 
