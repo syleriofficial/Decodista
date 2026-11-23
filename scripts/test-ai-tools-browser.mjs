@@ -55,7 +55,7 @@ try {
       assert.equal(await page.locator(".ai-tools-decision-link").count(), 2,
         "Keep only Pricing and Alternatives product navigation cards");
 
-      // Finder 2.1 must interpret intent locally without rankings, API calls or raw URL parameters.
+      // Finder 2.2 must interpret intent locally without rankings, API calls or raw URL parameters.
       const smartFinder = page.locator(".ai-task-finder");
       const smartInput = smartFinder.locator("#ai-smart-finder-input");
       assert.equal(await smartInput.getAttribute("maxLength"), "220");
@@ -69,6 +69,19 @@ try {
         "Private free-text requests must not be written into URL parameters");
       await noOverflow(page, "smart website intent", view.width);
 
+      for (const [request, expectedTask, expectedNames] of [
+        ["Create an app logo", "Create visuals", ["Adobe Firefly", "Canva", "Midjourney"]],
+        ["Generate an app icon", "Create visuals", ["Adobe Firefly", "Canva", "Midjourney"]],
+        ["Make a photo without coding", "Create visuals", ["Adobe Firefly", "Canva", "Midjourney"]],
+        ["Create a website without coding", "Build an app", ["Bolt", "Lovable", "Replit"]],
+      ]) {
+        await smartInput.fill(request);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + expectedTask),
+          "Task matcher must distinguish app assets, no-code design and app creation: " + request);
+        assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(), expectedNames);
+        assert(!page.url().includes(encodeURIComponent(request)), "Finder request text must stay off URL");
+      }
       await smartInput.fill("Summarize research PDFs");
       await smartInput.press("Enter");
       assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Research a topic"));
