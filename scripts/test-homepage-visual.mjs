@@ -86,6 +86,19 @@ for (const sample of [
     assert.equal(redesigned.heroDisplay, "grid", "Lead story must use the new magazine spread");
     assert.equal(redesigned.latestDisplay, "grid", "Latest Stories must use editorial grid tiles");
     assert(redesigned.footerBackground !== "rgba(0, 0, 0, 0)", "Footer must have its own editorial surface");
+
+    if (sample.width >= 1200) {
+      const density = await page.evaluate(() => ({
+        heroHeading: parseFloat(getComputedStyle(document.querySelector(".lead-copy h1")).fontSize),
+        sectionHeading: parseFloat(getComputedStyle(document.querySelector(".section-heading h2")).fontSize),
+        mastheadHeight: document.querySelector(".masthead").getBoundingClientRect().height,
+      }));
+      assert(density.heroHeading <= 50 && density.sectionHeading <= 46,
+        "Desktop editorial headings should not look artificially zoomed in");
+      assert(density.mastheadHeight <= 90,
+        "Desktop masthead should preserve reading space without hiding navigation");
+    }
+
     if (sample.width > 1000) {
       assert((await page.locator(".edition-line").isVisible()), "Desktop publication masthead must be visible");
       assert((await page.locator(".masthead .primary-nav").isVisible()), "Desktop second-tier navigation must be visible");
@@ -131,8 +144,10 @@ for (const sample of [
         "DECODISTA logo/tagline must remain above the nav while scrolling");
       assert(stickyHeader.searchBottom <= stickyHeader.navTop,
         "Search control must remain visible above the nav while scrolling");
-      assert(stickyHeader.navTop > 70 && stickyHeader.navBottom >= 112,
-        "Desktop full eight-link menu must remain below the compact masthead while scrolling");
+      assert(stickyHeader.navTop >= stickyHeader.editionBottom + 30 &&
+        stickyHeader.navBottom - stickyHeader.navTop >= 30 &&
+        stickyHeader.navBottom <= stickyHeader.bottom + 1,
+        "Desktop full eight-link menu must remain completely visible below the compact masthead");
     } else {
       assert(stickyHeader.bottom >= 60 && stickyHeader.brandTop >= 0,
         "Mobile compact header, logo, search and menu button must remain visible after scrolling");
