@@ -55,7 +55,7 @@ try {
       assert.equal(await page.locator(".ai-tools-decision-link").count(), 2,
         "Keep only Pricing and Alternatives product navigation cards");
 
-      // Finder 2.3 must interpret intent locally without rankings, API calls or raw URL parameters.
+      // Finder 2.4 must interpret intent locally without rankings, API calls or raw URL parameters.
       const smartFinder = page.locator(".ai-task-finder");
       const smartInput = smartFinder.locator("#ai-smart-finder-input");
       assert.equal(await smartInput.getAttribute("maxLength"), "220");
@@ -132,6 +132,28 @@ try {
         assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + taskName),
           "Single-output workflow must avoid irrelevant second category: " + query);
         assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
+      }
+
+      // Smart Finder 2.4: natural phrasings, multi-output requests and safe refusals.
+      for (const [query, expectedTask] of [
+        ["Polish my cover letter", "Write and edit"],
+        ["Investigate the causes of this financial crisis", "Research a topic"],
+        ["Pair program with me on a CLI app", "Build software"],
+        ["Turn a product photo into a promo clip", "Generate video"],
+        ["Make a banner for a mobile app", "Create visuals"],
+      ]) {
+        await smartInput.fill(query);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: " + expectedTask),
+          "Natural-language intent should not pick an unrelated category: " + query);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 1);
+      }
+      for (const utility of ["Join two PDF files into one", "Remove a PDF password", "Convert a DOCX into PDF"]) {
+        await smartInput.fill(utility);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("No confident task match yet."),
+          "PDF utility must not be invented as a research task: " + utility);
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0);
       }
 
       await smartInput.fill("Draft a LinkedIn post");
