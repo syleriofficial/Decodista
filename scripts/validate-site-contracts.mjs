@@ -245,8 +245,11 @@ assert(!sitemap.includes('AI_TOOLS.map(') && !sitemap.includes('route: "/ai-tool
 assert(aiToolsPricing.includes('title: "AI Tool Pricing & Plans"') &&
   aiToolsPricing.includes('index: false') &&
   aiToolsPricing.includes('record.pricingUrl') &&
-  aiToolsPricing.includes('PRICING_CHECKED_ON'),
-  "Pricing page must disclose official sources, checked date and noindex");
+  aiToolsPricing.includes('PRICING_LAST_EXPANDED_ON') &&
+  aiToolsPricing.includes('dateTime={record.checkedOn}') &&
+  aiToolsPricing.includes('source.findings.slice(0, 2)') &&
+  aiToolsPricing.includes('id={`plan-${record.slug}`}'),
+  "Pricing product must disclose all dated provider sources, capability evidence, and noindex");
 assert(aiToolsPricingData.includes('PRICING_CHECKED_ON = "2026-11-21"') &&
   aiToolsPricingData.includes('https://chatgpt.com/pricing/') &&
   aiToolsPricingData.includes('https://claude.com/pricing') &&
@@ -254,6 +257,22 @@ assert(aiToolsPricingData.includes('PRICING_CHECKED_ON = "2026-11-21"') &&
   aiToolsPricingData.includes('https://www.perplexity.ai/pro') &&
   aiToolsPricingData.includes('US$200/year'),
   "Dated pricing claims must point to official provider sources with billing context");
+assert(aiToolsPricingData.includes('PRICING_LAST_EXPANDED_ON = "2026-11-23"') &&
+  aiToolsPricingData.includes("checkedOn: PRICING_CHECKED_ON") &&
+  (aiToolsPricingData.match(/    slug: "/g) || []).length === 12 &&
+  (aiToolsPricingData.match(/checkedOn: PRICING_LAST_EXPANDED_ON/g) || []).length === 8 &&
+  aiToolsPricingData.includes('https://cursor.com/pricing') &&
+  aiToolsPricingData.includes('https://docs.github.com/en/copilot/get-started/plans') &&
+  aiToolsPricingData.includes('https://elevenlabs.io/pricing') &&
+  aiToolsPricingData.includes('https://support.google.com/gemininotebook/answer/16213268') &&
+  aiToolsPricingData.includes('https://www.canva.com/pricing/'),
+  "All 12 AI tools need dated official plan records, with separate dates for earlier reviews");
+assert(aiToolsExplorer.includes('href={`/ai-tools/pricing#plan-${tool.slug}`}') &&
+  aiToolsProfile.includes('href={`/ai-tools/pricing#plan-${tool.slug}`}') &&
+  aiToolsCompare.includes('firstPlans.planNames.join(" · ")') &&
+  aiToolsCompare.includes('secondPlans.planNames.join(" · ")') &&
+  aiToolsCss.includes(".ai-tools-card-plans") && aiToolsCss.includes(".ai-tools-price-capabilities"),
+  "Directory, tool profiles and comparison must use the same source-backed plan ledger");
 assert(aiToolsAlternatives.includes('title: "AI Tool Alternatives"') &&
   aiToolsAlternatives.includes('index: false') &&
   aiToolsAlternatives.includes('action="/ai-tools/alternatives"') &&
