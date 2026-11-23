@@ -1,5 +1,5 @@
 /**
- * Smart Finder 2.0: transparent, on-device task-intent matching.
+ * Smart Finder 2.1: transparent, on-device task-intent matching.
  * This only classifies tasks, NEVER ranks the underlying AI products.
  * Input is not transmitted, stored, logged or included in a URL.
  */
@@ -35,7 +35,7 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "writing",
     strong: [
-      /\b(?:write|draft|rewrite|proofread|edit) (?:an? |my |some |the )?(?:emails?|articles?|blogs?|essays?|stories|story|copy|letters?|reports?|text|scripts?|resumes?|cvs?|posts?|captions?)\b/,
+      /\b(?:write|draft|rewrite|proofread|edit|create|generate) (?:an? |my |some |the )?(?:emails?|articles?|blogs?|essays?|stories|story|copy|letters?|reports?|text|scripts?|resumes?|cvs?|posts?|captions?|linkedin posts?|social media (?:posts?|captions?)|product descriptions?)\b/,
     ],
     medium: [/\b(?:writing|rewriting|drafting|grammar|proofread(?:ing)?|emails?|blog posts?|copywriting|content writing)\b/],
     weak: [/\b(?:write|draft)\b/],
@@ -95,6 +95,13 @@ const SIGNALS: readonly TaskSignals[] = [
   },
 ];
 
+// These are utility/account workflows our curated tool directory does not verify.
+// A document noun alone must not turn a PDF converter into a research suggestion.
+const UNSUPPORTED_REQUESTS: readonly RegExp[] = [
+  /\b(?:convert|compress|merge|split|rotate|unlock|encrypt) (?:an? |the |my |some )?(?:pdfs?|files?)\b/,
+  /\b(?:reset|recover|retrieve) (?:an? |my |the )?(?:email|accounts?|passwords?)\b/,
+];
+
 function normalized(text: string): string {
   // Browser-local only; never logged, hashed or persisted.
   return text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().slice(0, 280);
@@ -102,7 +109,9 @@ function normalized(text: string): string {
 
 export function matchSmartFinderTask(input: string): SmartFinderResult {
   const text = normalized(input);
-  if (text.length < 3) return { matchedTasks: [], ambiguous: false };
+  if (text.length < 3 || UNSUPPORTED_REQUESTS.some((pattern) => pattern.test(text))) {
+    return { matchedTasks: [], ambiguous: false };
+  }
   // "Without coding" must not be a request for a coding IDE.
   const codingText = text.replace(/\b(?:no|without) (?:any )?(?:coding|code|programming)\b/g, " ");
   const matches = SIGNALS.map((task) => {
