@@ -44,6 +44,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: finder-synthetic-precision
-          path: artifacts/ai-tools-qa/finder-precision.json
+          path: |
+            artifacts/ai-tools-qa/finder-precision.json
+            artifacts/ai-tools-qa/finder-holdout.json
           if-no-files-found: ignore
           retention-days: 14
