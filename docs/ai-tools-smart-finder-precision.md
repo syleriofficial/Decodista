@@ -86,3 +86,23 @@ Finder 2.5 expands verb-and-output patterns to recognize citation verification, 
 The **48-case challenge has been used to design the 2.5 fixes** and is no longer an untouched holdout. The 40-case challenge was written and labeled before implementing the 2.5 matcher; it was first scored after code changes and intentionally **was not used for additional code tuning within this release**. Even 29/40 (72.5%) is only a result on 40 hand-written, non-representative English requests—not a percentage of real users served correctly.
 
 The 40-case score and each mismatch are recorded by `npm run ai:finder:challenge40` in `artifacts/ai-tools-qa/finder-challenge-40.json`. The test must remain reporting-only, not a release-quality pass threshold. Current known weaknesses include vague research tasks, writing paraphrases, software troubleshooting and combined user requests. Preserve frozen labels and report all failures. For future generalization estimates, commission a separately labeled consented real-world evaluation with proper privacy controls; never log raw Finder inputs into analytics by default.
+
+## Smart Finder 2.6 — research, coding, and mixed-intent wording
+
+The matcher now recognizes a broader set of **specific, browser-local English task verbs and outputs** without making up tool capabilities: finding academic sources, reviewing publications, phrasing notes, troubleshooting React/SQL, launching customer or booking portals, producing an animated explainer, and combining narration with video or release-note writing.
+
+### Synthetic evaluations (frozen labels; not field accuracy)
+
+| Test set | Smart Finder 2.5 | Candidate 2.6 |
+| --- | ---: | ---: |
+| Original 114 regression cases (reused) | 114/114 | 114/114 |
+| Original 100 diagnostics (reused) | 100/100 | 100/100 |
+| Prior 48 development cases (reused) | 48/48 | 48/48 |
+| Original 40-case challenge (now **reused to guide 2.6**) | 29/40 | 40/40 |
+| **Second 40-case challenge, authored before 2.6 changes** | 29/40 | 40/40 |
+
+The **first 40-case challenge was directly inspected to guide these matcher changes**; it is now development data. The *second* 40-case set was authored and labeled before candidate work and was tested afterward, without further adjustments from its results. Neither result is a scientifically representative user accuracy measure: both contain only hand-written English prompts, small task categories, and synthetic labels. No raw user Finder inputs are collected.
+
+Run `npm run ai:finder:challenge40v2`; the fixed second dataset is `scripts/fixtures/ai-tools-finder-challenge-40-v2.json`, and the non-gating output is `artifacts/ai-tools-qa/finder-challenge-40-v2.json`. CI success means measurement and software checks ran, **not** that real-user recognition is perfect. Keep all established and new datasets unchanged for future comparison.
+
+**Next validation need:** new truly unseen prompts, independently labeled and with consented real usage samples if permitted, plus checks for false positives and multi-intent outside the curated categories. Avoid score chasing by expanding regexes specifically for a known holdout set.
