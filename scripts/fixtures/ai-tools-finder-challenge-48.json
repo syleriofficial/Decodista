@@ -1,0 +1,383 @@
+{
+  "kind": "additional-synthetic-challenge",
+  "version": 1,
+  "description": "48 extra English prompts, labeled before the first candidate evaluation. Hand-authored by the developer, not representative traffic or independently labeled users. Keep this version fixed.",
+  "cases": [
+    {
+      "id": "research-01",
+      "group": "research",
+      "request": "Can AI gather reliable sources about battery recycling?",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-02",
+      "group": "research",
+      "request": "Check the references in my academic manuscript",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-03",
+      "group": "research",
+      "request": "Help me assess evidence for a public-health claim",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "research-04",
+      "group": "research",
+      "request": "Summarize the conclusions of a peer-reviewed paper",
+      "expected": [
+        "research"
+      ]
+    },
+    {
+      "id": "writing-01",
+      "group": "writing",
+      "request": "Make this customer complaint sound professional",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-02",
+      "group": "writing",
+      "request": "Prepare an apology letter for a client",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-03",
+      "group": "writing",
+      "request": "Write descriptions for my online shop",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "writing-04",
+      "group": "writing",
+      "request": "Turn rough meeting notes into a readable announcement",
+      "expected": [
+        "writing"
+      ]
+    },
+    {
+      "id": "coding-01",
+      "group": "coding",
+      "request": "Help diagnose an HTTP 500 in my Node server",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-02",
+      "group": "coding",
+      "request": "Can you refactor this TypeScript class?",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-03",
+      "group": "coding",
+      "request": "Suggest fixes for a failing Jest test",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "coding-04",
+      "group": "coding",
+      "request": "Check a pull request diff for bugs",
+      "expected": [
+        "coding"
+      ]
+    },
+    {
+      "id": "app-building-01",
+      "group": "app-building",
+      "request": "Build a simple membership portal for customers",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-02",
+      "group": "app-building",
+      "request": "Launch a mobile booking app",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-03",
+      "group": "app-building",
+      "request": "Create an e-commerce storefront",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "app-building-04",
+      "group": "app-building",
+      "request": "Make a no-code website for my portfolio",
+      "expected": [
+        "app-building"
+      ]
+    },
+    {
+      "id": "visuals-01",
+      "group": "visuals",
+      "request": "Remove a distracting object from a photo",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-02",
+      "group": "visuals",
+      "request": "Design an infographic for a lesson",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-03",
+      "group": "visuals",
+      "request": "Generate cover artwork for a podcast",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "visuals-04",
+      "group": "visuals",
+      "request": "Create a phone wallpaper design",
+      "expected": [
+        "visuals"
+      ]
+    },
+    {
+      "id": "video-01",
+      "group": "video",
+      "request": "Create a product walkthrough animation",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-02",
+      "group": "video",
+      "request": "Turn an illustration into moving footage",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-03",
+      "group": "video",
+      "request": "Edit a 30-second social clip",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "video-04",
+      "group": "video",
+      "request": "Generate a looping video background",
+      "expected": [
+        "video"
+      ]
+    },
+    {
+      "id": "voice-01",
+      "group": "voice",
+      "request": "Translate my voice track into German dubbing",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-02",
+      "group": "voice",
+      "request": "Narrate an audiobook chapter",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-03",
+      "group": "voice",
+      "request": "Make a realistic AI speech clip",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "voice-04",
+      "group": "voice",
+      "request": "Create audio narration for a training video",
+      "expected": [
+        "voice"
+      ]
+    },
+    {
+      "id": "presentations-01",
+      "group": "presentations",
+      "request": "Prepare a keynote speech slide deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-02",
+      "group": "presentations",
+      "request": "Generate an investor update slide deck",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-03",
+      "group": "presentations",
+      "request": "Design a conference presentation",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "presentations-04",
+      "group": "presentations",
+      "request": "Make a slide outline for next week",
+      "expected": [
+        "presentations"
+      ]
+    },
+    {
+      "id": "abstain-01",
+      "group": "abstain",
+      "request": "Combine three scans into one PDF",
+      "expected": []
+    },
+    {
+      "id": "abstain-02",
+      "group": "abstain",
+      "request": "Remove a signature from a document",
+      "expected": []
+    },
+    {
+      "id": "abstain-03",
+      "group": "abstain",
+      "request": "Translate English subtitles into Hindi",
+      "expected": []
+    },
+    {
+      "id": "abstain-04",
+      "group": "abstain",
+      "request": "Generate a barcode for inventory",
+      "expected": []
+    },
+    {
+      "id": "abstain-05",
+      "group": "abstain",
+      "request": "Edit an Excel formula",
+      "expected": []
+    },
+    {
+      "id": "abstain-06",
+      "group": "abstain",
+      "request": "Extract images from a PDF",
+      "expected": []
+    },
+    {
+      "id": "abstain-07",
+      "group": "abstain",
+      "request": "Reset my cloud account",
+      "expected": []
+    },
+    {
+      "id": "abstain-08",
+      "group": "abstain",
+      "request": "Rotate a scanned document",
+      "expected": []
+    },
+    {
+      "id": "mixed-01",
+      "group": "mixed",
+      "request": "Create a newsletter and matching social illustrations",
+      "expected": [
+        "writing",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-02",
+      "group": "mixed",
+      "request": "Build a landing page and generate a product photo",
+      "expected": [
+        "app-building",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-03",
+      "group": "mixed",
+      "request": "Debug a script and make a PowerPoint",
+      "expected": [
+        "coding",
+        "presentations"
+      ]
+    },
+    {
+      "id": "mixed-04",
+      "group": "mixed",
+      "request": "Summarize articles and design an infographic",
+      "expected": [
+        "research",
+        "visuals"
+      ]
+    },
+    {
+      "id": "mixed-05",
+      "group": "mixed",
+      "request": "Build a dashboard and generate a video tutorial",
+      "expected": [
+        "app-building",
+        "video"
+      ]
+    },
+    {
+      "id": "mixed-06",
+      "group": "mixed",
+      "request": "Write a blog post and narrate it",
+      "expected": [
+        "writing",
+        "voice"
+      ]
+    },
+    {
+      "id": "mixed-07",
+      "group": "mixed",
+      "request": "Create photos and a slideshow",
+      "expected": [
+        "visuals",
+        "presentations"
+      ]
+    },
+    {
+      "id": "mixed-08",
+      "group": "mixed",
+      "request": "Research battery technology and draft slides",
+      "expected": [
+        "research",
+        "presentations"
+      ]
+    }
+  ]
+}
