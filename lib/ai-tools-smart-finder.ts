@@ -1,5 +1,5 @@
 /**
- * Smart Finder 2.1: transparent, on-device task-intent matching.
+ * Smart Finder 2.2: transparent, on-device task-intent matching.
  * This only classifies tasks, NEVER ranks the underlying AI products.
  * Input is not transmitted, stored, logged or included in a URL.
  */
@@ -52,7 +52,6 @@ const SIGNALS: readonly TaskSignals[] = [
     id: "app-building",
     strong: [
       /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:full stack |mobile |web |saas |simple )?(?:apps?|applications?|websites?|web sites?|web apps?|landing pages?|online stores?)\b/,
-      /\b(?:no code|nocode|without (?:any )?coding|without (?:any )?code|no programming)\b/,
     ],
     medium: [/\b(?:websites?|web apps?|mobile apps?|full stack|saas|webpages?|landing pages?|app builders?|deploy an app|publish an app|create a backend)\b/],
     weak: [/\b(?:hosting|app deployment)\b/],
@@ -62,6 +61,7 @@ const SIGNALS: readonly TaskSignals[] = [
     strong: [
       /\b(?:generate|create|make|design|draw|edit) (?:an? |my |some |the )?(?:images?|pictures?|photos?|logos?|artwork|illustrations?|graphics?|posters?)\b/,
       /\b(?:image generation|photo editing|image editing|concept art)\b/,
+      /\b(?:create|make|design|generate|draw|edit) (?:an? |my |some |the )?(?:(?:app|website|brand|company|product) )?(?:logos?|icons?|banners?|thumbnails?)\b/,
     ],
     medium: [/\b(?:images?|pictures?|photos?|logos?|artwork|illustrations?|graphics?|posters?)\b/],
     weak: [/\b(?:visual design|design assets)\b/],
@@ -114,8 +114,13 @@ export function matchSmartFinderTask(input: string): SmartFinderResult {
   }
   // "Without coding" must not be a request for a coding IDE.
   const codingText = text.replace(/\b(?:no|without) (?:any )?(?:coding|code|programming)\b/g, " ");
+  // Requests to design an app's logo or icon do not mean building the app itself.
+  const appBuildingText = text.replace(
+    /\b(?:build|create|make|launch|develop|generate|prototype) (?:an? |my |our |a new |some )?(?:mobile |web )?(?:apps?|websites?) (?:logos?|icons?|banners?|thumbnails?)\b/g,
+    " ",
+  );
   const matches = SIGNALS.map((task) => {
-    const content = task.id === "coding" ? codingText : text;
+    const content = task.id === "coding" ? codingText : task.id === "app-building" ? appBuildingText : text;
     const strong = task.strong.some((signal) => signal.test(content)) ? 4 : 0;
     const medium = task.medium.some((signal) => signal.test(content)) ? 2 : 0;
     const weak = task.weak?.some((signal) => signal.test(content)) ? 1 : 0;
