@@ -555,13 +555,16 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .home-intro { padding-top: clamp(.7rem, 1.3vw, 1.15rem); }
   .hero { gap: clamp(1rem, 1.6vw, 1.45rem); padding-top: .5rem; padding-bottom: clamp(2.2rem, 3.2vw, 3.2rem); }
   .lead-story, .lead-story .lead-image { min-height: 365px; }
+  .lead-story { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
   .lead-story .lead-copy { padding: clamp(1.35rem, 2vw, 2.1rem); }
   .lead-copy .card-labels { margin-bottom: .7rem; }
   .lead-copy h1 { font-size: clamp(1.95rem, 2.65vw, 2.95rem); line-height: 1.11; }
   .lead-copy > p { margin-top: .65rem; font-size: .96rem; line-height: 1.55; }
   .lead-meta { margin-top: 1rem; }
-  .hero-rail article { padding-block: .8rem; }
-  .hero-rail h2 { font-size: clamp(1.07rem, 1.3vw, 1.3rem); }
+  .hero-rail { padding: .3rem .85rem; }
+  .hero-rail .rail-heading { padding: .55rem 0; }
+  .hero-rail article { padding-block: .6rem; }
+  .hero-rail h2 { margin: .25rem 0 .5rem; font-size: clamp(1.03rem, 1.2vw, 1.2rem); line-height: 1.18; }
 }
 
 @media (min-width: 601px) {
