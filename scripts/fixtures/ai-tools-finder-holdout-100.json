@@ -1,7 +1,7 @@
 {
   "kind": "unseen-hand-authored-synthetic-evaluation",
   "version": 1,
-  "basis": "New examples labeled and frozen before evaluation. This is not a sampled set of real requests or an independently administered study.",
+  "basis": "New hand-labeled synthetic examples. Labels remain frozen after an initial evaluation against Smart Finder 2.3; no matcher changes in this PR. Not a sampled set of real requests or an independently administered study.",
   "cases": [
     {
       "id": "research-01",
