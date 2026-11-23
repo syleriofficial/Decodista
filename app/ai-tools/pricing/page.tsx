@@ -36,7 +36,7 @@ export default function AiToolsPricingPage() {
         <Link className="ai-tools-back" href="/ai-tools"><ArrowLeft size={17} aria-hidden="true" /> Back to AI Tools</Link>
         <span className="ai-tools-eyebrow">Pricing desk / Source-led research</span>
         <h1>Know the plan <em>before you pay.</em></h1>
-        <p>All 12 listed AI tools now have dated official plan sources, with documented capabilities and clear limits. No scraped checkout totals, made-up discounts or universal &ldquo;best value&rdquo; labels.</p>
+        <p>All {AI_TOOL_PRICING.length} listed AI tools now have dated official plan sources, with documented capabilities and clear limits. No scraped checkout totals, made-up discounts or universal &ldquo;best value&rdquo; labels.</p>
         <div className="ai-tools-feature-meta"><CalendarClock size={17} aria-hidden="true" /> New sources added: <time dateTime={PRICING_LAST_EXPANDED_ON}>23 November 2026</time> <span aria-hidden="true">·</span> Review dates shown separately on each provider <span aria-hidden="true">·</span> Not real-time pricing</div>
         <AiEvidenceStatus checkedOn={PRICING_LAST_EXPANDED_ON} />
       </section>

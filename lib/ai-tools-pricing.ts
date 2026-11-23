@@ -1,7 +1,7 @@
 /**
  * Editorial source ledger for the initial AI Tools pricing section.
  *
- * Original four sources were reviewed 2026-11-21; eight further provider plan
+ * Original four sources were reviewed 2026-11-21; twelve further provider plan
  * sources were checked 2026-11-23. Each record has an explicit review date.
  * Not a real-time feed or a guarantee of price/feature availability.
  * Do not invent localised prices, use affiliate redirects or extrapolate
@@ -13,7 +13,8 @@ export const PRICING_LAST_EXPANDED_ON = "2026-11-23";
 export type AiToolPricingRecord = {
   slug: "chatgpt" | "claude" | "gemini" | "perplexity"
     | "adobe-firefly" | "canva" | "cursor" | "elevenlabs"
-    | "github-copilot" | "midjourney" | "notebooklm" | "runway";
+    | "github-copilot" | "midjourney" | "notebooklm" | "runway"
+    | "bolt" | "gamma" | "lovable" | "replit";
   pricingUrl: string;
   checkedOn: string;
   planNames: readonly string[];
@@ -136,6 +137,42 @@ export const AI_TOOL_PRICING: readonly AiToolPricingRecord[] = [
     priceSummary: "Check generation credits, output access and plan billing.",
     evidence: "Runway describes Free, Standard, Pro, Max and Team options with different credit and collaboration limits.",
     caution: "Existing subscribers may see legacy Unlimited terms; credits, usage and model access can change.",
+  },
+  {
+    slug: "bolt",
+    checkedOn: PRICING_LAST_EXPANDED_ON,
+    pricingUrl: "https://bolt.new/pricing",
+    planNames: ["Free","Pro","Teams","Enterprise"],
+    priceSummary: "Check available AI token allowances and workspace billing on the official plan page.",
+    evidence: "Bolt lists free and paid options, with paid token allowances and collaboration features differing by subscription.",
+    caution: "Token quotas, rollover terms, published app hosting and team-seat billing can affect the total cost.",
+  },
+  {
+    slug: "gamma",
+    checkedOn: PRICING_LAST_EXPANDED_ON,
+    pricingUrl: "https://gamma.app/en/pricing",
+    planNames: ["Free","Plus","Pro","Ultra","Business"],
+    priceSummary: "Check AI credits, export options, branding and seats on Gamma's official pricing page.",
+    evidence: "Gamma lists individual Free, Plus, Pro and Ultra options and business offerings, with differing generation and collaboration allowances.",
+    caution: "Annual billing, AI credits and optional additional seats change the effective cost; verify region and checkout.",
+  },
+  {
+    slug: "lovable",
+    checkedOn: PRICING_LAST_EXPANDED_ON,
+    pricingUrl: "https://lovable.dev/pricing",
+    planNames: ["Free","Pro","Business","Enterprise"],
+    priceSummary: "Check Lovable credits, hosting and usage-based billing for each subscription.",
+    evidence: "Lovable lists Free, Pro and Business workspaces and enterprise arrangements, with credits for building and hosting.",
+    caution: "Credit consumption and workspace limits vary by operation and subscription; do not infer a flat all-in cost.",
+  },
+  {
+    slug: "replit",
+    checkedOn: PRICING_LAST_EXPANDED_ON,
+    pricingUrl: "https://replit.com/pricing",
+    planNames: ["Starter","Core","Pro","Enterprise"],
+    priceSummary: "Review Replit credits, deployment resources and usage-based charges on its official plans page.",
+    evidence: "Replit lists a Starter entry tier and Core/Pro paid plans, with enterprise terms for larger organizations.",
+    caution: "Agent credits, database/hosting consumption and extra usage can be billed separately from the base subscription.",
   },
 ];
 

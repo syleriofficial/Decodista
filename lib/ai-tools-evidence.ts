@@ -8,7 +8,8 @@ export const AI_EVIDENCE_REVIEW_INTERVAL_DAYS = 30;
 
 export type AiToolEvidence = {
   slug: "chatgpt" | "claude" | "gemini" | "perplexity" | "github-copilot"
-    | "adobe-firefly" | "canva" | "cursor" | "elevenlabs" | "midjourney" | "notebooklm" | "runway";
+    | "adobe-firefly" | "canva" | "cursor" | "elevenlabs" | "midjourney" | "notebooklm" | "runway"
+    | "bolt" | "gamma" | "lovable" | "replit";
   sourceUrl: string;
   sourceLabel: string;
   checkedOn: string;
@@ -161,6 +162,54 @@ export const AI_TOOL_EVIDENCE: readonly AiToolEvidence[] = [
       "Model choices can differ in generation speed, output behavior and required credits.",
     ],
     caveat: "Available models, credit costs, output restrictions and rights change; check the selected model and account terms.",
+  },
+  {
+    slug: "bolt",
+    sourceUrl: "https://support.bolt.new/building/intro-bolt",
+    sourceLabel: "Bolt: introduction to building",
+    checkedOn: "2026-11-23",
+    findings: [
+      "Bolt describes building websites, web apps and mobile apps with AI.",
+      "The product provides a project editing workflow and publishing through Bolt Cloud.",
+      "Deployment access and AI token usage are subject to account limits."
+    ],
+    caveat: "Hosted app behavior, framework support, token allowances and publishing rights vary by plan and should be checked.",
+  },
+  {
+    slug: "gamma",
+    sourceUrl: "https://help.gamma.app/en/articles/7838093-how-do-i-create-a-new-presentation-document-or-webpage-in-gamma",
+    sourceLabel: "Gamma Help: create presentations, documents and webpages",
+    checkedOn: "2026-11-23",
+    findings: [
+      "Gamma's creation flow supports presentation, document and webpage formats.",
+      "Users can generate a new visual project from a prompt or supplied content.",
+      "The editor permits AI-assisted revisions after generation."
+    ],
+    caveat: "Export format, branding options, AI credits and team permissions depend on the active plan.",
+  },
+  {
+    slug: "lovable",
+    sourceUrl: "https://lovable.dev/build/web-app-builder",
+    sourceLabel: "Lovable: AI web app builder",
+    checkedOn: "2026-11-23",
+    findings: [
+      "Lovable describes prompt-driven creation of full-stack web applications.",
+      "The product supports app databases, logins and hosting capabilities.",
+      "It describes integrations for services such as payments and email."
+    ],
+    caveat: "Generated code needs independent security review; cloud and AI credit charges can be separate from workspace subscription terms.",
+  },
+  {
+    slug: "replit",
+    sourceUrl: "https://replit.com/products/agent",
+    sourceLabel: "Replit: Agent product overview",
+    checkedOn: "2026-11-23",
+    findings: [
+      "Replit Agent supports building apps and websites from natural-language requirements.",
+      "Replit provides a cloud environment to edit and work on app code.",
+      "Publishing and deployments are supported within the platform."
+    ],
+    caveat: "Agent usage, hosting, compute, collaboration and deployment allowances vary by plan and resource use.",
   },
 ];
 
