@@ -42,6 +42,7 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "writing",
     strong: [
+      /\b(?:write|draft|create|prepare|generate) (?:\w+ ){0,5}(?:descriptions?|product listings?) (?:for|of) (?:\w+ ){0,4}(?:online shops?|stores?|products?|items?)\b/,
       /\b(?:make|polish|rewrite|improve|change) (?:\w+ ){0,6}(?:complaints?|emails?|messages?|letters?) (?:\w+ ){0,4}(?:sound professional|more polite|sound polite|more formal|clearer)\b/,
       /\b(?:write|draft|prepare|create|compose|craft) (?:\w+ ){0,6}(?:apology letters?|thank you notes?|announcements?|item descriptions?|product listings?|online shop descriptions?)\b/,
       /\b(?:turn|convert|transform) (?:\w+ ){0,7}(?:meeting notes?|bullet points?|rough notes?) into (?:\w+ ){0,5}(?:announcements?|emails?|posts?|updates?|notes?)\b/,
