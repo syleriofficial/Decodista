@@ -55,7 +55,7 @@ try {
       assert.equal(await page.locator(".ai-tools-decision-link").count(), 2,
         "Keep only Pricing and Alternatives product navigation cards");
 
-      // Finder 2.0 must interpret intent locally without rankings, API calls or raw URL parameters.
+      // Finder 2.1 must interpret intent locally without rankings, API calls or raw URL parameters.
       const smartFinder = page.locator(".ai-task-finder");
       const smartInput = smartFinder.locator("#ai-smart-finder-input");
       assert.equal(await smartInput.getAttribute("maxLength"), "220");
@@ -87,18 +87,48 @@ try {
       assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("More than one type of work could fit"));
       assert.equal(await smartFinder.locator(".ai-task-smart-choices button").count(), 2,
         "Ambiguous voice and video intent must prompt a choice, not invent a winning tool");
+      assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0,
+        "Ambiguous requests must hide the previous result until a task is chosen");
+      assert.equal(await smartFinder.locator(".ai-task-option[aria-pressed=true]").count(), 0,
+        "No unrelated task should look selected while intent is ambiguous");
       await smartFinder.locator(".ai-task-smart-choices").getByRole("button", { name: "Generate video" }).click();
       assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(), ["Adobe Firefly", "Runway"]);
+
+      await smartInput.fill("Draft a LinkedIn post");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Write and edit"),
+        "Social writing requests must match the documented writing shortlist");
+      assert.deepEqual((await smartFinder.locator(".ai-task-match h4").allInnerTexts()).sort(),
+        ["ChatGPT", "Claude", "Gemini"]);
+
+      await smartInput.fill("Generate social media captions");
+      await smartFinder.getByRole("button", { name: "Find tools" }).click();
+      assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("Possible task: Write and edit"));
+
+      for (const unsupported of ["Convert PDF to Word", "Recover my email password"]) {
+        await smartInput.fill(unsupported);
+        await smartFinder.getByRole("button", { name: "Find tools" }).click();
+        assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("No confident task match yet."),
+          "Unsupported request must not be turned into a speculative tool recommendation");
+        assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0,
+          "An unsupported request must not show the earlier recommendation panel");
+      }
 
       await smartInput.fill("I need a local restaurant for dinner");
       await smartFinder.getByRole("button", { name: "Find tools" }).click();
       assert((await smartFinder.locator(".ai-task-smart-result").innerText()).includes("No confident task match yet."),
         "Unsupported intent must fail transparently without fake AI recommendations");
+      assert.equal(await smartFinder.locator(".ai-task-panel").count(), 0,
+        "A no-match result must not show stale tool cards or comparisons");
+      assert.equal(await smartFinder.locator(".ai-task-option[aria-pressed=true]").count(), 0,
+        "A no-match result must not leave a selected task");
       await noOverflow(page, "smart no-match state", view.width);
       await page.screenshot({path: outputDir + "/" + view.label + "-smart-finder.png", fullPage: true});
 
       const tasks = page.locator(".ai-task-finder");
       await tasks.getByRole("button", { name: "Build software" }).click();
+      assert.equal(await tasks.locator(".ai-task-panel").count(), 1,
+        "An explicit task choice must restore its documented shortlist");
       assert.deepEqual(
         (await tasks.locator(".ai-task-match h4").allInnerTexts()).map(x => x.trim()).sort(),
         ["Cursor", "GitHub Copilot"]);
