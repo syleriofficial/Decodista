@@ -188,6 +188,8 @@ assert(
   aiToolsSmartFinder.includes('id: "app-building"') &&
   aiToolsSmartFinder.includes('id: "presentations"') &&
   aiToolsSmartFinder.includes("codingText") &&
+  aiToolsSmartFinder.includes("UNSUPPORTED_REQUESTS") &&
+  aiToolsTaskFinder.includes("canShowTaskPanel") &&
   aiToolsSmartFinder.includes("matchedTasks: []") &&
   !aiToolsSmartFinder.includes("fetch(") &&
   !aiToolsSmartFinder.includes("localStorage") &&
@@ -195,7 +197,7 @@ assert(
   !aiToolsTaskFinder.includes("window.gtag") &&
   aiToolsCss.includes(".ai-task-smart-input-row") &&
   aiToolsPage.includes('href="#ai-task-finder"'),
-  "Smart Finder 2.0 must offer private, responsive, on-device task matching with transparent uncertainty and no AI API or raw-query telemetry");
+  "Smart Finder 2.1 must suppress stale matches, stay private and handle uncertain intent without AI API or raw-query telemetry");
 
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
