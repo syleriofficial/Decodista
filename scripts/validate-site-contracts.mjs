@@ -159,10 +159,27 @@ assert(aiToolsInteractions.includes('CONSENT_STORAGE_KEY = "decodista-analytics-
   !aiToolsInteractions.includes('search_query:') &&
   !aiToolsInteractions.includes('email:'),
   "AI Tools telemetry needs consent, strict path matching, static event taxonomy and no duplicate pageview / private content");
+assert(
+  aiToolsInteractions.includes('"app-building"') &&
+  aiToolsInteractions.includes('name: "ai_tools_compare_open"') &&
+  aiToolsInteractions.includes('name: "ai_tools_search_complete"') &&
+  aiToolsInteractions.includes('name: "ai_tools_save_toggle"') &&
+  aiToolsInteractions.includes('event.first_tool === event.second_tool') &&
+  aiToolsInteractions.includes('!toolIds.has(event.tool_slug)') &&
+  aiToolsInteractions.includes('result_bucket: event.result_bucket') &&
+  aiToolsExplorer.includes("const lastRecordedSearchRef = useRef") &&
+  aiToolsExplorer.includes("getAiToolsResultBucket(filtered.length)") &&
+  aiToolsExplorer.includes("onBlur={recordCompletedSearch}") &&
+  aiToolsExplorer.includes('name: "ai_tools_compare_open"') &&
+  aiToolsExplorer.includes('name: "ai_tools_save_toggle"') &&
+  !aiToolsExplorer.includes('search_query:') &&
+  !aiToolsInteractions.includes('search_term:') &&
+  !aiToolsInteractions.includes('email:'),
+  "Measure opt-in product intent without transmitting search text, personal IDs or unapproved tool IDs");
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_compare_select"'),
-  "Only actual task, category and comparison selections should generate opt-in AI Tools events");
+  "Only real interaction events after consent should generate AI Tools analytics");
 assert(aiToolsMeasurementPlaybook.includes('^/ai-tools(?:/|$)') &&
   aiToolsMeasurementPlaybook.includes('No additional') &&
   aiToolsMeasurementPlaybook.includes('GSC Wizard connection returned') &&
