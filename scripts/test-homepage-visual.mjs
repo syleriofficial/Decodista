@@ -724,8 +724,8 @@ for (const sample of [
         assert(width <= sample.width + 1, `Redesigned ${name} must not overflow the desktop viewport`);
         if (name === "weekly-archive") {
           assert.equal(await page.locator(".weekly-magazine").count(), 1, "Weekly archive must show exactly one latest issue");
-          assert.equal(await page.locator(`.weekly-magazine-feature a[href="/weekly/${newestWeeklySlug}"]`).count(), 1,
-            "Featured Weekly edition must open the latest published issue");
+          assert.equal(await page.locator(`.weekly-magazine-feature a[href="/weekly/${newestWeeklySlug}"]`).count(), 2,
+            "Featured Weekly title and reading CTA must both open the current published issue");
           const cover = page.locator(".weekly-magazine-cover img");
           assert.equal(await cover.count(), 1, "Weekly archive should display the published edition cover");
           assert((await cover.getAttribute("src"))?.startsWith("/images/weekly/"),
