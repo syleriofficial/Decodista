@@ -111,7 +111,7 @@ export function AiToolsExplorer() {
     : "/ai-tools/compare";
 
   return (
-    <section className="ai-tools-directory wrap" aria-labelledby="ai-tools-directory-heading">
+    <section className="ai-tools-directory wrap" id="ai-tools-directory" aria-labelledby="ai-tools-directory-heading">
       <div className="ai-tools-section-heading">
         <div>
           <span className="ai-tools-eyebrow">The directory</span>
