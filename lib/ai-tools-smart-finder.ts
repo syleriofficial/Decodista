@@ -1,5 +1,5 @@
 /**
- * Smart Finder 2.4: transparent, on-device task-intent matching.
+ * Smart Finder 2.5: transparent, on-device task-intent matching.
  * This only classifies tasks, NEVER ranks the underlying AI products.
  * Input is not transmitted, stored, logged or included in a URL.
  */
@@ -26,6 +26,9 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "research",
     strong: [
+      /\b(?:check|verify|validate|audit) (?:\w+ ){0,5}(?:references?|citations?|bibliograph(?:y|ies))\b/,
+      /\b(?:summari[sz]e|compare|review|analy[sz]e) (?:\w+ ){0,9}(?:peer reviewed papers?|papers?|publications?|conference proceedings|scientific studies|research literature)\b/,
+
       /\b(?:investigate|examine|explore) (?:\w+ ){0,5}(?:causes?|findings?|evidence|sources?|issues?|crises?|topics?)\b/,
       /\b(?:compare findings|what evidence supports|evaluate (?:the )?evidence|find trustworthy sources|find credible sources|verify (?:a |the )?claim)\b/,
       /\b(?:summari[sz]e|compare|analy[sz]e|interpret) (?:\w+ ){0,5}(?:journal articles?|academic (?:studies|papers)|research (?:documents?|reports?|papers?|studies)|studies)\b/,
@@ -39,6 +42,10 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "writing",
     strong: [
+      /\b(?:make|polish|rewrite|improve|change) (?:\w+ ){0,6}(?:complaints?|emails?|messages?|letters?) (?:\w+ ){0,4}(?:sound professional|more polite|sound polite|more formal|clearer)\b/,
+      /\b(?:write|draft|prepare|create|compose|craft) (?:\w+ ){0,6}(?:apology letters?|thank you notes?|announcements?|item descriptions?|product listings?|online shop descriptions?)\b/,
+      /\b(?:turn|convert|transform) (?:\w+ ){0,7}(?:meeting notes?|bullet points?|rough notes?) into (?:\w+ ){0,5}(?:announcements?|emails?|posts?|updates?|notes?)\b/,
+
       /\b(?:polish|rewrite|improve|draft|prepare|write|edit|proofread|correct|generate|create) (?:\w+ ){0,4}(?:cover letters?|newsletters?|press statements?|press releases?|biographies?|bios?|bedtime (?:stories?|story)|emails?|blog articles?|blog posts?|marketing copy|captions?|speeches?|articles?|paragraphs?|stories|essays?)\b/,
       /\b(?:wording|phrasing|tone|grammar) (?:\w+ ){0,5}(?:bios?|text|letters?|emails?|articles?|copy)\b/,
       /\b(?:write|draft|create) (?:\w+ ){0,3}(?:script|captions?) and (?:\w+ ){0,2}(?:videos?|animations?)\b/,
@@ -52,6 +59,9 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "coding",
     strong: [
+      /\b(?:diagnos(?:e|ing)|troubleshoot|fix|debug|repair|investigate) (?:\w+ ){0,7}(?:http \d{3}|http errors?|node servers?|server errors?|jest tests?|unit tests?|ci pipelines?|failing tests?)\b/,
+      /\b(?:suggest|find|apply) (?:\w+ ){0,5}(?:fixes?|solutions?) (?:\w+ ){0,4}(?:jest|unit|integration|api|ci) (?:tests?|bugs?|failures?)\b/,
+
       /\b(?:unit tests?|failing tests?|tracebacks?|stack traces?|api bugs?|pair programm?(?:ing)?|review code|code review|javascript crashes?|python exceptions?)\b/,
       /\b(?:fix|debug|troubleshoot|investigate|suggest a fix for|explain|review|refactor) (?:\w+ ){0,5}(?:tests?|bugs?|api bugs?|code|errors?|exceptions?|tracebacks?|modules?|repositories?)\b/,
       /\b(?:write|generate|create) (?:some |the |my )?(?:code|(?:python|javascript|typescript) code)\b/,
@@ -63,6 +73,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "app-building",
     strong: [
+      /\b(?:build|create|launch|develop|make|ship|prototype) (?:\w+ ){0,8}(?:membership portals?|booking apps?|e commerce storefronts?|storefronts?|crm systems?|community websites?|no code portals?)\b/,
+
       /\b(?:launch|build|develop|create|ship|prototype|make|turn (?:this )?idea into) (?:\w+ ){0,5}(?:booking platforms?|portfolios? sites?|websites?|web apps?|mobile apps?|applications?|landing pages?|online stores?|dashboards?|saas products?|ordering apps?|platforms?)\b/,
       /\b(?:no code|nocode|no coding) (?:\w+ ){0,4}(?:portfolio|websites?|web ?sites?|apps?|landing pages?|stores?)\b/,
       /\band (?:a |an |the )?(?:websites?|web apps?|apps?)\b(?! (?:logo|icon|banner|thumbnail))/,
@@ -74,6 +86,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "visuals",
     strong: [
+      /\b(?:design|make|create|generate|draw|produce|edit) (?:\w+ ){0,6}(?:infographics?|wallpapers?|packaging artwork|social illustrations?|advertising images?|cover artwork|product photos?|product pictures?)\b/,
+
       /\b(?:retouch|illustrat(?:e|ed|ion)|remove (?:the |my )?background|(?:create|design|generate|make|produce) (?:\w+ ){0,5}(?:thumbnails?|splash screens?|diagrams?|mockups?|graphics?|illustrations?|banners?|maps?))\b/,
       /\b(?:create|design|generate|make|produce) (?:\w+ ){0,5}(?:logos?|icons?|social graphics|brand assets?)\b/,
       /\b(?:generate|create|make|design|draw|edit) (?:an? |my |some |the )?(?:images?|pictures?|photos?|logos?|artwork|illustrations?|graphics?|posters?)\b/,
@@ -86,6 +100,9 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "video",
     strong: [
+      /\b(?:edit|cut|create|generate|make|produce) (?:\w+ ){0,7}(?:social clips?|video clips?|promo clips?|reels?|trailers?|video teasers?)\b/,
+      /\b(?:turn|transform|animate|convert) (?:\w+ ){0,7}(?:illustrations?|drawings?|photos?|images?|storyboards?) (?:\w+ ){0,7}(?:footage|moving scenes?|moving footage|clips?|videos?|reels?)\b/,
+
       /\b(?:animate|turn|convert|transform) (?:\w+ ){0,9}(?:photos?|images?|drawings?|storyboards?|illustrations?) (?:\w+ ){0,9}(?:videos?|clips?|reels?|animations?)\b/,
       /\b(?:animate|turn|convert|transform) (?:\w+ ){0,6}(?:photos?|images?|drawings?|illustrations?|storyboards?)\b/,
       /\b(?:animate|turn|convert|transform) (?:\w+ ){0,6}(?:videos?|clips?|reels?|trailers?|animations?)\b/,
@@ -104,7 +121,7 @@ const SIGNALS: readonly TaskSignals[] = [
       /\b(?:text to speech|voice ?overs?|voice narration|narrate|narration|dub(?:bing|bed)?|synthetic speech|voice cloning)\b/,
       /\b(?:generate|create|make) (?:an? |my |some |the )?(?:voice|speech|audio narration)\b/,
     ],
-    medium: [/\b(?:voice|speech|spoken audio|dubbing|dub|dubbed|audio narration)\b/],
+    medium: [/\b(?:voice|speech|spoken audio|dubbing|dub|dubbed|narrate|narrated|narration|audio narration)\b/],
     weak: [/\b(?:audio voices?)\b/],
   },
   {
@@ -127,6 +144,10 @@ const UNSUPPORTED_REQUESTS: readonly RegExp[] = [
   /\b(?:join|combine|merge|split|rotate|compress|convert|unlock|encrypt|decrypt|remove (?:a |my |the )?(?:pdf )?password) (?:\w+ ){0,7}(?:pdfs?|docx|word files?|files?|passwords?)\b/,
   /\b(?:remove|reset|crack) (?:\w+ ){0,6}(?:pdf )?password\b/,
   /\b(?:turn|convert|export) (?:\w+ ){0,7}(?:docx|word document) (?:\w+ ){0,5}(?:pdfs?)\b/,
+  /\b(?:remove|erase) (?:\w+ ){0,6}(?:signatures?|watermarks?) (?:from|in) (?:\w+ ){0,5}(?:documents?|files?|pdfs?)\b/,
+  /\b(?:extract|pull) (?:\w+ ){0,5}(?:images?|photos?|pages?) from (?:\w+ ){0,5}(?:pdfs?|documents?|files?)\b/,
+  /\b(?:rotate|join|merge|compress|split|convert) (?:\w+ ){0,7}(?:scanned documents?|pdfs?|jpe?gs?|image files?)(?: into (?:\w+ ){0,4}(?:pdfs?|documents?))?\b/,
+
 ];
 
 function normalized(text: string): string {
@@ -149,7 +170,7 @@ export function matchSmartFinderTask(input: string): SmartFinderResult {
     // Making an asset *for* an app is not the same as making the app.
     .replace(/\b(?:make|create|design|generate|draw|edit|produce) (?:\w+ ){0,5}(?:logos?|banners?|icons?|thumbnails?|splash screens?) (?:for|of) (?:\w+ ){0,4}(?:apps?|websites?)\b/g, " ");
   // Converting an existing photo into a clip asks for video, not image generation.
-  const visualText = text.replace(/\b(?:turn|convert|transform) (?:\w+ ){0,7}(?:photos?|images?) (?:\w+ ){0,7}(?:clips?|videos?|reels?)\b/g, " ");
+  const visualText = text.replace(/\b(?:turn|convert|transform|animate) (?:\w+ ){0,7}(?:photos?|images?|illustrations?|drawings?|storyboards?) (?:\w+ ){0,7}(?:clips?|videos?|reels?|footage|moving scenes?)\b/g, " ");
   const matches = SIGNALS.map((task) => {
     const content = task.id === "coding" ? codingText : task.id === "app-building" ? appBuildingText : task.id === "research" ? researchText : task.id === "visuals" ? visualText : text;
     const strong = task.strong.some((signal) => signal.test(content)) ? 4 : 0;
