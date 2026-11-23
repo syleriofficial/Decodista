@@ -53,6 +53,17 @@ const TASKS: readonly Task[] = [
     caution: "Generated code requires testing, review and security checks before release.",
   },
   {
+    id: "app-building",
+    label: "Build an app",
+    intro: "Explore prompt-driven app builders. Deployment options, source-code control and usage billing differ.",
+    options: [
+      { slug: "lovable", purpose: "Build web apps from prompts, with databases and hosted app features." },
+      { slug: "bolt", purpose: "Create websites and web apps and iterate on generated projects." },
+      { slug: "replit", purpose: "Use an AI Agent inside an integrated development and deployment workspace." },
+    ],
+    caution: "Check generated code, deployment configuration and recurring infrastructure costs before launch.",
+  },
+  {
     id: "visuals",
     label: "Create visuals",
     intro: "Explore AI-assisted image generation, visual editing and design.",
@@ -88,6 +99,7 @@ const TASKS: readonly Task[] = [
     intro: "Explore slide and design workflows without claiming a cross-product winner.",
     options: [
       { slug: "canva", purpose: "Design presentation slides with templates and AI assistance." },
+      { slug: "gamma", purpose: "Generate presentations and make AI-assisted slide edits." },
     ],
     caution: "Feature access and template/export rights can vary between plans.",
   },

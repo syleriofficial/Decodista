@@ -4,7 +4,7 @@
  * and regional availability. Keep this library distinct from editorial news.
  */
 export const AI_TOOL_CATEGORIES = [
-  { slug: "all", label: "All tools", description: "Browse the full starter directory" },
+  { slug: "all", label: "All tools", description: "Browse the source-reviewed tool directory" },
   { slug: "assistants", label: "Assistants", description: "Writing, questions and everyday work" },
   { slug: "research", label: "Research", description: "Explore information and source material" },
   { slug: "coding", label: "Coding", description: "Build and maintain software" },
@@ -146,6 +146,46 @@ export const AI_TOOLS: readonly AiTool[] = [
     useCases: ["Video generation", "Creative motion", "Video workflows"],
     practicalNote: "Check the current video models, output limits and credit requirements.",
     officialUrl: "https://runwayml.com/",
+  },
+  {
+    slug: "bolt",
+    name: "Bolt",
+    provider: "StackBlitz",
+    category: "coding",
+    description: "AI-powered builder for creating websites and web apps through prompts, with editing and publishing workflows.",
+    useCases: ["Build websites","Prototype web apps","Publish projects"],
+    practicalNote: "Review generated code, deployment settings and token limits before relying on a hosted app.",
+    officialUrl: "https://bolt.new/",
+  },
+  {
+    slug: "gamma",
+    name: "Gamma",
+    provider: "Gamma",
+    category: "design",
+    description: "AI-assisted visual communication workspace for presentations, documents and web pages.",
+    useCases: ["Presentations","Document layouts","Web pages"],
+    practicalNote: "Inspect generated facts, branding, exports and sharing permissions before sending presentations.",
+    officialUrl: "https://gamma.app/",
+  },
+  {
+    slug: "lovable",
+    name: "Lovable",
+    provider: "Lovable",
+    category: "coding",
+    description: "AI app builder for generating and iterating on full-stack web applications using natural-language instructions.",
+    useCases: ["Build web apps","Create app backends","Publish apps"],
+    practicalNote: "Verify generated authentication, database permissions, runtime costs and code before launching an app.",
+    officialUrl: "https://lovable.dev/",
+  },
+  {
+    slug: "replit",
+    name: "Replit",
+    provider: "Replit",
+    category: "coding",
+    description: "Cloud development platform with an AI Agent for building, testing and deploying apps from prompts.",
+    useCases: ["Build web apps","Edit software","Deploy projects"],
+    practicalNote: "Check production infrastructure spend, secrets, generated code security and agent usage before deployment.",
+    officialUrl: "https://replit.com/",
   },
 ] as const;
 

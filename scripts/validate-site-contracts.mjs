@@ -271,16 +271,34 @@ assert(aiToolsPricingData.includes('PRICING_CHECKED_ON = "2026-11-21"') &&
   aiToolsPricingData.includes('https://www.perplexity.ai/pro') &&
   aiToolsPricingData.includes('US$200/year'),
   "Dated pricing claims must point to official provider sources with billing context");
+assert(
+  ["bolt", "gamma", "lovable", "replit"].every((slug) =>
+    aiToolsData.includes('slug: "' + slug + '"') &&
+    aiToolsEvidence.includes('slug: "' + slug + '"') &&
+    aiToolsPricingData.includes('slug: "' + slug + '"') &&
+    aiToolsAlternativeJobs.includes('"' + slug + '":')) &&
+  aiToolsTaskFinder.includes('id: "app-building"') &&
+  aiToolsTaskFinder.includes('slug: "gamma"') &&
+  aiToolsPricingData.includes("https://lovable.dev/pricing") &&
+  aiToolsPricingData.includes("https://bolt.new/pricing") &&
+  aiToolsPricingData.includes("https://replit.com/pricing") &&
+  aiToolsPricingData.includes("https://gamma.app/en/pricing") &&
+  aiToolsEvidence.includes("https://replit.com/products/agent") &&
+  aiToolsEvidence.includes("https://support.bolt.new/building/intro-bolt") &&
+  aiToolsEvidence.includes("https://lovable.dev/build/web-app-builder") &&
+  aiToolsEvidence.includes("https://help.gamma.app/en/articles/7838093-how-do-i-create-a-new-presentation-document-or-webpage-in-gamma"),
+  "Every new catalog entry requires evidence, official pricing, task taxonomy and discoverability");
+
 assert(aiToolsPricingData.includes('PRICING_LAST_EXPANDED_ON = "2026-11-23"') &&
   aiToolsPricingData.includes("checkedOn: PRICING_CHECKED_ON") &&
-  (aiToolsPricingData.match(/    slug: "/g) || []).length === 12 &&
-  (aiToolsPricingData.match(/checkedOn: PRICING_LAST_EXPANDED_ON/g) || []).length === 8 &&
+  (aiToolsPricingData.match(/    slug: "/g) || []).length === 16 &&
+  (aiToolsPricingData.match(/checkedOn: PRICING_LAST_EXPANDED_ON/g) || []).length === 12 &&
   aiToolsPricingData.includes('https://cursor.com/pricing') &&
   aiToolsPricingData.includes('https://docs.github.com/en/copilot/get-started/plans') &&
   aiToolsPricingData.includes('https://elevenlabs.io/pricing') &&
   aiToolsPricingData.includes('https://support.google.com/gemininotebook/answer/16213268') &&
   aiToolsPricingData.includes('https://www.canva.com/pricing/'),
-  "All 12 AI tools need dated official plan records, with separate dates for earlier reviews");
+  "All 16 AI tools need dated official plan records, with separate dates for earlier reviews");
 assert(aiToolsExplorer.includes('href={`/ai-tools/pricing#plan-${tool.slug}`}') &&
   aiToolsProfile.includes('href={`/ai-tools/pricing#plan-${tool.slug}`}') &&
   aiToolsCompare.includes('firstPlans.planNames.join(" · ")') &&

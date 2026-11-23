@@ -21,6 +21,11 @@ export const AI_ALTERNATIVE_JOBS = {
   "image-generation": "Image generation",
   "creative-image-editing": "Creative image editing",
   "presentation-design": "Presentation design",
+  "document-creation": "Document creation",
+  "webpage-creation": "Webpage creation",
+  "app-building": "Building apps from prompts",
+  "website-building": "Building websites",
+  "app-deployment": "Publishing apps",
   "social-graphics": "Social graphics",
   "concept-art": "Concept art",
   "video-generation": "Video generation",
@@ -45,6 +50,10 @@ const WORKFLOWS_BY_TOOL = {
   "notebooklm": ["uploaded-sources", "source-summaries"],
   "perplexity": ["web-research", "source-discovery"],
   "runway": ["video-generation", "video-editing"],
+  "bolt": ["app-building","website-building","app-deployment"],
+  "gamma": ["presentation-design","document-creation","webpage-creation"],
+  "lovable": ["app-building","website-building","app-deployment"],
+  "replit": ["app-building","website-building","app-deployment"],
 } as const satisfies Record<string, readonly AiAlternativeJob[]>;
 
 export function getAiToolJobs(slug: string): readonly AiAlternativeJob[] {

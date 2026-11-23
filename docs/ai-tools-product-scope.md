@@ -25,7 +25,7 @@ AI Tools is a **global English-first discovery and comparison application**, not
 ### Product work roadmap
 1. Clean editorial-only code and tests while preserving actual tools, comparisons and search.
 2. Improve on-page search, sorting and use-case-based decision support.
-3. Build structured feature and plan comparisons, then expand the catalog with source verification.
+3. Build structured feature and plan comparisons, then expand the catalog with source verification. Maintain complete and consistent source, pricing, task and profile records whenever a tool is added.
 4. Add privacy-conscious Saved Tools and meaningful user utilities, not content farms.
 5. Measure product-only traffic and task completion; ten million monthly pageviews is a long-term goal, not a promise.
 
