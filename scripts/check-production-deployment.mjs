@@ -126,9 +126,14 @@ const alternativesHtml = snapshots["/ai-tools/alternatives?tool=claude"]?.body ?
 check("AI Tools pricing includes official-source confirmation",
   pricingHtml.includes("US$20") && pricingHtml.includes("https://claude.com/pricing") && pricingHtml.includes("21 November 2026"),
   "Dated Claude USD list price and official pricing source must render");
-check("AI Tools alternatives keeps category matching",
-  alternativesHtml.includes("Claude") && alternativesHtml.includes("ChatGPT") && alternativesHtml.includes("Gemini"),
-  "Claude should surface other assistant listings without invented rankings");
+check("AI Tools alternatives explains task overlap with dated evidence",
+  alternativesHtml.includes("Options with shared stated uses") &&
+  alternativesHtml.includes("ChatGPT") &&
+  alternativesHtml.includes("Gemini") &&
+  alternativesHtml.includes("Provider information checked") &&
+  alternativesHtml.includes("Official source") &&
+  !alternativesHtml.includes("AI Tools winner"),
+  "Claude alternatives must show documented tasks and official evidence without a ranking");
 
 for (const section of currentSections) {
   const html = snapshots[section]?.body ?? "";
