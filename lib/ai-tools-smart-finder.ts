@@ -1,5 +1,5 @@
 /**
- * Smart Finder 2.5: transparent, on-device task-intent matching.
+ * Smart Finder 2.6: transparent, on-device task-intent matching.
  * This only classifies tasks, NEVER ranks the underlying AI products.
  * Input is not transmitted, stored, logged or included in a URL.
  */
@@ -26,6 +26,10 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "research",
     strong: [
+      /\b(?:find|locate|identify) (?:\w+ ){0,6}(?:studies?|papers?|sources?|references?)\b/,
+      /\b(?:read|review|explain|compare|analy[sz]e|summari[sz]e|investigate) (?:\w+ ){0,8}(?:conference proceedings|peer reviewed publications?|papers?|scientific papers?|findings|conclusions)\b/,
+      /\b(?:summari[sz]e|analy[sz]e) (?:\w+ ){0,6}(?:pdfs?|documents?|papers?)\b/,
+
       /\b(?:check|verify|validate|audit) (?:\w+ ){0,5}(?:references?|citations?|bibliograph(?:y|ies))\b/,
       /\b(?:summari[sz]e|compare|review|analy[sz]e) (?:\w+ ){0,9}(?:peer reviewed papers?|papers?|publications?|conference proceedings|scientific studies|research literature)\b/,
 
@@ -42,6 +46,9 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "writing",
     strong: [
+      /\b(?:write|draft|rewrite|compose|prepare|edit|create) (?:\w+ ){0,6}(?:announcements?|congratulations? notes?|thank you notes?|release notes?|documentary scripts?)\b/,
+      /\b(?:phrase|word|polish|compose) (?:\w+ ){0,5}(?:notes?|thank you notes?|congratulations? notes?|letters?)\b/,
+
       /\b(?:write|draft|create|prepare|generate) (?:\w+ ){0,5}(?:descriptions?|product listings?) (?:for|of) (?:\w+ ){0,4}(?:online shops?|stores?|products?|items?)\b/,
       /\b(?:make|polish|rewrite|improve|change) (?:\w+ ){0,6}(?:complaints?|emails?|messages?|letters?) (?:\w+ ){0,4}(?:sound professional|more polite|sound polite|more formal|clearer)\b/,
       /\b(?:write|draft|prepare|create|compose|craft) (?:\w+ ){0,6}(?:apology letters?|thank you notes?|announcements?|item descriptions?|product listings?|online shop descriptions?)\b/,
@@ -60,6 +67,9 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "coding",
     strong: [
+      /\b(?:react|node|sql) (?:\w+ ){0,8}(?:throws?|errors?|failing|exceptions?|bottlenecks?|performance problems|failures?)\b/,
+      /\b(?:troubleshoot|investigate|debug|repair|inspect) (?:\w+ ){0,5}(?:react|sql|node|api|ci|pipeline|query|statement|component|app|build)\b/,
+
       /\b(?:diagnos(?:e|ing)|troubleshoot|fix|debug|repair|investigate) (?:\w+ ){0,7}(?:http \d{3}|http errors?|node servers?|server errors?|jest tests?|unit tests?|ci pipelines?|failing tests?)\b/,
       /\b(?:suggest|find|apply) (?:\w+ ){0,5}(?:fixes?|solutions?) (?:\w+ ){0,4}(?:jest|unit|integration|api|ci) (?:tests?|bugs?|failures?)\b/,
 
@@ -74,6 +84,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "app-building",
     strong: [
+      /\b(?:create|build|launch|make|develop|prototype) (?:\w+ ){0,7}(?:booking portals?|client portals?|customer portals?|web based crms?|crms?|membership portals?)\b/,
+
       /\b(?:build|create|launch|develop|make|ship|prototype) (?:\w+ ){0,8}(?:membership portals?|booking apps?|e commerce storefronts?|storefronts?|crm systems?|community websites?|no code portals?)\b/,
 
       /\b(?:launch|build|develop|create|ship|prototype|make|turn (?:this )?idea into) (?:\w+ ){0,5}(?:booking platforms?|portfolios? sites?|websites?|web apps?|mobile apps?|applications?|landing pages?|online stores?|dashboards?|saas products?|ordering apps?|platforms?)\b/,
@@ -101,6 +113,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "video",
     strong: [
+      /\b(?:produce|make|create|generate) (?:an? |the |my )?animated explainers?\b/,
+
       /\b(?:edit|cut|create|generate|make|produce) (?:\w+ ){0,7}(?:social clips?|video clips?|promo clips?|reels?|trailers?|video teasers?)\b/,
       /\b(?:turn|transform|animate|convert) (?:\w+ ){0,7}(?:illustrations?|drawings?|photos?|images?|storyboards?) (?:\w+ ){0,7}(?:footage|moving scenes?|moving footage|clips?|videos?|reels?)\b/,
 
@@ -119,6 +133,8 @@ const SIGNALS: readonly TaskSignals[] = [
   {
     id: "voice",
     strong: [
+      /\b(?:generate|produce|create|record) (?:\w+ ){0,5}(?:podcast intro voice|voice overs?|voiceovers?|narrations?)\b/,
+
       /\b(?:text to speech|voice ?overs?|voice narration|narrate|narration|dub(?:bing|bed)?|synthetic speech|voice cloning)\b/,
       /\b(?:generate|create|make) (?:an? |my |some |the )?(?:voice|speech|audio narration)\b/,
     ],
