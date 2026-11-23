@@ -663,3 +663,31 @@
   .ai-tools-price-card { padding:1rem; }
   .ai-tools-price-capabilities ul { padding-left:1rem; }
 }
+
+/* Evidence-aware, server-rendered workflow comparison. Not feature availability scoring. */
+.ai-tools-workflow-comparison { margin:1.6rem 0 2rem; }
+.ai-tools-workflow-heading h2 { font-size:clamp(1.5rem,2.5vw,2.1rem); line-height:1.15; margin:.4rem 0 .65rem; }
+.ai-tools-workflow-heading p { max-width:770px; line-height:1.7; color:var(--muted); margin:0 0 1rem; font-size:.85rem; }
+.ai-tools-workflow-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.75rem; margin:1.2rem 0; }
+.ai-tools-workflow-summary > div { display:flex; align-items:flex-start; justify-content:space-between; gap:.65rem; min-width:0; padding:1rem; border:1px solid var(--line); border-radius:var(--tools-radius); background:var(--surface); }
+.ai-tools-workflow-summary dt { min-width:0; color:var(--muted); font-size:.76rem; font-weight:800; line-height:1.5; overflow-wrap:anywhere; }
+.ai-tools-workflow-summary dd { margin:0; font-size:1.5rem; line-height:1; font-weight:900; font-variant-numeric:tabular-nums; }
+.ai-tools-workflow-table { width:100%; min-width:630px; border-collapse:collapse; background:var(--surface); }
+.ai-tools-workflow-table thead { background:var(--edition-panel); }
+.ai-tools-workflow-table th,.ai-tools-workflow-table td { text-align:left; padding:1rem; vertical-align:middle; border-bottom:1px solid var(--line); line-height:1.5; }
+.ai-tools-workflow-table thead th { font-size:.8rem; }
+.ai-tools-workflow-table th:first-child { width:42%; }
+.ai-tools-workflow-table tbody th { font-size:.88rem; font-weight:800; }
+.ai-tools-workflow-table tbody td { width:29%; font-size:.78rem; }
+.ai-tools-workflow-table tbody tr:last-child th,.ai-tools-workflow-table tbody tr:last-child td { border-bottom:0; }
+.ai-tools-workflow-listed,.ai-tools-workflow-unknown { display:inline-flex; max-width:100%; border-radius:4px; padding:.25rem .5rem; font-size:.76rem; line-height:1.5; font-weight:800; }
+.ai-tools-workflow-listed { color:var(--signal); background:var(--signal-soft); }
+.ai-tools-workflow-unknown { color:var(--muted); background:var(--edition-panel); }
+.ai-tools-workflow-zero { padding:.9rem 1.1rem; background:var(--edition-panel); border-left:3px solid var(--signal); color:var(--ink); font-size:.82rem; line-height:1.6; }
+.ai-tools-workflow-disclaimer { font-size:.79rem; line-height:1.7; color:var(--muted); margin:1rem 0 0; }
+.ai-tools-workflow-disclaimer strong { color:var(--ink); }
+@media(max-width:650px) {
+  .ai-tools-workflow-summary { grid-template-columns:1fr; gap:.45rem; }
+  .ai-tools-workflow-summary > div { align-items:center; padding:.75rem 1rem; }
+  .ai-tools-workflow-summary dd { font-size:1.25rem; }
+}

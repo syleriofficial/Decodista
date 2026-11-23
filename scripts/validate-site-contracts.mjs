@@ -128,6 +128,7 @@ assert.deepEqual(
 
 const aiToolsPage = read("app/ai-tools/page.tsx");
 const aiToolsCompare = read("app/ai-tools/compare/page.tsx");
+const aiToolsWorkflowCompare = read("lib/ai-tools-compare-workflows.ts");
 const aiToolsProfile = read("app/ai-tools/[slug]/page.tsx");
 const aiToolsPricing = read("app/ai-tools/pricing/page.tsx");
 const aiToolsTrialAudit = read("scripts/verify-ai-tool-trial.mjs");
@@ -208,6 +209,19 @@ assert(aiToolsCompare.includes('title: "Compare AI Tools"') && aiToolsCompare.in
   "AI tools comparison must be honest, functional and noindex until editorial review");
 assert(aiToolsCompare.includes('action="/ai-tools/compare"') && aiToolsCompare.includes('findAiTool('),
   "Comparisons must support shareable form-based tool selection");
+assert(aiToolsCompare.includes("compareListedAiWorkflows(first.slug, second.slug)") &&
+  aiToolsCompare.includes('className="ai-tools-workflow-comparison"') &&
+  aiToolsCompare.includes('data-workflow={item.job}') &&
+  aiToolsCompare.includes('"Not listed here"') &&
+  aiToolsCompare.includes("not mean a missing feature") &&
+  aiToolsWorkflowCompare.includes("getAiToolJobs(firstSlug)") &&
+  aiToolsWorkflowCompare.includes("getAiToolJobs(secondSlug)") &&
+  aiToolsWorkflowCompare.includes("secondOnlyCount") &&
+  aiToolsWorkflowCompare.includes("sharedCount") &&
+  !aiToolsWorkflowCompare.includes("score:") &&
+  aiToolsCss.includes(".ai-tools-workflow-table") &&
+  aiToolsCss.includes(".ai-tools-workflow-summary"),
+  "Comparison must show task overlap without inventing missing features, ranks or scores");
 assert(aiToolsExplorer.includes("useSyncExternalStore(") &&
   aiToolsExplorer.includes('SAVED_STORAGE_KEY = "decodista-ai-tools-saved-v1"') &&
   aiToolsExplorer.includes('aria-pressed={isSaved}') &&

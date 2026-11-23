@@ -3,6 +3,7 @@ import Link from "@/components/app-link";
 import { AiEvidenceStatus } from "@/components/ai-tools-evidence-status";
 import { getAiToolEvidence } from "@/lib/ai-tools-evidence";
 import { getAiToolPricing } from "@/lib/ai-tools-pricing";
+import { compareListedAiWorkflows } from "@/lib/ai-tools-compare-workflows";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitCompareArrows } from "lucide-react";
 import { AI_TOOLS, findAiTool, getCategoryLabel } from "@/lib/ai-tools";
 import { SITE_NAME } from "@/lib/site";
@@ -40,6 +41,7 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
       ?? AI_TOOLS.find((tool) => tool.slug !== first.slug)!;
 
   const officialSources = [first, second].map((tool) => ({ tool, evidence: getAiToolEvidence(tool.slug) }));
+  const workflowComparison = compareListedAiWorkflows(first.slug, second.slug);
   const firstPlans = getAiToolPricing(first.slug);
   const secondPlans = getAiToolPricing(second.slug);
   const rows = [
@@ -86,6 +88,49 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
           <button type="submit">Compare <ArrowRight size={16} aria-hidden="true" /></button>
         </form>
         <p className="ai-tools-form-hint">Selecting the same tool twice will use a different second tool. This is a descriptive overview, not an evaluation of model quality.</p>
+
+        <section className="ai-tools-workflow-comparison" aria-labelledby="ai-tools-workflow-heading">
+          <div className="ai-tools-workflow-heading">
+            <span className="ai-tools-eyebrow">Structured task comparison</span>
+            <h2 id="ai-tools-workflow-heading">Where the listed workflows overlap</h2>
+            <p>These labels come from the curated tool directory and its dated provider sources—not a hands-on test or a complete feature inventory.</p>
+          </div>
+          <dl className="ai-tools-workflow-summary" aria-label="Workflow label counts in this directory">
+            <div><dt>Shared listed tasks</dt><dd>{workflowComparison.sharedCount}</dd></div>
+            <div><dt>Listed for {first.name} only</dt><dd>{workflowComparison.firstOnlyCount}</dd></div>
+            <div><dt>Listed for {second.name} only</dt><dd>{workflowComparison.secondOnlyCount}</dd></div>
+          </dl>
+          {workflowComparison.sharedCount === 0 && (
+            <p className="ai-tools-workflow-zero">No shared task labels in our current directory. That is not proof these products cannot perform overlapping work.</p>
+          )}
+          <div className="ai-tools-table-scroll" role="region"
+            aria-label={`${first.name} and ${second.name} listed workflow table`} tabIndex={0}>
+            <table className="ai-tools-workflow-table">
+              <caption className="sr-only">Curated listed tasks for {first.name} and {second.name}; not independent test results</caption>
+              <thead><tr>
+                <th scope="col">Task</th>
+                <th scope="col">{first.name}</th>
+                <th scope="col">{second.name}</th>
+              </tr></thead>
+              <tbody>
+                {workflowComparison.rows.map((item) => (
+                  <tr key={item.job} data-workflow={item.job}>
+                    <th scope="row">{item.label}</th>
+                    <td><span className={item.firstListed ? "ai-tools-workflow-listed" : "ai-tools-workflow-unknown"}>
+                      {item.firstListed ? "Listed use" : "Not listed here"}
+                    </span></td>
+                    <td><span className={item.secondListed ? "ai-tools-workflow-listed" : "ai-tools-workflow-unknown"}>
+                      {item.secondListed ? "Listed use" : "Not listed here"}
+                    </span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="ai-tools-workflow-disclaimer">
+            <strong>Important:</strong> “Not listed here” means this directory has not categorized that use for the product; it does <strong>not</strong> mean a missing feature. “Listed use” is not a promise about capabilities, quality, model versions, regional access or plan entitlements. Check the official sources below.
+          </p>
+        </section>
 
         <div className="ai-tools-table-scroll" role="region" aria-label={`${first.name} and ${second.name} comparison table`} tabIndex={0}>
           <table className="ai-tools-compare-table">
