@@ -190,6 +190,9 @@ assert(
   aiToolsSmartFinder.includes("codingText") &&
   aiToolsSmartFinder.includes("UNSUPPORTED_REQUESTS") &&
   aiToolsSmartFinder.includes("appBuildingText") &&
+  aiToolsSmartFinder.includes("researchText") &&
+  packageScripts["ai:finder:test"] === "node --test scripts/test-ai-tools-finder-precision.mjs" &&
+  packageScripts["release:check"].includes("npm run ai:finder:test") &&
   aiToolsTaskFinder.includes("canShowTaskPanel") &&
   aiToolsSmartFinder.includes("matchedTasks: []") &&
   !aiToolsSmartFinder.includes("fetch(") &&
@@ -198,7 +201,7 @@ assert(
   !aiToolsTaskFinder.includes("window.gtag") &&
   aiToolsCss.includes(".ai-task-smart-input-row") &&
   aiToolsPage.includes('href="#ai-task-finder"'),
-  "Smart Finder 2.2 must avoid false app-building matches, suppress stale results and keep local-only task interpretation");
+  "Smart Finder 2.3 must test safe intent interpretation, suppress stale results and keep browser-local task matching");
 
 assert(aiToolsTaskFinder.includes('trackAiToolsInteraction({ name: "ai_tools_task_select"') &&
   aiToolsExplorer.includes('name: "ai_tools_category_select"') &&
