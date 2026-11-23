@@ -128,7 +128,7 @@ export default async function CompareAiToolsPage({ searchParams }: { searchParam
             </table>
           </div>
           <p className="ai-tools-workflow-disclaimer">
-            <strong>Important:</strong> “Not listed here” means this directory has not categorized that use for the product; it does <strong>not</strong> mean a missing feature. “Listed use” is not a promise about capabilities, quality, model versions, regional access or plan entitlements. Check the official sources below.
+            <strong>Important:</strong> “Not listed here” means this directory has not categorized that use for the product; it does not mean a missing feature. “Listed use” is not a promise about capabilities, quality, model versions, regional access or plan entitlements. Check the official sources below.
           </p>
         </section>
 
