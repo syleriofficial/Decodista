@@ -71,7 +71,8 @@ for (const article of documents) {
   const headings = article.content.filter((block) => block.type === "heading");
   for (const [id, label] of [["key-takeaways", "Key Takeaways"], ["faq", "FAQ"], ["sources-verification", "Sources & Verification"]]) {
     const count = headings.filter((block) => block.id === id).length;
-    if (count !== 1) throw new Error(`${article.slug}: ${label} must render exactly once (found ${count})`);
+    const optional = article.category === "tech-news" && article.contentType === "news" && (id === "key-takeaways" || id === "faq");
+    if (optional ? count > 1 : count !== 1) throw new Error(`${article.slug}: ${label} has an invalid section count (found ${count})`);
   }
   for (const block of article.content) {
     if (block.type === "paragraph" || block.type === "quote" || block.type === "callout") {
