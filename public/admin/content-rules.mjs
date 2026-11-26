@@ -170,8 +170,13 @@ export function validateCmsArticleData(input) {
     errors.push("Hero Image must retain dimensions of at least 1200px wide; CMS uploads should be 1600×900.");
   }
 
-  validateRequiredString(data, "shortAnswer", "Short Answer", errors);
-  validateStringList(data, "keyTakeaways", "Key Takeaways", { min: 2, max: 9 }, errors);
+  const independentNews = data.primaryCategory === "tech-news" && data.contentType === "news";
+  if (!independentNews || !isBlankCmsValue(data.shortAnswer)) {
+    validateRequiredString(data, "shortAnswer", "Short Answer", errors);
+  }
+  if (!independentNews || (data.keyTakeaways !== undefined && !(Array.isArray(data.keyTakeaways) && data.keyTakeaways.length === 0))) {
+    validateStringList(data, "keyTakeaways", "Key Takeaways", { min: 2, max: 9 }, errors);
+  }
   validateRequiredString(data, "body", "Main Article Body", errors);
   if (!isBlankCmsValue(data.introduction) && typeof data.introduction !== "string") {
     errors.push("Opening Note must contain formatted text.");
