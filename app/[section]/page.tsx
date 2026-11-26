@@ -55,7 +55,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const { page: pageParam } = await searchParams;
   if (!isCategory(section)) notFound();
   const category = CATEGORY_MAP[section];
-  const isVerticalCategory = section === "digital-life" || section === "security";
+  const isVerticalCategory = section === "digital-life" || section === "security" || section === "tech-news";
   const all = getArticlesByCategory(section);
   const page = parsePageNumber(pageParam);
   if (page === null) notFound();
