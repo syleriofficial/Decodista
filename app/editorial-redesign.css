@@ -954,8 +954,8 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
    empty-state honest while presenting published stories from other sections
    in the same compact editorial list (clearly labeled as cross-section). */
 .tech-news-page .tech-news-empty-state {
-  margin-top: clamp(1.3rem, 2.5vw, 2.2rem);
-  padding: clamp(1.2rem, 2.7vw, 2.3rem);
+  margin-top: clamp(.8rem, 1.5vw, 1.3rem);
+  padding: clamp(.95rem, 1.7vw, 1.5rem);
   border-left-width: 3px;
 }
 .tech-news-page .tech-news-empty-state h2 {
@@ -980,7 +980,7 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   margin-bottom: 1.2rem;
 }
 @media (max-width: 600px) {
-  .tech-news-page .tech-news-empty-state { padding: 1rem; }
+  .tech-news-page .tech-news-empty-state { padding: .95rem 1rem; }
   .tech-news-page .tech-news-empty-state h2 { font-size: 1.55rem; }
   .tech-news-page .tech-news-elsewhere { padding-top: 1.4rem; }
 }
