@@ -368,10 +368,11 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
   const readingTime = Number(data.readingTime);
   if (!Number.isInteger(readingTime) || readingTime < 1 || readingTime > 120) fail(source, '"readingTime" must be 1–120 minutes');
 
-  const shortAnswerMarkdown = requiredString(data.shortAnswer, "shortAnswer", source);
-  const shortAnswer = markdownInlineToRichText(shortAnswerMarkdown, `${source} short answer`);
-  const keyTakeawayMarkdown = requiredStringList(data.keyTakeaways, "keyTakeaways", source);
-  if (keyTakeawayMarkdown.length < 2 || keyTakeawayMarkdown.length > 9) {
+  const independentNews = category === "tech-news" && contentType === "news";
+  const shortAnswerMarkdown = independentNews ? (optionalString(data.shortAnswer, "shortAnswer", source) ?? "") : requiredString(data.shortAnswer, "shortAnswer", source);
+  const shortAnswer = shortAnswerMarkdown ? markdownInlineToRichText(shortAnswerMarkdown, `${source} short answer`) : "";
+  const keyTakeawayMarkdown = independentNews ? (optionalStringList(data.keyTakeaways, "keyTakeaways", source) ?? []) : requiredStringList(data.keyTakeaways, "keyTakeaways", source);
+  if ((!independentNews || keyTakeawayMarkdown.length > 0) && (keyTakeawayMarkdown.length < 2 || keyTakeawayMarkdown.length > 9)) {
     fail(source, '"keyTakeaways" must contain 2–9 items');
   }
   const keyTakeaways = keyTakeawayMarkdown.map((item, index) => markdownInlineToRichText(item, `${source} key takeaway ${index + 1}`));
@@ -399,8 +400,10 @@ export function parseArticleDocument(raw, filePath, projectRoot) {
 
   const content = [
     ...introduction,
-    { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
-    { type: "list", style: "unordered", items: keyTakeaways },
+    ...(keyTakeaways.length ? [
+      { type: "heading", level: 2, id: "key-takeaways", text: "Key takeaways" },
+      { type: "list", style: "unordered", items: keyTakeaways },
+    ] : []),
     ...bodyWithoutDuplicateFaq,
     ...(faqs.length ? [
       { type: "heading", level: 2, id: "faq", text: "FAQ" },
