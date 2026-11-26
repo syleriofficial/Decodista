@@ -556,7 +556,13 @@ for (const sample of [
       const mobileTechNews = await page.goto(base + "/tech-news", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileTechNews?.status(), 200, "Tech News archive should load on mobile");
       const mobileTechRows = page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal");
-      assert((await mobileTechRows.count()) > 0, "Tech News mobile archive needs published article rows");
+      assert((await mobileTechRows.count()) > 0, "Tech News mobile should show real published article rows or clearly labeled articles from other sections");
+      if (await page.locator(".tech-news-page .tech-news-empty-state").count()) {
+        assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 1,
+          "Empty Tech News must clearly distinguish articles published elsewhere");
+        assert((await page.locator(".tech-news-page .cross-section-note").innerText()).includes("other published sections"),
+          "Do not mislabel cross-section articles as Tech News reporting");
+      }
       const techMobileLayout = await mobileTechRows.first().evaluate((article) => {
         const row = article.getBoundingClientRect();
         const image = article.querySelector(".card-image").getBoundingClientRect();
@@ -572,12 +578,14 @@ for (const sample of [
         "Tech News mobile should show compact left thumbnails and headlines on the right");
       assert(techMobileLayout.pageWidth <= techMobileLayout.viewportWidth + 1,
         "Tech News must not introduce horizontal overflow on 390px or 320px phones");
-      const techFeature = await page.locator(".tech-news-page .category-lead-image").evaluate((element) => ({
-        height: element.getBoundingClientRect().height,
-        viewport: window.innerWidth,
-      }));
-      assert(techFeature.height <= techFeature.viewport * .55,
-        "Tech News mobile feature should use a compact image rather than an oversized hero");
+      if (await page.locator(".tech-news-page .category-lead-image").count()) {
+        const techFeature = await page.locator(".tech-news-page .category-lead-image").evaluate((element) => ({
+          height: element.getBoundingClientRect().height,
+          viewport: window.innerWidth,
+        }));
+        assert(techFeature.height <= techFeature.viewport * .55,
+          "Published Tech News mobile feature should use a compact image");
+      }
       if (sample.name === "mobile-light") {
         await page.screenshot({ path: out + "/tech-news-mobile-first-screen.png" });
         await page.locator(".tech-news-page .editorial-vertical-list").screenshot({ path: out + "/tech-news-mobile-list.png" });
@@ -633,7 +641,7 @@ for (const sample of [
             "How-To must appear in the eight-section primary navigation");
         }
         assert((await page.locator('main a[href^="/articles/"]').count()) > 0, `Primary category ${category} should link to published stories`);
-        assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
+        if (category !== "tech-news") assert.equal(await page.locator("main").getByText("Coverage in development").count(), 0, `Primary category ${category} must not be an empty placeholder`);
         if (category === "how-to") {
           const image = page.locator(".category-lead-image img").first();
           assert.equal(await image.getAttribute("fetchpriority"), "high", "How-To lead must retain high fetch priority");
@@ -666,7 +674,19 @@ for (const sample of [
           assert.equal(await page.locator(".tech-news-page .article-grid").count(), 0,
             "Tech News must not retain the two-column card grid");
           const rows = list.locator(".article-card--horizontal");
-          assert((await rows.count()) > 0, "Tech News should show published article rows");
+          assert((await rows.count()) > 0, "Tech News must display genuine published rows without fabricating section articles");
+          const noTechNewsYet = (await page.locator(".tech-news-page .tech-news-empty-state").count()) > 0;
+          if (noTechNewsYet) {
+            assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 1,
+              "If Tech News has no published stories, only clearly labeled cross-section content can be shown");
+            assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
+              "Do not invent a Tech News featured article for an empty category");
+            assert((await page.locator(".tech-news-page .cross-section-note").innerText()).includes("other published sections"),
+              "Empty Tech News must identify the true source sections");
+          } else {
+            assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 0,
+              "Once Tech News has published stories, the true category archive should be displayed");
+          }
           const positions = await list.evaluate((element) => ({
             columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
             tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
