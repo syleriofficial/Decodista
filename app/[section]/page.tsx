@@ -55,7 +55,8 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const { page: pageParam } = await searchParams;
   if (!isCategory(section)) notFound();
   const category = CATEGORY_MAP[section];
-  const isVerticalCategory = section === "digital-life" || section === "security";
+  const isVerticalCategory = section === "digital-life" || section === "security" || section === "tech-news";
+  const isTechNews = section === "tech-news";
   const all = getArticlesByCategory(section);
   const page = parsePageNumber(pageParam);
   if (page === null) notFound();
@@ -83,23 +84,27 @@ export default async function CategoryPage({ params, searchParams }: { params: P
         <Link className="category-lead-image" href={`/articles/${featured.slug}`}><ResponsiveImage src={featured.featuredImage} alt={featured.featuredImageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" /></Link>
         <div><span className="content-type-label">{CONTENT_TYPE_MAP[featured.contentType].name}</span><h2 id="category-lead-title"><Link href={`/articles/${featured.slug}`}>{featured.title}</Link></h2><p>{featured.standfirst}</p><Link className="read-link category-read-link" href={`/articles/${featured.slug}`}>Read the story <ArrowRight aria-hidden="true" /></Link></div>
       </section> : !featured ? (
-        <section className="section-principle wrap" aria-labelledby="section-coverage-title">
+        <section className={isTechNews ? "section-principle wrap tech-news-empty-state" : "section-principle wrap"} aria-labelledby="section-coverage-title">
           <span className="eyebrow">Editorial scope</span>
           <h2 id="section-coverage-title">Coverage in development</h2>
           <p>Our {category.name.toLowerCase()} section will publish original, verified stories as they are ready. We do not fill sections with placeholder articles.</p>
-          <div className="section-explore" aria-label="Explore published DECODISTA sections">
-            <span className="eyebrow">Explore published guides</span>
-            <div className="section-explore-links">
-              {discoverySections.map((item) => (
-                <Link href={item.href} key={item.href}>{item.label}<ArrowRight aria-hidden="true" /></Link>
-              ))}
-            </div>
-          </div>
-          <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
+          {!isTechNews && (
+            <>
+              <div className="section-explore" aria-label="Explore published DECODISTA sections">
+                <span className="eyebrow">Explore published guides</span>
+                <div className="section-explore-links">
+                  {discoverySections.map((item) => (
+                    <Link href={item.href} key={item.href}>{item.label}<ArrowRight aria-hidden="true" /></Link>
+                  ))}
+                </div>
+              </div>
+              <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
+            </>
+          )}
         </section>
       ) : null}
       {!featured && articles.length > 0 && (
-        <section className="section-block wrap" aria-labelledby="cross-section-title">
+        <section className={isTechNews ? "section-block wrap editorial-vertical-section tech-news-elsewhere" : "section-block wrap"} aria-labelledby="cross-section-title">
           <div className="section-heading">
             <div>
               <span className="eyebrow">Elsewhere in DECODISTA</span>
@@ -108,8 +113,8 @@ export default async function CategoryPage({ params, searchParams }: { params: P
             <Link href="/latest">View all published stories <ArrowRight aria-hidden="true" /></Link>
           </div>
           <p className="cross-section-note">These articles are from other published sections, not {category.name.toLowerCase()} coverage.</p>
-          <div className="article-grid">
-            {articles.slice(0, 3).map((article) => <ArticleCard key={article.slug} article={article} />)}
+          <div className={isTechNews ? "editorial-vertical-list" : "article-grid"}>
+            {articles.slice(0, 3).map((article) => <ArticleCard key={article.slug} article={article} variant={isTechNews ? "horizontal" : "standard"} imageSizes={isTechNews ? "(max-width: 600px) 38vw, (max-width: 1000px) 32vw, 260px" : undefined} />)}
           </div>
         </section>
       )}

@@ -949,3 +949,38 @@ html { scroll-padding-top: calc(var(--sticky-nav-height) + 1rem); }
   .weekly-archive-page .weekly-magazine-archive li a { grid-row: 2; }
   .weekly-archive-page .weekly-magazine-archive time { text-align: left; font-size: .76rem; }
 }
+
+/* Tech News currently has no articles assigned to its category. Keep its
+   empty-state honest while presenting published stories from other sections
+   in the same compact editorial list (clearly labeled as cross-section). */
+.tech-news-page .tech-news-empty-state {
+  margin-top: clamp(.8rem, 1.5vw, 1.3rem);
+  padding: clamp(.95rem, 1.7vw, 1.5rem);
+  border-left-width: 3px;
+}
+.tech-news-page .tech-news-empty-state h2 {
+  font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+  line-height: 1.18;
+}
+.tech-news-page .tech-news-empty-state p {
+  max-width: 72ch;
+  line-height: 1.55;
+}
+.tech-news-page .tech-news-elsewhere {
+  padding-top: clamp(1.8rem, 3vw, 2.8rem);
+}
+.tech-news-page .tech-news-elsewhere .section-heading {
+  margin-bottom: .65rem;
+}
+.tech-news-page .tech-news-elsewhere .cross-section-note {
+  max-width: 75ch;
+  color: var(--muted);
+  font-size: .93rem;
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+}
+@media (max-width: 600px) {
+  .tech-news-page .tech-news-empty-state { padding: .95rem 1rem; }
+  .tech-news-page .tech-news-empty-state h2 { font-size: 1.55rem; }
+  .tech-news-page .tech-news-elsewhere { padding-top: 1.4rem; }
+}
