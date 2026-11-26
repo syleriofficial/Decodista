@@ -88,15 +88,19 @@ export default async function CategoryPage({ params, searchParams }: { params: P
           <span className="eyebrow">Editorial scope</span>
           <h2 id="section-coverage-title">Coverage in development</h2>
           <p>Our {category.name.toLowerCase()} section will publish original, verified stories as they are ready. We do not fill sections with placeholder articles.</p>
-          <div className="section-explore" aria-label="Explore published DECODISTA sections">
-            <span className="eyebrow">Explore published guides</span>
-            <div className="section-explore-links">
-              {discoverySections.map((item) => (
-                <Link href={item.href} key={item.href}>{item.label}<ArrowRight aria-hidden="true" /></Link>
-              ))}
-            </div>
-          </div>
-          <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
+          {!isTechNews && (
+            <>
+              <div className="section-explore" aria-label="Explore published DECODISTA sections">
+                <span className="eyebrow">Explore published guides</span>
+                <div className="section-explore-links">
+                  {discoverySections.map((item) => (
+                    <Link href={item.href} key={item.href}>{item.label}<ArrowRight aria-hidden="true" /></Link>
+                  ))}
+                </div>
+              </div>
+              <p><Link className="read-link" href="/latest">Explore all published stories <ArrowRight aria-hidden="true" /></Link></p>
+            </>
+          )}
         </section>
       ) : null}
       {!featured && articles.length > 0 && (
