@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReviewsPage } from "@/components/reviews-page";
 import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
@@ -20,12 +21,13 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ section: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; category?: string; format?: string }>;
 }): Promise<Metadata> {
   const { section } = await params;
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, category: reviewCategory, format: reviewFormat } = await searchParams;
   if (!isCategory(section)) return {};
   const category = CATEGORY_MAP[section];
+  if (section === "reviews" && (reviewCategory || reviewFormat)) return { title: "Reviews", robots: { index: false, follow: true }, alternates: { canonical: "/reviews" } };
   const hasStories = getArticlesByCategory(section).length > 0;
   const page = parsePageNumber(pageParam);
   const pages = Math.max(1, Math.ceil(Math.max(0, getArticlesByCategory(section).length - 1) / PAGE_SIZE));
@@ -50,11 +52,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: { params: Promise<{ section: string }>; searchParams: Promise<{ page?: string }> }) {
+export default async function CategoryPage({ params, searchParams }: { params: Promise<{ section: string }>; searchParams: Promise<{ page?: string; category?: string; format?: string }> }) {
   const { section } = await params;
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, category: reviewCategory, format: reviewFormat } = await searchParams;
   if (!isCategory(section)) notFound();
   const category = CATEGORY_MAP[section];
+  if (section === "reviews") return <ReviewsPage category={reviewCategory} format={reviewFormat} />;
   const isVerticalCategory = section === "digital-life" || section === "security";
   const all = getArticlesByCategory(section);
   const page = parsePageNumber(pageParam);
