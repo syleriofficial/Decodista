@@ -553,6 +553,35 @@ for (const sample of [
         await page.screenshot({ path: out + "/how-to-mobile-first-screen.png" });
         await page.locator(".how-to-guide-list").screenshot({ path: out + "/how-to-mobile-guide-list.png" });
       }
+      const mobileTechNews = await page.goto(base + "/tech-news", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(mobileTechNews?.status(), 200, "Tech News archive should load on mobile");
+      const mobileTechRows = page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal");
+      assert((await mobileTechRows.count()) > 0, "Tech News mobile archive needs published article rows");
+      const techMobileLayout = await mobileTechRows.first().evaluate((article) => {
+        const row = article.getBoundingClientRect();
+        const image = article.querySelector(".card-image").getBoundingClientRect();
+        const content = article.querySelector(".card-copy").getBoundingClientRect();
+        return {
+          sideBySide: image.left < content.left && image.right <= content.left,
+          thumbnailFraction: image.width / row.width,
+          pageWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+      assert(techMobileLayout.sideBySide && techMobileLayout.thumbnailFraction <= .37,
+        "Tech News mobile should show compact left thumbnails and headlines on the right");
+      assert(techMobileLayout.pageWidth <= techMobileLayout.viewportWidth + 1,
+        "Tech News must not introduce horizontal overflow on 390px or 320px phones");
+      const techFeature = await page.locator(".tech-news-page .category-lead-image").evaluate((element) => ({
+        height: element.getBoundingClientRect().height,
+        viewport: window.innerWidth,
+      }));
+      assert(techFeature.height <= techFeature.viewport * .55,
+        "Tech News mobile feature should use a compact image rather than an oversized hero");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/tech-news-mobile-first-screen.png" });
+        await page.locator(".tech-news-page .editorial-vertical-list").screenshot({ path: out + "/tech-news-mobile-list.png" });
+      }
       const mobileSecurity = await page.goto(base + "/security", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileSecurity?.status(), 200, "Security category should load on mobile");
       const securityRows = page.locator(".security-page .editorial-vertical-list .article-card--horizontal");
@@ -596,7 +625,7 @@ for (const sample of [
       }
     }
     if (sample.name === "desktop-light") {
-      for (const category of ["ai", "how-to", "security", "digital-life"]) {
+      for (const category of ["ai", "tech-news", "how-to", "security", "digital-life"]) {
         const sectionResponse = await page.goto(base + "/" + category, { waitUntil: "domcontentloaded", timeout: 45000 });
         assert.equal(sectionResponse?.status(), 200, `Primary category ${category} should load`);
         if (category === "how-to") {
@@ -630,6 +659,34 @@ for (const sample of [
             "How-To list images should request thumbnail-sized responsive artwork");
           await page.screenshot({ path: out + "/how-to-desktop-first-screen.png" });
           await list.screenshot({ path: out + "/how-to-desktop-guide-list.png" });
+        }
+        if (category === "tech-news") {
+          const list = page.locator(".tech-news-page .editorial-vertical-list");
+          assert.equal(await list.count(), 1, "Tech News should use one vertical archive list");
+          assert.equal(await page.locator(".tech-news-page .article-grid").count(), 0,
+            "Tech News must not retain the two-column card grid");
+          const rows = list.locator(".article-card--horizontal");
+          assert((await rows.count()) > 0, "Tech News should show published article rows");
+          const positions = await list.evaluate((element) => ({
+            columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+            tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+              .map((article) => article.getBoundingClientRect().top),
+          }));
+          assert.equal(positions.columns, 1, "Tech News desktop articles should be in a single column");
+          assert(positions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
+            "Tech News rows must be vertically stacked");
+          assert((await rows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+            "Tech News images should request thumbnail-sized responsive WebP");
+          await page.screenshot({ path: out + "/tech-news-desktop-first-screen.png" });
+          await list.screenshot({ path: out + "/tech-news-desktop-list.png" });
+          if (await page.locator('.tech-news-page .pagination a[href="/tech-news?page=2"]').count()) {
+            const second = await page.goto(base + "/tech-news?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+            assert.equal(second?.status(), 200, "Tech News second page must load if pagination is present");
+            assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
+              "Tech News featured story must only appear on page one");
+            assert((await page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+              "Tech News later pages should keep the vertical list layout");
+          }
         }
         if (category === "security") {
           const securityList = page.locator(".security-page .editorial-vertical-list");
