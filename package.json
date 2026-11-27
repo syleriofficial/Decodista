@@ -28,7 +28,7 @@
     "rss:test": "node --test scripts/test-rss.mjs",
     "security:audit": "npm audit --omit=dev --audit-level=high",
     "security:audit:all": "npm audit",
-    "release:check": "npm run security:audit && npm run content:validate && npm run editorial:quality && npm run content:links:test && npm run cms:test && npm run contact:test && npm run site:contracts && npm run ai:finder:test && npm run ai:finder:holdout && npm run ai:finder:challenge && npm run ai:finder:challenge40 && npm run ai:finder:challenge40v2 && npm run ai:performance:stats:test && npm run ai:performance:diagnostics:test && npm run ai:trial:test && npm run search:test && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run images:test && npm run contact:leak-check",
+    "release:check": "npm run security:audit && npm run content:validate && npm run editorial:quality && npm run content:links:test && npm run cms:test && npm run contact:test && npm run site:contracts && npm run ai:finder:test && npm run ai:finder:holdout && npm run ai:finder:challenge && npm run ai:finder:challenge40 && npm run ai:finder:challenge40v2 && npm run ai:performance:stats:test && npm run ai:performance:diagnostics:test && npm run ai:chrome-trace:test && npm run ai:trial:test && npm run search:test && npm run rss:test && npm run lint && npm run typecheck && npm run build && npm run images:test && npm run contact:leak-check",
     "images:test": "node scripts/test-responsive-images.mjs",
     "search:test": "node --test scripts/test-search.mjs",
     "ai:trial:test": "node --test scripts/test-verify-ai-tool-trial.mjs",
@@ -39,6 +39,7 @@
     "ai:finder:challenge40v2": "node --test scripts/test-ai-tools-finder-challenge-40-v2.mjs",
     "ai:performance:stats:test": "node --test scripts/test-ai-tools-lighthouse-stats.mjs",
     "ai:performance:diagnostics:test": "node --test scripts/test-ai-tools-lighthouse-diagnostics.mjs",
+    "ai:chrome-trace:test": "node --test scripts/test-ai-tools-chrome-trace.mjs",
     "ai:performance:repeat": "node scripts/audit-ai-tools-repeated-lighthouse.mjs"
   },
   "dependencies": {
