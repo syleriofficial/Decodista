@@ -11,12 +11,16 @@ on:
       - 'lib/ai-tools-smart-finder.ts'
       - 'scripts/audit-ai-tools-repeated-lighthouse.mjs'
       - 'scripts/lib/ai-tools-lighthouse-stats.mjs'
+      - 'scripts/lib/ai-tools-lighthouse-diagnostics.mjs'
+      - 'scripts/test-ai-tools-lighthouse-diagnostics.mjs'
       - '.github/workflows/ai-tools-repeated-lighthouse.yml'
   pull_request:
     branches: [main]
     paths:
       - 'scripts/audit-ai-tools-repeated-lighthouse.mjs'
       - 'scripts/lib/ai-tools-lighthouse-stats.mjs'
+      - 'scripts/lib/ai-tools-lighthouse-diagnostics.mjs'
+      - 'scripts/test-ai-tools-lighthouse-diagnostics.mjs'
       - 'scripts/test-ai-tools-lighthouse-stats.mjs'
       - '.github/workflows/ai-tools-repeated-lighthouse.yml'
 
@@ -38,8 +42,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify repeated lab statistics
-        run: node --test scripts/test-ai-tools-lighthouse-stats.mjs
+      - name: Verify repeated lab statistics and outlier evidence
+        run: node --test scripts/test-ai-tools-lighthouse-stats.mjs scripts/test-ai-tools-lighthouse-diagnostics.mjs
       - name: Wait for same-commit successful Cloudflare Workers build
         if: github.event_name != 'pull_request'
         env:

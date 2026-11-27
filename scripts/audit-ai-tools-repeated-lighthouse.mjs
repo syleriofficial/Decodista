@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { summarizeAiToolsRuns, TARGET_PATHS } from "./lib/ai-tools-lighthouse-stats.mjs";
+import { summarizeRawLighthouseDiagnostics } from "./lib/ai-tools-lighthouse-diagnostics.mjs";
 
 // Executed in GitHub Actions AFTER the matching Cloudflare build has succeeded.
 // No AI API, user-provided prompts or Finder telemetry. Does not change public UI.
@@ -48,8 +49,20 @@ for (let i = 0; i < repeats; i++) {
   rounds.push(report);
 }
 
+const diagnostics = [];
+for (const route of TARGET_PATHS) {
+  const basename = route === "/ai-tools" ? "ai-tools.lighthouse.json" : "ai-tools-compare.lighthouse.json";
+  const rawReports = [];
+  for (let i = 0; i < repeats; i++) {
+    const roundDir = path.join(outDir, "round-" + String(i + 1).padStart(2, "0"));
+    const rawReport = JSON.parse(await readFile(path.join(roundDir, basename), "utf8"));
+    rawReports.push(rawReport);
+  }
+  diagnostics.push(summarizeRawLighthouseDiagnostics(rawReports, route));
+}
 const summary = {
   ...summarizeAiToolsRuns(rounds, origin.href),
+  diagnostics,
   checkedAt: new Date().toISOString(),
   gitCommitSha: process.env.GITHUB_SHA ?? null,
   hardware: "GitHub Actions ubuntu-latest, installed Chrome, Lighthouse 13.6.0",
