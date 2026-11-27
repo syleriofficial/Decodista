@@ -138,6 +138,22 @@ export const infoPages: Record<string, InfoPage> = {
         ],
       },
       {
+        title: "Copyright and image usage",
+        paragraphs: [
+          "DECODISTA aims to publish original editorial writing and use images, screenshots, quotations and other third-party material only when a documented permission, applicable licence or lawful basis supports the intended use, including advertising-supported publication where relevant. Attribution alone does not establish permission.",
+          "Source links and credits should identify the original material and its creator or rights holder where required. Editorial photographs and genuine screenshots must not be confused with generated illustrations. Generated imagery must not be presented as photographic evidence of a real event or as a screenshot of an actual product.",
+          "Before publishing new visual material, we require a record of its origin, applicable usage terms, attribution and any restrictions. Where rights cannot be established, the material should not be published until reviewed or replaced.",
+        ],
+      },
+      {
+        title: "Reporting a copyright concern",
+        paragraphs: [
+          "If you believe material on DECODISTA infringes your copyright, use our Contact form, select General enquiry and enter Copyright concern as the subject. Include the affected DECODISTA URL, identification of the original work, the basis of your rights or authority to act, and a description of the disputed use. Include supporting links where available.",
+          "We aim to review credible notices, request clarification when necessary, and remove, replace or correct material when appropriate. Submitting a complaint does not automatically establish infringement. Please do not submit unnecessary sensitive personal information or account secrets.",
+        ],
+        links: [{ href: "/contact", label: "Report a copyright concern" }],
+      },
+      {
         title: "Corrections and updates",
         paragraphs: [
           "Material factual errors should be corrected promptly. Significant corrections should be explained on the affected page; ordinary maintenance changes may be reflected in the updated date when they materially change the article.",
