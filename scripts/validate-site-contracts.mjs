@@ -511,7 +511,7 @@ assert(navigation.includes('href: "/security"') && navigation.includes('href: "/
 assert(footerSecondary.includes('href: "/weekly", label: "Weekly Brief"'),
   "Published Weekly Brief must have a visible footer archive link");
 assert(homepage.includes("if (!stories.length) return null;"), "Homepage must not present empty editorial sections");
-assert.equal(articles.filter((article) => article.category === "science").length, 0, "Science must remain empty until genuine coverage is published");
+assert(articles.some((article) => article.category === "science" && article.slug === "hera-dimorphos-dart-impact-crater" && article.contentType === "news"), "Science must include the first genuine Hera news report");
 assert(/robots:\s*\{[\s\S]*?index:\s*hasStories/.test(science), "Empty category routes must remain noindex");
 assert(science.includes('className="section-explore-links"') && science.includes('getArticlesByContentType("how-to").length')
   && science.includes('all.length === 1 ? "story" : "stories"'),
