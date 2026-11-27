@@ -49,6 +49,13 @@ jobs:
               check("canonical redirect "+url, code==200 and final==dest, f"HTTP {code}; {final}" if code else body)
           code, final, typ, body = get(base+"/privacy-policy")
           check("updated privacy policy",code==200 and "Advertising and third-party data use" in body and "policies.google.com/technologies/partner-sites" in body, f"HTTP {code}")
+          for path, markers in [
+              ("/editorial-policy", ["Copyright and image usage", "Reporting a copyright concern"]),
+              ("/contact", ["Copyright concerns", "Read our copyright and image usage standards"]),
+          ]:
+              code, final, typ, body = get(base+path)
+              missing = [m for m in markers if m not in body]
+              check("copyright policy live "+path, code==200 and final==base+path and not missing, f"HTTP {code}; missing markers: {missing}")
           code, final, typ, body = get(base+"/robots.txt")
           check("robots reachable",code==200 and "Sitemap:" in body, f"HTTP {code}")
           robots=urllib.robotparser.RobotFileParser()
