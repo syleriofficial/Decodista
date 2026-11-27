@@ -822,6 +822,7 @@ for (const sample of [
       }
       const scienceResponse = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(scienceResponse?.status(), 200, "Science category must remain reachable");
+      const scienceList = page.locator(".science-page .editorial-vertical-list");
       const scienceSingle = (await scienceList.count()) === 0;
       if (scienceSingle) {
         assert.equal(await page.locator(".science-page .category-lead").count(), 1,
@@ -830,7 +831,6 @@ for (const sample of [
           "Science needs one actual published article when no list exists");
         await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
       } else {
-        const scienceList = page.locator(".science-page .editorial-vertical-list");
         assert.equal(await scienceList.count(), 1, "Science must display a single-column editorial list");
         assert.equal(await page.locator(".science-page .article-grid").count(), 0,
           "Science must not show the old tiled article grid");
