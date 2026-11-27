@@ -65,9 +65,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const heroCaptionSeparator = /[.!?…]$/.test(article.featuredImageAlt) ? " " : ". ";
   // Editorial art illustrates a subject; it is not photographic evidence or
   // a screenshot of the product. Incident illustrations need extra precision.
-  const artworkDisclosure = article.slug === "openai-agent-leak-53-chatgpt-user-images"
-    ? "This is fictional artwork, not a photograph or depiction of actual OpenAI facilities or systems."
-    : "Conceptual editorial illustration, not an official product screenshot.";
+  const artworkDisclosure = article.slug === "hera-dimorphos-dart-impact-crater"
+    ? "Actual mission photograph: ©ESA, Hera Asteroid Framing Camera, November 7, 2026. Resized with padding; original framing preserved."
+    : article.slug === "openai-agent-leak-53-chatgpt-user-images"
+      ? "This is fictional artwork, not a photograph or depiction of actual OpenAI facilities or systems."
+      : "Conceptual editorial illustration, not an official product screenshot.";
   const hasMeaningfulUpdate = article.updatedDate && article.updatedDate !== article.publishedDate;
   const related = getRelatedArticles(article);
   const topicHubs = getArticleTopicHubs(article);
