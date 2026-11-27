@@ -42,7 +42,7 @@ jobs:
                   return 0, url, "", str(e)
           for url in [base+"/ads.txt","http://decodista.com/ads.txt"]:
               code, final, typ, body = get(url)
-              check("ads.txt "+url, code==200 and final==base+"/ads.txt" and "text/plain" in typ.lower() and expected in body.splitlines(), f"HTTP {code}; {final}; {typ}")
+              check("ads.txt "+url, code==200 and final==base+"/ads.txt" and "text/plain" in typ.lower() and expected in [line.strip() for line in body.splitlines()], f"HTTP {code}; {final}; {typ}")
           for url in ["http://decodista.com/","https://www.decodista.com/","http://www.decodista.com/","https://www.decodista.com/ads.txt"]:
               code, final, typ, body = get(url)
               dest = base+("/ads.txt" if url.endswith("ads.txt") else "/")
@@ -64,7 +64,7 @@ jobs:
               urls=[e.text for e in ET.fromstring(body).iter() if e.tag.split("}")[-1]=="loc" and e.text]
           except ET.ParseError:
               pass
-          check("sitemap parsed",code==200 and bool(urls) and all(urllib.parse.urlsplit(x).netloc=="decodista.com" and x.startswith(base+"/") for x in urls),f"HTTP {code}; {len(urls)} URLs")
+          check("sitemap parsed",code==200 and bool(urls) and all(urllib.parse.urlsplit(x).netloc=="decodista.com" and (x==base or x.startswith(base+"/")) for x in urls),f"HTTP {code}; {len(urls)} URLs")
           class Links(HTMLParser):
               def __init__(self):
                   super().__init__()
@@ -84,7 +84,7 @@ jobs:
               parser=Links()
               parser.feed(b)
               links.update(parser.urls)
-          targets=sorted({x for x in urls if x.startswith(base+"/")} | links)
+          targets=sorted({x for x in urls if x==base or x.startswith(base+"/")} | links)
           check("crawl scope",len(targets)<=250,f"{len(targets)} public URLs; limit 250")
           with ThreadPoolExecutor(max_workers=3) as pool:
               for url,result in zip(targets[:250],pool.map(get,targets[:250])):
