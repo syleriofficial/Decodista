@@ -66,7 +66,7 @@ Hera's mission scientist, Michael Kueppers, reported that Dimorphos is tumbling 
 
 Hera has also identified hundreds of meter-scale rocks moving around the system. These objects must be considered when planning observations at closer range.
 
-![Composite long-exposure spacecraft image showing trails and points of light around the asteroid system](/images/uploads/hera-orbiting-boulders.webp "Long exposure from Hera's Hyperscout H instrument. See the ESA mission release for the original image and credit.")
+![Composite long-exposure spacecraft image showing trails and points of light around the asteroid system](/images/uploads/hera-orbiting-boulders.webp "Composite of long-exposure images from Hera's HyperScout-H instrument. Credit: ©ESA/HyperScout-H.")
 
 The current observations do not establish the origin of every object. Identifying which material came from the DART collision and understanding its subsequent movement are separate scientific questions.
 
@@ -105,4 +105,4 @@ Reporting checked November 27, 2026. The new findings are attributed to ESA; the
 - [Nature Astronomy: Dimorphos impact simulations](https://www.nature.com/articles/s41550-024-02200-3)
 - [ESA: image use conditions](https://www.esa.int/terms-and-conditions/terms-and-conditions-for-images-and-videos)
 
-The scientific photographs must retain their original attribution and must not be presented as generated illustrations.
+Image provenance: the featured photograph and comparison were retrieved from ESA's published source files. The HyperScout-H composite was retrieved from the ESA media rendition. The hero has been resized with black padding to fit the site layout; the original framing is preserved. All three are mission images, not generated illustrations.
