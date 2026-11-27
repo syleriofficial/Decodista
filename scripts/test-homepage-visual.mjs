@@ -560,7 +560,7 @@ for (const sample of [
       if (techMobileRowCount === 0) {
         assert.equal(await page.locator(".tech-news-page .category-lead").count(), 1,
           "A Tech News archive with only one published article should show its real featured story");
-        assert((await page.locator(".tech-news-page .category-count").innerText()).includes("1 published story"),
+        assert((await page.locator(".tech-news-page .category-count").textContent()).includes("1 published story"),
           "A Tech News archive with no list must have exactly one published story");
         const width = await page.evaluate(() => document.documentElement.scrollWidth);
         assert(width <= sample.width + 1, "Single-story Tech News must not overflow mobile");
@@ -609,7 +609,7 @@ for (const sample of [
       if (scienceMobileRowCount === 0) {
         assert.equal(await page.locator(".science-page .category-lead").count(), 1,
           "A Science archive with only one published article should show its real featured story");
-        assert((await page.locator(".science-page .category-count").innerText()).includes("1 published story"),
+        assert((await page.locator(".science-page .category-count").textContent()).includes("1 published story"),
           "A Science archive with no list must have exactly one published story");
         const width = await page.evaluate(() => document.documentElement.scrollWidth);
         assert(width <= sample.width + 1, "Single-story Science must not overflow mobile");
@@ -728,7 +728,7 @@ for (const sample of [
           if (techSingle) {
             assert.equal(await page.locator(".tech-news-page .category-lead").count(), 1,
               "Single published Tech News story should have a real featured article without a list");
-            assert((await page.locator(".tech-news-page .category-count").innerText()).includes("1 published story"),
+            assert((await page.locator(".tech-news-page .category-count").textContent()).includes("1 published story"),
               "Tech News needs exactly one published story when no archive list is present");
             await page.screenshot({ path: out + "/tech-news-desktop-first-screen.png" });
           } else {
@@ -827,7 +827,7 @@ for (const sample of [
       if (scienceSingle) {
         assert.equal(await page.locator(".science-page .category-lead").count(), 1,
           "A single genuine Science article should appear as a featured story");
-        assert((await page.locator(".science-page .category-count").innerText()).includes("1 published story"),
+        assert((await page.locator(".science-page .category-count").textContent()).includes("1 published story"),
           "Science needs one actual published article when no list exists");
         await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
       } else {
