@@ -1,0 +1,131 @@
+name: AdSense live readiness audit
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/adsense-live-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check public production endpoints (read only)
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import urllib.request as u
+          import urllib.error
+          import urllib.parse
+          import urllib.robotparser
+          import xml.etree.ElementTree as ET
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from concurrent.futures import ThreadPoolExecutor
+          
+          base = "https://decodista.com"
+          expected = Path("public/ads.txt").read_text().strip()
+          failures = []
+          def check(name, ok, details=""):
+              print(f"{'PASS' if ok else 'FAIL'} {name}: {details}", flush=True)
+              if not ok:
+                  failures.append(name)
+          def get(url, ua="Decodista-Readiness-Audit/1.0"):
+              try:
+                  with u.urlopen(u.Request(url, headers={"User-Agent":ua}), timeout=15) as r:
+                      return r.status, r.url, r.headers.get("Content-Type",""), r.read(4_000_000).decode("utf-8", "replace")
+              except urllib.error.HTTPError as e:
+                  return e.code, e.url, e.headers.get("Content-Type",""), ""
+              except Exception as e:
+                  return 0, url, "", str(e)
+          for url in [base+"/ads.txt","http://decodista.com/ads.txt"]:
+              code, final, typ, body = get(url)
+              check("ads.txt "+url, code==200 and final==base+"/ads.txt" and "text/plain" in typ.lower() and expected in [line.strip() for line in body.splitlines()], f"HTTP {code}; {final}; {typ}")
+          for url in ["http://decodista.com/","https://www.decodista.com/","http://www.decodista.com/","https://www.decodista.com/ads.txt"]:
+              code, final, typ, body = get(url)
+              dest = base+("/ads.txt" if url.endswith("ads.txt") else "/")
+              check("canonical redirect "+url, code==200 and final==dest, f"HTTP {code}; {final}" if code else body)
+          code, final, typ, body = get(base+"/privacy-policy")
+          check("updated privacy policy",code==200 and "Advertising and third-party data use" in body and "policies.google.com/technologies/partner-sites" in body, f"HTTP {code}")
+          for path, markers in [
+              ("/editorial-policy", ["Copyright and image usage", "Reporting a copyright concern"]),
+              ("/contact", ["Copyright concerns", "Read our copyright and image usage standards"]),
+          ]:
+              code, final, typ, body = get(base+path)
+              missing = [m for m in markers if m not in body]
+              check("copyright policy live "+path, code==200 and final==base+path and not missing, f"HTTP {code}; missing markers: {missing}")
+          code, final, typ, body = get(base+"/robots.txt")
+          check("robots reachable",code==200 and "Sitemap:" in body, f"HTTP {code}")
+          robots=urllib.robotparser.RobotFileParser()
+          robots.parse(body.splitlines() if code==200 else [])
+          for ua in ["Googlebot","Mediapartners-Google","Google-Display-Ads-Bot"]:
+              check("robots allows "+ua,code==200 and all(robots.can_fetch(ua,base+p) for p in ["/","/ads.txt","/privacy-policy"]), "public routes")
+              for p in ["/","/ads.txt","/privacy-policy"]:
+                  c,f,t,b=get(base+p,ua)
+                  check("simulated UA "+ua+" "+p,c==200 and "cf-chl-" not in b.lower(),f"HTTP {c}; not proof of verified Google IP access")
+          code, final, typ, body = get(base+"/sitemap.xml")
+          urls=[]
+          try:
+              urls=[e.text for e in ET.fromstring(body).iter() if e.tag.split("}")[-1]=="loc" and e.text]
+          except ET.ParseError:
+              pass
+          check("sitemap parsed",code==200 and bool(urls) and all(urllib.parse.urlsplit(x).netloc=="decodista.com" and (x==base or x.startswith(base+"/")) for x in urls),f"HTTP {code}; {len(urls)} URLs")
+          class Links(HTMLParser):
+              def __init__(self, page):
+                  super().__init__()
+                  self.page=page
+                  self.urls=set()
+                  self.canonicals=[]
+                  self.noindex=False
+                  self.in_head=False
+              def handle_endtag(self,tag):
+                  if tag=="head":
+                      self.in_head=False
+              def handle_starttag(self,tag,attrs):
+                  attrs=dict(attrs)
+                  if tag=="head":
+                      self.in_head=True
+                  if self.in_head and tag=="link" and "canonical" in (attrs.get("rel") or "").lower().split():
+                      self.canonicals.append(attrs.get("href") or "")
+                  if self.in_head and tag=="meta" and (attrs.get("name") or "").lower() in ("robots","googlebot"):
+                      self.noindex |= "noindex" in (attrs.get("content") or "").lower()
+                  if tag=="a":
+                      href=attrs.get("href")
+                      if href:
+                          dest=urllib.parse.urljoin(self.page,href)
+                          parts=urllib.parse.urlsplit(dest)
+                          if parts.scheme in ("http","https") and parts.netloc.lower() in ("decodista.com","www.decodista.com") and not parts.path.startswith(("/admin","/api/")):
+                              self.urls.add(urllib.parse.urlunsplit((parts.scheme,parts.netloc,parts.path,parts.query,"")))
+          sitemap_urls={x for x in urls if x==base or x.startswith(base+"/")}
+          seeds=sitemap_urls | {base+p for p in ["/","/privacy-policy","/about","/contact","/latest","/ai-tools","/search"]}
+          visited=set()
+          frontier=set(seeds)
+          limit=300
+          for depth in range(2):
+              targets=sorted(frontier-visited)
+              check("crawl scope round "+str(depth+1),len(visited)+len(targets)<=limit,f"{len(targets)} new URLs; cumulative limit {limit}")
+              targets=targets[:max(0,limit-len(visited))]
+              frontier=set()
+              with ThreadPoolExecutor(max_workers=3) as pool:
+                  for url,result in zip(targets,pool.map(get,targets)):
+                      c,f,t,b=result
+                      visited.add(url)
+                      check("public link "+url,c==200,f"HTTP {c}; {f}" if c else b)
+                      if c!=200 or "text/html" not in t.lower():
+                          continue
+                      parser=Links(f)
+                      parser.feed(b)
+                      frontier.update(parser.urls)
+                      if url in sitemap_urls:
+                          expected_url=url.rstrip("/")
+                          check("sitemap canonical "+url,len(parser.canonicals)==1 and parser.canonicals[0].rstrip("/")==expected_url and f.rstrip("/")==expected_url,repr(parser.canonicals))
+                          check("sitemap indexability "+url,not parser.noindex and robots.can_fetch("Googlebot",url),"HTML meta robots and robots.txt")
+          print(f"Inspected {len(visited)} unique URLs across two crawl rounds; external links and fragments excluded.")
+          code, final, typ, body=get(base+"/adsense-readiness-nonexistent-qa-8e4f7c")
+          check("unknown URL returns 404",code==404,f"HTTP {code}")
+          print("Account-side Publisher ID, actual Google crawler identity and CMP cannot be certified by this audit.")
+          if failures:
+              raise SystemExit(f"{len(failures)} checks failed")
+          PY
