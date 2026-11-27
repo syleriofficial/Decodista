@@ -1,0 +1,66 @@
+name: AI Tools Chrome Performance trace audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/trace-ai-tools-chrome.mjs'
+      - 'scripts/lib/ai-tools-chrome-trace.mjs'
+      - 'scripts/test-ai-tools-chrome-trace.mjs'
+      - '.github/workflows/ai-tools-chrome-trace.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/trace-ai-tools-chrome.mjs'
+      - 'scripts/lib/ai-tools-chrome-trace.mjs'
+      - 'scripts/test-ai-tools-chrome-trace.mjs'
+      - '.github/workflows/ai-tools-chrome-trace.yml'
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: ai-tools-chrome-trace-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  performance-trace:
+    name: Trace Finder and Compare on one Chrome runner
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install repository dependencies
+        run: npm ci --include=dev
+      - name: Install pinned Playwright CDP client
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Unit-test CDP trace parsing and privacy
+        run: node --test scripts/test-ai-tools-chrome-trace.mjs
+      - name: Wait for matching Cloudflare deployment (post-merge only)
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/wait-for-cloudflare-build.mjs
+      - name: Record Chrome and OS
+        run: |
+          google-chrome --version
+          uname -a
+      - name: Capture eight controlled public Chrome DevTools traces
+        env:
+          AI_TOOLS_TRACE_ORIGIN: https://decodista.com/
+          AI_TOOLS_TRACE_OUTPUT_DIR: artifacts/ai-tools-chrome-traces
+        run: node scripts/trace-ai-tools-chrome.mjs
+      - name: Upload short-lived Chrome traces and summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-tools-chrome-devtools-traces
+          path: artifacts/ai-tools-chrome-traces/
+          if-no-files-found: ignore
+          retention-days: 3
