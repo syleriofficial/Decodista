@@ -33,3 +33,31 @@ The site sends certain **opt-in, pre-defined intent events**, but that is not en
 ## Scope
 
 Only AI Tools diagnostics, test scripts, documentation and GitHub Actions workflow are changed here. No new articles, SEO index-policy change, paid AI requests, Finder prompt collection, tool rankings or other site menus.
+
+## 658 ms TBT anomaly — source-evidence audit (23 November 2026 UTC)
+
+We inspected the archived **original** Lighthouse 13.6 JSON files, not only the score summary, for [matching-commit GitHub Actions run 45280623708](https://github.com/syleriofficial/Decodista/actions/runs/45280623708). All results refer to public production commit `e21edb91377774b7fa64dc03d01ae72b2a4f9a83`.
+
+| Raw Lighthouse evidence — `/ai-tools` | Round 1 | Round 2 | Round 3 |
+| --- | ---: | ---: | ---: |
+| Performance score | 83 | 100 | 100 |
+| Total Blocking Time | **658.4 ms** | 0 ms | 0 ms |
+| CPU benchmark index (higher is faster) | **2,876.5** | 4,374.5 | 4,435 |
+| Main-thread work | **2,373.1 ms** | 491.5 ms | 642.6 ms |
+| JS bootup | **790.3 ms** | 136.8 ms | 155.2 ms |
+| Script-evaluation work | **789.1 ms** | 146.1 ms | 161.1 ms |
+| Framework chunk scripting | **537.6 ms** | 100.3 ms | 118.2 ms |
+| Long tasks captured by Lighthouse | 7 | 1 | 2 |
+| Network request count | 23 | 23 | 23 |
+
+Crucially, the **`/ai-tools/compare` page in those same three rounds** showed CPU benchmark indices of **4,255.5, 4,108 and 4,175.5** with **0 ms TBT in every run**. Lower CPU capacity was **not** a persistent condition across all pages in the first round. Temporary browser/CPU contention or page-specific execution may be contributors, but a single three-run audit cannot distinguish or prove a root cause. The unusually slow first round also attributed some scripting to Cloudflare's beacon, but its appearance is **not** evidence the beacon caused the 658 ms blocking.
+
+The archived request count was identical, and the framework bundle URL was the same in all three Finder runs. There is no evidence here of a newly injected script, a changed Finder task matcher or a deploy-to-deploy performance regression. This is a **within-commit variance** observation. The fixed score is neither a user-success measure nor a field Core Web Vitals result.
+
+### Automatic evidence for future repeat audits
+
+The new `scripts/lib/ai-tools-lighthouse-diagnostics.mjs` reads each original Lighthouse JSON and adds a `diagnostics` section to the existing repeated-lab summary. It records sanitized script source names (no URL query strings), per-round CPU index, TBT, main-thread and script-bootup times, long-task counts and top task/script entries for both Finder and Compare. Three explanatory **attention flags** call out >200 ms TBT spread, >20% CPU index spread or main-thread work >2× its median. Flags request investigation; they are not automated evidence of causation.
+
+The additional unit tests reject missing raw evidence, unexpected origins/routes, non-mobile settings and invalid metrics, and verify source URL sanitization. This PR changes **only diagnostics, documentation, tests and CI**; it intentionally does not remove Cloudflare analytics, change React hydration, alter Smart Finder functionality or assert a speed improvement.
+
+**Next meaningful action** is to repeat the audit on a stable, controlled machine under comparable conditions and inspect the affected Chrome trace. Only optimize the page after a source-specific bottleneck is reproducible. Consider field data from consented analytics if available; the connected analytics provider was unavailable during this analysis.
