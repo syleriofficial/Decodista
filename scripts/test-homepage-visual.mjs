@@ -590,6 +590,37 @@ for (const sample of [
         await page.screenshot({ path: out + "/tech-news-mobile-first-screen.png" });
         await page.locator(".tech-news-page .editorial-vertical-list").screenshot({ path: out + "/tech-news-mobile-list.png" });
       }
+      const scienceMobileResponse = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(scienceMobileResponse?.status(), 200, "Science should load on mobile");
+      const scienceMobileRows = page.locator(".science-page .editorial-vertical-list .article-card--horizontal");
+      assert((await scienceMobileRows.count()) > 0, "Science should show real article rows or labeled articles from other sections");
+      if (await page.locator(".science-page .science-empty-state").count()) {
+        assert.equal(await page.locator(".science-page .science-elsewhere").count(), 1,
+          "Empty Science should clearly label its cross-section articles");
+        assert((await page.locator(".science-page .cross-section-note").innerText()).includes("other published sections"),
+          "Do not pass off other sections' articles as Science reporting");
+        assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
+          "Unpublished Science section must remain noindex");
+      }
+      const scienceMobileLayout = await scienceMobileRows.first().evaluate(article => {
+        const row = article.getBoundingClientRect();
+        const thumb = article.querySelector(".card-image").getBoundingClientRect();
+        const copy = article.querySelector(".card-copy").getBoundingClientRect();
+        return {
+          adjacent: thumb.left < copy.left && thumb.right <= copy.left,
+          fraction: thumb.width / row.width,
+          pageWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+      assert(scienceMobileLayout.adjacent && scienceMobileLayout.fraction <= .37,
+        "Science mobile needs compact left thumbnails and headlines to the right");
+      assert(scienceMobileLayout.pageWidth <= scienceMobileLayout.viewportWidth + 1,
+        "Science must not horizontally overflow 390px or 320px screens");
+      if (sample.name === "mobile-light") {
+        await page.screenshot({ path: out + "/science-mobile-first-screen.png" });
+        await page.locator(".science-page .editorial-vertical-list").screenshot({ path: out + "/science-mobile-vertical-list.png" });
+      }
       const mobileSecurity = await page.goto(base + "/security", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileSecurity?.status(), 200, "Security category should load on mobile");
       const securityRows = page.locator(".security-page .editorial-vertical-list .article-card--horizontal");
@@ -755,14 +786,49 @@ for (const sample of [
           }
         }
       }
-      const emptyScience = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
-      assert.equal(emptyScience?.status(), 200, "Science category should remain reachable as planned coverage");
-      assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
-        "A category without published stories must remain noindex despite appearing in navigation");
-      assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
-        "Do not manufacture science articles to populate an editorial section");
-      assert((await page.locator(".section-explore-links a").count()) >= 2,
-        "Empty Science should offer real published alternative sections");
+      const scienceResponse = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
+      assert.equal(scienceResponse?.status(), 200, "Science category must remain reachable");
+      const scienceList = page.locator(".science-page .editorial-vertical-list");
+      assert.equal(await scienceList.count(), 1, "Science must display a single-column editorial list");
+      assert.equal(await page.locator(".science-page .article-grid").count(), 0,
+        "Science must not show the old tiled article grid");
+      const scienceRows = scienceList.locator(".article-card--horizontal");
+      assert((await scienceRows.count()) > 0, "Science must link to real published articles");
+      if (await page.locator(".science-page .science-empty-state").count()) {
+        assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
+          "Empty Science category must remain noindex");
+        assert.equal(await page.locator(".science-page .category-lead").count(), 0,
+          "Empty Science must never invent a featured article");
+        assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
+          "Empty Science must still accurately describe editorial coverage");
+        assert.equal(await page.locator(".science-page .science-elsewhere").count(), 1,
+          "Cross-section articles must be clearly distinguished from Science reporting");
+        assert((await page.locator(".science-page .cross-section-note").innerText()).includes("other published sections"),
+          "Other articles must not be mislabeled as Science");
+      } else {
+        assert.equal(await page.locator(".science-page .science-elsewhere").count(), 0,
+          "Once Science has published articles, use genuine Science content");
+      }
+      const sciencePositions = await scienceList.evaluate(element => ({
+        columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+        tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+          .map(article => article.getBoundingClientRect().top),
+      }));
+      assert.equal(sciencePositions.columns, 1, "Science must use a vertical one-column list");
+      assert(sciencePositions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
+        "Science rows should stack one below another");
+      assert((await scienceRows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+        "Science list should request responsive thumbnail-sized images");
+      await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
+      await scienceList.screenshot({ path: out + "/science-desktop-vertical-list.png" });
+      if (await page.locator('.science-page .pagination a[href="/science?page=2"]').count()) {
+        const scienceSecond = await page.goto(base + "/science?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+        assert.equal(scienceSecond?.status(), 200, "Science page two must work when published archive grows");
+        assert.equal(await page.locator(".science-page .category-lead").count(), 0,
+          "Featured Science story should only appear on first page");
+        assert((await page.locator(".science-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+          "Science pagination must preserve the vertical layout");
+      }
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
       const firstArchiveImage = page.locator(".archive-feed .article-card--horizontal .card-image img").first();
