@@ -61,3 +61,36 @@ The new `scripts/lib/ai-tools-lighthouse-diagnostics.mjs` reads each original Li
 The additional unit tests reject missing raw evidence, unexpected origins/routes, non-mobile settings and invalid metrics, and verify source URL sanitization. This PR changes **only diagnostics, documentation, tests and CI**; it intentionally does not remove Cloudflare analytics, change React hydration, alter Smart Finder functionality or assert a speed improvement.
 
 **Next meaningful action** is to repeat the audit on a stable, controlled machine under comparable conditions and inspect the affected Chrome trace. Only optimize the page after a source-specific bottleneck is reproducible. Consider field data from consented analytics if available; the connected analytics provider was unavailable during this analysis.
+
+## Chrome DevTools trace follow-up — isolated *within one hosted runner*, not a dedicated machine
+
+Two previous three-repeat Lighthouse runs showed outlier TBT on the Finder route (658 ms in one audit, 317 ms in another) alongside lower Chrome CPU benchmark indices. The Compare route did not show a similar spike in those runs. This association alone cannot distinguish site code, runner contention, cold-start effects or tracing overhead.
+
+The dedicated workflow `AI Tools Chrome Performance trace audit` navigates anonymous public Finder and Compare pages **eight times** in this ABBA / BAAB order, with four runs for each route, on **one GitHub-hosted Ubuntu 24.04 runner and one Chrome browser instance**. A new browser context is used per navigation, with 390×844 mobile viewport emulation and Chrome DevTools Protocol CPU throttling set to 4×, without network throttling or form entry. No user searches or authenticated data are collected.
+
+Using CDP `Tracing.start` and `ReturnAsStream`, it writes eight gzip-compressed, query-stripped Chrome Performance traces and a machine-readable `summary.json`. The report separates renderer-main-thread tasks, script event duration, in-page PerformanceObserver long tasks, CPU-throttled CDP ScriptDuration, and resource count; it also saves actual Chrome version. The raw traces are **temporary GitHub Actions artifacts, retained for three days**, and are not embedded in the site or sent to web analytics.
+
+**Interpretation:** The sum of event durations above 50 ms is a *Chrome trace blocking proxy*, not Lighthouse's simulated Total Blocking Time and not Core Web Vitals INP. Tracing incurs overhead; 4× CDP slowdown is not identical to Lighthouse's simulated mobile throttling. Shared GitHub-hosted runners are not dedicated or guaranteed CPU-stable, even within one job. Comparing Finder and Compare in the same process is more controlled than comparing unrelated CI runs, but does **not** establish a root cause. If long tasks are reproducible, inspect the individual trace in Chrome Performance tools before proposing a specific JavaScript, framework hydration, caching or third-party optimization.
+
+On a pull request, the workflow runs the new instrumented script against the **currently public production website**, not the unmerged PR. After merge, it first verifies the matching Cloudflare build. A separate pure unit test verifies trace parsing and URL-query sanitization and is included in `npm run release:check`. This is strictly diagnostics-only: the website's UI, Finder behavior, analytics setup and content remain unchanged.
+
+### First same-runner trace experiment — 27 November 2026
+
+The initial PR-run experiment recorded eight Chrome 158.0.8127.36 CDP traces on one runner using 4× CPU throttling (no network throttling). In these **anonymous, trace-instrumented public-page** visits:
+
+| Order / route | Chrome main renderer scheduler tasks above 50 ms, excess duration | In-page longtask observer excess |
+| --- | ---: | ---: |
+| 1 · Finder | **366.3 ms** | **148 ms** |
+| 2 · Compare | 76.0 ms | 32 ms |
+| 3 · Compare | 27.1 ms | 12 ms |
+| 4 · Finder | 85.8 ms | 14 ms |
+| 5 · Compare | 50.9 ms | 14 ms |
+| 6 · Finder | 98.2 ms | 19 ms |
+| 7 · Finder | 47.9 ms | 17 ms |
+| 8 · Compare | 32.3 ms | 12 ms |
+
+The two excess-duration methods **do not measure the same event set or window** and must never be labeled Lighthouse TBT. The Chrome DevTools trace showed seven renderer scheduler tasks above 50 ms on the first Finder visit, compared with only two or three on the later visits; its longest was 205.8 ms. The script-duration CDP performance metric was 0.383 seconds on that visit and approximately 0.187–0.195 seconds on later Finder visits. Network-resource counts remained constant by route (22 Finder, 20 Compare).
+
+**Parser correction:** Chrome 158 names its renderer scheduler event `ThreadControllerImpl::RunTask`, not simply `RunTask`. The first iteration of the diagnostic parser therefore incorrectly reported zero trace scheduler tasks despite the raw traces containing them. The parser now accepts both names and **fails closed** if no scheduler task evidence exists. The original artifact and this documented reanalysis remain traceable in [GitHub Actions run 45934224548](https://github.com/syleriofficial/Decodista/actions/runs/45934224548).
+
+The first visit shows a consistent cold-start-like pattern, not a proven React/hydration or hosting defect. CDP tracing overhead, per-context renderer process startup and shared-runner scheduling all remain confounders. Keep production features unchanged pending controlled trace reproduction or more convincing attribution.
