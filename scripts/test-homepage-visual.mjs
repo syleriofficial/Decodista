@@ -993,6 +993,26 @@ for (const sample of [
         assert(overflow <= 1, `320px mobile reflow must not overflow on ${url}: ${overflow}px`);
       }
     }
+    const reviewsResponse = await page.goto(base + "/reviews", { waitUntil: "domcontentloaded", timeout: 45000 });
+    assert.equal(reviewsResponse?.status(), 200, "Reviews archive must load");
+    assert.equal(await page.locator(".reviews-editorial h1").innerText(), "Reviews");
+    assert.equal(await page.locator(".reviews-scope-grid > div").count(), 9, "Reviews must retain the nine approved product categories");
+    assert.equal(await page.locator('.reviews-masthead a[href="/review-methodology"]').count(), 1);
+    assert((await page.locator('head link[rel="canonical"]').getAttribute("href"))?.endsWith("/reviews"));
+    const reviewsOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    assert(reviewsOverflow <= 1, "Reviews must reflow without horizontal overflow");
+    if (await page.locator(".reviews-empty").count()) {
+      assert.equal(await page.locator(".reviews-feature").count(), 0, "Empty Reviews must not invent a featured review");
+      assert.equal(await page.locator(".reviews-nav").count(), 0, "Empty Reviews must not advertise unavailable filters");
+      assert.equal(await page.locator(".reviews-scope-grid a").count(), 0, "Unpublished categories are editorial scope, not links");
+      assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"));
+      assert((await page.locator(".reviews-editorial .cross-section-note").innerText()).includes("not reviews coverage"));
+    }
+    await page.screenshot({ path: out + "/reviews-" + sample.name + ".png", fullPage: true });
+    for (const query of ["?category=invalid", "?format=invalid", "?page=0", "?category=phones&category=audio"]) {
+      const invalidReview = await ctx.request.get(base + "/reviews" + query);
+      assert.equal(invalidReview.status(), 404, "Malformed Reviews query must return 404: " + query);
+    }
     assert.deepEqual(unexpectedHttpErrors, [],
       "Unexpected failed first-party HTTP responses: " + JSON.stringify(unexpectedHttpErrors));
     report.status = "passed";
