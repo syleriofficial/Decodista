@@ -625,3 +625,37 @@ html[data-theme="dark"] .theme-sun { display: block; }
   letter-spacing: -.02em;
 }
 .article-discovery svg { width: 18px; height: 18px; color: var(--signal); }
+
+
+/* Reviews: a dedicated, theme-aware editorial section. */
+.reviews-editorial { padding-block: clamp(2rem,5vw,5rem); min-width: 0; }
+.reviews-masthead { padding-bottom: clamp(1.5rem,3vw,3rem); border-bottom: 3px solid var(--ink); }
+.reviews-masthead h1 { font: 500 clamp(3rem,6.5vw,6rem)/.98 var(--font-editorial); letter-spacing: -.065em; margin: .7rem 0 1rem; }
+.reviews-masthead p { max-width: 44rem; color: var(--muted); font-size: clamp(1rem,2vw,1.35rem); margin: 0 0 1rem; }
+.reviews-nav { display: flex; gap: 1.7rem; overflow-x: auto; padding: 0 4px; border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+.reviews-nav a { flex: none; padding: .9rem .1rem; border-bottom: 3px solid transparent; font-size: .86rem; font-weight: 750; }
+.reviews-nav a[aria-current="page"] { color: var(--signal); border-color: var(--signal); }
+.reviews-nav a:hover { color: var(--signal); }
+.reviews-formats a { font-size: .78rem; }
+.reviews-feature { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: clamp(1.5rem,4vw,4rem); align-items: center; padding-block: 2.5rem; border-bottom: 1px solid var(--line); }
+.reviews-feature-image { display: block; position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--surface); }
+.reviews-feature-image img { object-fit: cover; }
+.reviews-feature-copy h2, .reviews-empty h2 { font: 500 clamp(2rem,4vw,3.75rem)/1.05 var(--font-editorial); letter-spacing: -.04em; margin: .7rem 0 1rem; text-wrap: balance; }
+.reviews-feature-copy p, .reviews-empty p { color: var(--muted); max-width: 42rem; }
+.reviews-feature-copy time { color: var(--muted); font-size: .8rem; }
+.reviews-empty { margin-top: 2rem; padding: clamp(1.5rem,5vw,4rem); background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--signal); }
+.reviews-list, .reviews-scope { margin-top: clamp(2.5rem,5vw,4rem); border-top: 2px solid var(--ink); padding-top: 1.25rem; }
+.reviews-list > h2, .reviews-scope > h2 { font: 500 clamp(1.8rem,3vw,2.6rem)/1.1 var(--font-editorial); margin: .5rem 0 1.5rem; letter-spacing: -.035em; }
+.reviews-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 2rem; }
+.reviews-grid .article-card { min-width: 0; }
+.reviews-scope-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); column-gap: 2rem; }
+.reviews-scope-grid > div { border-top: 1px solid var(--line); padding: 1rem 0; font-weight: 650; }
+.reviews-scope-grid span { color: var(--muted); }
+.reviews-scope-grid a:hover { color: var(--signal); text-decoration: underline; }
+@media(max-width: 1000px) { .reviews-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width: 760px) { .reviews-feature { grid-template-columns: minmax(0,1fr); } .reviews-scope-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width: 600px) { .reviews-grid { grid-template-columns: minmax(0,1fr); } .reviews-nav { gap: 1.1rem; } }
+.reviews-editorial .reviews-nav a:focus-visible { outline-offset: -3px; }
+.reviews-editorial .reviews-scope-grid > div { overflow-wrap: anywhere; }
+.reviews-editorial .reviews-list .pagination { margin-top: 2rem; }
+.reviews-editorial .reviews-nav { max-width: 100%; }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReviewsPage, getReviewArchive, type ReviewQuery } from "@/components/reviews-page";
 import { ResponsiveImage } from "@/components/responsive-image";
 import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
@@ -20,12 +21,18 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ section: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<ReviewQuery>;
 }): Promise<Metadata> {
   const { section } = await params;
-  const { page: pageParam } = await searchParams;
+  const query = await searchParams;
+  const { page: pageParam } = query;
   if (!isCategory(section)) return {};
   const category = CATEGORY_MAP[section];
+  if (section === "reviews") {
+    const archive = getReviewArchive(query);
+    if (!archive) return { robots: { index: false, follow: true }, alternates: { canonical: null } };
+    if (archive.category || archive.format) return { title: "Reviews", description: category.description, robots: { index: false, follow: true }, alternates: { canonical: "/reviews" } };
+  }
   const hasStories = getArticlesByCategory(section).length > 0;
   const page = parsePageNumber(pageParam);
   const pages = Math.max(1, Math.ceil(Math.max(0, getArticlesByCategory(section).length - 1) / PAGE_SIZE));
@@ -50,11 +57,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: { params: Promise<{ section: string }>; searchParams: Promise<{ page?: string }> }) {
+export default async function CategoryPage({ params, searchParams }: { params: Promise<{ section: string }>; searchParams: Promise<ReviewQuery> }) {
   const { section } = await params;
-  const { page: pageParam } = await searchParams;
+  const query = await searchParams;
+  const { page: pageParam } = query;
   if (!isCategory(section)) notFound();
   const category = CATEGORY_MAP[section];
+  if (section === "reviews") {
+    const archive = getReviewArchive(query);
+    if (!archive) notFound();
+    return <ReviewsPage archive={archive} />;
+  }
   const isEditorialEmptyCategory = section === "tech-news" || section === "science";
   const isVerticalCategory = section === "digital-life" || section === "security" || isEditorialEmptyCategory;
   const all = getArticlesByCategory(section);
