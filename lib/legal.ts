@@ -280,8 +280,8 @@ export const infoPages: Record<string, InfoPage> = {
   "privacy-policy": {
     title: "Privacy Policy",
     eyebrow: "Reader privacy",
-    updated: "30 September 2026",
-    description: "How DECODISTA handles contact submissions, local preferences, optional analytics and standard hosting data.",
+    updated: "27 November 2026",
+    description: "How DECODISTA handles contact submissions, local preferences, optional analytics, hosting data and any future advertising.",
     sections: [
       {
         title: "Information collected",
@@ -298,10 +298,28 @@ export const infoPages: Record<string, InfoPage> = {
         ],
       },
       {
+        title: "Advertising and third-party data use",
+        paragraphs: [
+          "DECODISTA does not currently load Google AdSense advertising code or serve AdSense ads. We may introduce Google AdSense in the future. If advertising is enabled, Google and other advertising partners may collect, receive and use information about visits to deliver, measure and protect advertising, including preventing fraud and abuse.",
+          "When ads are served, third parties may place and read browser cookies, use web beacons, IP addresses or other identifiers, and process information about the page visited, device and browser. Depending on applicable law, settings and consent, advertising may be personalised or non-personalised. Non-personalised advertising may still involve data processing for purposes such as frequency control, reporting and fraud prevention.",
+          "Before enabling advertising, DECODISTA will configure the applicable advertising privacy controls and obtain consent where required. Advertising choices will be separate from optional analytics choices.",
+        ],
+        links: [
+          { href: "https://policies.google.com/technologies/partner-sites", label: "How Google uses data from sites and apps that use its services" },
+          { href: "https://myadcenter.google.com/", label: "Google My Ad Center" },
+        ],
+      },
+      {
         title: "Your choices",
         paragraphs: [
           "Analytics is off by default and its tag is not loaded unless you accept. You can decline or reopen Privacy choices in the footer. Withdrawing consent prevents future analytics collection from that browser but does not delete information already processed before withdrawal.",
+          "If advertising is introduced, the advertising privacy controls will allow you to manage or withdraw consent where applicable. You can also manage Google ad personalisation through My Ad Center and control cookies through your browser settings. These settings do not necessarily prevent all advertising or data processing.",
         ],
+      },
+      {
+        title: "Privacy enquiries",
+        paragraphs: ["Use our Contact form for questions about this policy or requests concerning your personal information."],
+        links: [{ href: "/contact", label: "Contact DECODISTA" }],
       },
     ],
   },
