@@ -52,6 +52,11 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             <p>For a correction, include the article URL, the disputed statement, a concise explanation and a credible supporting source when available.</p>
             <Link className="contact-inline-link" href="/corrections">Read the Corrections policy</Link>
           </section>
+          <section>
+            <h2>Copyright concerns</h2>
+            <p>Choose General enquiry and use the subject Copyright concern. Include the affected DECODISTA URL, the original work, your rights or authority to act, and the disputed use. Provide supporting links where available.</p>
+            <Link className="contact-inline-link" href="/editorial-policy">Read our copyright and image usage standards</Link>
+          </section>
         </aside>
       </div>
     </main>
