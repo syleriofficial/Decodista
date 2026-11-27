@@ -556,28 +556,38 @@ for (const sample of [
       const mobileTechNews = await page.goto(base + "/tech-news", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileTechNews?.status(), 200, "Tech News archive should load on mobile");
       const mobileTechRows = page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal");
-      assert((await mobileTechRows.count()) > 0, "Tech News mobile should show real published article rows or clearly labeled articles from other sections");
+      const techMobileRowCount = await mobileTechRows.count();
+      if (techMobileRowCount === 0) {
+        assert.equal(await page.locator(".tech-news-page .category-lead").count(), 1,
+          "A Tech News archive with only one published article should show its real featured story");
+        assert((await page.locator(".tech-news-page .category-count").innerText()).includes("1 published story"),
+          "A Tech News archive with no list must have exactly one published story");
+        const width = await page.evaluate(() => document.documentElement.scrollWidth);
+        assert(width <= sample.width + 1, "Single-story Tech News must not overflow mobile");
+      }
       if (await page.locator(".tech-news-page .tech-news-empty-state").count()) {
         assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 1,
           "Empty Tech News must clearly distinguish articles published elsewhere");
         assert((await page.locator(".tech-news-page .cross-section-note").innerText()).includes("other published sections"),
           "Do not mislabel cross-section articles as Tech News reporting");
       }
-      const techMobileLayout = await mobileTechRows.first().evaluate((article) => {
-        const row = article.getBoundingClientRect();
-        const image = article.querySelector(".card-image").getBoundingClientRect();
-        const content = article.querySelector(".card-copy").getBoundingClientRect();
-        return {
-          sideBySide: image.left < content.left && image.right <= content.left,
-          thumbnailFraction: image.width / row.width,
-          pageWidth: document.documentElement.scrollWidth,
-          viewportWidth: window.innerWidth,
-        };
-      });
-      assert(techMobileLayout.sideBySide && techMobileLayout.thumbnailFraction <= .37,
-        "Tech News mobile should show compact left thumbnails and headlines on the right");
-      assert(techMobileLayout.pageWidth <= techMobileLayout.viewportWidth + 1,
-        "Tech News must not introduce horizontal overflow on 390px or 320px phones");
+      if (techMobileRowCount > 0) {
+        const techMobileLayout = await mobileTechRows.first().evaluate((article) => {
+          const row = article.getBoundingClientRect();
+          const image = article.querySelector(".card-image").getBoundingClientRect();
+          const content = article.querySelector(".card-copy").getBoundingClientRect();
+          return {
+            sideBySide: image.left < content.left && image.right <= content.left,
+            thumbnailFraction: image.width / row.width,
+            pageWidth: document.documentElement.scrollWidth,
+            viewportWidth: window.innerWidth,
+          };
+        });
+        assert(techMobileLayout.sideBySide && techMobileLayout.thumbnailFraction <= .37,
+          "Tech News mobile should show compact left thumbnails and headlines on the right");
+        assert(techMobileLayout.pageWidth <= techMobileLayout.viewportWidth + 1,
+          "Tech News must not introduce horizontal overflow on 390px or 320px phones");
+      }
       if (await page.locator(".tech-news-page .category-lead-image").count()) {
         const techFeature = await page.locator(".tech-news-page .category-lead-image").evaluate((element) => ({
           height: element.getBoundingClientRect().height,
@@ -588,12 +598,22 @@ for (const sample of [
       }
       if (sample.name === "mobile-light") {
         await page.screenshot({ path: out + "/tech-news-mobile-first-screen.png" });
-        await page.locator(".tech-news-page .editorial-vertical-list").screenshot({ path: out + "/tech-news-mobile-list.png" });
+        if (techMobileRowCount > 0) {
+          await page.locator(".tech-news-page .editorial-vertical-list").screenshot({ path: out + "/tech-news-mobile-list.png" });
+        }
       }
       const scienceMobileResponse = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(scienceMobileResponse?.status(), 200, "Science should load on mobile");
       const scienceMobileRows = page.locator(".science-page .editorial-vertical-list .article-card--horizontal");
-      assert((await scienceMobileRows.count()) > 0, "Science should show real article rows or labeled articles from other sections");
+      const scienceMobileRowCount = await scienceMobileRows.count();
+      if (scienceMobileRowCount === 0) {
+        assert.equal(await page.locator(".science-page .category-lead").count(), 1,
+          "A Science archive with only one published article should show its real featured story");
+        assert((await page.locator(".science-page .category-count").innerText()).includes("1 published story"),
+          "A Science archive with no list must have exactly one published story");
+        const width = await page.evaluate(() => document.documentElement.scrollWidth);
+        assert(width <= sample.width + 1, "Single-story Science must not overflow mobile");
+      }
       if (await page.locator(".science-page .science-empty-state").count()) {
         assert.equal(await page.locator(".science-page .science-elsewhere").count(), 1,
           "Empty Science should clearly label its cross-section articles");
@@ -602,24 +622,28 @@ for (const sample of [
         assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
           "Unpublished Science section must remain noindex");
       }
-      const scienceMobileLayout = await scienceMobileRows.first().evaluate(article => {
-        const row = article.getBoundingClientRect();
-        const thumb = article.querySelector(".card-image").getBoundingClientRect();
-        const copy = article.querySelector(".card-copy").getBoundingClientRect();
-        return {
-          adjacent: thumb.left < copy.left && thumb.right <= copy.left,
-          fraction: thumb.width / row.width,
-          pageWidth: document.documentElement.scrollWidth,
-          viewportWidth: window.innerWidth,
-        };
-      });
-      assert(scienceMobileLayout.adjacent && scienceMobileLayout.fraction <= .37,
-        "Science mobile needs compact left thumbnails and headlines to the right");
-      assert(scienceMobileLayout.pageWidth <= scienceMobileLayout.viewportWidth + 1,
-        "Science must not horizontally overflow 390px or 320px screens");
+      if (scienceMobileRowCount > 0) {
+        const scienceMobileLayout = await scienceMobileRows.first().evaluate(article => {
+          const row = article.getBoundingClientRect();
+          const thumb = article.querySelector(".card-image").getBoundingClientRect();
+          const copy = article.querySelector(".card-copy").getBoundingClientRect();
+          return {
+            adjacent: thumb.left < copy.left && thumb.right <= copy.left,
+            fraction: thumb.width / row.width,
+            pageWidth: document.documentElement.scrollWidth,
+            viewportWidth: window.innerWidth,
+          };
+        });
+        assert(scienceMobileLayout.adjacent && scienceMobileLayout.fraction <= .37,
+          "Science mobile needs compact left thumbnails and headlines to the right");
+        assert(scienceMobileLayout.pageWidth <= scienceMobileLayout.viewportWidth + 1,
+          "Science must not horizontally overflow 390px or 320px screens");
+      }
       if (sample.name === "mobile-light") {
         await page.screenshot({ path: out + "/science-mobile-first-screen.png" });
-        await page.locator(".science-page .editorial-vertical-list").screenshot({ path: out + "/science-mobile-vertical-list.png" });
+        if (scienceMobileRowCount > 0) {
+          await page.locator(".science-page .editorial-vertical-list").screenshot({ path: out + "/science-mobile-vertical-list.png" });
+        }
       }
       const mobileSecurity = await page.goto(base + "/security", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(mobileSecurity?.status(), 200, "Security category should load on mobile");
@@ -700,43 +724,53 @@ for (const sample of [
           await list.screenshot({ path: out + "/how-to-desktop-guide-list.png" });
         }
         if (category === "tech-news") {
-          const list = page.locator(".tech-news-page .editorial-vertical-list");
-          assert.equal(await list.count(), 1, "Tech News should use one vertical archive list");
-          assert.equal(await page.locator(".tech-news-page .article-grid").count(), 0,
-            "Tech News must not retain the two-column card grid");
-          const rows = list.locator(".article-card--horizontal");
-          assert((await rows.count()) > 0, "Tech News must display genuine published rows without fabricating section articles");
-          const noTechNewsYet = (await page.locator(".tech-news-page .tech-news-empty-state").count()) > 0;
-          if (noTechNewsYet) {
-            assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 1,
-              "If Tech News has no published stories, only clearly labeled cross-section content can be shown");
-            assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
-              "Do not invent a Tech News featured article for an empty category");
-            assert((await page.locator(".tech-news-page .cross-section-note").innerText()).includes("other published sections"),
-              "Empty Tech News must identify the true source sections");
+          const techSingle = (await page.locator(".tech-news-page .editorial-vertical-list").count()) === 0;
+          if (techSingle) {
+            assert.equal(await page.locator(".tech-news-page .category-lead").count(), 1,
+              "Single published Tech News story should have a real featured article without a list");
+            assert((await page.locator(".tech-news-page .category-count").innerText()).includes("1 published story"),
+              "Tech News needs exactly one published story when no archive list is present");
+            await page.screenshot({ path: out + "/tech-news-desktop-first-screen.png" });
           } else {
-            assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 0,
-              "Once Tech News has published stories, the true category archive should be displayed");
-          }
-          const positions = await list.evaluate((element) => ({
-            columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
-            tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
-              .map((article) => article.getBoundingClientRect().top),
-          }));
-          assert.equal(positions.columns, 1, "Tech News desktop articles should be in a single column");
-          assert(positions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
-            "Tech News rows must be vertically stacked");
-          assert((await rows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
-            "Tech News images should request thumbnail-sized responsive WebP");
-          await page.screenshot({ path: out + "/tech-news-desktop-first-screen.png" });
-          await list.screenshot({ path: out + "/tech-news-desktop-list.png" });
-          if (await page.locator('.tech-news-page .pagination a[href="/tech-news?page=2"]').count()) {
-            const second = await page.goto(base + "/tech-news?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
-            assert.equal(second?.status(), 200, "Tech News second page must load if pagination is present");
-            assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
-              "Tech News featured story must only appear on page one");
-            assert((await page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
-              "Tech News later pages should keep the vertical list layout");
+            const list = page.locator(".tech-news-page .editorial-vertical-list");
+            assert.equal(await list.count(), 1, "Tech News should use one vertical archive list");
+            assert.equal(await page.locator(".tech-news-page .article-grid").count(), 0,
+              "Tech News must not retain the two-column card grid");
+            const rows = list.locator(".article-card--horizontal");
+            assert((await rows.count()) > 0, "Tech News must display genuine published rows without fabricating section articles");
+            const noTechNewsYet = (await page.locator(".tech-news-page .tech-news-empty-state").count()) > 0;
+            if (noTechNewsYet) {
+              assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 1,
+                "If Tech News has no published stories, only clearly labeled cross-section content can be shown");
+              assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
+                "Do not invent a Tech News featured article for an empty category");
+              assert((await page.locator(".tech-news-page .cross-section-note").innerText()).includes("other published sections"),
+                "Empty Tech News must identify the true source sections");
+            } else {
+              assert.equal(await page.locator(".tech-news-page .tech-news-elsewhere").count(), 0,
+                "Once Tech News has published stories, the true category archive should be displayed");
+            }
+            const positions = await list.evaluate((element) => ({
+              columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+              tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+                .map((article) => article.getBoundingClientRect().top),
+            }));
+            assert.equal(positions.columns, 1, "Tech News desktop articles should be in a single column");
+            assert(positions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
+              "Tech News rows must be vertically stacked");
+            assert((await rows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+              "Tech News images should request thumbnail-sized responsive WebP");
+            await page.screenshot({ path: out + "/tech-news-desktop-first-screen.png" });
+            await list.screenshot({ path: out + "/tech-news-desktop-list.png" });
+            if (await page.locator('.tech-news-page .pagination a[href="/tech-news?page=2"]').count()) {
+              const second = await page.goto(base + "/tech-news?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+              assert.equal(second?.status(), 200, "Tech News second page must load if pagination is present");
+              assert.equal(await page.locator(".tech-news-page .category-lead").count(), 0,
+                "Tech News featured story must only appear on page one");
+              assert((await page.locator(".tech-news-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+                "Tech News later pages should keep the vertical list layout");
+            }
+  
           }
         }
         if (category === "security") {
@@ -788,46 +822,56 @@ for (const sample of [
       }
       const scienceResponse = await page.goto(base + "/science", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(scienceResponse?.status(), 200, "Science category must remain reachable");
-      const scienceList = page.locator(".science-page .editorial-vertical-list");
-      assert.equal(await scienceList.count(), 1, "Science must display a single-column editorial list");
-      assert.equal(await page.locator(".science-page .article-grid").count(), 0,
-        "Science must not show the old tiled article grid");
-      const scienceRows = scienceList.locator(".article-card--horizontal");
-      assert((await scienceRows.count()) > 0, "Science must link to real published articles");
-      if (await page.locator(".science-page .science-empty-state").count()) {
-        assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
-          "Empty Science category must remain noindex");
-        assert.equal(await page.locator(".science-page .category-lead").count(), 0,
-          "Empty Science must never invent a featured article");
-        assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
-          "Empty Science must still accurately describe editorial coverage");
-        assert.equal(await page.locator(".science-page .science-elsewhere").count(), 1,
-          "Cross-section articles must be clearly distinguished from Science reporting");
-        assert((await page.locator(".science-page .cross-section-note").innerText()).includes("other published sections"),
-          "Other articles must not be mislabeled as Science");
+      const scienceSingle = (await scienceList.count()) === 0;
+      if (scienceSingle) {
+        assert.equal(await page.locator(".science-page .category-lead").count(), 1,
+          "A single genuine Science article should appear as a featured story");
+        assert((await page.locator(".science-page .category-count").innerText()).includes("1 published story"),
+          "Science needs one actual published article when no list exists");
+        await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
       } else {
-        assert.equal(await page.locator(".science-page .science-elsewhere").count(), 0,
-          "Once Science has published articles, use genuine Science content");
-      }
-      const sciencePositions = await scienceList.evaluate(element => ({
-        columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
-        tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
-          .map(article => article.getBoundingClientRect().top),
-      }));
-      assert.equal(sciencePositions.columns, 1, "Science must use a vertical one-column list");
-      assert(sciencePositions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
-        "Science rows should stack one below another");
-      assert((await scienceRows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
-        "Science list should request responsive thumbnail-sized images");
-      await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
-      await scienceList.screenshot({ path: out + "/science-desktop-vertical-list.png" });
-      if (await page.locator('.science-page .pagination a[href="/science?page=2"]').count()) {
-        const scienceSecond = await page.goto(base + "/science?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
-        assert.equal(scienceSecond?.status(), 200, "Science page two must work when published archive grows");
-        assert.equal(await page.locator(".science-page .category-lead").count(), 0,
-          "Featured Science story should only appear on first page");
-        assert((await page.locator(".science-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
-          "Science pagination must preserve the vertical layout");
+        const scienceList = page.locator(".science-page .editorial-vertical-list");
+        assert.equal(await scienceList.count(), 1, "Science must display a single-column editorial list");
+        assert.equal(await page.locator(".science-page .article-grid").count(), 0,
+          "Science must not show the old tiled article grid");
+        const scienceRows = scienceList.locator(".article-card--horizontal");
+        assert((await scienceRows.count()) > 0, "Science must link to real published articles");
+        if (await page.locator(".science-page .science-empty-state").count()) {
+          assert((await page.locator('head meta[name="robots"]').getAttribute("content"))?.includes("noindex"),
+            "Empty Science category must remain noindex");
+          assert.equal(await page.locator(".science-page .category-lead").count(), 0,
+            "Empty Science must never invent a featured article");
+          assert.equal(await page.locator("main").getByText("Coverage in development").count(), 1,
+            "Empty Science must still accurately describe editorial coverage");
+          assert.equal(await page.locator(".science-page .science-elsewhere").count(), 1,
+            "Cross-section articles must be clearly distinguished from Science reporting");
+          assert((await page.locator(".science-page .cross-section-note").innerText()).includes("other published sections"),
+            "Other articles must not be mislabeled as Science");
+        } else {
+          assert.equal(await page.locator(".science-page .science-elsewhere").count(), 0,
+            "Once Science has published articles, use genuine Science content");
+        }
+        const sciencePositions = await scienceList.evaluate(element => ({
+          columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+          tops: Array.from(element.querySelectorAll(":scope > article")).slice(0, 3)
+            .map(article => article.getBoundingClientRect().top),
+        }));
+        assert.equal(sciencePositions.columns, 1, "Science must use a vertical one-column list");
+        assert(sciencePositions.tops.every((y, i, all) => i === 0 || y > all[i - 1]),
+          "Science rows should stack one below another");
+        assert((await scienceRows.locator(".card-image img").first().getAttribute("sizes"))?.includes("260px"),
+          "Science list should request responsive thumbnail-sized images");
+        await page.screenshot({ path: out + "/science-desktop-first-screen.png" });
+        await scienceList.screenshot({ path: out + "/science-desktop-vertical-list.png" });
+        if (await page.locator('.science-page .pagination a[href="/science?page=2"]').count()) {
+          const scienceSecond = await page.goto(base + "/science?page=2", { waitUntil: "domcontentloaded", timeout: 45000 });
+          assert.equal(scienceSecond?.status(), 200, "Science page two must work when published archive grows");
+          assert.equal(await page.locator(".science-page .category-lead").count(), 0,
+            "Featured Science story should only appear on first page");
+          assert((await page.locator(".science-page .editorial-vertical-list .article-card--horizontal").count()) > 0,
+            "Science pagination must preserve the vertical layout");
+        }
+  
       }
       const latestPage = await page.goto(base + "/latest", { waitUntil: "domcontentloaded", timeout: 45000 });
       assert.equal(latestPage?.status(), 200, "Latest archive must load");
