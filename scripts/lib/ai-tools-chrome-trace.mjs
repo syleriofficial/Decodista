@@ -41,7 +41,9 @@ export function summarizeTraceEvents(traceEvents) {
     e => rendererThreads.has(String(e.pid) + ":" + String(e.tid)) &&
       typeof e.dur === "number" && e.dur >= 0
   );
-  const tasks = mainEvents.filter(e => e.name === "RunTask");
+  // Chrome 158 uses ThreadControllerImpl::RunTask; older traces may say RunTask.
+  const tasks = mainEvents.filter(e => e.name === "ThreadControllerImpl::RunTask" || e.name === "RunTask");
+  if (!tasks.length) throw new Error("No renderer scheduler tasks in Chrome trace; refusing a false zero");
   const long = tasks.filter(e => e.dur >= 50000);
   const scripts = mainEvents.filter(e => e.name === "EvaluateScript" || e.name === "FunctionCall");
   const source = e => safeUrl(e.args?.data?.url ?? e.args?.data?.scriptName ?? "unknown");
