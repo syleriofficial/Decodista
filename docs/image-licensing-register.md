@@ -6,7 +6,7 @@ Inventory prepared 27 November 2026 from tracked source assets in public/images.
 
 For each asset record the creator or rights holder, original source URL or creation/commission record, applicable licence or permission, evidence date and location, attribution, permitted modifications, advertising-supported use restrictions and reviewer decision. Retain sensitive evidence securely outside the public site. Use Pending, Cleared, or Replace/remove as decision statuses. Do not mark Cleared without evidence of a valid basis for the intended use. Review third-party logos, depicted persons and other restrictions separately where relevant.
 
-Prioritise the three Hera mission images for review against their exact media terms and third-party credits before monetising the article. If permission for the intended use cannot be established, obtain clarification or replace/remove the material. See [ESA multimedia terms](https://www.esa.int/ESA_Multimedia/Terms_and_conditions).
+Prioritise the three Hera mission images for review against their exact media terms and third-party credits before monetising the article. If permission for the intended use cannot be established, obtain clarification or replace/remove the material. See [ESA multimedia terms](https://www.esa.int/terms-and-conditions/terms-and-conditions-for-images-and-videos).
 
 ## Source-asset inventory
 
@@ -26,12 +26,12 @@ Prioritise the three Hera mission images for review against their exact media te
 | `public/images/uploads/chatgpt-image-sep-23-2026-04_46_10-pm.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/chatgpt-memory-vs-chat-history-model-training.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/chrome-enhanced-protection-vs-standard-protection.webp` | Not yet documented in this register. | Pending |
-| `public/images/uploads/clickfix-real-vs-fake-captcha.webp` | Not yet documented in this register. | Pending |
-| `public/images/uploads/clickfix-recovery-decision-flowchart.webp` | Not yet documented in this register. | Pending |
+| `public/images/uploads/clickfix-real-vs-fake-captcha.webp` | [Internal release record](editorial-clickfix-release-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
+| `public/images/uploads/clickfix-recovery-decision-flowchart.webp` | [Internal release record](editorial-clickfix-release-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
 | `public/images/uploads/delete-chatgpt-chat-uploaded-files-library.webp` | Not yet documented in this register. | Pending |
-| `public/images/uploads/fake-captcha-scams-clickfix-malware.webp` | Not yet documented in this register. | Pending |
-| `public/images/uploads/fake-online-store-checklist.webp` | Not yet documented in this register. | Pending |
-| `public/images/uploads/fake-online-store-domain-comparison.webp` | Not yet documented in this register. | Pending |
+| `public/images/uploads/fake-captcha-scams-clickfix-malware.webp` | [Internal release record](editorial-clickfix-release-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
+| `public/images/uploads/fake-online-store-checklist.webp` | [Internal release record](editorial-fake-online-store-pr-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
+| `public/images/uploads/fake-online-store-domain-comparison.webp` | [Internal release record](editorial-fake-online-store-pr-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
 | `public/images/uploads/fake-tech-support-scams-remote-access-verification-code.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/gemini-memory-turn-off-delete-past-chats.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/gmail-not-receiving-emails-google-storage-full.webp` | Not yet documented in this register. | Pending |
@@ -41,8 +41,8 @@ Prioritise the three Hera mission images for review against their exact media te
 | `public/images/uploads/google-photos-undo-backup-local-kept-cloud-removed.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/hera-dart-before-after.webp` | Article credits NASA/Johns Hopkins APL and ©ESA; [source](https://www.esa.int/es/media/pre-and-post-dart-impact-comparison-of-the-didymos-system). | Pending |
 | `public/images/uploads/hera-dimorphos-dart-impact-crater.webp` | Article credits ©ESA; [source](https://www.esa.int/media/didymos-and-dimorphos-with-dart-impact-site-visible). | Pending |
-| `public/images/uploads/hera-orbiting-boulders.webp` | Article credits ©ESA/HyperScout-H; exact source and usage terms still to confirm. | Pending |
-| `public/images/uploads/how-to-spot-fake-online-store.webp` | Not yet documented in this register. | Pending |
+| `public/images/uploads/hera-orbiting-boulders.webp` | Article credits ©ESA/HyperScout-H; official [ESA media page](https://www.esa.int/media/long-exposure-hyperscout-h-image-reveals-boulders) credits ESA. | Pending |
+| `public/images/uploads/how-to-spot-fake-online-store.webp` | [Internal release record](editorial-fake-online-store-pr-qa.md) documents original asset upload and integrity; creator/tool and applicable rights still need confirmation. | Pending |
 | `public/images/uploads/ios-26-7-1-cve-2026-86950-security-update.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/iphone-storage-full-icloud-has-space.webp` | Not yet documented in this register. | Pending |
 | `public/images/uploads/meta-muse-privacy-access-memory-ai-training.webp` | Not yet documented in this register. | Pending |
@@ -61,6 +61,12 @@ Prioritise the three Hera mission images for review against their exact media te
 | `public/images/weekly/2026-11-22-cover.webp` | Not yet documented in this register. | Pending |
 | `public/images/weekly/2026-11-22-og.webp` | Not yet documented in this register. | Pending |
 | `public/images/weekly/2026-11-22-shopping-scams.webp` | Not yet documented in this register. | Pending |
+
+## Evidence review — 27 November 2026
+
+ESA's current multimedia terms (revision 18 January 2024) permit editorial, educational and informational use with attribution, subject to third-party rights and restrictions on endorsement and other uses. Separate permission is required for commercial use outside the permitted purposes. The terms do not expressly resolve ordinary display advertising alongside a news article. Ask ESA image distribution (spaceinimages@esa.int) to confirm that intended use; for the comparison image also establish the rights of NASA/Johns Hopkins APL. The identified media pages support source attribution but do not by themselves establish byte-for-byte identity with the local files. No permission request has been sent.
+
+The two internal release records above document six local artwork assets and integrity checks. They do not independently establish the creation tool or licence; keep these entries pending. The remaining files require origin evidence, not merely visual inspection.
 
 ## Scope and maintenance
 
