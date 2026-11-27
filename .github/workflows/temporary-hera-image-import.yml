@@ -1,0 +1,41 @@
+name: Temporary Hera editorial image import
+on:
+  push:
+    branches: [editorial/hera-dimorphos-science]
+    paths: ['.github/workflows/temporary-hera-image-import.yml']
+permissions:
+  contents: read
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Retrieve ESA image files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/hera
+          curl --fail --silent --show-error --location --max-time 45 'https://media.esa.int/global/public/common/misc/2026/11/hera-afc-dimorphos-crater-261107.png?dl=' -o /tmp/hera/hero.png
+          curl --fail --silent --show-error --location --max-time 45 'https://media.esa.int/global/public/common/misc/2026/11/afc-postdart-comparison-1.png?dl=' -o /tmp/hera/comparison.png
+          curl --fail --silent --show-error --location --max-time 45 'https://media.esa.int/global/public/common/misc/2026/11/402773/image-thumb__402773__fit_large/hsh-long-exposure-261103.380b96dc.webp' -o /tmp/hera/boulders.webp
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          from PIL import Image, ImageOps
+          from pathlib import Path
+          import base64, hashlib
+          root = Path('/tmp/hera')
+          for name, ext in [('hero','png'), ('comparison','png'), ('boulders','webp')]:
+              with Image.open(root / f'{name}.{ext}') as im:
+                  im.load()
+                  im = im.convert('RGB')
+                  print(f'ORIGINAL {name} {im.size}', flush=True)
+                  if name == 'hero':
+                      im = ImageOps.pad(im, (1600,900), method=Image.Resampling.LANCZOS, color='black')
+                  output = root / f'{name}-optimized.webp'
+                  im.save(output, 'WEBP', quality=90, method=6)
+                  data = output.read_bytes()
+                  print(f'ASSET {name} {im.size} {len(data)} {hashlib.sha256(data).hexdigest()}')
+                  encoded = base64.b64encode(data).decode('ascii')
+                  for i in range(0,len(encoded),2000):
+                      print(f'IMAGE_DATA {name} {i//2000:04d} {encoded[i:i+2000]}')
+          PY
